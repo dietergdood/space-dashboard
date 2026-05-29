@@ -375,6 +375,7 @@ body{font-family:'DM Sans',sans-serif;background:var(--bg);color:var(--text);min
     </div>
     <div class="hdr-r">
       <div class="live-badge"><div class="live-dot"></div><span>Echtzeitkurse</span></div>
+      <div id="ki-status" style="display:none;font-size:12px;color:var(--text3);padding:0 8px;white-space:nowrap;"></div>
       <button class="refresh-btn" id="refresh-btn" onclick="hdrRefresh()">
         <div class="refresh-spin" id="refresh-spin"></div>
         <span id="refresh-txt">↺ Aktualisieren</span>
@@ -1141,6 +1142,7 @@ async function checkAuth() {
     hideAuthOverlay();
     showUserMenu(currentUser.email);
     await loadPortfolioFromDB();
+    // Don't trigger KI refresh here - init() handles it
   } else {
     showAuthOverlay();
   }
@@ -1724,21 +1726,38 @@ const SECTOR_PROMPTS = {
 };
 
 // ── KI API Helper ──────────────────────────────────────────
-async function kiCall(prompt, retries=3) {
+async function kiCall(prompt) {
   const key = getKey();
   if (!key || !key.startsWith('sk-ant-')) return null;
-  for (let attempt = 0; attempt < retries; attempt++) {
+  const maxRetries = 4;
+  const baseDelay = 20000; // 20s base wait on rate limit
+  for (let attempt = 0; attempt < maxRetries; attempt++) {
+    if (attempt > 0) {
+      const wait = baseDelay * attempt;
+      console.log('Rate limit - waiting ' + (wait/1000) + 's before retry ' + attempt);
+      const statusEl = document.getElementById('ki-status');
+      if (statusEl) statusEl.textContent = '⏳ Rate limit — warte ' + (wait/1000) + 's...';
+      await new Promise(r => setTimeout(r, wait));
+    }
     try {
       const resp = await fetch('https://api.anthropic.com/v1/messages', {
         method: 'POST',
-        headers: {'Content-Type':'application/json','x-api-key':key,'anthropic-version':'2023-06-01','anthropic-dangerous-direct-browser-access':'true'},
-        body: JSON.stringify({model:'claude-sonnet-4-5',max_tokens:1000,tools:[{type:'web_search_20250305',name:'web_search'}],messages:[{role:'user',content:prompt}]})
+        headers: {
+          'Content-Type': 'application/json',
+          'x-api-key': key,
+          'anthropic-version': '2023-06-01',
+          'anthropic-dangerous-direct-browser-access': 'true'
+        },
+        body: JSON.stringify({
+          model: 'claude-sonnet-4-5',
+          max_tokens: 1000,
+          tools: [{type:'web_search_20250305',name:'web_search'}],
+          messages: [{role:'user',content:prompt}]
+        })
       });
       if (resp.status === 429) {
-        const wait = (attempt + 1) * 15000; // 15s, 30s, 45s
-        console.log('Rate limited, waiting ' + wait/1000 + 's...');
-        await new Promise(r => setTimeout(r, wait));
-        continue;
+        console.log('429 on attempt', attempt);
+        continue; // retry with increased delay
       }
       if (!resp.ok) throw new Error('API ' + resp.status);
       const data = await resp.json();
@@ -1747,8 +1766,7 @@ async function kiCall(prompt, retries=3) {
       if (!match) throw new Error('No JSON in response');
       return JSON.parse(match[0]);
     } catch(e) {
-      if (attempt === retries - 1) throw e;
-      await new Promise(r => setTimeout(r, 5000));
+      if (attempt === maxRetries - 1) throw e;
     }
   }
   return null;
@@ -1894,23 +1912,31 @@ async function refreshAllNews(manual=false) {
   if (dot) dot.classList.add('on');
   if (lbl) lbl.textContent = 'Aktualisiert...';
   const delay = ms => new Promise(r => setTimeout(r, ms));
+  const statusEl = document.getElementById('ki-status');
+  const setStatus = (txt) => { if(statusEl){ statusEl.style.display='block'; statusEl.textContent=txt; } };
+  const clearStatus = () => { if(statusEl){ statusEl.style.display='none'; statusEl.textContent=''; } };
+
   const calls = [
-    () => fetchRec('rklb'),
-    () => fetchRec('asts'),
-    () => fetchLiveNews('rklb'),
-    () => fetchLiveNews('asts'),
-    () => fetchScenarios('rklb'),
-    () => fetchScenarios('asts'),
-    () => fetchSectorContext('rklb'),
-    () => fetchSectorContext('asts'),
-    () => fetchCtxBar('rklb'),
-    () => fetchCtxBar('asts'),
-    () => fetchGlossar(),
+    [() => fetchRec('rklb'),            '🎯 RKLB Empfehlung...'],
+    [() => fetchRec('asts'),            '🎯 ASTS Empfehlung...'],
+    [() => fetchLiveNews('rklb'),       '📰 RKLB News...'],
+    [() => fetchLiveNews('asts'),       '📰 ASTS News...'],
+    [() => fetchScenarios('rklb'),      '📊 RKLB Szenarien...'],
+    [() => fetchScenarios('asts'),      '📊 ASTS Szenarien...'],
+    [() => fetchSectorContext('rklb'),  '🌌 RKLB Sektor...'],
+    [() => fetchSectorContext('asts'),  '🌌 ASTS Sektor...'],
+    [() => fetchCtxBar('rklb'),         '🏢 RKLB Firmendaten...'],
+    [() => fetchCtxBar('asts'),         '🏢 ASTS Firmendaten...'],
+    [() => fetchGlossar(),              '📚 Lexikon...'],
   ];
-  for (const call of calls) {
-    try { await call(); } catch(e) { console.warn('refresh call failed:', e.message); }
-    await delay(8000); // 8s between calls to respect rate limits
+  for (let i = 0; i < calls.length; i++) {
+    const [fn, label] = calls[i];
+    setStatus(label + ' (' + (i+1) + '/' + calls.length + ')');
+    try { await fn(); } catch(e) { console.warn('refresh call failed:', e.message); }
+    if (i < calls.length - 1) await delay(12000); // 12s between calls
   }
+  setStatus('✓ Alles aktualisiert');
+  setTimeout(clearStatus, 4000);
   if (lbl) lbl.textContent = 'Nächste Aktualisierung in 2h';
   if (!manual) startAutoRefresh();
 }
@@ -1978,10 +2004,20 @@ async function hdrRefresh() {
   // Load data
   loadAll();
   setInterval(loadAll, 15000);
-  // Auto-refresh if key exists
+  // Don't auto-refresh on init - wait 30s to avoid rate limits on page load
   const key = getKey();
   if (key && key.startsWith('sk-ant-')) {
-    refreshAllNews();
+    const statusEl = document.getElementById('ki-status');
+    if (statusEl) {
+      statusEl.style.display = 'block';
+      statusEl.textContent = '⏳ KI-Analyse startet in 30s...';
+      setTimeout(() => {
+        statusEl.style.display = 'none';
+        refreshAllNews();
+      }, 30000);
+    } else {
+      setTimeout(() => refreshAllNews(), 30000);
+    }
   }
 })();
 
