@@ -12,7 +12,7 @@ async function supa(path, method='GET', body=null) {
       'apikey': SUPABASE_SERVICE_KEY,
       'Authorization': `Bearer ${SUPABASE_SERVICE_KEY}`,
       'Content-Type': 'application/json',
-      'Prefer': method==='POST' ? 'return=minimal' : '',
+      'Prefer': (method==='POST'||method==='PATCH') ? 'return=minimal' : '',
     }
   };
   if (body) opts.body = JSON.stringify(body);
@@ -153,8 +153,7 @@ export default async function handler(req, res) {
     }
 
     // Update last_sync timestamp
-    await supa('/sync_settings', 'POST', {
-      id: 1,
+    await supa('/sync_settings?id=eq.1', 'PATCH', {
       last_sync: new Date().toISOString(),
       sync_enabled: true
     });
