@@ -534,7 +534,7 @@ body{font-family:'DM Sans',sans-serif;background:var(--bg);color:var(--text);min
             <input class="settings-api-in" type="password" id="api-key" placeholder="sk-ant-api03-..." oninput="onKeyInput()"/>
             <span class="settings-api-ok" id="api-ok">✓</span>
           </div>
-          <div class="settings-hint">Ohne Schlüssel: Live-Kurse (immer kostenlos). Mit Schlüssel: KI sucht alle 4 Stunden automatisch News, Reddit-Diskussionen und Analysten-Berichte. <a href="https://console.anthropic.com/settings/keys" target="_blank">Key holen →</a> Wird niemals gespeichert.</div>
+          <div class="settings-hint">Ohne Schlüssel: Live-Kurse (immer kostenlos). Mit Schlüssel: KI sucht alle 2 Stunden automatisch News, Reddit-Diskussionen und Analysten-Berichte. <a href="https://console.anthropic.com/settings/keys" target="_blank">Key holen →</a> Wird niemals gespeichert.</div>
         </div>
         <!-- Auto-Refresh -->
         <div class="settings-section">
@@ -1002,7 +1002,7 @@ body{font-family:'DM Sans',sans-serif;background:var(--bg);color:var(--text);min
 
   <div class="collapsible-card" id="card-rklb-news">
   <button class="section-toggle open" onclick="toggleCard('rklb-news')">
-    <div class="st-left"><span class="st-icon">📰</span><div><div class="st-title">Live-Nachrichten & Marktanalyse</div><div class="st-sub">Automatisch alle 4h aktualisiert</div></div></div>
+    <div class="st-left"><span class="st-icon">📰</span><div><div class="st-title">Live-Nachrichten & Marktanalyse</div><div class="st-sub">Automatisch alle 2h aktualisiert</div></div></div>
     <div class="st-right"><span class="st-arrow">▼</span></div>
   </button>
   <div class="section-body open" id="body-rklb-news">
@@ -1016,7 +1016,7 @@ body{font-family:'DM Sans',sans-serif;background:var(--bg);color:var(--text);min
       <div class="ln-loading-dot"></div>
       <span id="rklb-news-loading-txt">KI durchsucht gerade das Internet nach aktuellen Nachrichten...</span>
     </div>
-    <div class="ln-content empty" id="rklb-news-content">KI-Schlüssel eingeben → Nachrichten werden automatisch alle 4 Stunden von der KI gesucht und hier angezeigt. Die KI durchsucht Finanznachrichten, Reddit-Foren, Analystenberichte und fasst alles verständlich zusammen.</div>
+    <div class="ln-content empty" id="rklb-news-content">KI-Schlüssel eingeben → Nachrichten werden automatisch alle 2 Stunden von der KI gesucht und hier angezeigt. Die KI durchsucht Finanznachrichten, Reddit-Foren, Analystenberichte und fasst alles verständlich zusammen.</div>
   </div>  </div>
 </div>
 
@@ -1428,7 +1428,7 @@ body{font-family:'DM Sans',sans-serif;background:var(--bg);color:var(--text);min
 
   <div class="collapsible-card" id="card-asts-news">
   <button class="section-toggle open" onclick="toggleCard('asts-news')">
-    <div class="st-left"><span class="st-icon">📰</span><div><div class="st-title">Live-Nachrichten & Marktanalyse</div><div class="st-sub">Automatisch alle 4h aktualisiert</div></div></div>
+    <div class="st-left"><span class="st-icon">📰</span><div><div class="st-title">Live-Nachrichten & Marktanalyse</div><div class="st-sub">Automatisch alle 2h aktualisiert</div></div></div>
     <div class="st-right"><span class="st-arrow">▼</span></div>
   </button>
   <div class="section-body open" id="body-asts-news">
@@ -1442,7 +1442,7 @@ body{font-family:'DM Sans',sans-serif;background:var(--bg);color:var(--text);min
       <div class="ln-loading-dot"></div>
       <span id="asts-news-loading-txt">KI durchsucht gerade das Internet nach aktuellen Nachrichten...</span>
     </div>
-    <div class="ln-content empty" id="asts-news-content">KI-Schlüssel eingeben → Nachrichten werden automatisch alle 4 Stunden gesucht und hier angezeigt.</div>
+    <div class="ln-content empty" id="asts-news-content">KI-Schlüssel eingeben → Nachrichten werden automatisch alle 2 Stunden gesucht und hier angezeigt.</div>
   </div>  </div>
 </div>
 
@@ -1466,7 +1466,7 @@ body{font-family:'DM Sans',sans-serif;background:var(--bg);color:var(--text);min
       <div class="sector-card">
         <div class="sector-emoji">💥</div>
         <div class="sector-name">Blue Origin Status</div>
-        <div class="sector-val dn">Geerdet</div>
+        <div class="sector-val dn">Grounded</div>
         <div class="sector-desc">Gestern Nacht explodiert. ASTS hat Vertrag für 45 Satelliten-Starts mit Blue Origin. Kein Starttermin bekannt. Direktes Risiko für den Zeitplan.</div>
       </div>
       <div class="sector-card">
@@ -1518,7 +1518,7 @@ const quotes={rklb:null,asts:null};
 const CONS={rklb:120,asts:83};
 const txData={rklb:[],asts:[]};
 let autoTimer=null,progressTimer=null;
-const AUTO_INTERVAL=4*60*60*1000;
+const AUTO_INTERVAL=2*60*60*1000;
 
 function fmt(n,d=2){if(n==null||isNaN(n))return'—';return n.toLocaleString('de-CH',{minimumFractionDigits:d,maximumFractionDigits:d});}
 function fmtK(n){if(!n)return'—';if(n>=1e9)return(n/1e9).toFixed(1)+' Mrd.';if(n>=1e6)return(n/1e6).toFixed(1)+' Mio.';return(n/1e3).toFixed(0)+'K';}
