@@ -6,7 +6,7 @@
 <title>Space Stocks Dashboard</title>
 <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🚀</text></svg>">
 <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet">
-    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/_supaClient.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
 <style>
 /* ── Reset & Base ── */
@@ -1242,7 +1242,7 @@ body{font-family:'DM Sans',sans-serif;background:var(--bg);color:var(--text);min
 </main>
 
 <!-- ═══ AUTH OVERLAY ═══ -->
-<div class="auth-overlay" id="auth-overlay">
+<div class="auth-overlay hidden" id="auth-overlay">
   <div class="auth-box">
     <div class="auth-logo">🚀</div>
     <div class="auth-title">Space Stocks Dashboard</div>
@@ -2251,7 +2251,8 @@ async function refreshAllNews(manual=false) {
 (function init() {
   loadKey();
   loadTx(); // local fallback (overridden by DB if logged in)
-  // Show context bar for active tab
+  // Ensure RKLB panel is active and visible
+  $('p-rklb').classList.add('active');
   $('ctx-rklb').classList.add('show');
   // Open all cards
   document.querySelectorAll('.card').forEach(c => c.classList.add('open'));
