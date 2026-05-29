@@ -296,6 +296,19 @@ body{font-family:'DM Sans',sans-serif;background:var(--bg);color:var(--text);min
 .clearfix::after{content:'';display:table;clear:both;}
 
 /* ── Mobile ── */
+
+
+@keyframes fadeIn{from{opacity:0;transform:translateY(-4px);}to{opacity:1;transform:translateY(0);}}
+
+.tab-logo{width:18px;height:18px;border-radius:3px;object-fit:cover;vertical-align:middle;margin-right:6px;flex-shrink:0;}
+.tab-rklb-label::after{content:'Rocket Lab (RKLB)';}
+.tab-asts-label::after{content:'AST SpaceMobile (ASTS)';}
+
+
+
+/* ══════════════════════════════════
+   TABLET (max 900px)
+══════════════════════════════════ */
 @media(max-width:900px){
   .mets{grid-template-columns:repeat(2,1fr);}
   .rec-scores{grid-template-columns:repeat(2,1fr);}
@@ -306,124 +319,146 @@ body{font-family:'DM Sans',sans-serif;background:var(--bg);color:var(--text);min
   .pf-form{grid-template-columns:1fr 1fr;}
   .day-row{grid-template-columns:1fr 1fr;}
 }
+
+/* ══════════════════════════════════
+   MOBILE (max 640px)
+══════════════════════════════════ */
 @media(max-width:640px){
+
+  /* ── Header ── */
   .hdr-inner{padding:0 12px;gap:8px;height:52px;}
+  .logo{gap:8px;}
+  .logo-icon{font-size:20px;}
   .logo-text{font-size:14px;}
   .logo-sub{display:none;}
+  .live-badge span{display:none;}
+  .live-badge{padding:5px 8px;}
+  .hdr-mid{flex:1;min-width:0;overflow:hidden;}
+  .hdr-r{gap:6px;flex-shrink:0;}
+  .settings-btn{width:32px;height:32px;font-size:14px;}
+  .ki-status-pill{display:none !important;}
+
+  /* ── Tabs ── */
+  .tabs{gap:2px;padding:3px;width:100%;}
+  .tab{padding:7px 10px;font-size:13px;flex:1;text-align:center;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
+  .tab-logo{width:15px;height:15px;margin-right:3px;}
+
+  /* ── Container ── */
   .container{padding:10px 10px 80px;}
-  
-  /* Tabs: scrollable horizontal, no wrap */
-  .tabs{gap:2px;overflow-x:auto;-webkit-overflow-scrolling:touch;scrollbar-width:none;flex-wrap:nowrap;padding:3px;}
-  .tabs::-webkit-scrollbar{display:none;}
-  .tab{padding:8px 14px;font-size:14px;white-space:nowrap;flex-shrink:0;}
-  
-  /* Cards full width */
-  .card-header{padding:14px 12px;}
-  .card-body{padding:14px 12px;}
+
+  /* ── Context bar ── */
+  .ctx-bar{flex-direction:column;padding:12px;gap:8px;}
+  .ctx-logo,.ctx-logo-emoji{width:36px;height:36px;}
+  .ctx-name{font-size:15px;}
+  .ctx-desc{font-size:13px;}
+  .ctx-tags{gap:4px;}
+  .ctx-tag{font-size:11px;padding:2px 7px;}
+  .ctx-stats{display:flex;gap:10px;flex-wrap:wrap;}
+  .ctx-stat{font-size:12px;}
+
+  /* ── Cards ── */
+  .card-header{padding:12px 12px;}
+  .card-body{padding:12px 12px;}
   .card-title{font-size:15px;}
-  
-  /* Metrics: 2 cols */
+  .card-sub{font-size:12px;}
+  .card-arrow{font-size:10px;}
+
+  /* ── Metrics ── */
   .mets{grid-template-columns:repeat(2,1fr);gap:8px;}
-  .met{padding:12px;}
+  .met{padding:11px;}
+  .met-icon{font-size:16px;margin-bottom:4px;}
   .met-val{font-size:20px;}
-  
-  /* Rec scores: 2 cols */
+  .met-label{font-size:12px;}
+  .met-chg{font-size:12px;}
+  .met-sub{font-size:11px;}
+
+  /* ── Recommendation ── */
+  .rec-banner{padding:12px;}
+  .rec-head{gap:10px;}
+  .rec-pill{font-size:13px;padding:4px 12px;}
+  .rec-title{font-size:14px;}
+  .rec-explain{font-size:13px;}
   .rec-scores{grid-template-columns:repeat(2,1fr);gap:6px;}
   .score-card{padding:10px;}
-  
-  /* Rec levels: stack */
+  .score-val{font-size:20px;}
+  .score-explain{font-size:11px;}
   .rec-levels{flex-direction:column;gap:6px;}
-  .rec-level{font-size:14px;}
-  
-  /* Chart */
-  .chart-wrap{height:190px;}
-  .chart-grid{grid-template-columns:1fr;}
+  .rec-level{font-size:13px;padding:7px 12px;}
+
+  /* ── Charts ── */
   .chart-tabs{overflow-x:auto;flex-wrap:nowrap;}
-  .chart-tab{white-space:nowrap;font-size:13px;}
-  
-  /* Scenarios */
-  .scl{width:110px;font-size:12px;}
-  .scv{font-size:13px;width:65px;}
-  
-  /* Sector */
+  .chart-tab{white-space:nowrap;padding:9px 12px;font-size:13px;}
+  .chart-wrap{height:185px;}
+  .chart-grid{grid-template-columns:1fr;}
+  .lgbox{padding:10px;}
+  .lgr{padding:5px 0;}
+  .lgt{font-size:12px;}
+  .lgx{font-size:11px;}
+
+  /* ── Scenarios ── */
+  .scr{gap:8px;}
+  .scl{width:105px;font-size:12px;}
+  .scv{font-size:13px;width:60px;}
+  .sentiment-box{padding:10px;}
+  .sentiment-text{font-size:12px;}
+
+  /* ── Day Forecast ── */
+  .day-fc{padding:12px;}
+  .day-row{grid-template-columns:1fr 1fr;gap:8px;margin-bottom:10px;}
+  .day-stat-label{font-size:11px;}
+  .day-stat-val{font-size:16px;}
+  .df-note{font-size:12px;}
+
+  /* ── Portfolio ── */
+  .pf-new{padding:12px;}
+  .pf-form{grid-template-columns:1fr;gap:7px;}
+  .pf-input,.pf-select{font-size:14px;padding:9px 10px;}
+  .pf-tx{font-size:12px;gap:6px;}
+  .pf-sum-grid{grid-template-columns:1fr 1fr;}
+  .pf-sum-item{padding:9px 10px;}
+  .pf-sum-val{font-size:15px;}
+  .pf-scenarios{grid-template-columns:1fr 1fr;}
+
+  /* ── News ── */
+  .news-art{padding:10px 0;}
+  .news-art-title{font-size:13px;}
+  .news-art-body{font-size:12px;}
+  .news-art-src{font-size:11px;}
+
+  /* ── Sector ── */
   .sector-grid{grid-template-columns:repeat(2,1fr);gap:8px;}
   .sector-card{padding:10px;}
-  .sector-emoji{font-size:20px;}
-  
-  /* Glossar */
+  .sector-emoji{font-size:20px;margin-bottom:6px;}
+  .sector-name{font-size:11px;}
+  .sector-val{font-size:14px;}
+  .sector-desc{font-size:11px;}
+
+  /* ── Glossar ── */
   .glossar-grid{grid-template-columns:1fr;}
-  
-  /* Portfolio */
-  .pf-form{grid-template-columns:1fr 1fr;}
-  .pf-sum-grid{grid-template-columns:1fr 1fr;}
-  .pf-scenarios{grid-template-columns:1fr 1fr;}
-  
-  /* Context bar */
-  .ctx-bar{flex-direction:column;gap:10px;padding:12px;}
-  .ctx-stats{display:flex;gap:12px;flex-wrap:wrap;}
-  .ctx-stat{font-size:12px;}
-  
-  /* Day forecast */
-  .day-row{grid-template-columns:1fr 1fr;}
-  .day-stat-val{font-size:15px;}
-  
-  /* Settings dropdown full width */
-  .settings-dd{width:calc(100vw - 24px);right:-12px;}
-  
-  /* Hide live badge text */
-  .live-badge span{display:none;}
+  .gitem{padding:10px;}
+  .gitem-term{font-size:13px;}
+  .gitem-def{font-size:12px;}
 
-  /* News */
-  .news-art-title{font-size:14px;}
-  .news-art-body{font-size:13px;}
+  /* ── Settings ── */
+  .settings-dd{width:calc(100vw - 20px);right:-8px;padding:14px;}
+  .api-input{font-size:14px;}
+
+  /* ── Alert ── */
+  .alert{padding:10px 12px;font-size:13px;}
 }
 
-/* ── Auth Overlay ── */
-.auth-overlay{position:fixed;inset:0;background:var(--bg);z-index:1000;display:flex;align-items:center;justify-content:center;}
-.auth-overlay.hidden{display:none;}
-.auth-box{background:var(--surface);border:1px solid var(--border);border-radius:20px;padding:40px;width:360px;max-width:90vw;text-align:center;box-shadow:var(--shadow-md);}
-.auth-logo{font-size:48px;margin-bottom:16px;}
-.auth-title{font-size:22px;font-weight:700;margin-bottom:6px;}
-.auth-sub{font-size:14px;color:var(--text2);margin-bottom:28px;line-height:1.5;}
-.auth-input{width:100%;padding:11px 14px;border:1px solid var(--border2);border-radius:10px;font-family:inherit;font-size:15px;outline:none;margin-bottom:12px;transition:border-color .2s;}
-.auth-input:focus{border-color:var(--blue);}
-.auth-btn{width:100%;padding:12px;background:var(--blue);color:#fff;border:none;border-radius:10px;font-family:inherit;font-size:15px;font-weight:600;cursor:pointer;transition:opacity .2s;}
-.auth-btn:hover{opacity:.88;}
-.auth-btn:disabled{opacity:.5;cursor:not-allowed;}
-.auth-msg{font-size:13px;margin-top:12px;min-height:20px;}
-.auth-msg.ok{color:var(--green);}
-.auth-msg.err{color:var(--red);}
-.auth-footer{font-size:12px;color:var(--text3);margin-top:20px;line-height:1.5;}
-/* ── User Menu ── */
-.user-btn{display:flex;align-items:center;gap:6px;padding:6px 12px;border-radius:8px;border:1px solid var(--border);background:var(--surface);cursor:pointer;font-family:inherit;font-size:13px;font-weight:500;color:var(--text2);}
-.user-btn:hover{background:var(--surface2);}
-.user-avatar{width:22px;height:22px;border-radius:50%;background:var(--blue);color:#fff;display:flex;align-items:center;justify-content:center;font-size:11px;font-weight:700;}
-
-/* ── Toggle Switch ── */
-.toggle-switch{position:relative;display:inline-block;width:40px;height:22px;flex-shrink:0;}
-.toggle-switch input{opacity:0;width:0;height:0;}
-.toggle-slider{position:absolute;cursor:pointer;inset:0;background:var(--surface3);border-radius:22px;transition:.3s;}
-.toggle-slider:before{position:absolute;content:"";height:16px;width:16px;left:3px;bottom:3px;background:#fff;border-radius:50%;transition:.3s;box-shadow:0 1px 3px rgba(0,0,0,.2);}
-input:checked + .toggle-slider{background:var(--green);}
-input:checked + .toggle-slider:before{transform:translateX(18px);}
-
-/* ── KI Status Pill ── */
-.ki-status-pill{display:inline-flex;align-items:center;gap:6px;padding:5px 12px;background:var(--blue-bg);border:1px solid rgba(37,99,235,.2);border-radius:20px;font-size:12px;font-weight:500;color:var(--blue);white-space:nowrap;animation:fadeIn .3s ease;}
-.ki-status-pill.success{background:var(--green-bg);border-color:var(--green-bd);color:var(--green);}
-.ki-status-pill.error{background:var(--red-bg);border-color:var(--red-bd);color:var(--red);}
-@keyframes fadeIn{from{opacity:0;transform:translateY(-4px);}to{opacity:1;transform:translateY(0);}}
-
-.tab-logo{width:18px;height:18px;border-radius:3px;object-fit:cover;vertical-align:middle;margin-right:6px;flex-shrink:0;}
-.tab-rklb-label::after{content:'Rocket Lab (RKLB)';}
-.tab-asts-label::after{content:'AST SpaceMobile (ASTS)';}
-@media(max-width:640px){
-  .tab-logo{width:16px;height:16px;margin-right:4px;}
-  .hdr-mid{flex:1;min-width:0;}
-  .tabs{width:100%;}
+/* ══════════════════════════════════
+   SMALL MOBILE (max 400px)
+══════════════════════════════════ */
+@media(max-width:400px){
+  .tab{font-size:12px;padding:6px 8px;}
+  .tab-logo{display:none;}
+  .mets{grid-template-columns:repeat(2,1fr);}
+  .met-val{font-size:18px;}
+  .rec-scores{grid-template-columns:repeat(2,1fr);}
+  .scl{width:90px;font-size:11px;}
 }
-@media(max-width:420px){
-  .tab{padding:7px 10px;font-size:12px;}
-}
+
 </style>
   <!-- PWA -->
   <link rel="manifest" href="/manifest.json">
