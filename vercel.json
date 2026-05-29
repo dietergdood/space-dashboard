@@ -2,12 +2,20 @@
   "version": 2,
   "outputDirectory": "public",
   "rewrites": [
-    { "source": "/api/:path*", "destination": "/api/:path*" }
+    {
+      "source": "/api/:path*",
+      "destination": "/api/:path*"
+    }
   ],
   "crons": [
     {
       "path": "/api/cron",
       "schedule": "0 7 * * *"
     }
-  ]
+  ],
+  "functions": {
+    "api/cron.js": {
+      "maxDuration": 300
+    }
+  }
 }

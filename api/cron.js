@@ -115,10 +115,10 @@ export default async function handler(req, res) {
         const data = await kiCall(call.prompt);
         await saveToCache(call.ticker, call.section, data);
         results.success.push(`${call.ticker}/${call.section}`);
-        await delay(8000); // 8s between calls
+        await delay(3000); // 3s between calls
       } catch(e) {
         results.failed.push(`${call.ticker}/${call.section}: ${e.message}`);
-        await delay(5000);
+        await delay(2000);
       }
     }
 
