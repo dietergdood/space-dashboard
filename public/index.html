@@ -780,12 +780,12 @@ body{font-family:'DM Sans',sans-serif;background:var(--bg);color:var(--text);min
       <div class="cw"><canvas id="rklb-chart" role="img" aria-label="RKLB Chart">RKLB Kursverlauf</canvas></div>
       <div class="lgbox" id="rklb-lgbox">
         <div class="lgr"><div class="lgl"><div class="lgs" style="background:var(--rklb);"></div><div class="lgdot" style="background:var(--rklb);"></div></div><div><div class="lgt">Was wirklich passiert ist</div><div class="lgx">Der echte Kursverlauf der letzten 12 Monate — von $42 auf $150, ein Anstieg von 257%</div></div></div>
-        <div class="lgr"><div class="lgl"><div class="lgd" style="border-color:var(--green);"></div><div class="lgdot" style="background:var(--green);"></div></div><div><div class="lgt" style="color:var(--green);">Optimistisches Szenario → $200–216</div><div class="lgx">Wenn Neutron-Rakete fliegt + Defense-Verträge kommen + SpaceX-IPO-Effekt hält an</div></div></div>
-        <div class="lgr"><div class="lgl"><div class="lgd" style="border-color:#bbb;"></div><div class="lgdot" style="background:#bbb;"></div></div><div><div class="lgt" style="color:#888;">Was Bankexperten im Schnitt erwarten → $120</div><div class="lgx">Nüchterne Mitte der Profis — ohne übertriebenen Optimismus oder Pessimismus</div></div></div>
-        <div class="lgr"><div class="lgl"><div class="lgd" style="border-color:var(--red);"></div><div class="lgdot" style="background:var(--red);"></div></div><div><div class="lgt" style="color:var(--red);">Pessimistisches Szenario → $86</div><div class="lgx">Wenn Neutron scheitert oder sich stark verzögert und der Hype nachlässt</div></div></div>
+        <div class="lgr"><div class="lgl"><div class="lgd" style="border-color:var(--green);"></div><div class="lgdot" style="background:var(--green);"></div></div><div><div class="lgt" style="color:var(--green);" id="rklb-lg-bull">Optimistisches Szenario — wird mit KI geladen</div></div></div>
+        <div class="lgr"><div class="lgl"><div class="lgd" style="border-color:#bbb;"></div><div class="lgdot" style="background:#bbb;"></div></div><div><div class="lgt" style="color:#888;" id="rklb-lg-base">Bankexperten-Konsens — wird mit KI geladen</div></div></div>
+        <div class="lgr"><div class="lgl"><div class="lgd" style="border-color:var(--red);"></div><div class="lgdot" style="background:var(--red);"></div></div><div><div class="lgt" style="color:var(--red);" id="rklb-lg-bear">Pessimistisches Szenario — wird mit KI geladen</div></div></div>
       </div>
     </div>
-    id="rklb-view-5y" style="display:none;padding-top:4px;">
+    <div id="rklb-view-5y" style="display:none;padding-top:4px;">
       <div class="f5-disclaimer-inline">⚠️ Spekulative Schätzung — kein Versprechen! Nutze dies als Denkrahmen, nicht als Prognose.</div>
       <div class="f5-chart-wrap" style="margin-top:4px;"><canvas id="rklb-chart5" role="img" aria-label="RKLB 5-Jahres Chart"></canvas></div>
       <button class="f5-milestones-btn" id="rklb-f5-btn-txt" onclick="toggleF5Details('rklb')">▼ Jahres-Meilensteine & Annahmen anzeigen</button>
@@ -1260,12 +1260,12 @@ body{font-family:'DM Sans',sans-serif;background:var(--bg);color:var(--text);min
       <div class="cw"><canvas id="asts-chart" role="img" aria-label="ASTS Chart">ASTS Kursverlauf</canvas></div>
       <div class="lgbox" id="asts-lgbox">
         <div class="lgr"><div class="lgl"><div class="lgs" style="background:var(--asts);"></div><div class="lgdot" style="background:var(--asts);"></div></div><div><div class="lgt">Was wirklich passiert ist</div><div class="lgx">Echter historischer Kurs — stark gestiegen, aber auch sehr schwankend</div></div></div>
-        <div class="lgr"><div class="lgl"><div class="lgd" style="border-color:var(--green);"></div><div class="lgdot" style="background:var(--green);"></div></div><div><div class="lgt" style="color:var(--green);">Optimistisches Szenario → $200+</div><div class="lgx">Wenn die Satelliten funktionieren und Umsatz kommt</div></div></div>
-        <div class="lgr"><div class="lgl"><div class="lgd" style="border-color:#bbb;"></div><div class="lgdot" style="background:#bbb;"></div></div><div><div class="lgt" style="color:#888;">Was Bankexperten erwarten → $83</div><div class="lgx">Nüchterne Mitte — der aktuelle Kurs liegt 44% darüber</div></div></div>
-        <div class="lgr"><div class="lgl"><div class="lgd" style="border-color:var(--red);"></div><div class="lgdot" style="background:var(--red);"></div></div><div><div class="lgt" style="color:var(--red);">Pessimistisches Szenario → $50</div><div class="lgx">Wenn Blue Origin dauerhaft ausfällt + Starlink gewinnt</div></div></div>
+        <div class="lgr"><div class="lgl"><div class="lgd" style="border-color:var(--green);"></div><div class="lgdot" style="background:var(--green);"></div></div><div><div class="lgt" style="color:var(--green);" id="asts-lg-bull">Optimistisches Szenario — wird mit KI geladen</div></div></div>
+        <div class="lgr"><div class="lgl"><div class="lgd" style="border-color:#bbb;"></div><div class="lgdot" style="background:#bbb;"></div></div><div><div class="lgt" style="color:#888;" id="asts-lg-base">Bankexperten-Konsens — wird mit KI geladen</div></div></div>
+        <div class="lgr"><div class="lgl"><div class="lgd" style="border-color:var(--red);"></div><div class="lgdot" style="background:var(--red);"></div></div><div><div class="lgt" style="color:var(--red);" id="asts-lg-bear">Pessimistisches Szenario — wird mit KI geladen</div></div></div>
       </div>
     </div>
-    id="asts-view-5y" style="display:none;padding-top:4px;">
+    <div id="asts-view-5y" style="display:none;padding-top:4px;">
       <div class="f5-disclaimer-inline">⚠️ Spekulative Schätzung — kein Versprechen! Nutze dies als Denkrahmen, nicht als Prognose.</div>
       <div class="f5-chart-wrap" style="margin-top:4px;"><canvas id="asts-chart5" role="img" aria-label="ASTS 5-Jahres Chart"></canvas></div>
       <button class="f5-milestones-btn" id="asts-f5-btn-txt" onclick="toggleF5Details('asts')">▼ Jahres-Meilensteine &amp; Annahmen anzeigen</button>
@@ -1606,6 +1606,15 @@ body{font-family:'DM Sans',sans-serif;background:var(--bg);color:var(--text);min
 </div>
 
 <script>
+const chartInstances = {};
+const forecastTargets = {
+  rklb: { bull: 216, base: 120, bear: 86 },
+  asts: { bull: 200, base: 83, bear: 50 }
+};
+const mo=['Jun','Jul','Aug','Sep','Okt','Nov','Dez','Jan','Feb','Mär','Apr','Mai','Jun→','Jul→','Aug→','Sep→'];
+
+
+
 const $=id=>document.getElementById(id);
 const quotes={rklb:null,asts:null};
 const CONS={rklb:120,asts:83};
@@ -2076,13 +2085,13 @@ async function fetchScenarios(t){
         return '<div class="scr"><div class="scl">'+lbl+'</div><div class="scb"><div class="scf" style="width:'+(b.pct||50)+'%;background:'+col+';"></div></div><div class="scv '+cls+'" '+vstyle+'>'+( b.val||'—')+'</div></div>';
       }).join('');
     }
-    if(lgbox&&p.bull_desc&&p.base_desc&&p.bear_desc){
-      const first=lgbox.querySelector('.lgr');
-      lgbox.innerHTML=(first?first.outerHTML:'')+
-        '<div class="lgr"><div class="lgl"><div class="lgd" style="border-color:var(--green);"></div><div class="lgdot" style="background:var(--green);"></div></div><div><div class="lgt" style="color:var(--green);">'+p.bull_desc+'</div></div></div>'+
-        '<div class="lgr"><div class="lgl"><div class="lgd" style="border-color:#bbb;"></div><div class="lgdot" style="background:#bbb;"></div></div><div><div class="lgt" style="color:#888;">'+p.base_desc+'</div></div></div>'+
-        '<div class="lgr"><div class="lgl"><div class="lgd" style="border-color:var(--red);"></div><div class="lgdot" style="background:var(--red);"></div></div><div><div class="lgt" style="color:var(--red);">'+p.bear_desc+'</div></div></div>';
-    }
+    // Update lgbox via IDs (no full rebuild needed)
+    const bullLg=document.getElementById(t+'-lg-bull');
+    const baseLg=document.getElementById(t+'-lg-base');
+    const bearLg=document.getElementById(t+'-lg-bear');
+    if(bullLg&&p.bull_desc)bullLg.textContent=p.bull_desc;
+    if(baseLg&&p.base_desc)baseLg.textContent=p.base_desc;
+    if(bearLg&&p.bear_desc)bearLg.textContent=p.bear_desc;
     if(sentEl&&p.sentiment)sentEl.innerHTML=p.sentiment;
   }catch(e){console.warn('Scenarios update failed:',e.message);}
   finally{barsEl.style.opacity='1';}
@@ -2136,6 +2145,9 @@ async function loadAll(){
   }
 })();
 
+// Init RKLB 5yr chart after definitions
+build5yrChart('rklb','rklb-chart5');
+
 loadAll();setInterval(loadAll,15000);
 
 // ── 5-Year forecast toggles ────────────────────────────
@@ -2181,20 +2193,7 @@ function build5yrChart(ticker, canvasId) {
     {label:'🐻 Bear', data:interp(cur, ft.bear*0.4), borderColor:'#dc2626', fill:false, tension:.4, pointRadius:4, borderWidth:2, borderDash:[4,4]}
   ]}, options:co5()});
 }
-build5yrChart('rklb','rklb-chart5');
-
-// ── ASTS charts: lazy-init on first tab switch ────
-let _astsChartsInited = false;
-function initAstsCharts(){
-  if(_astsChartsInited) return;
-  _astsChartsInited = true;
-  buildHistoryChart('asts','asts-chart','#15803d','rgba(21,128,61,.06)',forecastTargets.asts.bull,forecastTargets.asts.base,forecastTargets.asts.bear);
-  build5yrChart('asts','asts-chart5');
-}
-
 // Chart instances (updatable)
-const chartInstances = {};
-const mo=['Jun','Jul','Aug','Sep','Okt','Nov','Dez','Jan','Feb','Mär','Apr','Mai','Jun→','Jul→','Aug→','Sep→'];
 
 // Build chart with real history data
 function buildHistoryChart(ticker, canvasId, accentColor, bgColor, forecastBull, forecastBase, forecastBear) {
@@ -2257,10 +2256,6 @@ function buildHistoryChart(ticker, canvasId, accentColor, bgColor, forecastBull,
 }
 
 // Forecast targets (updated by AI)
-const forecastTargets = {
-  rklb: { bull: 216, base: 120, bear: 86 },
-  asts: { bull: 200, base: 83, bear: 50 }
-};
 
 function rebuildCharts() {
   buildHistoryChart('rklb','rklb-chart','#1d4ed8','rgba(29,78,216,.06)',
@@ -2270,6 +2265,17 @@ function rebuildCharts() {
       forecastTargets.asts.bull, forecastTargets.asts.base, forecastTargets.asts.bear);
   }
 }
+
+
+// ── ASTS charts: lazy-init on first tab switch ────
+let _astsChartsInited = false;
+function initAstsCharts(){
+  if(_astsChartsInited) return;
+  _astsChartsInited = true;
+  buildHistoryChart('asts','asts-chart','#15803d','rgba(21,128,61,.06)',forecastTargets.asts.bull,forecastTargets.asts.base,forecastTargets.asts.bear);
+  build5yrChart('asts','asts-chart5');
+}
+
 const co=y=>({responsive:true,maintainAspectRatio:false,plugins:{legend:{display:false},tooltip:{callbacks:{label:c=>'$'+(c.parsed.y!=null?c.parsed.y.toFixed(0):'—')},backgroundColor:'#fff',titleColor:'#666',bodyColor:'#1a1a18',borderColor:'#e5e5e0',borderWidth:1}},scales:{x:{grid:{color:'rgba(0,0,0,.04)'},ticks:{color:'#aaa',font:{size:10},maxRotation:0}},y:{grid:{color:'rgba(0,0,0,.04)'},ticks:{color:'#aaa',font:{size:10},callback:v=>'$'+v},min:y}}});
 // rklb-chart built dynamically via buildHistoryChart()
 </script>
