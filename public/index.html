@@ -1926,6 +1926,81 @@ function applyCtx(t, p) {
   }
 }
 
+
+// ── Portfolio Functions ────────────────────────────────────
+function addTx(t) {
+  const type = $(t+'-tx-type').value;
+  const qty = parseFloat($(t+'-tx-qty').value);
+  const price = parseFloat($(t+'-tx-price').value);
+  const date = $(t+'-tx-date').value;
+  const note = $(t+'-tx-note') ? $(t+'-tx-note').value.trim() : '';
+  if (!qty || !price || qty<=0 || price<=0) { alert('Bitte Anzahl und Preis eingeben.'); return; }
+  txData[t].push({type,qty,price,date:date||new Date().toISOString().split('T')[0],note,id:Date.now()});
+  saveTx(t);
+  if ($(t+'-tx-qty')) $(t+'-tx-qty').value='';
+  if ($(t+'-tx-price')) $(t+'-tx-price').value='';
+  if ($(t+'-tx-note')) $(t+'-tx-note').value='';
+  renderTxList(t);
+  recalcPF(t);
+}
+
+function removeTx(t, id) {
+  txData[t] = txData[t].filter(x=>x.id!==id);
+  saveTx(t); renderTxList(t); recalcPF(t);
+}
+
+function renderTxList(t) {
+  const el = $(t+'-tx-list');
+  if (!el) return;
+  if (txData[t].length === 0) {
+    el.innerHTML = '<div class="pf-empty">Noch keine Transaktionen erfasst.</div>';
+    return;
+  }
+  el.innerHTML = txData[t].map(tx =>
+    `<div class="pf-tx">
+      <span class="pf-tx-type ${tx.type}">${tx.type==='buy'?'KAUF':'VERKAUF'}</span>
+      <span class="mono">${tx.qty} × $${fmt(tx.price)}</span>
+      <span style="color:var(--text3);font-size:12px;">${tx.date}</span>
+      ${tx.note?`<span style="color:var(--text2);font-size:12px;">${tx.note}</span>`:''}
+      <button class="pf-tx-remove" onclick="removeTx('${t}',${tx.id})">✕</button>
+    </div>`
+  ).join('');
+}
+
+function recalcPF(t) {
+  const q = quotes[t], txs = txData[t];
+  const sumEl = $(t+'-pf-summary');
+  if (!txs.length) { if(sumEl) sumEl.style.display='none'; return; }
+  if(sumEl) sumEl.style.display='block';
+  let qty=0, invested=0, realized=0, avgCost=0;
+  txs.forEach(tx => {
+    if (tx.type==='buy') { avgCost=(avgCost*qty+tx.price*tx.qty)/(qty+tx.qty); qty+=tx.qty; invested+=tx.price*tx.qty; }
+    else { realized+=(tx.price-avgCost)*tx.qty; qty-=tx.qty; }
+  });
+  qty = Math.max(0,qty);
+  const cur = q?.price||0, val = qty*cur, unreal = qty*(cur-avgCost);
+  if ($(t+'-sum-qty')) $(t+'-sum-qty').textContent = qty.toFixed(2);
+  if ($(t+'-sum-avg')) $(t+'-sum-avg').textContent = '$'+fmt(avgCost);
+  if ($(t+'-sum-val')) $(t+'-sum-val').textContent = '$'+fmt(val);
+  if ($(t+'-sum-invested')) $(t+'-sum-invested').textContent = '$'+fmt(invested);
+  if ($(t+'-sum-unreal')) {
+    $(t+'-sum-unreal').textContent = (unreal>=0?'+':'')+' $'+fmt(Math.abs(unreal))+' ('+fmt(unreal/invested*100||0)+'%)';
+    $(t+'-sum-unreal').className = 'pf-sum-val '+(unreal>=0?'up':'dn');
+  }
+  const ft = forecastTargets[t];
+  if (ft && ft.bull && $(t+'-pf-bull')) $(t+'-pf-bull').textContent = '$'+fmt(qty*ft.bull);
+  if (ft && ft.bear && $(t+'-pf-bear')) $(t+'-pf-bear').textContent = '$'+fmt(qty*ft.bear);
+}
+
+// ── Context Bar KI Update ──────────────────────────────────
+async function fetchCtxBar(t) {
+  try {
+    const p = await kiCall(CTX_PROMPTS[t]);
+    if (!p) return;
+    applyCtx(t, p);
+  } catch(e) { console.warn('fetchCtxBar failed:', e.message); }
+}
+
 async function loadAll() {
   const now = new Date();
   if ($('last-upd')) $('last-upd').textContent = 'Kurse: '+now.toLocaleTimeString('de-CH')+' · '+now.toLocaleDateString('de-CH')+' (15s)';
