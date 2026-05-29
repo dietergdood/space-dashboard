@@ -437,16 +437,13 @@ input:checked + .toggle-slider:before{transform:translateX(18px);}
     <div class="ctx-name">Rocket Lab · RKLB</div>
     <div class="ctx-desc" id="rklb-ctx-desc">Baut Raketen (Electron) und Raumfahrtkomponenten. Wächst in grössere Raketen (Neutron, geplant 2026) und US-Verteidigung ("Golden Dome").</div>
     <div class="ctx-tags" id="rklb-ctx-tags">
-      <span class="ctx-tag green">✓ Golden Dome Partner</span>
-      <span class="ctx-tag green">wird geladen...</span>
-      <span class="ctx-tag amber" id="rklb-tag-neutron">⚡ Neutron-Erstflug H2 2026</span>
-      <span class="ctx-tag">Long Beach, CA · 2006</span>
+      <span class="ctx-tag" style="color:var(--text3);font-style:italic;">Wird geladen...</span>
     </div>
   </div>
   <div class="ctx-stats" id="rklb-ctx-stats">
     <div class="ctx-stat">Gegründet <b>2006</b></div>
     <div class="ctx-stat">HQ <b>Long Beach</b></div>
-    <div class="ctx-stat">Sektor <b>Space-Infra</b></div>
+    <div class="ctx-stat" id="rklb-stat-extra">—</div>
   </div>
 </div>
 
@@ -456,16 +453,13 @@ input:checked + .toggle-slider:before{transform:translateX(18px);}
     <div class="ctx-name">AST SpaceMobile · ASTS</div>
     <div class="ctx-desc" id="asts-ctx-desc">Baut riesige Satelliten die direkt mit normalen Handys kommunizieren — ohne Spezialgerät. Weltweit einziger Anbieter dieses Konzepts. Sehr spekulativ — hohe Chance, hohes Risiko.</div>
     <div class="ctx-tags" id="asts-ctx-tags">
-      <span class="ctx-tag green">✓ FCC-Genehmigung USA</span>
-      <span class="ctx-tag green">✓ AT&T + Verizon Partner</span>
-      <span class="ctx-tag red">⚠ Blue Origin Probleme</span>
-      <span class="ctx-tag amber">🚀 BlueBird 8-10 Launch Jun</span>
+      <span class="ctx-tag" style="color:var(--text3);font-style:italic;">Wird geladen...</span>
     </div>
   </div>
   <div class="ctx-stats" id="asts-ctx-stats">
     <div class="ctx-stat">Gegründet <b>2017</b></div>
-    <div class="ctx-stat">Cash <b>—</b></div>
-    <div class="ctx-stat">Sektor <b>Satellit D2D</b></div>
+    <div class="ctx-stat" id="asts-stat-cash">Cash <b>—</b></div>
+    <div class="ctx-stat">Sektor <b>D2D</b></div>
   </div>
 </div>
 
@@ -483,7 +477,7 @@ input:checked + .toggle-slider:before{transform:translateX(18px);}
   <div class="card-body" id="body-rklb-alert">
     <div class="alert neutral" id="rklb-alert-box">
       <div class="alert-dot"></div>
-      <div id="rklb-alert-text" style="font-style:italic;color:var(--text3);">Aktuelle Lage wird mit KI geladen...</div>
+      <div id="rklb-alert-text" style="font-style:italic;color:var(--text3);">⏳ Wird beim nächsten Cron-Lauf aktualisiert (4× täglich)</div>
     </div>
   </div>
 </div>
@@ -769,7 +763,7 @@ input:checked + .toggle-slider:before{transform:translateX(18px);}
   <div class="card-body" id="body-asts-alert">
     <div class="alert neutral" id="asts-alert-box">
       <div class="alert-dot"></div>
-      <div id="asts-alert-text" style="font-style:italic;color:var(--text3);">Aktuelle Lage wird mit KI geladen...</div>
+      <div id="asts-alert-text" style="font-style:italic;color:var(--text3);">⏳ Wird beim nächsten Cron-Lauf aktualisiert (4× täglich)</div>
     </div>
   </div>
 </div>
