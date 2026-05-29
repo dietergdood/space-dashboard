@@ -527,6 +527,9 @@ body{font-family:'DM Sans',sans-serif;background:var(--bg);color:var(--text);min
   padding-left: 0;
   padding-right: 0;
 }
+
+.rec-banner.rec-empty{background:var(--surface2);border-color:var(--border);}
+.rec-pill-empty{background:var(--surface2);color:var(--text3);border:1px solid var(--border2);font-size:13px;padding:5px 14px;border-radius:6px;}
 </style>
 </head>
 <body>
@@ -684,39 +687,39 @@ body{font-family:'DM Sans',sans-serif;background:var(--bg);color:var(--text);min
   </button>
   <div class="section-body open" id="body-rklb-rec">
   <!-- Recommendation RKLB -->
-  <div class="rec-banner rec-buy" id="rklb-rec-banner">
+  <div class="rec-banner rec-empty" id="rklb-rec-banner">
     <div class="rec-head">
-      <span class="rec-pill rec-pill-buy" id="rklb-rec-pill">KAUFEN</span>
+      <span class="rec-pill rec-pill-empty" id="rklb-rec-pill">—</span>
       <div class="rec-head-right">
-        <div class="rec-title" id="rklb-rec-title">Starke Zahlen, Raketenabwehr-Vertrag und neue Neutron-Rakete als Kurs-Katalysator</div>
-        <div class="rec-ts" id="rklb-rec-ts">Statische Basis-Einschätzung — mit KI-Schlüssel aktualisierbar</div>
+        <div class="rec-title" id="rklb-rec-title" style="color:var(--text2);font-weight:400;">KI-Analyse ausstehend</div>
+        <div class="rec-ts" id="rklb-rec-ts">API-Schlüssel eingeben → KI analysiert live mit Web-Search</div>
       </div>
     </div>
-    <div class="rec-explain" id="rklb-rec-sub">
-      <b>Warum "Kaufen"?</b> Rocket Lab läuft gerade sehr gut: Das Unternehmen hat mehr Aufträge als je zuvor ($2.2 Milliarden bereits gebucht), wächst 64% pro Jahr und ist neu Teil des US-Raketenabwehrsystems "Golden Dome". Die neue Neutron-Rakete (erster Flug geplant H2 2026) könnte den Kurs stark nach oben treiben, wenn sie funktioniert. <b>Aber:</b> Der aktuelle Kurs ($150) liegt bereits über dem, was die meisten Bankexperten erwarten ($120). Das heisst, viel Optimismus ist schon eingepreist. Wer einsteigen will, findet bei $120–130 (auf einem Rücksetzer) einen besseren Einstieg. Hauptrisiko: Wenn die Neutron-Rakete scheitert oder sich stark verzögert.
+    <div class="rec-explain" id="rklb-rec-sub" style="color:var(--text3);font-style:italic;">
+      Noch keine Analyse geladen. Mit KI-Schlüssel im ⚙️-Menü wird die Empfehlung automatisch generiert und alle 2 Stunden aktualisiert.
     </div>
     <div class="rec-scores">
       <div class="rec-score-card">
         <div class="rec-score-top"><div class="rec-score-emoji">📈</div><div class="rec-score-label">Wie gut läuft<br>das Geschäft?</div></div>
-        <div class="rec-score-val up" id="rklb-s1">8/10</div>
+        <div class="rec-score-val up" id="rklb-s1">—</div>
         <div class="rec-meter"><div class="rec-meter-fill" style="width:80%;background:var(--green);" id="rklb-m1"></div></div>
         <div class="rec-score-explain"><b>Fundamentals</b> — Umsatzwachstum, Auftragsbestand, Marge. 8/10 = Rocket Lab wächst stark: +64% Umsatz, $2.2 Mrd. Backlog, erste Profitabilität in Sicht.</div>
       </div>
       <div class="rec-score-card">
         <div class="rec-score-top"><div class="rec-score-emoji">🚀</div><div class="rec-score-label">Wie stark steigt<br>der Kurs gerade?</div></div>
-        <div class="rec-score-val up" id="rklb-s2">7/10</div>
+        <div class="rec-score-val up" id="rklb-s2">—</div>
         <div class="rec-meter"><div class="rec-meter-fill" style="width:70%;background:var(--green);" id="rklb-m2"></div></div>
         <div class="rec-score-explain"><b>Momentum</b> — Kursrichtung der letzten Wochen. 7/10 = +80% in einem Monat. Vorsicht: Starkes Momentum kann schnell drehen wenn Enttäuschungen kommen.</div>
       </div>
       <div class="rec-score-card">
         <div class="rec-score-top"><div class="rec-score-emoji">⚠️</div><div class="rec-score-label">Wie hoch ist<br>das Risiko?</div></div>
-        <div class="rec-score-val wn" id="rklb-s3">6/10</div>
+        <div class="rec-score-val wn" id="rklb-s3">—</div>
         <div class="rec-meter"><div class="rec-meter-fill" style="width:60%;background:var(--amber);" id="rklb-m3"></div></div>
         <div class="rec-score-explain"><b>Risiko</b> — <b>Höherer Score = niedrigeres Risiko.</b> 6/10 = mittleres Risiko. Hauptgefahr: Neutron-Rakete scheitert oder verzögert sich stark → Kurs könnte 40%+ fallen.</div>
       </div>
       <div class="rec-score-card">
         <div class="rec-score-top"><div class="rec-score-emoji">💎</div><div class="rec-score-label">Ist der Preis<br>fair?</div></div>
-        <div class="rec-score-val wn" id="rklb-s4">5/10</div>
+        <div class="rec-score-val wn" id="rklb-s4">—</div>
         <div class="rec-meter"><div class="rec-meter-fill" style="width:50%;background:var(--amber);" id="rklb-m4"></div></div>
         <div class="rec-score-explain"><b>Bewertung</b> — Ist der Kurs gemessen am Unternehmenswert günstig oder teuer? 5/10 = leicht teuer. Kurs ($150) liegt 25% über Analysten-Konsens ($120). Wachstum rechtfertigt einen Teil davon.</div>
       </div>
@@ -1140,39 +1143,39 @@ body{font-family:'DM Sans',sans-serif;background:var(--bg);color:var(--text);min
   </button>
   <div class="section-body open" id="body-asts-rec">
   <!-- Recommendation ASTS -->
-  <div class="rec-banner rec-hold" id="asts-rec-banner">
+  <div class="rec-banner rec-empty" id="asts-rec-banner">
     <div class="rec-head">
-      <span class="rec-pill rec-pill-hold" id="asts-rec-pill">HALTEN</span>
+      <span class="rec-pill rec-pill-empty" id="asts-rec-pill">—</span>
       <div class="rec-head-right">
-        <div class="rec-title" id="asts-rec-title">Spannende Technologie, aber Kurs weit über Expertenmeinungen — und neue Blue-Origin-Krise</div>
-        <div class="rec-ts" id="asts-rec-ts">Statische Basis-Einschätzung — mit KI-Schlüssel aktualisierbar</div>
+        <div class="rec-title" id="asts-rec-title" style="color:var(--text2);font-weight:400;">KI-Analyse ausstehend</div>
+        <div class="rec-ts" id="asts-rec-ts">API-Schlüssel eingeben → KI analysiert live mit Web-Search</div>
       </div>
     </div>
-    <div class="rec-explain" id="asts-rec-sub">
-      <b>Warum "Halten" und nicht Kaufen?</b> ASTS baut etwas Revolutionäres: Satelliteninternet direkt aufs normale Handy — ohne Spezialgerät. Weltweit einzigartig. Grosse Telekonanbieter wie AT&T und Verizon unterstützen ASTS aktiv. Das Problem: Der aktuelle Kurs ($120) ist 44% höher als was Bankexperten für fair halten ($83). Und die Blue Origin Rakete ist gestern explodiert — das verzögert weitere Satelliten-Starts. Wer bereits ASTS-Aktien hat: Halten und abwarten. Wer noch nicht investiert ist: Besser auf den Mitte-Juni-Satelliten-Start warten. Klappt er gut, zeigt das ob die Technologie wirklich funktioniert.
+    <div class="rec-explain" id="asts-rec-sub" style="color:var(--text3);font-style:italic;">
+      Noch keine Analyse geladen. Mit KI-Schlüssel im ⚙️-Menü wird die Empfehlung automatisch generiert und alle 2 Stunden aktualisiert.
     </div>
     <div class="rec-scores">
       <div class="rec-score-card">
         <div class="rec-score-top"><div class="rec-score-emoji">📈</div><div class="rec-score-label">Wie gut läuft<br>das Geschäft?</div></div>
-        <div class="rec-score-val wn" id="asts-s1">5/10</div>
+        <div class="rec-score-val wn" id="asts-s1">—</div>
         <div class="rec-meter"><div class="rec-meter-fill" style="width:50%;background:var(--amber);" id="asts-m1"></div></div>
         <div class="rec-score-explain"><b>Fundamentals</b> — 5/10 = mittelmässig. ASTS macht erst $14.7 Mio. Quartalsumsatz, schreibt hohe Verluste. Cash ($3.5 Mrd.) hält die Firma am Leben. Potenzial ist riesig, aber noch kaum bewiesen.</div>
       </div>
       <div class="rec-score-card">
         <div class="rec-score-top"><div class="rec-score-emoji">🚀</div><div class="rec-score-label">Wie stark steigt<br>der Kurs gerade?</div></div>
-        <div class="rec-score-val up" id="asts-s2">8/10</div>
+        <div class="rec-score-val up" id="asts-s2">—</div>
         <div class="rec-meter"><div class="rec-meter-fill" style="width:80%;background:var(--green);" id="asts-m2"></div></div>
         <div class="rec-score-explain"><b>Momentum</b> — 8/10 = sehr starkes Momentum. +77% in 2 Wochen vor Blue Origin Explosion. Nach der Explosion −7% — Momentum könnte sich abschwächen. Nur für Kurzfrist relevant.</div>
       </div>
       <div class="rec-score-card">
         <div class="rec-score-top"><div class="rec-score-emoji">💣</div><div class="rec-score-label">Wie hoch ist<br>das Risiko?</div></div>
-        <div class="rec-score-val dn" id="asts-s3">4/10</div>
+        <div class="rec-score-val dn" id="asts-s3">—</div>
         <div class="rec-meter"><div class="rec-meter-fill" style="width:40%;background:var(--red);" id="asts-m3"></div></div>
         <div class="rec-score-explain"><b>Risiko</b> — <b>Höherer Score = niedrigeres Risiko.</b> 4/10 = hohes Risiko. Blue Origin Explosion, Starlink-Konkurrenz, kaum Umsatz, starke Kursschwankungen. Nur für risikobereite Anleger geeignet.</div>
       </div>
       <div class="rec-score-card">
         <div class="rec-score-top"><div class="rec-score-emoji">💸</div><div class="rec-score-label">Ist der Preis<br>fair?</div></div>
-        <div class="rec-score-val dn" id="asts-s4">3/10</div>
+        <div class="rec-score-val dn" id="asts-s4">—</div>
         <div class="rec-meter"><div class="rec-meter-fill" style="width:30%;background:var(--red);" id="asts-m4"></div></div>
         <div class="rec-score-explain"><b>Bewertung</b> — 3/10 = deutlich überbewertet. Kurs ($120) liegt 44% über Analysten-Konsens ($83) und 68% über DCF-Fairer-Wert ($71). Man bezahlt fast nur für Zukunftshoffnung.</div>
       </div>
