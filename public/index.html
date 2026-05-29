@@ -1176,11 +1176,9 @@ body{font-family:'DM Sans',sans-serif;background:var(--bg);color:var(--text);min
     </div>
     <div id="asts-view-1y" style="padding-top:16px;">
 
-<div class="two">
+  <div class="two">
     <div class="card">
       <div class="ch">📈 Kursverlauf der letzten 12 Monate + Zukunftsszenarien</div>
-  <div class="card">
-      <div class="ch">Kursverlauf der letzten 12 Monate + Zukunftsszenarien</div>
       <div class="cw"><canvas id="asts-chart" role="img" aria-label="ASTS Chart">ASTS Kursverlauf</canvas></div>
       <div class="lgbox">
         <div class="lgr"><div class="lgl"><div class="lgs" style="background:var(--asts);"></div><div class="lgdot" style="background:var(--asts);"></div></div><div><div class="lgt">Was wirklich passiert ist</div><div class="lgx">Echter historischer Kurs — stark gestiegen, aber auch sehr schwankend</div></div></div>
@@ -1193,7 +1191,7 @@ body{font-family:'DM Sans',sans-serif;background:var(--bg);color:var(--text);min
       <div class="ch">Wo könnte der Kurs in 12 Monaten stehen?</div>
       <div style="font-size:14px;color:var(--text2);margin-bottom:12px;line-height:1.5;">Die Bandbreite ist riesig — das zeigt das grosse Risiko und das grosse Potenzial:</div>
       <div class="scr"><div class="scl">Bestmöglicher Fall</div><div class="scb"><div class="scf" style="width:100%;background:var(--green);"></div></div><div class="scv up">$200+</div></div>
-      <div class="scr"><div class="scl">Roth Capital Bank</div><div class="scb"><div class="scf" style="width:54%;background:var(--rklb);"></div></div><div class="scv" style="color:var(--rklb);">$108</div></div>
+      <div class="scr"><div class="scl">Roth Capital Bank</div><div class="scb"><div class="scf" style="width:54%;background:var(--asts);"></div></div><div class="scv" style="color:var(--asts);">$108</div></div>
       <div class="scr"><div class="scl">Alle Banken<br>(Durchschnitt)</div><div class="scb"><div class="scf" style="width:42%;background:#bbb;"></div></div><div class="scv mu">$83</div></div>
       <div class="scr"><div class="scl">Fairer Wert<br>(Berechnung)</div><div class="scb"><div class="scf" style="width:36%;background:var(--amber);"></div></div><div class="scv wn">$71</div></div>
       <div class="scr"><div class="scl">Schlechtester Fall</div><div class="scb"><div class="scf" style="width:25%;background:var(--red);"></div></div><div class="scv dn">$50</div></div>
@@ -1204,8 +1202,7 @@ body{font-family:'DM Sans',sans-serif;background:var(--bg);color:var(--text);min
     </div>
   </div>
 
-    </div>
-    <div id="asts-view-5y" style="display:none;padding-top:4px;">
+    id="asts-view-5y" style="display:none;padding-top:4px;">
       <div class="f5-disclaimer-inline">⚠️ Spekulative Schätzung — kein Versprechen! Nutze dies als Denkrahmen, nicht als Prognose.</div>
       <div class="f5-chart-wrap" style="margin-top:4px;"><canvas id="asts-chart5" role="img" aria-label="ASTS 5-Jahres Chart"></canvas></div>
       <button class="f5-milestones-btn" id="asts-f5-btn-txt" onclick="toggleF5Details('asts')">▼ Jahres-Meilensteine &amp; Annahmen anzeigen</button>
