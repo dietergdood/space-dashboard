@@ -1879,16 +1879,24 @@ async function refreshAllNews(manual=false) {
   const dot = $('auto-dot'), lbl = $('auto-label-txt');
   if (dot) dot.classList.add('on');
   if (lbl) lbl.textContent = 'Aktualisiert...';
-  try {
-    await Promise.all([
-      fetchRec('rklb'), fetchRec('asts'),
-      fetchLiveNews('rklb'), fetchLiveNews('asts'),
-      fetchScenarios('rklb'), fetchScenarios('asts'),
-      fetchSectorContext('rklb'), fetchSectorContext('asts'),
-      fetchCtxBar('rklb'), fetchCtxBar('asts'),
-      fetchGlossar(),
-    ]);
-  } catch(e) { console.warn('refreshAllNews error:', e.message); }
+  const delay = ms => new Promise(r => setTimeout(r, ms));
+  const calls = [
+    () => fetchRec('rklb'),
+    () => fetchRec('asts'),
+    () => fetchLiveNews('rklb'),
+    () => fetchLiveNews('asts'),
+    () => fetchScenarios('rklb'),
+    () => fetchScenarios('asts'),
+    () => fetchSectorContext('rklb'),
+    () => fetchSectorContext('asts'),
+    () => fetchCtxBar('rklb'),
+    () => fetchCtxBar('asts'),
+    () => fetchGlossar(),
+  ];
+  for (const call of calls) {
+    try { await call(); } catch(e) { console.warn('refresh call failed:', e.message); }
+    await delay(3000); // 3s between calls to respect rate limits
+  }
   if (lbl) lbl.textContent = 'Nächste Aktualisierung in 2h';
   if (!manual) startAutoRefresh();
 }
