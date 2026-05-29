@@ -636,17 +636,32 @@ body{font-family:'DM Sans',sans-serif;background:var(--bg);color:var(--text);min
 <!-- ════════════════ RKLB ════════════════ -->
 <div class="panel on" id="p-rklb">
 
+  <div class="collapsible-card open" id="card-rklb-alert">
+  <button class="section-toggle open" onclick="toggleCard('rklb-alert')">
+    <div class="st-left"><span class="st-icon">📢</span><div><div class="st-title">Aktuelle Lage · Rocket Lab</div></div></div>
+    <div class="st-right"><span class="st-arrow">▲</span></div>
+  </button>
+  <div class="section-body open" id="body-rklb-alert">
   <div class="alert al-g">
     <div class="adot dg"></div>
     <div><b>Gute Nachrichten:</b> Rocket Lab hat gerade das beste Quartal seiner Geschichte abgeliefert — $200 Millionen Umsatz in 3 Monaten! Dazu ist die Firma jetzt Teil von Trumps gigantischem $1.2 Billionen Raketenabwehrprogramm "Golden Dome". Die neue grosse Neutron-Rakete soll Ende 2026 erstmals fliegen — das könnte den Aktienkurs stark nach oben treiben.</div>
   </div>
 
   <!-- Live Metrics -->
+  </div>
+</div>
+
+<div class="collapsible-card open" id="card-rklb-mets">
+  <button class="section-toggle open" onclick="toggleCard('rklb-mets')">
+    <div class="st-left"><span class="st-icon">💰</span><div><div class="st-title">Live-Kurszahlen</div><div class="st-sub">Aktueller Kurs · Volumen · Jahresspanne</div></div></div>
+    <div class="st-right"><span class="st-arrow">▲</span></div>
+  </button>
+  <div class="section-body open" id="body-rklb-mets">
   <div class="mets">
     <div class="met">
       <div class="met-icon">💰</div>
       <div class="ml">
-        <span class="tip">Aktueller Kurs <span class="tip-icon">?</span><span class="tip-box"><b>Was bedeutet "Kurs"?</b> Das ist der aktuelle Preis für eine einzelne Rocket-Lab-Aktie in US-Dollar. Dieser Preis ändert sich ständig — je nachdem wie viele Leute gerade kaufen oder verkaufen wollen. Während der Börsenwoche (Montag–Freitag, 15:30–22:00 Uhr Schweizer Zeit) wird er alle 60 Sekunden automatisch aktualisiert.</span></span>
+        <span class="tip">Aktueller Kurs <span class="tip-icon">?</span><span class="tip-box"><b>Was bedeutet "Kurs"?</b> Das ist der aktuelle Preis für eine einzelne Rocket-Lab-Aktie in US-Dollar. Dieser Preis ändert sich ständig — je nachdem wie viele Leute gerade kaufen oder verkaufen wollen. Während der Börsenwoche (Montag–Freitag, 15:30–22:00 Uhr Schweizer Zeit) wird er alle 15 Sekunden automatisch aktualisiert.</span></span>
       </div>
       <div class="mv" id="rklb-price">lädt...</div>
       <div class="mc" id="rklb-chg">—</div>
@@ -679,6 +694,8 @@ body{font-family:'DM Sans',sans-serif;background:var(--bg);color:var(--text);min
       <div class="mc-explain">Ø Expertenziel (12 Monate)</div>
     </div>
   </div>
+  </div>
+</div>
 
 <div class="collapsible-card open" id="card-rklb-rec">
   <button class="section-toggle open" onclick="toggleCard('rklb-rec')">
@@ -1094,12 +1111,27 @@ body{font-family:'DM Sans',sans-serif;background:var(--bg);color:var(--text);min
 <!-- ════════════════ ASTS ════════════════ -->
 <div class="panel" id="p-asts">
 
+  <div class="collapsible-card open" id="card-asts-alert">
+  <button class="section-toggle open" onclick="toggleCard('asts-alert')">
+    <div class="st-left"><span class="st-icon">⚠️</span><div><div class="st-title">Aktuelle Lage · AST SpaceMobile</div></div></div>
+    <div class="st-right"><span class="st-arrow">▲</span></div>
+  </button>
+  <div class="section-body open" id="body-asts-alert">
   <div class="alert al-r">
     <div class="adot dr"></div>
     <div><b>Wichtige Warnung:</b> Gestern Nacht (28. Mai) explodierte die Blue Origin Rakete beim Test. Das ist ein Problem für ASTS, weil ASTS einen Vertrag mit Blue Origin für Satelliten-Starts hat. ASTS fiel 7% über Nacht. Gleichzeitig: Drei neue Satelliten (BlueBird 8–10) starten Mitte Juni mit einer SpaceX-Rakete — das ist der nächste wichtige Test.</div>
   </div>
 
   <!-- Live Metrics -->
+  </div>
+</div>
+
+<div class="collapsible-card open" id="card-asts-mets">
+  <button class="section-toggle open" onclick="toggleCard('asts-mets')">
+    <div class="st-left"><span class="st-icon">💰</span><div><div class="st-title">Live-Kurszahlen</div><div class="st-sub">Aktueller Kurs · Volumen · Jahresspanne</div></div></div>
+    <div class="st-right"><span class="st-arrow">▲</span></div>
+  </button>
+  <div class="section-body open" id="body-asts-mets">
   <div class="mets">
     <div class="met">
       <div class="met-icon">💰</div>
@@ -1137,6 +1169,8 @@ body{font-family:'DM Sans',sans-serif;background:var(--bg);color:var(--text);min
       <div class="mc-explain">Ø Expertenziel (12 Monate)</div>
     </div>
   </div>
+  </div>
+</div>
 
 <div class="collapsible-card open" id="card-asts-rec">
   <button class="section-toggle open" onclick="toggleCard('asts-rec')">
@@ -1960,7 +1994,7 @@ function calcPF(t){recalcPF(t);}
 // ── Load quotes ────────────────────────────────────────
 async function loadAll(){
   const now=new Date();
-  $('last-upd').textContent='Kurse: '+now.toLocaleTimeString('de-CH')+' · '+now.toLocaleDateString('de-CH')+' (60s)';
+  $('last-upd').textContent='Kurse: '+now.toLocaleTimeString('de-CH')+' · '+now.toLocaleDateString('de-CH')+' (15s)';
   const[r,a,l,pl]=await Promise.all([fetchQ('RKLB'),fetchQ('ASTS'),fetchSimple('LUNR'),fetchSimple('PL')]);
   applyQ('rklb',r);applyQ('asts',a);
   if(l){const el=$('lunr-price');if(el){el.textContent='$'+l.toFixed(2);el.className='sector-val '+(l>20?'up':'mu');}}
@@ -1983,7 +2017,7 @@ async function loadAll(){
   }
 })();
 
-loadAll();setInterval(loadAll,60000);
+loadAll();setInterval(loadAll,15000);
 
 // ── 5-Year forecast toggles ────────────────────────────
 function toggleF5(t){
