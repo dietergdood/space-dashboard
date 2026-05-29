@@ -652,9 +652,9 @@ body{font-family:'DM Sans',sans-serif;background:var(--bg);color:var(--text);min
     <div class="st-right"><span class="st-arrow">▲</span></div>
   </button>
   <div class="section-body open" id="body-rklb-alert">
-  <div class="alert al-g">
+  <div class="alert al-g" id="rklb-alert-box">
     <div class="adot dg"></div>
-    <div><b>Gute Nachrichten:</b> Rocket Lab hat gerade das beste Quartal seiner Geschichte abgeliefert — $200 Millionen Umsatz in 3 Monaten! Dazu ist die Firma jetzt Teil von Trumps gigantischem $1.2 Billionen Raketenabwehrprogramm "Golden Dome". Die neue grosse Neutron-Rakete soll Ende 2026 erstmals fliegen — das könnte den Aktienkurs stark nach oben treiben.</div>
+    <div id="rklb-alert-text"><i style="color:var(--text3);">Aktuelle Lage wird mit KI geladen...</i></div>
   </div>
 
   <!-- Live Metrics -->
@@ -699,8 +699,8 @@ body{font-family:'DM Sans',sans-serif;background:var(--bg);color:var(--text);min
       <div class="ml">
         <span class="tip">Was Experten erwarten <span class="tip-icon">?</span><span class="tip-box"><b>Was sind Analysten?</b> Bezahlte Börsenprofis von grossen Banken, die Unternehmen intensiv analysieren und dann ein Kursziel setzen — wo sie den Preis in 12 Monaten erwarten. "12× Kaufen" bedeutet: 12 von 17 Experten empfehlen Rocket Lab zu kaufen. Aber: Das sind Meinungen, keine Garantien!</span></span>
       </div>
-      <div class="mv" style="font-family:'DM Mono',monospace;">$120</div>
-      <div class="mc mu">12× Kaufen · 5× Halten</div>
+      <div class="mv" id="rklb-cons-price" style="font-family:'DM Mono',monospace;">—</div>
+      <div class="mc mu" id="rklb-cons-rating">— Analysten</div>
       <div class="mc-explain">Ø Expertenziel (12 Monate)</div>
     </div>
   </div>
@@ -1132,9 +1132,9 @@ body{font-family:'DM Sans',sans-serif;background:var(--bg);color:var(--text);min
     <div class="st-right"><span class="st-arrow">▲</span></div>
   </button>
   <div class="section-body open" id="body-asts-alert">
-  <div class="alert al-r">
+  <div class="alert al-r" id="asts-alert-box">
     <div class="adot dr"></div>
-    <div><b>Wichtige Warnung:</b> Gestern Nacht (28. Mai) explodierte die Blue Origin Rakete beim Test. Das ist ein Problem für ASTS, weil ASTS einen Vertrag mit Blue Origin für Satelliten-Starts hat. ASTS fiel 7% über Nacht. Gleichzeitig: Drei neue Satelliten (BlueBird 8–10) starten Mitte Juni mit einer SpaceX-Rakete — das ist der nächste wichtige Test.</div>
+    <div id="asts-alert-text"><i style="color:var(--text3);">Aktuelle Lage wird mit KI geladen...</i></div>
   </div>
 
   <!-- Live Metrics -->
@@ -1179,8 +1179,8 @@ body{font-family:'DM Sans',sans-serif;background:var(--bg);color:var(--text);min
       <div class="ml">
         <span class="tip">Was Experten erwarten <span class="tip-icon">?</span><span class="tip-box"><b>Achtung:</b> Bankexperten erwarten $83 — aber der aktuelle Kurs liegt bei $120. Das heisst: Du bezahlst 44% mehr als was die Profis für fair halten. Das ist möglich wenn viel Zukunftsfantasie eingepreist ist — aber auch riskant.</span></span>
       </div>
-      <div class="mv" style="font-family:'DM Mono',monospace;">$83</div>
-      <div class="mc dn">44% unter aktuellem Kurs</div>
+      <div class="mv" id="asts-cons-price" style="font-family:'DM Mono',monospace;">—</div>
+      <div class="mc dn" id="asts-cons-rating">— Analysten</div>
       <div class="mc-explain">Ø Expertenziel (12 Monate)</div>
     </div>
   </div>
@@ -1785,9 +1785,9 @@ function newsToHtml(txt){
 // ── Recommendation ─────────────────────────────────────
 const REC_PROMPTS={
   rklb:`Analysiere Rocket Lab (RKLB) mit Web-Suchen. Berücksichtige aktuellen Kurs, Neutron-Status, Golden Dome, SpaceX IPO. Antworte NUR mit JSON ohne Markdown:
-{"empfehlung":"KAUFEN","titel":"Max 80 Zeichen","begruendung":"2-4 Sätze für Einsteiger","fundamentals":8,"momentum":7,"risiko":6,"bewertung":5,"explain_fundamentals":"<b>Fundamentals</b> — 1 Satz mit aktuellen Zahlen zu Umsatz/Wachstum","explain_momentum":"<b>Momentum</b> — 1 Satz zur aktuellen Kursbewegung","explain_risiko":"<b>Risiko</b> — <b>Höherer Score = niedrigeres Risiko.</b> 1 Satz zum Hauptrisiko","explain_bewertung":"<b>Bewertung</b> — 1 Satz: Kurs vs. Analysten-Konsens","einstieg":"$120-130","kursziel":"$180","stopp":"$105"}`,
+{"empfehlung":"KAUFEN","titel":"Max 80 Zeichen","begruendung":"2-4 Sätze für Einsteiger","fundamentals":8,"momentum":7,"risiko":6,"bewertung":5,"explain_fundamentals":"<b>Fundamentals</b> — 1 Satz mit aktuellen Zahlen zu Umsatz/Wachstum","explain_momentum":"<b>Momentum</b> — 1 Satz zur aktuellen Kursbewegung","explain_risiko":"<b>Risiko</b> — <b>Höherer Score = niedrigeres Risiko.</b> 1 Satz zum Hauptrisiko","explain_bewertung":"<b>Bewertung</b> — 1 Satz: Kurs vs. Analysten-Konsens","einstieg":"$120-130","kursziel":"$180","stopp":"$105","lage":"<b>Kurze Überschrift:</b> 1-2 Sätze was gerade wichtig ist für RKLB","lage_typ":"positive","analysten":"12x Kaufen · 5x Halten"}`,
   asts:`Analysiere AST SpaceMobile (ASTS) mit Web-Suchen. Berücksichtige Blue Origin Explosion, BlueBird Launch, SpaceX IPO, Starlink. Antworte NUR mit JSON ohne Markdown:
-{"empfehlung":"HALTEN","titel":"Max 80 Zeichen","begruendung":"2-4 Sätze für Einsteiger","fundamentals":5,"momentum":8,"risiko":4,"bewertung":3,"explain_fundamentals":"<b>Fundamentals</b> — 1 Satz zu Umsatz/Cash-Lage","explain_momentum":"<b>Momentum</b> — 1 Satz zur aktuellen Kursbewegung","explain_risiko":"<b>Risiko</b> — <b>Höherer Score = niedrigeres Risiko.</b> 1 Satz zu Hauptrisiken","explain_bewertung":"<b>Bewertung</b> — 1 Satz: Kurs vs. Analysten-Konsens","einstieg":"$80-90","kursziel":"$140","stopp":"$70"}`
+{"empfehlung":"HALTEN","titel":"Max 80 Zeichen","begruendung":"2-4 Sätze für Einsteiger","fundamentals":5,"momentum":8,"risiko":4,"bewertung":3,"explain_fundamentals":"<b>Fundamentals</b> — 1 Satz zu Umsatz/Cash-Lage","explain_momentum":"<b>Momentum</b> — 1 Satz zur aktuellen Kursbewegung","explain_risiko":"<b>Risiko</b> — <b>Höherer Score = niedrigeres Risiko.</b> 1 Satz zu Hauptrisiken","explain_bewertung":"<b>Bewertung</b> — 1 Satz: Kurs vs. Analysten-Konsens","einstieg":"$80-90","kursziel":"$140","stopp":"$70","lage":"<b>Kurze Überschrift:</b> 1-2 Sätze was gerade wichtig ist für ASTS","lage_typ":"warning","analysten":"8x Kaufen · 6x Halten"}`
 };
 
 async function fetchRec(t){
@@ -1827,8 +1827,20 @@ function applyRec(t,rec){
   });
   // Update level pills
   if(rec.einstieg){const el=document.getElementById(t+'-pill-einstieg-val');if(el)el.textContent=rec.einstieg;}
-  if(rec.kursziel){const el=document.getElementById(t+'-pill-ziel-val');if(el)el.textContent=rec.kursziel;}
+  if(rec.kursziel){
+    const el=document.getElementById(t+'-pill-ziel-val');if(el)el.textContent=rec.kursziel;
+    // Update mets analyst consensus
+    const cp=document.getElementById(t+'-cons-price');if(cp)cp.textContent=rec.kursziel;
+  }
   if(rec.stopp){const el=document.getElementById(t+'-pill-stopp-val');if(el)el.textContent=rec.stopp;}
+  // Update alert banner
+  if(rec.lage){
+    const ab=document.getElementById(t+'-alert-text');
+    if(ab)ab.innerHTML=rec.lage;
+    const box=document.getElementById(t+'-alert-box');
+    if(box){box.className=rec.lage_typ==='warning'?'alert al-r':'alert al-g';}
+  }
+  if(rec.analysten){const cr=document.getElementById(t+'-cons-rating');if(cr)cr.textContent=rec.analysten;}
 }
 
 // ── Yahoo Finance via Vercel proxy ─────────────────────
@@ -2045,8 +2057,13 @@ async function fetchScenarios(t){
       if(bull&&base&&bear){
         forecastTargets[t]={bull,base,bear};
         // Rebuild chart with new forecast lines
-        if(t==='rklb') buildHistoryChart('rklb','rklb-chart','#1d4ed8','rgba(29,78,216,.06)',bull,base,bear);
-        else if(chartInstances['asts-chart']) buildHistoryChart('asts','asts-chart','#15803d','rgba(21,128,61,.06)',bull,base,bear);
+        if(t==='rklb'){
+          buildHistoryChart('rklb','rklb-chart','#1d4ed8','rgba(29,78,216,.06)',bull,base,bear);
+          if(chartInstances['rklb-chart5']) build5yrChart('rklb','rklb-chart5');
+        } else if(chartInstances['asts-chart']){
+          buildHistoryChart('asts','asts-chart','#15803d','rgba(21,128,61,.06)',bull,base,bear);
+          if(chartInstances['asts-chart5']) build5yrChart('asts','asts-chart5');
+        }
       }
     }
     if(p.bars&&p.bars.length){
@@ -2146,11 +2163,25 @@ const co5=()=>({responsive:true,maintainAspectRatio:false,
   tooltip:{callbacks:{label:c=>c.dataset.label+': $'+(c.parsed.y!=null?c.parsed.y.toFixed(0):'—')},backgroundColor:'#fff',titleColor:'#666',bodyColor:'#1a1a18',borderColor:'#e5e5e0',borderWidth:1}},
   scales:{x:{grid:{color:'rgba(0,0,0,.04)'},ticks:{color:'#aaa',font:{size:11}}},y:{grid:{color:'rgba(0,0,0,.04)'},ticks:{color:'#aaa',font:{size:11},callback:v=>'$'+v}}}
 });
-new Chart(document.getElementById('rklb-chart5'),{type:'line',data:{labels:yrs,datasets:[
-  {label:'🐂 Bull',data:[150,216,320,480,680,950],borderColor:'#16a34a',backgroundColor:'rgba(22,163,74,.06)',fill:false,tension:.4,pointRadius:4,borderWidth:2.5},
-  {label:'📊 Base',data:[150,120,140,175,210,260],borderColor:'#94a3b8',fill:false,tension:.4,pointRadius:4,borderWidth:2,borderDash:[6,3]},
-  {label:'🐻 Bear',data:[150,86,70,55,45,35],borderColor:'#dc2626',fill:false,tension:.4,pointRadius:4,borderWidth:2,borderDash:[4,4]}
-]},options:co5()});
+// 5yr RKLB chart - built dynamically
+function build5yrChart(ticker, canvasId) {
+  const el = document.getElementById(canvasId);
+  if (!el) return;
+  if (chartInstances[canvasId]) chartInstances[canvasId].destroy();
+  const ft = forecastTargets[ticker];
+  const cur = quotes[ticker]?.price || (ticker==='rklb'?150:129);
+  const yrs = ['2025','2026','2027','2028','2029','2030'];
+  // Interpolate from current price to targets over 5 years
+  const interp = (start, end) => [start,
+    start+(end-start)*0.15, start+(end-start)*0.35,
+    start+(end-start)*0.6,  start+(end-start)*0.8, end];
+  chartInstances[canvasId] = new Chart(el, {type:'line', data:{labels:yrs, datasets:[
+    {label:'🐂 Bull', data:interp(cur, ft.bull*6), borderColor:'#16a34a', backgroundColor:'rgba(22,163,74,.06)', fill:false, tension:.4, pointRadius:4, borderWidth:2.5},
+    {label:'📊 Base', data:interp(cur, ft.base*2.2), borderColor:'#94a3b8', fill:false, tension:.4, pointRadius:4, borderWidth:2, borderDash:[6,3]},
+    {label:'🐻 Bear', data:interp(cur, ft.bear*0.4), borderColor:'#dc2626', fill:false, tension:.4, pointRadius:4, borderWidth:2, borderDash:[4,4]}
+  ]}, options:co5()});
+}
+build5yrChart('rklb','rklb-chart5');
 
 // ── ASTS charts: lazy-init on first tab switch ────
 let _astsChartsInited = false;
@@ -2158,11 +2189,7 @@ function initAstsCharts(){
   if(_astsChartsInited) return;
   _astsChartsInited = true;
   buildHistoryChart('asts','asts-chart','#15803d','rgba(21,128,61,.06)',forecastTargets.asts.bull,forecastTargets.asts.base,forecastTargets.asts.bear);
-  new Chart(document.getElementById('asts-chart5'),{type:'line',data:{labels:yrs,datasets:[
-  {label:'🐂 Bull',data:[129,200,380,620,880,1200],borderColor:'#16a34a',fill:false,tension:.4,pointRadius:4,borderWidth:2.5},
-  {label:'📊 Base',data:[129,83,95,110,130,150],borderColor:'#94a3b8',fill:false,tension:.4,pointRadius:4,borderWidth:2,borderDash:[6,3]},
-  {label:'🐻 Bear',data:[129,50,25,12,8,5],borderColor:'#dc2626',fill:false,tension:.4,pointRadius:4,borderWidth:2,borderDash:[4,4]}
-]},options:co5()});
+  build5yrChart('asts','asts-chart5');
 }
 
 // Chart instances (updatable)
