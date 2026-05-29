@@ -502,6 +502,31 @@ body{font-family:'DM Sans',sans-serif;background:var(--bg);color:var(--text);min
 .rec-score-val{font-size:26px;font-weight:500;font-family:'DM Mono',monospace;margin-bottom:5px;}
 .rec-score-explain{font-size:11px;color:var(--text3);line-height:1.5;margin-top:6px;padding-top:6px;border-top:1px solid var(--border);}
 .rec-score-explain b{color:var(--text2);}
+
+/* Charts card: no side padding so two-grid uses full width */
+#body-rklb-charts, #body-asts-charts {
+  padding-left: 0;
+  padding-right: 0;
+}
+#body-rklb-charts .chart-tabs, #body-asts-charts .chart-tabs {
+  padding: 0 16px;
+}
+#body-rklb-charts .f5-disclaimer-inline,
+#body-asts-charts .f5-disclaimer-inline,
+#body-rklb-charts .f5-chart-wrap,
+#body-asts-charts .f5-chart-wrap,
+#body-rklb-charts .f5-milestones-btn,
+#body-asts-charts .f5-milestones-btn,
+#body-rklb-charts .f5-milestones,
+#body-asts-charts .f5-milestones {
+  margin-left: 16px;
+  margin-right: 16px;
+}
+#rklb-view-1y, #asts-view-1y,
+#rklb-view-5y, #asts-view-5y {
+  padding-left: 0;
+  padding-right: 0;
+}
 </style>
 </head>
 <body>
