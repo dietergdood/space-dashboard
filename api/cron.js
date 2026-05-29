@@ -12,7 +12,7 @@ async function supa(path, method='GET', body=null) {
       'apikey': SUPABASE_SERVICE_KEY,
       'Authorization': `Bearer ${SUPABASE_SERVICE_KEY}`,
       'Content-Type': 'application/json',
-      'Prefer': method==='POST' ? 'return=minimal,resolution=merge-duplicates' : '',
+      'Prefer': method==='POST' ? 'return=minimal' : '',
     }
   };
   if (body) opts.body = JSON.stringify(body);
@@ -53,18 +53,35 @@ async function kiCall(prompt) {
 
 async function saveToCache(ticker, section, data) {
   try {
+    const t = ticker || 'global';
+    // DELETE existing row first
+    await supaDelete(`/ki_cache?ticker=eq.${t}&section=eq.${section}`);
+    // Then INSERT fresh
     const result = await supa('/ki_cache', 'POST', {
-      ticker: ticker || 'global',
+      ticker: t,
       section,
       data,
       updated_at: new Date().toISOString()
     });
-    console.log('Saved:', ticker, section);
+    console.log('Saved:', t, section);
     return result;
   } catch(e) {
     console.error('saveToCache failed:', ticker, section, e.message);
     throw e;
   }
+}
+
+async function supaDelete(path) {
+  const r = await fetch(`${SUPABASE_URL}/rest/v1${path}`, {
+    method: 'DELETE',
+    headers: {
+      'apikey': SUPABASE_SERVICE_KEY,
+      'Authorization': `Bearer ${SUPABASE_SERVICE_KEY}`,
+      'Prefer': 'return=minimal',
+    }
+  });
+  // 204 = success, ignore other statuses
+  return r.status;
 }
 
 const delay = ms => new Promise(r => setTimeout(r, ms));
