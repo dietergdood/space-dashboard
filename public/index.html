@@ -580,28 +580,89 @@ body{font-family:'DM Sans',sans-serif;background:var(--bg);color:var(--text);min
 </div>
 
 
-<div class="collapsible-card open" id="card-rklb-news">
-  <button class="section-toggle open" onclick="toggleCard('rklb-news')">
-    <div class="st-left"><span class="st-icon">📰</span><div><div class="st-title">Live-Nachrichten & Marktanalyse</div><div class="st-sub">Automatisch alle 4h aktualisiert</div></div></div>
+<div class="collapsible-card open" id="card-rklb-charts">
+  <button class="section-toggle" onclick="toggleCard('rklb-charts')">
+    <div class="st-left"><span class="st-icon">📈</span><div><div class="st-title">Kursverlauf & Szenarien</div><div class="st-sub">12-Monats-Chart + Preisziele</div></div></div>
     <div class="st-right"><span class="st-arrow">▼</span></div>
   </button>
-  <div class="section-body open" id="body-rklb-news">
-  <!-- Live News RKLB -->
-  <div class="live-news">
-    <div class="ln-header">
-      <div class="ln-title"><div class="live-dot"></div>Live-Nachrichten · Rocket Lab (RKLB)</div>
-      <span class="ln-ts" id="rklb-news-ts">Noch nicht geladen</span>
+  <div class="section-body" id="body-rklb-charts">
+  <div class="two">
+    <div class="card">
+      <div class="ch">📈 Kursverlauf der letzten 12 Monate + Zukunftsszenarien</div>
+      <div class="cw"><canvas id="rklb-chart" role="img" aria-label="RKLB Chart">RKLB Kursverlauf</canvas></div>
+      <div class="lgbox">
+        <div class="lgr"><div class="lgl"><div class="lgs" style="background:var(--rklb);"></div><div class="lgdot" style="background:var(--rklb);"></div></div><div><div class="lgt">Was wirklich passiert ist</div><div class="lgx">Der echte Kursverlauf der letzten 12 Monate — von $42 auf $150, ein Anstieg von 257%</div></div></div>
+        <div class="lgr"><div class="lgl"><div class="lgd" style="border-color:var(--green);"></div><div class="lgdot" style="background:var(--green);"></div></div><div><div class="lgt" style="color:var(--green);">Optimistisches Szenario → $200–216</div><div class="lgx">Wenn Neutron-Rakete fliegt + Defense-Verträge kommen + SpaceX-IPO-Effekt hält an</div></div></div>
+        <div class="lgr"><div class="lgl"><div class="lgd" style="border-color:#bbb;"></div><div class="lgdot" style="background:#bbb;"></div></div><div><div class="lgt" style="color:#888;">Was Bankexperten im Schnitt erwarten → $120</div><div class="lgx">Nüchterne Mitte der Profis — ohne übertriebenen Optimismus oder Pessimismus</div></div></div>
+        <div class="lgr"><div class="lgl"><div class="lgd" style="border-color:var(--red);"></div><div class="lgdot" style="background:var(--red);"></div></div><div><div class="lgt" style="color:var(--red);">Pessimistisches Szenario → $86</div><div class="lgx">Wenn Neutron scheitert oder sich stark verzögert und der Hype nachlässt</div></div></div>
+      </div>
     </div>
-    <div class="ln-loading" id="rklb-news-loading">
-      <div class="ln-loading-dot"></div>
-      <span id="rklb-news-loading-txt">KI durchsucht gerade das Internet nach aktuellen Nachrichten...</span>
+    <div class="card">
+      <div class="ch">🎯 Wo könnte der Kurs in 12 Monaten stehen?</div>
+      <div style="font-size:15px;color:var(--text2);margin-bottom:12px;line-height:1.5;">Verschiedene Experten und Szenarien — die Balken zeigen wie "hoch" das jeweilige Ziel ist:</div>
+      <div class="scr"><div class="scl">Bestmöglicher Fall<br>(alles klappt)</div><div class="scb"><div class="scf" style="width:100%;background:var(--green);"></div></div><div class="scv up">$200–216</div></div>
+      <div class="scr"><div class="scl">Needham Bank<br>(optimistische Bank)</div><div class="scb"><div class="scf" style="width:56%;background:var(--rklb);"></div></div><div class="scv" style="color:var(--rklb);">$120</div></div>
+      <div class="scr"><div class="scl">Alle Banken<br>(Durchschnitt)</div><div class="scb"><div class="scf" style="width:56%;background:#bbb;"></div></div><div class="scv mu">$120</div></div>
+      <div class="scr"><div class="scl">Vorsichtige<br>Schätzung</div><div class="scb"><div class="scf" style="width:40%;background:var(--amber);"></div></div><div class="scv wn">$86</div></div>
+      <div style="background:var(--surface2);border-radius:8px;padding:12px;margin-top:14px;">
+        <div style="font-size:15px;font-weight:500;margin-bottom:8px;">💡 Was sagt die Internet-Community?</div>
+        <div style="font-size:15px;color:var(--text2);line-height:1.6;">Reddit und WallStreetBets (grosse Internet-Foren für Privatanleger): <b>84% positive Kommentare</b> zu RKLB. Ein Post über das Rekordquartal hatte hunderte Upvotes. Aber Vorsicht: Internet-Euphorie kann schnell kippen!</div>
+      </div>
     </div>
-    <div class="ln-content empty" id="rklb-news-content">KI-Schlüssel eingeben → Nachrichten werden automatisch alle 4 Stunden von der KI gesucht und hier angezeigt. Die KI durchsucht Finanznachrichten, Reddit-Foren, Analystenberichte und fasst alles verständlich zusammen.</div>
+  </div>  </div>
+</div>
+
+</div>id="card-rklb-df">
+  <button class="section-toggle" onclick="toggleCard('rklb-df')">
+    <div class="st-left"><span class="st-icon">📅</span><div><div class="st-title">Was heute passieren könnte</div><div class="st-sub">ATR-basierte Tagesschätzung</div></div></div>
+    <div class="st-right"><span class="st-arrow">▼</span></div>
+  </button>
+  <div class="section-body" id="body-rklb-df">
+  <!-- Day Forecast RKLB -->
+  <div class="day-forecast">
+    <div class="section-title">📅 Was heute passieren könnte</div>
+    <div class="section-sub" style="margin-bottom:12px;">Basierend auf der durchschnittlichen Kursschwankung der letzten 5 Tage. <b>Wichtig:</b> Das ist eine statistische Schätzung, kein Versprechen! Jeder Tag kann anders sein.</div>
+    <div class="df-grid">
+      <div class="df-card">
+        <div class="df-emoji">🌅</div>
+        <div class="df-lbl">Kurs beim Börsenstart heute</div>
+        <div class="df-val" id="rklb-open">—</div>
+        <div class="df-sub mu">Vorbörslich</div>
+      </div>
+      <div class="df-card">
+        <div class="df-emoji">📈</div>
+        <div class="df-lbl">Mögliches Tageshoch (Schätzung)</div>
+        <div class="df-val up" id="rklb-day-hi">—</div>
+        <div class="df-sub up" id="rklb-hi-pf">—</div>
+      </div>
+      <div class="df-card">
+        <div class="df-emoji">📉</div>
+        <div class="df-lbl">Mögliches Tagestief (Schätzung)</div>
+        <div class="df-val dn" id="rklb-day-lo">—</div>
+        <div class="df-sub dn" id="rklb-lo-pf">—</div>
+      </div>
+      <div class="df-card">
+        <div class="df-emoji">📍</div>
+        <div class="df-lbl">Wo steht der Kurs gerade?</div>
+        <div class="df-range-wrap">
+          <div style="font-size:15px;color:var(--text2);display:flex;justify-content:space-between;margin-bottom:4px;font-family:'DM Mono',monospace;"><span id="rklb-lo-lbl">Tief</span><span id="rklb-hi-lbl">Hoch</span></div>
+          <div class="df-range-bar"><div class="df-range-dot" id="rklb-rdot" style="left:50%;"></div></div>
+          <div style="font-size:15px;color:var(--text3);margin-top:6px;text-align:center;">Links = nahe Tief · Rechts = nahe Hoch</div>
+        </div>
+        <div class="df-sub mu" style="margin-top:6px;" id="rklb-vol-avg">—</div>
+      </div>
+      <div class="df-card">
+        <div class="df-emoji">⚡</div>
+        <div class="df-lbl">Kaufdruck / Stärke heute</div>
+        <div class="df-val" id="rklb-mom">—</div>
+        <div class="df-sub mu" id="rklb-rsi">—</div>
+      </div>
+    </div>
   </div>  </div>
 </div>
 
 
-  <!-- Portfolio RKLB -->
+<div class="collapsible-card" <!-- Portfolio RKLB -->
   <div class="pf-new" id="rklb-pf-section">
     <div class="pf-tx-header">
       <div>
@@ -702,57 +763,28 @@ body{font-family:'DM Sans',sans-serif;background:var(--bg);color:var(--text);min
     </div>
   </div>
 
-  <div class="collapsible-card" id="card-rklb-df">
-  <button class="section-toggle" onclick="toggleCard('rklb-df')">
-    <div class="st-left"><span class="st-icon">📅</span><div><div class="st-title">Was heute passieren könnte</div><div class="st-sub">ATR-basierte Tagesschätzung</div></div></div>
+  <div class="collapsible-card" id="card-rklb-news">
+  <button class="section-toggle open" onclick="toggleCard('rklb-news')">
+    <div class="st-left"><span class="st-icon">📰</span><div><div class="st-title">Live-Nachrichten & Marktanalyse</div><div class="st-sub">Automatisch alle 4h aktualisiert</div></div></div>
     <div class="st-right"><span class="st-arrow">▼</span></div>
   </button>
-  <div class="section-body" id="body-rklb-df">
-  <!-- Day Forecast RKLB -->
-  <div class="day-forecast">
-    <div class="section-title">📅 Was heute passieren könnte</div>
-    <div class="section-sub" style="margin-bottom:12px;">Basierend auf der durchschnittlichen Kursschwankung der letzten 5 Tage. <b>Wichtig:</b> Das ist eine statistische Schätzung, kein Versprechen! Jeder Tag kann anders sein.</div>
-    <div class="df-grid">
-      <div class="df-card">
-        <div class="df-emoji">🌅</div>
-        <div class="df-lbl">Kurs beim Börsenstart heute</div>
-        <div class="df-val" id="rklb-open">—</div>
-        <div class="df-sub mu">Vorbörslich</div>
-      </div>
-      <div class="df-card">
-        <div class="df-emoji">📈</div>
-        <div class="df-lbl">Mögliches Tageshoch (Schätzung)</div>
-        <div class="df-val up" id="rklb-day-hi">—</div>
-        <div class="df-sub up" id="rklb-hi-pf">—</div>
-      </div>
-      <div class="df-card">
-        <div class="df-emoji">📉</div>
-        <div class="df-lbl">Mögliches Tagestief (Schätzung)</div>
-        <div class="df-val dn" id="rklb-day-lo">—</div>
-        <div class="df-sub dn" id="rklb-lo-pf">—</div>
-      </div>
-      <div class="df-card">
-        <div class="df-emoji">📍</div>
-        <div class="df-lbl">Wo steht der Kurs gerade?</div>
-        <div class="df-range-wrap">
-          <div style="font-size:15px;color:var(--text2);display:flex;justify-content:space-between;margin-bottom:4px;font-family:'DM Mono',monospace;"><span id="rklb-lo-lbl">Tief</span><span id="rklb-hi-lbl">Hoch</span></div>
-          <div class="df-range-bar"><div class="df-range-dot" id="rklb-rdot" style="left:50%;"></div></div>
-          <div style="font-size:15px;color:var(--text3);margin-top:6px;text-align:center;">Links = nahe Tief · Rechts = nahe Hoch</div>
-        </div>
-        <div class="df-sub mu" style="margin-top:6px;" id="rklb-vol-avg">—</div>
-      </div>
-      <div class="df-card">
-        <div class="df-emoji">⚡</div>
-        <div class="df-lbl">Kaufdruck / Stärke heute</div>
-        <div class="df-val" id="rklb-mom">—</div>
-        <div class="df-sub mu" id="rklb-rsi">—</div>
-      </div>
+  <div class="section-body open" id="body-rklb-news">
+  <!-- Live News RKLB -->
+  <div class="live-news">
+    <div class="ln-header">
+      <div class="ln-title"><div class="live-dot"></div>Live-Nachrichten · Rocket Lab (RKLB)</div>
+      <span class="ln-ts" id="rklb-news-ts">Noch nicht geladen</span>
     </div>
+    <div class="ln-loading" id="rklb-news-loading">
+      <div class="ln-loading-dot"></div>
+      <span id="rklb-news-loading-txt">KI durchsucht gerade das Internet nach aktuellen Nachrichten...</span>
+    </div>
+    <div class="ln-content empty" id="rklb-news-content">KI-Schlüssel eingeben → Nachrichten werden automatisch alle 4 Stunden von der KI gesucht und hier angezeigt. Die KI durchsucht Finanznachrichten, Reddit-Foren, Analystenberichte und fasst alles verständlich zusammen.</div>
   </div>  </div>
 </div>
 
 
-<div class="collapsible-card" id="card-rklb-sector">
+  id="card-rklb-sector">
   <button class="section-toggle" onclick="toggleCard('rklb-sector')">
     <div class="st-left"><span class="st-icon">🌌</span><div><div class="st-title">Sektor-Kontext & Einflussfaktoren</div><div class="st-sub">SpaceX IPO, Golden Dome, Konkurrenz</div></div></div>
     <div class="st-right"><span class="st-arrow">▼</span></div>
@@ -900,38 +932,7 @@ body{font-family:'DM Sans',sans-serif;background:var(--bg);color:var(--text);min
     </div>
   </div>
 
-<div class="collapsible-card" id="card-rklb-charts">
-  <button class="section-toggle" onclick="toggleCard('rklb-charts')">
-    <div class="st-left"><span class="st-icon">📈</span><div><div class="st-title">Kursverlauf & Szenarien</div><div class="st-sub">12-Monats-Chart + Preisziele</div></div></div>
-    <div class="st-right"><span class="st-arrow">▼</span></div>
-  </button>
-  <div class="section-body" id="body-rklb-charts">
-  <div class="two">
-    <div class="card">
-      <div class="ch">📈 Kursverlauf der letzten 12 Monate + Zukunftsszenarien</div>
-      <div class="cw"><canvas id="rklb-chart" role="img" aria-label="RKLB Chart">RKLB Kursverlauf</canvas></div>
-      <div class="lgbox">
-        <div class="lgr"><div class="lgl"><div class="lgs" style="background:var(--rklb);"></div><div class="lgdot" style="background:var(--rklb);"></div></div><div><div class="lgt">Was wirklich passiert ist</div><div class="lgx">Der echte Kursverlauf der letzten 12 Monate — von $42 auf $150, ein Anstieg von 257%</div></div></div>
-        <div class="lgr"><div class="lgl"><div class="lgd" style="border-color:var(--green);"></div><div class="lgdot" style="background:var(--green);"></div></div><div><div class="lgt" style="color:var(--green);">Optimistisches Szenario → $200–216</div><div class="lgx">Wenn Neutron-Rakete fliegt + Defense-Verträge kommen + SpaceX-IPO-Effekt hält an</div></div></div>
-        <div class="lgr"><div class="lgl"><div class="lgd" style="border-color:#bbb;"></div><div class="lgdot" style="background:#bbb;"></div></div><div><div class="lgt" style="color:#888;">Was Bankexperten im Schnitt erwarten → $120</div><div class="lgx">Nüchterne Mitte der Profis — ohne übertriebenen Optimismus oder Pessimismus</div></div></div>
-        <div class="lgr"><div class="lgl"><div class="lgd" style="border-color:var(--red);"></div><div class="lgdot" style="background:var(--red);"></div></div><div><div class="lgt" style="color:var(--red);">Pessimistisches Szenario → $86</div><div class="lgx">Wenn Neutron scheitert oder sich stark verzögert und der Hype nachlässt</div></div></div>
-      </div>
-    </div>
-    <div class="card">
-      <div class="ch">🎯 Wo könnte der Kurs in 12 Monaten stehen?</div>
-      <div style="font-size:15px;color:var(--text2);margin-bottom:12px;line-height:1.5;">Verschiedene Experten und Szenarien — die Balken zeigen wie "hoch" das jeweilige Ziel ist:</div>
-      <div class="scr"><div class="scl">Bestmöglicher Fall<br>(alles klappt)</div><div class="scb"><div class="scf" style="width:100%;background:var(--green);"></div></div><div class="scv up">$200–216</div></div>
-      <div class="scr"><div class="scl">Needham Bank<br>(optimistische Bank)</div><div class="scb"><div class="scf" style="width:56%;background:var(--rklb);"></div></div><div class="scv" style="color:var(--rklb);">$120</div></div>
-      <div class="scr"><div class="scl">Alle Banken<br>(Durchschnitt)</div><div class="scb"><div class="scf" style="width:56%;background:#bbb;"></div></div><div class="scv mu">$120</div></div>
-      <div class="scr"><div class="scl">Vorsichtige<br>Schätzung</div><div class="scb"><div class="scf" style="width:40%;background:var(--amber);"></div></div><div class="scv wn">$86</div></div>
-      <div style="background:var(--surface2);border-radius:8px;padding:12px;margin-top:14px;">
-        <div style="font-size:15px;font-weight:500;margin-bottom:8px;">💡 Was sagt die Internet-Community?</div>
-        <div style="font-size:15px;color:var(--text2);line-height:1.6;">Reddit und WallStreetBets (grosse Internet-Foren für Privatanleger): <b>84% positive Kommentare</b> zu RKLB. Ein Post über das Rekordquartal hatte hunderte Upvotes. Aber Vorsicht: Internet-Euphorie kann schnell kippen!</div>
-      </div>
-    </div>
-  </div>  </div>
-</div>
-
+<div class="collapsible-card" 
 </div>
 
 <!-- ════════════════ ASTS ════════════════ -->
@@ -1028,28 +1029,62 @@ body{font-family:'DM Sans',sans-serif;background:var(--bg);color:var(--text);min
 </div>
 
 
-<div class="collapsible-card open" id="card-asts-news">
-  <button class="section-toggle open" onclick="toggleCard('asts-news')">
-    <div class="st-left"><span class="st-icon">📰</span><div><div class="st-title">Live-Nachrichten & Marktanalyse</div><div class="st-sub">Automatisch alle 4h aktualisiert</div></div></div>
+<div class="collapsible-card open" <div class="two">
+    <div class="card">
+      <div class="ch">📈 Kursverlauf der letzten 12 Monate + Zukunftsszenarien</div>
+  <div class="card">
+      <div class="ch">Kursverlauf der letzten 12 Monate + Zukunftsszenarien</div>
+      <div class="cw"><canvas id="asts-chart" role="img" aria-label="ASTS Chart">ASTS Kursverlauf</canvas></div>
+      <div class="lgbox">
+        <div class="lgr"><div class="lgl"><div class="lgs" style="background:var(--asts);"></div><div class="lgdot" style="background:var(--asts);"></div></div><div><div class="lgt">Was wirklich passiert ist</div><div class="lgx">Echter historischer Kurs — stark gestiegen, aber auch sehr schwankend</div></div></div>
+        <div class="lgr"><div class="lgl"><div class="lgd" style="border-color:var(--green);"></div><div class="lgdot" style="background:var(--green);"></div></div><div><div class="lgt" style="color:var(--green);">Optimistisches Szenario → $200+</div><div class="lgx">Wenn die Satelliten funktionieren und Umsatz kommt</div></div></div>
+        <div class="lgr"><div class="lgl"><div class="lgd" style="border-color:#bbb;"></div><div class="lgdot" style="background:#bbb;"></div></div><div><div class="lgt" style="color:#888;">Was Bankexperten erwarten → $83</div><div class="lgx">Nüchterne Mitte — der aktuelle Kurs liegt 44% darüber</div></div></div>
+        <div class="lgr"><div class="lgl"><div class="lgd" style="border-color:var(--red);"></div><div class="lgdot" style="background:var(--red);"></div></div><div><div class="lgt" style="color:var(--red);">Pessimistisches Szenario → $50</div><div class="lgx">Wenn Blue Origin dauerhaft ausfällt + Starlink gewinnt</div></div></div>
+      </div>
+    </div>
+    <div class="card">
+      <div class="ch">Wo könnte der Kurs in 12 Monaten stehen?</div>
+      <div style="font-size:14px;color:var(--text2);margin-bottom:12px;line-height:1.5;">Die Bandbreite ist riesig — das zeigt das grosse Risiko und das grosse Potenzial:</div>
+      <div class="scr"><div class="scl">Bestmöglicher Fall</div><div class="scb"><div class="scf" style="width:100%;background:var(--green);"></div></div><div class="scv up">$200+</div></div>
+      <div class="scr"><div class="scl">Roth Capital Bank</div><div class="scb"><div class="scf" style="width:54%;background:var(--rklb);"></div></div><div class="scv" style="color:var(--rklb);">$108</div></div>
+      <div class="scr"><div class="scl">Alle Banken<br>(Durchschnitt)</div><div class="scb"><div class="scf" style="width:42%;background:#bbb;"></div></div><div class="scv mu">$83</div></div>
+      <div class="scr"><div class="scl">Fairer Wert<br>(Berechnung)</div><div class="scb"><div class="scf" style="width:36%;background:var(--amber);"></div></div><div class="scv wn">$71</div></div>
+      <div class="scr"><div class="scl">Schlechtester Fall</div><div class="scb"><div class="scf" style="width:25%;background:var(--red);"></div></div><div class="scv dn">$50</div></div>
+      <div style="background:rgba(220,38,38,.05);border:1px solid rgba(220,38,38,.15);border-radius:8px;padding:14px;margin-top:14px;">
+        <div style="font-size:13px;font-weight:500;margin-bottom:6px;color:#991b1b;">⚠️ Wichtige Warnung</div>
+        <div style="font-size:13px;color:var(--text2);line-height:1.6;">Der aktuelle Kurs ($120) liegt deutlich über dem, was die meisten Experten für fair halten ($83). Nur mit Geld investieren, dessen Verlust du verkraften könntest.</div>
+      </div>
+    </div>
+  </div>
+</div>id="card-asts-df">
+  <button class="section-toggle" onclick="toggleCard('asts-df')">
+    <div class="st-left"><span class="st-icon">📅</span><div><div class="st-title">Was heute passieren könnte</div><div class="st-sub">ATR-basierte Tagesschätzung</div></div></div>
     <div class="st-right"><span class="st-arrow">▼</span></div>
   </button>
-  <div class="section-body open" id="body-asts-news">
-  <!-- Live News ASTS -->
-  <div class="live-news">
-    <div class="ln-header">
-      <div class="ln-title"><div class="live-dot"></div>Live-Nachrichten · AST SpaceMobile (ASTS)</div>
-      <span class="ln-ts" id="asts-news-ts">Noch nicht geladen</span>
+  <div class="section-body" id="body-asts-df">
+  <!-- Day Forecast ASTS -->
+  <div class="day-forecast">
+    <div class="section-title">📅 Was heute passieren könnte</div>
+    <div class="section-sub" style="margin-bottom:12px;"><b>Achtung:</b> ASTS schwankt täglich oft 8–15%! Diese Schätzung ist sehr ungenau. Nie mehr investieren als du verlieren kannst.</div>
+    <div class="df-grid">
+      <div class="df-card"><div class="df-emoji">🌅</div><div class="df-lbl">Kurs beim Börsenstart heute</div><div class="df-val" id="asts-open">—</div><div class="df-sub mu">Vorbörslich</div></div>
+      <div class="df-card"><div class="df-emoji">📈</div><div class="df-lbl">Mögliches Tageshoch</div><div class="df-val up" id="asts-day-hi">—</div><div class="df-sub up" id="asts-hi-pf">—</div></div>
+      <div class="df-card"><div class="df-emoji">📉</div><div class="df-lbl">Mögliches Tagestief</div><div class="df-val dn" id="asts-day-lo">—</div><div class="df-sub dn" id="asts-lo-pf">—</div></div>
+      <div class="df-card"><div class="df-emoji">📍</div><div class="df-lbl">Wo steht der Kurs gerade?</div>
+        <div class="df-range-wrap">
+          <div style="font-size:15px;color:var(--text2);display:flex;justify-content:space-between;margin-bottom:4px;font-family:'DM Mono',monospace;"><span id="asts-lo-lbl">Tief</span><span id="asts-hi-lbl">Hoch</span></div>
+          <div class="df-range-bar"><div class="df-range-dot" id="asts-rdot" style="left:50%;"></div></div>
+          <div style="font-size:15px;color:var(--text3);margin-top:6px;text-align:center;">Links = nahe Tief · Rechts = nahe Hoch</div>
+        </div>
+        <div class="df-sub mu" style="margin-top:6px;" id="asts-vol-avg">—</div>
+      </div>
+      <div class="df-card"><div class="df-emoji">⚡</div><div class="df-lbl">Kaufdruck / Stärke heute</div><div class="df-val" id="asts-mom">—</div><div class="df-sub mu" id="asts-rsi">—</div></div>
     </div>
-    <div class="ln-loading" id="asts-news-loading">
-      <div class="ln-loading-dot"></div>
-      <span id="asts-news-loading-txt">KI durchsucht gerade das Internet nach aktuellen Nachrichten...</span>
-    </div>
-    <div class="ln-content empty" id="asts-news-content">KI-Schlüssel eingeben → Nachrichten werden automatisch alle 4 Stunden gesucht und hier angezeigt.</div>
   </div>  </div>
 </div>
 
 
-  <!-- Portfolio ASTS -->
+<div class="collapsible-card" <!-- Portfolio ASTS -->
   <div class="pf-new" id="asts-pf-section">
     <div class="pf-tx-header">
       <div>
@@ -1146,35 +1181,28 @@ body{font-family:'DM Sans',sans-serif;background:var(--bg);color:var(--text);min
     </div>
   </div>
 
-  <div class="collapsible-card" id="card-asts-df">
-  <button class="section-toggle" onclick="toggleCard('asts-df')">
-    <div class="st-left"><span class="st-icon">📅</span><div><div class="st-title">Was heute passieren könnte</div><div class="st-sub">ATR-basierte Tagesschätzung</div></div></div>
+  <div class="collapsible-card" id="card-asts-news">
+  <button class="section-toggle open" onclick="toggleCard('asts-news')">
+    <div class="st-left"><span class="st-icon">📰</span><div><div class="st-title">Live-Nachrichten & Marktanalyse</div><div class="st-sub">Automatisch alle 4h aktualisiert</div></div></div>
     <div class="st-right"><span class="st-arrow">▼</span></div>
   </button>
-  <div class="section-body" id="body-asts-df">
-  <!-- Day Forecast ASTS -->
-  <div class="day-forecast">
-    <div class="section-title">📅 Was heute passieren könnte</div>
-    <div class="section-sub" style="margin-bottom:12px;"><b>Achtung:</b> ASTS schwankt täglich oft 8–15%! Diese Schätzung ist sehr ungenau. Nie mehr investieren als du verlieren kannst.</div>
-    <div class="df-grid">
-      <div class="df-card"><div class="df-emoji">🌅</div><div class="df-lbl">Kurs beim Börsenstart heute</div><div class="df-val" id="asts-open">—</div><div class="df-sub mu">Vorbörslich</div></div>
-      <div class="df-card"><div class="df-emoji">📈</div><div class="df-lbl">Mögliches Tageshoch</div><div class="df-val up" id="asts-day-hi">—</div><div class="df-sub up" id="asts-hi-pf">—</div></div>
-      <div class="df-card"><div class="df-emoji">📉</div><div class="df-lbl">Mögliches Tagestief</div><div class="df-val dn" id="asts-day-lo">—</div><div class="df-sub dn" id="asts-lo-pf">—</div></div>
-      <div class="df-card"><div class="df-emoji">📍</div><div class="df-lbl">Wo steht der Kurs gerade?</div>
-        <div class="df-range-wrap">
-          <div style="font-size:15px;color:var(--text2);display:flex;justify-content:space-between;margin-bottom:4px;font-family:'DM Mono',monospace;"><span id="asts-lo-lbl">Tief</span><span id="asts-hi-lbl">Hoch</span></div>
-          <div class="df-range-bar"><div class="df-range-dot" id="asts-rdot" style="left:50%;"></div></div>
-          <div style="font-size:15px;color:var(--text3);margin-top:6px;text-align:center;">Links = nahe Tief · Rechts = nahe Hoch</div>
-        </div>
-        <div class="df-sub mu" style="margin-top:6px;" id="asts-vol-avg">—</div>
-      </div>
-      <div class="df-card"><div class="df-emoji">⚡</div><div class="df-lbl">Kaufdruck / Stärke heute</div><div class="df-val" id="asts-mom">—</div><div class="df-sub mu" id="asts-rsi">—</div></div>
+  <div class="section-body open" id="body-asts-news">
+  <!-- Live News ASTS -->
+  <div class="live-news">
+    <div class="ln-header">
+      <div class="ln-title"><div class="live-dot"></div>Live-Nachrichten · AST SpaceMobile (ASTS)</div>
+      <span class="ln-ts" id="asts-news-ts">Noch nicht geladen</span>
     </div>
+    <div class="ln-loading" id="asts-news-loading">
+      <div class="ln-loading-dot"></div>
+      <span id="asts-news-loading-txt">KI durchsucht gerade das Internet nach aktuellen Nachrichten...</span>
+    </div>
+    <div class="ln-content empty" id="asts-news-content">KI-Schlüssel eingeben → Nachrichten werden automatisch alle 4 Stunden gesucht und hier angezeigt.</div>
   </div>  </div>
 </div>
 
 
-<div class="collapsible-card" id="card-asts-sector">
+  id="card-asts-sector">
   <button class="section-toggle" onclick="toggleCard('asts-sector')">
     <div class="st-left"><span class="st-icon">🌌</span><div><div class="st-title">Sektor-Kontext & Einflussfaktoren</div><div class="st-sub">Blue Origin, Starlink, SpaceX IPO</div></div></div>
     <div class="st-right"><span class="st-arrow">▼</span></div>
@@ -1323,33 +1351,7 @@ body{font-family:'DM Sans',sans-serif;background:var(--bg);color:var(--text);min
     </div>
   </div>
   </div>
-<div class="two">
-    <div class="card">
-      <div class="ch">📈 Kursverlauf der letzten 12 Monate + Zukunftsszenarien</div>
-  <div class="card">
-      <div class="ch">Kursverlauf der letzten 12 Monate + Zukunftsszenarien</div>
-      <div class="cw"><canvas id="asts-chart" role="img" aria-label="ASTS Chart">ASTS Kursverlauf</canvas></div>
-      <div class="lgbox">
-        <div class="lgr"><div class="lgl"><div class="lgs" style="background:var(--asts);"></div><div class="lgdot" style="background:var(--asts);"></div></div><div><div class="lgt">Was wirklich passiert ist</div><div class="lgx">Echter historischer Kurs — stark gestiegen, aber auch sehr schwankend</div></div></div>
-        <div class="lgr"><div class="lgl"><div class="lgd" style="border-color:var(--green);"></div><div class="lgdot" style="background:var(--green);"></div></div><div><div class="lgt" style="color:var(--green);">Optimistisches Szenario → $200+</div><div class="lgx">Wenn die Satelliten funktionieren und Umsatz kommt</div></div></div>
-        <div class="lgr"><div class="lgl"><div class="lgd" style="border-color:#bbb;"></div><div class="lgdot" style="background:#bbb;"></div></div><div><div class="lgt" style="color:#888;">Was Bankexperten erwarten → $83</div><div class="lgx">Nüchterne Mitte — der aktuelle Kurs liegt 44% darüber</div></div></div>
-        <div class="lgr"><div class="lgl"><div class="lgd" style="border-color:var(--red);"></div><div class="lgdot" style="background:var(--red);"></div></div><div><div class="lgt" style="color:var(--red);">Pessimistisches Szenario → $50</div><div class="lgx">Wenn Blue Origin dauerhaft ausfällt + Starlink gewinnt</div></div></div>
-      </div>
-    </div>
-    <div class="card">
-      <div class="ch">Wo könnte der Kurs in 12 Monaten stehen?</div>
-      <div style="font-size:14px;color:var(--text2);margin-bottom:12px;line-height:1.5;">Die Bandbreite ist riesig — das zeigt das grosse Risiko und das grosse Potenzial:</div>
-      <div class="scr"><div class="scl">Bestmöglicher Fall</div><div class="scb"><div class="scf" style="width:100%;background:var(--green);"></div></div><div class="scv up">$200+</div></div>
-      <div class="scr"><div class="scl">Roth Capital Bank</div><div class="scb"><div class="scf" style="width:54%;background:var(--rklb);"></div></div><div class="scv" style="color:var(--rklb);">$108</div></div>
-      <div class="scr"><div class="scl">Alle Banken<br>(Durchschnitt)</div><div class="scb"><div class="scf" style="width:42%;background:#bbb;"></div></div><div class="scv mu">$83</div></div>
-      <div class="scr"><div class="scl">Fairer Wert<br>(Berechnung)</div><div class="scb"><div class="scf" style="width:36%;background:var(--amber);"></div></div><div class="scv wn">$71</div></div>
-      <div class="scr"><div class="scl">Schlechtester Fall</div><div class="scb"><div class="scf" style="width:25%;background:var(--red);"></div></div><div class="scv dn">$50</div></div>
-      <div style="background:rgba(220,38,38,.05);border:1px solid rgba(220,38,38,.15);border-radius:8px;padding:14px;margin-top:14px;">
-        <div style="font-size:13px;font-weight:500;margin-bottom:6px;color:#991b1b;">⚠️ Wichtige Warnung</div>
-        <div style="font-size:13px;color:var(--text2);line-height:1.6;">Der aktuelle Kurs ($120) liegt deutlich über dem, was die meisten Experten für fair halten ($83). Nur mit Geld investieren, dessen Verlust du verkraften könntest.</div>
-      </div>
-    </div>
-  </div>
+
 </div>
 
 <!-- ════════════════ Glossar ════════════════ -->
