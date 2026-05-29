@@ -472,7 +472,7 @@ body{font-family:'DM Sans',sans-serif;background:var(--bg);color:var(--text);min
 .section-toggle.open .st-arrow{transform:rotate(180deg);}
 .section-body{display:none;}
 .section-body.open{display:block;border-top:1px solid var(--border);padding:16px;}
-.collapsible-card{background:var(--surface);border:1px solid var(--border);border-radius:var(--rl);margin-bottom:14px;overflow:hidden;transition:border-color .2s;}
+.collapsible-card{background:var(--surface);border:1px solid var(--border);border-radius:var(--rl);margin-bottom:10px;overflow:hidden;transition:border-color .2s;}
 .collapsible-card .section-toggle{border-radius:0;}
 .collapsible-card.open{border-color:rgba(0,0,0,.16);}
 
@@ -482,8 +482,6 @@ body{font-family:'DM Sans',sans-serif;background:var(--bg);color:var(--text);min
 
 .section-body.open>.mets,.section-body.open>.alert,
 .section-body.open>.rec-banner{margin-top:0;}
-
-.collapsible-card+.collapsible-card{margin-top:0;}
 
 /* ── Chart Tabs ── */
 .chart-tabs{display:flex;gap:0;border-bottom:1px solid var(--border);margin:-16px -16px 0;padding:0 4px;}
@@ -536,6 +534,11 @@ body{font-family:'DM Sans',sans-serif;background:var(--bg);color:var(--text);min
 .hdr-refresh-btn.busy{opacity:.6;cursor:not-allowed;pointer-events:none;}
 .hdr-refresh-spin{width:13px;height:13px;border:2px solid currentColor;border-top-color:transparent;border-radius:50%;animation:spin .7s linear infinite;display:none;flex-shrink:0;}
 .hdr-refresh-btn.busy .hdr-refresh-spin{display:block;}
+
+/* ── Better card separation ── */
+.collapsible-card+.collapsible-card{margin-top:8px;}
+.collapsible-card:not(.open) .section-toggle{opacity:.85;}
+.collapsible-card:not(.open):hover .section-toggle{opacity:1;}
 </style>
 </head>
 <body>
@@ -563,7 +566,7 @@ body{font-family:'DM Sans',sans-serif;background:var(--bg);color:var(--text);min
     </button>
     <!-- Settings Button -->
     <div class="settings-btn" id="settings-btn" onclick="toggleSettings()" title="Einstellungen">⚙️
-      <div class="settings-dropdown" id="settings-dropdown">
+      <div class="settings-dropdown" id="settings-dropdown" onclick="event.stopPropagation()">
         <!-- KI-Schlüssel -->
         <div class="settings-section">
           <div class="settings-section-title">🔑 KI-Analyse Schlüssel</div>
@@ -1668,7 +1671,8 @@ function switchChartTab(t,tab){
 }
 document.addEventListener('click',function(e){
   const btn=document.getElementById('settings-btn');
-  if(btn&&!btn.contains(e.target))document.getElementById('settings-dropdown').classList.remove('open');
+  const dd=document.getElementById('settings-dropdown');
+  if(btn&&!btn.contains(e.target)&&dd&&!dd.contains(e.target))dd.classList.remove('open');
 });
 
 // ── API Key ────────────────────────────────────────────
