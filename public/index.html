@@ -46,12 +46,12 @@ body{font-family:'DM Sans',sans-serif;background:var(--bg);color:var(--text);min
 .tab.active.asts-tab{color:var(--asts);}
 
 /* ── Panel ── */
-.panel{display:none;flex-direction:column;gap:10px;margin-top:16px;}
+.panel{display:none;flex-direction:column;gap:8px;margin-top:12px;}
 .panel.active{display:flex;}
 
 /* ── Collapsible Cards ── */
 .card{background:var(--surface);border:1px solid var(--border);border-radius:var(--rl);overflow:hidden;transition:border-color .2s;box-shadow:var(--shadow);}
-.card-header{display:flex;align-items:center;gap:12px;padding:14px 16px;cursor:pointer;user-select:none;}
+.card-header{display:flex;align-items:center;gap:12px;padding:13px 16px;cursor:pointer;user-select:none;}
 .card-header:hover{background:var(--surface2);}
 .card-icon{font-size:18px;flex-shrink:0;}
 .card-title{font-weight:700;font-size:16px;line-height:1.3;}
@@ -462,13 +462,16 @@ body{font-family:'DM Sans',sans-serif;background:var(--bg);color:var(--text);min
 
 /* ── Day Forecast Redesign ── */
 .df-range-wrap{padding:4px 0 8px;}
-.df-range-labels{display:flex;justify-content:space-between;align-items:flex-end;margin-bottom:4px;}
-.df-edge{flex:1;}
-.df-center{flex:1;text-align:center;}
-.df-edge-lbl{font-size:11px;color:var(--text3);margin-bottom:3px;}
-.df-edge-val{font-size:18px;font-weight:700;}
-.df-stats-row{display:flex;gap:8px;margin-top:14px;flex-wrap:wrap;}
-.df-stat-pill{flex:1;min-width:0;padding:8px 12px;background:var(--surface2);border:1px solid var(--border);border-radius:10px;font-size:13px;color:var(--text2);text-align:center;white-space:nowrap;}
+.df-range-labels{display:grid;grid-template-columns:1fr 1fr 1fr;align-items:end;margin-bottom:8px;gap:4px;}
+.df-edge{} 
+.df-edge:last-child{text-align:right;}
+.df-center{text-align:center;}
+.df-edge-lbl{font-size:11px;color:var(--text3);margin-bottom:4px;font-weight:500;letter-spacing:.02em;text-transform:uppercase;}
+.df-edge-val{font-size:22px;font-weight:700;font-family:"DM Mono",monospace;}
+.df-stats-row{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin-top:16px;}
+.df-stat-pill{padding:10px 8px;background:var(--surface2);border:1px solid var(--border);border-radius:12px;font-size:13px;color:var(--text2);text-align:center;font-weight:500;}
+.df-stat-pill span.up{color:var(--green);}
+.df-stat-pill span.dn{color:var(--red);}
 
 /* ── Auth Overlay ── */
 .auth-overlay{position:fixed;inset:0;background:var(--bg);z-index:1000;display:flex;align-items:center;justify-content:center;padding:20px;}
@@ -1714,22 +1717,28 @@ function calcDF(t, q) {
     const lbl = $(t+'-rdot-lbl');
     if (lbl) lbl.textContent = '$'+fmt(q.price);
   }
+  const atrEl = $(t+'-df-atr'), momEl = $(t+'-df-mom'), rsiEl = $(t+'-df-rsi');
   // ATR
   if (closes.length >= 5) {
     const atr = closes.slice(-5).reduce((s,v,i,a) => i===0?s:s+Math.abs(v-a[i-1]),0)/4;
-    if ($(t+'-vol-avg')) $(t+'-vol-avg').textContent = '±$'+fmt(atr)+' (~'+fmt(atr/q.price*100)+'%)';
+    const atrPct = fmt(atr/q.price*100);
+    if (atrEl) atrEl.innerHTML = `<div style="font-size:20px;margin-bottom:3px;">⚡</div><div style="font-size:11px;color:var(--text3);margin-bottom:3px;">Schwankung</div><div style="font-weight:700;">±$${fmt(atr)}</div><div style="font-size:11px;color:var(--text3);">~${atrPct}%</div>`;
   }
   // Momentum
   if (closes.length >= 2) {
     const mom = (closes[closes.length-1]-closes[0])/closes[0]*100;
-    if ($(t+'-mom')) { $(t+'-mom').textContent = (mom>=0?'+':'')+fmt(mom)+'%'; $(t+'-mom').className = mom>=0?'up':'dn'; }
+    const momIcon = mom>=0?'📈':'📉';
+    const momClass = mom>=0?'up':'dn';
+    if (momEl) momEl.innerHTML = `<div style="font-size:20px;margin-bottom:3px;">${momIcon}</div><div style="font-size:11px;color:var(--text3);margin-bottom:3px;">Momentum</div><div class="${momClass}" style="font-weight:700;">${mom>=0?'+':''}${fmt(mom)}%</div>`;
   }
   // RSI
   if (closes.length >= 5) {
     let gains=0,losses=0;
     for(let i=1;i<Math.min(closes.length,15);i++){const d=closes[i]-closes[i-1];d>0?gains+=d:losses-=d;}
     const rs=losses===0?100:gains/losses, rsi=100-100/(1+rs);
-    if ($(t+'-rsi')) $(t+'-rsi').textContent = fmt(rsi)+(rsi>70?' (überkauft)':rsi<30?' (überverkauft)':'');
+    const rsiLabel = rsi>70?'Überkauft ⚠️':rsi<30?'Überverkauft ✅':'Neutral';
+    const rsiColor = rsi>70?'var(--red)':rsi<30?'var(--green)':'var(--text2)';
+    if (rsiEl) rsiEl.innerHTML = `<div style="font-size:20px;margin-bottom:3px;">🔬</div><div style="font-size:11px;color:var(--text3);margin-bottom:3px;">RSI ${rsi.toFixed(0)}</div><div style="color:${rsiColor};font-weight:700;">${rsiLabel}</div>`;
   }
 }
 
