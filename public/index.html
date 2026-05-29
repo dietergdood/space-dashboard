@@ -169,9 +169,7 @@ body{font-family:'DM Sans',sans-serif;background:var(--bg);color:var(--text);min
 .score-explain{font-size:11px;color:var(--text2);line-height:1.4;}
 .rec-levels{display:flex;flex-wrap:wrap;gap:8px;margin-bottom:14px;}
 .rec-level{display:inline-flex;align-items:center;gap:4px;padding:6px 12px;background:var(--surface2);border:1px solid var(--border2);border-radius:8px;font-size:13px;font-weight:500;font-family:'DM Mono',monospace;}
-.rec-update-btn{float:right;padding:8px 16px;border:1px solid var(--border2);border-radius:8px;background:var(--surface2);color:var(--text2);font-size:13px;font-weight:500;cursor:pointer;font-family:inherit;transition:all .2s;display:flex;align-items:center;gap:6px;}
-.rec-update-btn:hover{background:var(--blue);color:#fff;border-color:var(--blue);}
-.rec-update-spin{width:12px;height:12px;border:2px solid currentColor;border-top-color:transparent;border-radius:50%;animation:spin .7s linear infinite;display:none;}
+
 
 /* ── Charts ── */
 .chart-tabs{display:flex;gap:0;border-bottom:1px solid var(--border);margin:-16px -16px 14px;padding:0 4px;}
@@ -354,6 +352,12 @@ body{font-family:'DM Sans',sans-serif;background:var(--bg);color:var(--text);min
 .toggle-slider:before{position:absolute;content:"";height:16px;width:16px;left:3px;bottom:3px;background:#fff;border-radius:50%;transition:.3s;box-shadow:0 1px 3px rgba(0,0,0,.2);}
 input:checked + .toggle-slider{background:var(--green);}
 input:checked + .toggle-slider:before{transform:translateX(18px);}
+
+/* ── KI Status Pill ── */
+.ki-status-pill{display:inline-flex;align-items:center;gap:6px;padding:5px 12px;background:var(--blue-bg);border:1px solid rgba(37,99,235,.2);border-radius:20px;font-size:12px;font-weight:500;color:var(--blue);white-space:nowrap;animation:fadeIn .3s ease;}
+.ki-status-pill.success{background:var(--green-bg);border-color:var(--green-bd);color:var(--green);}
+.ki-status-pill.error{background:var(--red-bg);border-color:var(--red-bd);color:var(--red);}
+@keyframes fadeIn{from{opacity:0;transform:translateY(-4px);}to{opacity:1;transform:translateY(0);}}
 </style>
 </head>
 <body>
@@ -376,7 +380,7 @@ input:checked + .toggle-slider:before{transform:translateX(18px);}
     </div>
     <div class="hdr-r">
       <div class="live-badge"><div class="live-dot"></div><span>Echtzeitkurse</span></div>
-      <div id="ki-status" style="display:none;font-size:12px;color:var(--text3);padding:0 8px;white-space:nowrap;"></div>
+      <div id="ki-status" class="ki-status-pill" style="display:none;"></div>
       <div class="settings-wrap">
         <button class="settings-btn" id="settings-btn" onclick="toggleSettings()">⚙️</button>
         <div class="settings-dd" id="settings-dd" onclick="event.stopPropagation()">
@@ -388,13 +392,25 @@ input:checked + .toggle-slider:before{transform:translateX(18px);}
             <br><small style="color:var(--text3)">Wird im Browser gespeichert, niemals auf Servern.</small>
           </div>
           <div class="divider"></div>
-          <div class="settings-label">↺ Automatische Aktualisierung</div>
+          <div class="settings-label">↺ Aktualisierung</div>
           <div class="auto-bar">
-            <div class="auto-label"><div class="auto-dot" id="auto-dot"></div><span id="auto-label-txt">KI-Schlüssel eingeben um zu starten</span></div>
-            <button class="auto-btn" id="auto-btn" onclick="manualRefreshAll()">↺ Jetzt</button>
+            <div class="auto-label"><div class="auto-dot on" id="auto-dot"></div><span id="auto-label-txt">Cron läuft 4× täglich automatisch</span></div>
           </div>
-          <div class="auto-progress-track"><div class="auto-progress-fill" id="auto-progress"></div></div>
-          <div class="next-label" id="next-label"></div>
+          <div style="margin-top:10px;" id="manual-refresh-wrap">
+            <button class="auto-btn" style="width:100%;padding:8px;font-size:13px;" onclick="manualRefreshFromSettings()" id="manual-refresh-btn">
+              ↺ Jetzt manuell aktualisieren
+            </button>
+            <div style="font-size:11px;color:var(--text3);margin-top:4px;">Eigener API-Key nötig · nutzt dein Guthaben</div>
+          </div>
+          <div class="next-label" id="next-label" style="margin-top:6px;"></div>
+          <div class="divider"></div>
+          <div class="settings-label">ℹ️ Aktualisierungs-Übersicht</div>
+          <div style="font-size:12px;color:var(--text2);line-height:1.8;">
+            <div>⚡ <b>Kurse</b> — alle 15 Sekunden (Yahoo Finance)</div>
+            <div>🤖 <b>KI-Analysen</b> — 4× täglich (09:00, 14:00, 19:00, 00:00)</div>
+            <div>📦 <b>Beim Öffnen</b> — letzte gespeicherte Daten sofort</div>
+            <div style="margin-top:6px;color:var(--text3);">Letzte KI-Aktualisierung: <span id="last-sync-label">—</span></div>
+          </div>
           <div class="divider"></div>
           <div class="settings-label">🔄 Auto-Sync (Cron)</div>
           <div style="display:flex;align-items:center;justify-content:space-between;">
@@ -563,12 +579,7 @@ input:checked + .toggle-slider:before{transform:translateX(18px);}
       <div class="rec-level"><span class="tip"><b>Kursziel:</b> <span id="rklb-pill-ziel-val">—</span><span class="tip-icon">?</span><span class="tip-box">Wo der Kurs hinlaufen könnte wenn die Entwicklung wie erwartet verläuft.</span></span></div>
       <div class="rec-level"><span class="tip"><b>Stopp-Loss:</b> <span id="rklb-pill-stopp-val">—</span><span class="tip-icon">?</span><span class="tip-box">Unter diesem Kurs sollte man die Position überdenken — Sicherheitsnetz.</span></span></div>
     </div>
-    <div class="clearfix">
-      <button class="rec-update-btn" id="rklb-rec-btn" onclick="fetchRec('rklb')">
-        <div class="rec-update-spin" id="rklb-rec-spin"></div>
-        <span id="rklb-rec-btn-txt">✦ Einschätzung mit KI aktualisieren</span>
-      </button>
-    </div>
+
   </div>
 </div>
 <div class="card open" id="card-rklb-charts">
@@ -854,12 +865,7 @@ input:checked + .toggle-slider:before{transform:translateX(18px);}
       <div class="rec-level"><span class="tip"><b>Kursziel:</b> <span id="asts-pill-ziel-val">—</span><span class="tip-icon">?</span><span class="tip-box">Wo der Kurs hinlaufen könnte wenn die Entwicklung wie erwartet verläuft.</span></span></div>
       <div class="rec-level"><span class="tip"><b>Stopp-Loss:</b> <span id="asts-pill-stopp-val">—</span><span class="tip-icon">?</span><span class="tip-box">Unter diesem Kurs sollte man die Position überdenken — Sicherheitsnetz.</span></span></div>
     </div>
-    <div class="clearfix">
-      <button class="rec-update-btn" id="asts-rec-btn" onclick="fetchRec('asts')">
-        <div class="rec-update-spin" id="asts-rec-spin"></div>
-        <span id="asts-rec-btn-txt">✦ Einschätzung mit KI aktualisieren</span>
-      </button>
-    </div>
+
   </div>
 </div>
 <div class="card open" id="card-asts-charts">
@@ -1920,8 +1926,13 @@ async function refreshAllNews(manual=false) {
   if (lbl) lbl.textContent = 'Aktualisiert...';
   const delay = ms => new Promise(r => setTimeout(r, ms));
   const statusEl = document.getElementById('ki-status');
-  const setStatus = (txt) => { if(statusEl){ statusEl.style.display='block'; statusEl.textContent=txt; } };
-  const clearStatus = () => { if(statusEl){ statusEl.style.display='none'; statusEl.textContent=''; } };
+  const setStatus = (txt, type='') => {
+    if(!statusEl) return;
+    statusEl.style.display='inline-flex';
+    statusEl.textContent = txt;
+    statusEl.className = 'ki-status-pill' + (type ? ' '+type : '');
+  };
+  const clearStatus = () => { if(statusEl){ statusEl.style.display='none'; } };
 
   const calls = [
     [() => fetchRec('rklb'),            '🎯 RKLB Empfehlung...'],
@@ -1942,7 +1953,7 @@ async function refreshAllNews(manual=false) {
     try { await fn(); } catch(e) { console.warn('refresh call failed:', e.message); }
     if (i < calls.length - 1) await delay(12000); // 12s between calls
   }
-  setStatus('✓ Alles aktualisiert');
+  setStatus('✓ Aktualisiert', 'success');
   setTimeout(clearStatus, 4000);
   if (lbl) lbl.textContent = 'Nächste Aktualisierung in 2h';
   if (!manual) startAutoRefresh();
