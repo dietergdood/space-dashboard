@@ -66,12 +66,6 @@ body{font-family:'DM Sans',sans-serif;background:var(--bg);color:var(--text);min
 .live-dot{width:7px;height:7px;background:var(--green);border-radius:50%;animation:pulse 2s infinite;}
 @keyframes pulse{0%,100%{opacity:1;}50%{opacity:.4;}}
 
-/* ── Header Refresh Button ── */
-.refresh-btn{display:flex;align-items:center;gap:6px;padding:7px 14px;border-radius:8px;border:1px solid var(--border2);background:var(--surface);color:var(--text2);font-size:13px;font-weight:500;cursor:pointer;font-family:inherit;transition:all .2s;white-space:nowrap;}
-.refresh-btn:hover{border-color:var(--blue);color:var(--blue);background:var(--blue-bg);}
-.refresh-btn.busy{opacity:.6;cursor:not-allowed;pointer-events:none;}
-.refresh-spin{width:12px;height:12px;border:2px solid currentColor;border-top-color:transparent;border-radius:50%;animation:spin .7s linear infinite;display:none;}
-.refresh-btn.busy .refresh-spin{display:block;}
 @keyframes spin{to{transform:rotate(360deg);}}
 
 /* ── Settings ── */
@@ -320,7 +314,6 @@ body{font-family:'DM Sans',sans-serif;background:var(--bg);color:var(--text);min
   .tabs{gap:1px;}
   .tab{padding:7px 12px;font-size:13px;}
   .live-badge span{display:none;}
-  .refresh-btn span{display:none;}
   .mets{grid-template-columns:repeat(2,1fr);gap:8px;}
   .rec-scores{grid-template-columns:repeat(2,1fr);gap:6px;}
   .sector-grid{grid-template-columns:repeat(2,1fr);}
@@ -353,6 +346,14 @@ body{font-family:'DM Sans',sans-serif;background:var(--bg);color:var(--text);min
 .user-btn{display:flex;align-items:center;gap:6px;padding:6px 12px;border-radius:8px;border:1px solid var(--border);background:var(--surface);cursor:pointer;font-family:inherit;font-size:13px;font-weight:500;color:var(--text2);}
 .user-btn:hover{background:var(--surface2);}
 .user-avatar{width:22px;height:22px;border-radius:50%;background:var(--blue);color:#fff;display:flex;align-items:center;justify-content:center;font-size:11px;font-weight:700;}
+
+/* ── Toggle Switch ── */
+.toggle-switch{position:relative;display:inline-block;width:40px;height:22px;flex-shrink:0;}
+.toggle-switch input{opacity:0;width:0;height:0;}
+.toggle-slider{position:absolute;cursor:pointer;inset:0;background:var(--surface3);border-radius:22px;transition:.3s;}
+.toggle-slider:before{position:absolute;content:"";height:16px;width:16px;left:3px;bottom:3px;background:#fff;border-radius:50%;transition:.3s;box-shadow:0 1px 3px rgba(0,0,0,.2);}
+input:checked + .toggle-slider{background:var(--green);}
+input:checked + .toggle-slider:before{transform:translateX(18px);}
 </style>
 </head>
 <body>
@@ -376,10 +377,6 @@ body{font-family:'DM Sans',sans-serif;background:var(--bg);color:var(--text);min
     <div class="hdr-r">
       <div class="live-badge"><div class="live-dot"></div><span>Echtzeitkurse</span></div>
       <div id="ki-status" style="display:none;font-size:12px;color:var(--text3);padding:0 8px;white-space:nowrap;"></div>
-      <button class="refresh-btn" id="refresh-btn" onclick="hdrRefresh()">
-        <div class="refresh-spin" id="refresh-spin"></div>
-        <span id="refresh-txt">↺ Aktualisieren</span>
-      </button>
       <div class="settings-wrap">
         <button class="settings-btn" id="settings-btn" onclick="toggleSettings()">⚙️</button>
         <div class="settings-dd" id="settings-dd" onclick="event.stopPropagation()">
@@ -398,6 +395,16 @@ body{font-family:'DM Sans',sans-serif;background:var(--bg);color:var(--text);min
           </div>
           <div class="auto-progress-track"><div class="auto-progress-fill" id="auto-progress"></div></div>
           <div class="next-label" id="next-label"></div>
+          <div class="divider"></div>
+          <div class="settings-label">🔄 Auto-Sync (Cron)</div>
+          <div style="display:flex;align-items:center;justify-content:space-between;">
+            <div style="font-size:13px;color:var(--text2);" id="sync-status-label">Status wird geladen...</div>
+            <label class="toggle-switch">
+              <input type="checkbox" id="sync-toggle" onchange="toggleSync(this.checked)">
+              <span class="toggle-slider"></span>
+            </label>
+          </div>
+          <div style="font-size:11px;color:var(--text3);margin-top:6px;">4× täglich automatisch aktualisieren (~$6/Monat)</div>
         </div>
       </div>
     </div>
@@ -2004,20 +2011,13 @@ async function hdrRefresh() {
   // Load data
   loadAll();
   setInterval(loadAll, 15000);
-  // Don't auto-refresh on init - wait 30s to avoid rate limits on page load
+  // Load cached data first (instant, no rate limits)
+  loadFromCache();
+  loadSyncStatus();
+  // If user has own key, also schedule a live refresh after 60s
   const key = getKey();
   if (key && key.startsWith('sk-ant-')) {
-    const statusEl = document.getElementById('ki-status');
-    if (statusEl) {
-      statusEl.style.display = 'block';
-      statusEl.textContent = '⏳ KI-Analyse startet in 30s...';
-      setTimeout(() => {
-        statusEl.style.display = 'none';
-        refreshAllNews();
-      }, 30000);
-    } else {
-      setTimeout(() => refreshAllNews(), 30000);
-    }
+    setTimeout(() => refreshAllNews(), 60000);
   }
 })();
 
