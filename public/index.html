@@ -61,13 +61,6 @@ body{font-family:'DM Sans',sans-serif;background:var(--bg);color:var(--text);min
 .api-hint b{color:var(--text);}
 
 /* Intro / Onboarding */
-.intro{background:var(--blue-bg);border:1px solid rgba(37,99,235,.2);border-radius:var(--rl);padding:20px 22px;margin-bottom:18px;}
-.intro-title{font-size:17px;font-weight:500;margin-bottom:10px;}
-.intro-grid{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-top:10px;}
-.intro-card{background:var(--surface);border-radius:8px;padding:14px 16px;border:1px solid var(--border);}
-.intro-card-title{font-size:15px;font-weight:500;margin-bottom:5px;}
-.intro-card-body{font-size:14px;color:var(--text2);line-height:1.55;}
-.intro-toggle{cursor:pointer;color:var(--blue);font-size:13px;margin-top:10px;display:inline-block;}
 
 /* Auto-Refresh Bar */
 .auto-bar{background:var(--surface);border:1px solid var(--border);border-radius:var(--rl);padding:14px 20px;margin-bottom:18px;display:flex;align-items:center;gap:14px;flex-wrap:wrap;}
@@ -247,7 +240,6 @@ body{font-family:'DM Sans',sans-serif;background:var(--bg);color:var(--text);min
 
   /* Intro */
   .intro{padding:12px 14px;}
-  .intro-grid{grid-template-columns:1fr;}
 
   /* Metrics */
   .mets{grid-template-columns:1fr 1fr;gap:10px;margin-bottom:14px;}
@@ -323,7 +315,6 @@ body{font-family:'DM Sans',sans-serif;background:var(--bg);color:var(--text);min
   .section-sub{font-size:12px;}
 
   /* Intro grid */
-  #intro-box [style*="grid-template-columns"]{grid-template-columns:1fr 1fr !important;}
   /* Alert */
   .alert{padding:10px 12px;font-size:12px;}
 
@@ -505,11 +496,12 @@ body{font-family:'DM Sans',sans-serif;background:var(--bg);color:var(--text);min
 
 /* ── Score cards with explanation ── */
 .rec-score-card{background:var(--surface);border-radius:10px;padding:14px 16px;border:1px solid var(--border);}
-.rec-score-top{display:flex;align-items:flex-start;gap:8px;margin-bottom:8px;}
+.rec-score-top{display:flex;align-items:center;gap:8px;margin-bottom:6px;}
 .rec-score-emoji{font-size:20px;flex-shrink:0;}
-.rec-score-label{font-size:12px;color:var(--text2);line-height:1.45;flex:1;display:flex;align-items:center;gap:4px;flex-wrap:wrap;}
+.rec-score-label{font-size:12px;color:var(--text2);line-height:1.35;flex:1;}
 .rec-score-val{font-size:26px;font-weight:500;font-family:'DM Mono',monospace;margin-bottom:5px;}
-/* rec-score-explain removed - now using tooltip */
+.rec-score-explain{font-size:11px;color:var(--text3);line-height:1.5;margin-top:6px;padding-top:6px;border-top:1px solid var(--border);}
+.rec-score-explain b{color:var(--text2);}
 </style>
 </head>
 <body>
@@ -564,36 +556,7 @@ body{font-family:'DM Sans',sans-serif;background:var(--bg);color:var(--text);min
   </div>
 </div>
 
-<!-- Einsteiger-Erklärung (ausblendbar) -->
-<div class="intro" id="intro-box">
-  <div style="display:flex;align-items:flex-start;justify-content:space-between;gap:12px;margin-bottom:12px;">
-    <div class="intro-title" style="margin-bottom:0;">👋 Kurze Erklärung für Einsteiger</div>
-    <div class="intro-toggle" style="margin-top:2px;flex-shrink:0;" onclick="document.getElementById('intro-box').style.display='none'">✕</div>
-  </div>
-  <div style="display:grid;grid-template-columns:1fr 1fr 1fr 1fr;gap:10px;">
-    <div style="background:var(--surface);border-radius:8px;padding:12px 14px;border:1px solid var(--border);">
-      <div style="font-size:16px;margin-bottom:5px;">📄</div>
-      <div style="font-size:13px;font-weight:500;margin-bottom:4px;color:var(--text);">Was ist eine Aktie?</div>
-      <div style="font-size:12px;color:var(--text2);line-height:1.55;">Ein kleines Stück eines Unternehmens. Wenn der Kurs steigt, machst du Gewinn — fällt er, Verlust.</div>
-    </div>
-    <div style="background:var(--surface);border-radius:8px;padding:12px 14px;border:1px solid var(--border);">
-      <div style="font-size:16px;margin-bottom:5px;">🎯</div>
-      <div style="font-size:13px;font-weight:500;margin-bottom:4px;color:var(--text);">Was bedeuten die Scores?</div>
-      <div style="font-size:12px;color:var(--text2);line-height:1.55;">Die 4 Kacheln bei der Empfehlung (1–10) zeigen: Geschäftsstärke, Kursmomentum, Risikolevel und ob der Preis fair ist.</div>
-    </div>
-    <div style="background:var(--surface);border-radius:8px;padding:12px 14px;border:1px solid var(--border);">
-      <div style="font-size:16px;margin-bottom:5px;">🐂🐻</div>
-      <div style="font-size:13px;font-weight:500;margin-bottom:4px;color:var(--text);">Bull vs. Bear?</div>
-      <div style="font-size:12px;color:var(--text2);line-height:1.55;"><b>Bull</b> = optimistisch (Kurs steigt). <b>Bear</b> = pessimistisch (Kurs fällt). Charts zeigen immer beide Szenarien.</div>
-    </div>
-    <div style="background:var(--surface);border-radius:8px;padding:12px 14px;border:1px solid var(--border);">
-      <div style="font-size:16px;margin-bottom:5px;">⚠️</div>
-      <div style="font-size:13px;font-weight:500;margin-bottom:4px;color:var(--text);">Wichtiger Hinweis</div>
-      <div style="font-size:12px;color:var(--text2);line-height:1.55;">Alle Empfehlungen sind KI-generiert. Nie mehr investieren als du verlieren kannst. Kein Anlageberatung!</div>
-    </div>
-  </div>
-  <div style="font-size:12px;color:var(--text3);margin-top:10px;">Alle <span style="display:inline-flex;align-items:center;gap:2px;vertical-align:middle;"><span style="width:14px;height:14px;border-radius:50%;background:rgba(37,99,235,.15);color:#2563eb;font-size:9px;display:inline-flex;align-items:center;justify-content:center;font-weight:500;">?</span></span>-Symbole erklären sich beim Drüberfahren · Alle Begriffe im Glossar am Ende der Seite</div>
-</div>
+
 
 <!-- Context Bar (switches with tab) -->
 <div id="ctx-rklb" class="ctx-bar rklb-bar">
@@ -709,36 +672,28 @@ body{font-family:'DM Sans',sans-serif;background:var(--bg);color:var(--text);min
     </div>
     <div class="rec-scores">
       <div class="rec-score-card">
-        <div class="rec-score-top">
-          <div class="rec-score-emoji">📈</div>
-          <div class="rec-score-label">Wie gut läuft das Geschäft? <span class="tip"><span class="tip-icon">?</span><span class="tip-box"><b>Fundamentals</b> — Wie stark wächst das Unternehmen? Umsatz, Auftragsbestand, Marge. 8/10 = sehr stark: +64% Umsatz, $2.2 Mrd. Backlog, erste Profitabilität in Sicht.</span></span></div>
-        </div>
+        <div class="rec-score-top"><div class="rec-score-emoji">📈</div><div class="rec-score-label">Wie gut läuft<br>das Geschäft?</div></div>
         <div class="rec-score-val up" id="rklb-s1">8/10</div>
         <div class="rec-meter"><div class="rec-meter-fill" style="width:80%;background:var(--green);" id="rklb-m1"></div></div>
+        <div class="rec-score-explain"><b>Fundamentals</b> — Umsatzwachstum, Auftragsbestand, Marge. 8/10 = Rocket Lab wächst stark: +64% Umsatz, $2.2 Mrd. Backlog, erste Profitabilität in Sicht.</div>
       </div>
       <div class="rec-score-card">
-        <div class="rec-score-top">
-          <div class="rec-score-emoji">🚀</div>
-          <div class="rec-score-label">Wie stark steigt der Kurs? <span class="tip"><span class="tip-icon">?</span><span class="tip-box"><b>Momentum</b> — Wie stark bewegt sich der Kurs nach oben? 7/10 = stark (+80% in einem Monat). Achtung: Hohes Momentum kann schnell drehen wenn Enttäuschungen kommen.</span></span></div>
-        </div>
+        <div class="rec-score-top"><div class="rec-score-emoji">🚀</div><div class="rec-score-label">Wie stark steigt<br>der Kurs gerade?</div></div>
         <div class="rec-score-val up" id="rklb-s2">7/10</div>
         <div class="rec-meter"><div class="rec-meter-fill" style="width:70%;background:var(--green);" id="rklb-m2"></div></div>
+        <div class="rec-score-explain"><b>Momentum</b> — Kursrichtung der letzten Wochen. 7/10 = +80% in einem Monat. Vorsicht: Starkes Momentum kann schnell drehen wenn Enttäuschungen kommen.</div>
       </div>
       <div class="rec-score-card">
-        <div class="rec-score-top">
-          <div class="rec-score-emoji">⚠️</div>
-          <div class="rec-score-label">Wie hoch ist das Risiko? <span class="tip"><span class="tip-icon">?</span><span class="tip-box"><b>Risiko</b> — <b>Höherer Score = niedrigeres Risiko!</b> 6/10 = mittleres Risiko. Hauptgefahr: Neutron-Rakete scheitert oder verzögert sich → Kurs könnte 40%+ fallen.</span></span></div>
-        </div>
+        <div class="rec-score-top"><div class="rec-score-emoji">⚠️</div><div class="rec-score-label">Wie hoch ist<br>das Risiko?</div></div>
         <div class="rec-score-val wn" id="rklb-s3">6/10</div>
         <div class="rec-meter"><div class="rec-meter-fill" style="width:60%;background:var(--amber);" id="rklb-m3"></div></div>
+        <div class="rec-score-explain"><b>Risiko</b> — <b>Höherer Score = niedrigeres Risiko.</b> 6/10 = mittleres Risiko. Hauptgefahr: Neutron-Rakete scheitert oder verzögert sich stark → Kurs könnte 40%+ fallen.</div>
       </div>
       <div class="rec-score-card">
-        <div class="rec-score-top">
-          <div class="rec-score-emoji">💎</div>
-          <div class="rec-score-label">Ist der Preis fair? <span class="tip"><span class="tip-icon">?</span><span class="tip-box"><b>Bewertung</b> — Ist der Kurs günstig oder teuer verglichen mit dem was das Unternehmen verdient? 5/10 = leicht teuer. Kurs ($150) liegt 25% über Analysten-Konsens ($120).</span></span></div>
-        </div>
+        <div class="rec-score-top"><div class="rec-score-emoji">💎</div><div class="rec-score-label">Ist der Preis<br>fair?</div></div>
         <div class="rec-score-val wn" id="rklb-s4">5/10</div>
         <div class="rec-meter"><div class="rec-meter-fill" style="width:50%;background:var(--amber);" id="rklb-m4"></div></div>
+        <div class="rec-score-explain"><b>Bewertung</b> — Ist der Kurs gemessen am Unternehmenswert günstig oder teuer? 5/10 = leicht teuer. Kurs ($150) liegt 25% über Analysten-Konsens ($120). Wachstum rechtfertigt einen Teil davon.</div>
       </div>
     </div>
     <div class="rec-levels-row">
@@ -1164,36 +1119,28 @@ body{font-family:'DM Sans',sans-serif;background:var(--bg);color:var(--text);min
     </div>
     <div class="rec-scores">
       <div class="rec-score-card">
-        <div class="rec-score-top">
-          <div class="rec-score-emoji">📈</div>
-          <div class="rec-score-label">Wie gut läuft das Geschäft? <span class="tip"><span class="tip-icon">?</span><span class="tip-box"><b>Fundamentals</b> — 5/10 = mittelmässig. ASTS macht erst $14.7 Mio. Quartalsumsatz und schreibt hohe Verluste. Cash ($3.5 Mrd.) hält die Firma am Leben, aber Umsatz ist noch kaum vorhanden.</span></span></div>
-        </div>
+        <div class="rec-score-top"><div class="rec-score-emoji">📈</div><div class="rec-score-label">Wie gut läuft<br>das Geschäft?</div></div>
         <div class="rec-score-val wn" id="asts-s1">5/10</div>
         <div class="rec-meter"><div class="rec-meter-fill" style="width:50%;background:var(--amber);" id="asts-m1"></div></div>
+        <div class="rec-score-explain"><b>Fundamentals</b> — 5/10 = mittelmässig. ASTS macht erst $14.7 Mio. Quartalsumsatz, schreibt hohe Verluste. Cash ($3.5 Mrd.) hält die Firma am Leben. Potenzial ist riesig, aber noch kaum bewiesen.</div>
       </div>
       <div class="rec-score-card">
-        <div class="rec-score-top">
-          <div class="rec-score-emoji">🚀</div>
-          <div class="rec-score-label">Wie stark steigt der Kurs? <span class="tip"><span class="tip-icon">?</span><span class="tip-box"><b>Momentum</b> — 8/10 = sehr starkes Momentum (+77% in 2 Wochen). Nach der Blue Origin Explosion −7% über Nacht. Hohes Momentum kann sich schnell umkehren.</span></span></div>
-        </div>
+        <div class="rec-score-top"><div class="rec-score-emoji">🚀</div><div class="rec-score-label">Wie stark steigt<br>der Kurs gerade?</div></div>
         <div class="rec-score-val up" id="asts-s2">8/10</div>
         <div class="rec-meter"><div class="rec-meter-fill" style="width:80%;background:var(--green);" id="asts-m2"></div></div>
+        <div class="rec-score-explain"><b>Momentum</b> — 8/10 = sehr starkes Momentum. +77% in 2 Wochen vor Blue Origin Explosion. Nach der Explosion −7% — Momentum könnte sich abschwächen. Nur für Kurzfrist relevant.</div>
       </div>
       <div class="rec-score-card">
-        <div class="rec-score-top">
-          <div class="rec-score-emoji">💣</div>
-          <div class="rec-score-label">Wie hoch ist das Risiko? <span class="tip"><span class="tip-icon">?</span><span class="tip-box"><b>Risiko</b> — <b>Höherer Score = niedrigeres Risiko!</b> 4/10 = hohes Risiko. Blue Origin ausgefallen, Starlink-Konkurrenz, kaum Umsatz, extreme Kursschwankungen. Nur für risikobereite Anleger.</span></span></div>
-        </div>
+        <div class="rec-score-top"><div class="rec-score-emoji">💣</div><div class="rec-score-label">Wie hoch ist<br>das Risiko?</div></div>
         <div class="rec-score-val dn" id="asts-s3">4/10</div>
         <div class="rec-meter"><div class="rec-meter-fill" style="width:40%;background:var(--red);" id="asts-m3"></div></div>
+        <div class="rec-score-explain"><b>Risiko</b> — <b>Höherer Score = niedrigeres Risiko.</b> 4/10 = hohes Risiko. Blue Origin Explosion, Starlink-Konkurrenz, kaum Umsatz, starke Kursschwankungen. Nur für risikobereite Anleger geeignet.</div>
       </div>
       <div class="rec-score-card">
-        <div class="rec-score-top">
-          <div class="rec-score-emoji">💸</div>
-          <div class="rec-score-label">Ist der Preis fair? <span class="tip"><span class="tip-icon">?</span><span class="tip-box"><b>Bewertung</b> — 3/10 = deutlich teuer. Kurs ($120) liegt 44% über Analysten-Konsens ($83) und 68% über dem berechneten fairen Wert ($71). Man bezahlt fast nur für Zukunftshoffnung.</span></span></div>
-        </div>
+        <div class="rec-score-top"><div class="rec-score-emoji">💸</div><div class="rec-score-label">Ist der Preis<br>fair?</div></div>
         <div class="rec-score-val dn" id="asts-s4">3/10</div>
         <div class="rec-meter"><div class="rec-meter-fill" style="width:30%;background:var(--red);" id="asts-m4"></div></div>
+        <div class="rec-score-explain"><b>Bewertung</b> — 3/10 = deutlich überbewertet. Kurs ($120) liegt 44% über Analysten-Konsens ($83) und 68% über DCF-Fairer-Wert ($71). Man bezahlt fast nur für Zukunftshoffnung.</div>
       </div>
     </div>
     <div class="rec-levels-row">
