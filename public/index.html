@@ -410,15 +410,15 @@ body{font-family:'DM Sans',sans-serif;background:var(--bg);color:var(--text);min
   <div class="ctx-logo-emoji">🚀</div>
   <div class="ctx-info">
     <div class="ctx-name">Rocket Lab · RKLB</div>
-    <div class="ctx-desc">Baut Raketen (Electron) und Raumfahrtkomponenten. Wächst in grössere Raketen (Neutron, geplant 2026) und US-Verteidigung ("Golden Dome").</div>
-    <div class="ctx-tags">
+    <div class="ctx-desc" id="rklb-ctx-desc">Baut Raketen (Electron) und Raumfahrtkomponenten. Wächst in grössere Raketen (Neutron, geplant 2026) und US-Verteidigung ("Golden Dome").</div>
+    <div class="ctx-tags" id="rklb-ctx-tags">
       <span class="ctx-tag green">✓ Golden Dome Partner</span>
       <span class="ctx-tag green">✓ $2.2 Mrd Backlog</span>
       <span class="ctx-tag amber">⚡ Neutron-Erstflug H2 2026</span>
       <span class="ctx-tag">Long Beach, CA · 2006</span>
     </div>
   </div>
-  <div class="ctx-stats">
+  <div class="ctx-stats" id="rklb-ctx-stats">
     <div class="ctx-stat">Gegründet <b>2006</b></div>
     <div class="ctx-stat">HQ <b>Long Beach</b></div>
     <div class="ctx-stat">Sektor <b>Space-Infra</b></div>
@@ -429,15 +429,15 @@ body{font-family:'DM Sans',sans-serif;background:var(--bg);color:var(--text);min
   <div class="ctx-logo-emoji">📡</div>
   <div class="ctx-info">
     <div class="ctx-name">AST SpaceMobile · ASTS</div>
-    <div class="ctx-desc">Baut riesige Satelliten die direkt mit normalen Handys kommunizieren — ohne Spezialgerät. Weltweit einziger Anbieter dieses Konzepts. Sehr spekulativ — hohe Chance, hohes Risiko.</div>
-    <div class="ctx-tags">
+    <div class="ctx-desc" id="asts-ctx-desc">Baut riesige Satelliten die direkt mit normalen Handys kommunizieren — ohne Spezialgerät. Weltweit einziger Anbieter dieses Konzepts. Sehr spekulativ — hohe Chance, hohes Risiko.</div>
+    <div class="ctx-tags" id="asts-ctx-tags">
       <span class="ctx-tag green">✓ FCC-Genehmigung USA</span>
       <span class="ctx-tag green">✓ AT&T + Verizon Partner</span>
       <span class="ctx-tag red">⚠ Blue Origin Probleme</span>
       <span class="ctx-tag amber">🚀 BlueBird 8-10 Launch Jun</span>
     </div>
   </div>
-  <div class="ctx-stats">
+  <div class="ctx-stats" id="asts-ctx-stats">
     <div class="ctx-stat">Gegründet <b>2017</b></div>
     <div class="ctx-stat">Cash <b>$3.5 Mrd.</b></div>
     <div class="ctx-stat">Sektor <b>Satellit D2D</b></div>
@@ -1534,6 +1534,31 @@ function recalcPF(t) {
 }
 
 // ── loadAll ────────────────────────────────────────────────
+
+// ── Context Bar AI Update ──────────────────
+const CTX_PROMPTS = {
+  rklb: `Suche aktuelle Firmendaten für Rocket Lab (RKLB). Antworte NUR mit JSON ohne Markdown:
+{"desc":"1-2 Sätze was das Unternehmen macht und was gerade wichtig ist","tags":[{"text":"Backlog $X Mrd","type":"green"},{"text":"Neutron H2 2026","type":"amber"},{"text":"Golden Dome Partner","type":"green"},{"text":"Revenue $XXXMio Q1","type":"green"}],"stats":[{"label":"Gegründet","val":"2006"},{"label":"HQ","val":"Long Beach"},{"label":"Backlog","val":"$X.X Mrd"}]}`,
+  asts: `Suche aktuelle Firmendaten für AST SpaceMobile (ASTS). Antworte NUR mit JSON ohne Markdown:
+{"desc":"1-2 Sätze was das Unternehmen macht und was gerade wichtig ist","tags":[{"text":"FCC USA","type":"green"},{"text":"AT&T + Verizon","type":"green"},{"text":"BlueBird X Launch","type":"amber"},{"text":"$X.X Mrd Cash","type":"green"}],"stats":[{"label":"Gegründet","val":"2017"},{"label":"Cash","val":"$X.X Mrd"},{"label":"Satelliten","val":"X im Orbit"}]}`
+};
+
+async function fetchCtxBar(t) {
+  try {
+    const p = await kiCall(CTX_PROMPTS[t]);
+    if (!p) return;
+    const typeMap = {green:'ctx-tag green',red:'ctx-tag red',amber:'ctx-tag amber',neutral:'ctx-tag'};
+    if (p.desc && document.getElementById(t+'-ctx-desc'))
+      document.getElementById(t+'-ctx-desc').textContent = p.desc;
+    if (p.tags && document.getElementById(t+'-ctx-tags'))
+      document.getElementById(t+'-ctx-tags').innerHTML = p.tags.map(tag =>
+        `<span class="${typeMap[tag.type]||'ctx-tag'}">${tag.text}</span>`).join('');
+    if (p.stats && document.getElementById(t+'-ctx-stats'))
+      document.getElementById(t+'-ctx-stats').innerHTML = p.stats.map(s =>
+        `<div class="ctx-stat">${s.label} <b>${s.val}</b></div>`).join('');
+  } catch(e) { console.warn('fetchCtxBar failed:', e.message); }
+}
+
 async function loadAll() {
   const now = new Date();
   if ($('last-upd')) $('last-upd').textContent = 'Kurse: '+now.toLocaleTimeString('de-CH')+' · '+now.toLocaleDateString('de-CH')+' (15s)';
@@ -1726,6 +1751,7 @@ async function refreshAllNews(manual=false) {
       fetchLiveNews('rklb'), fetchLiveNews('asts'),
       fetchScenarios('rklb'), fetchScenarios('asts'),
       fetchSectorContext('rklb'), fetchSectorContext('asts'),
+      fetchCtxBar('rklb'), fetchCtxBar('asts'),
     ]);
   } catch(e) { console.warn('refreshAllNews error:', e.message); }
   if (lbl) lbl.textContent = 'Nächste Aktualisierung in 2h';
