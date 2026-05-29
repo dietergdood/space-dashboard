@@ -774,10 +774,8 @@ body{font-family:'DM Sans',sans-serif;background:var(--bg);color:var(--text);min
       <button class="chart-tab active" id="rklb-tab-1y" onclick="switchChartTab('rklb','1y')">📊 12 Monate</button>
       <button class="chart-tab" id="rklb-tab-5y" onclick="switchChartTab('rklb','5y')">🔭 5-Jahres-Forecast</button>
     </div>
-    <div id="rklb-view-1y" style="padding-top:16px;">
-
-  <div class="two">
-    <div class="card">
+    <div id="rklb-view-1y" style="padding-top:4px;">
+  <div class="card">
       <div class="ch">📈 Kursverlauf der letzten 12 Monate + Zukunftsszenarien</div>
       <div class="cw"><canvas id="rklb-chart" role="img" aria-label="RKLB Chart">RKLB Kursverlauf</canvas></div>
       <div class="lgbox" id="rklb-lgbox">
@@ -787,19 +785,7 @@ body{font-family:'DM Sans',sans-serif;background:var(--bg);color:var(--text);min
         <div class="lgr"><div class="lgl"><div class="lgd" style="border-color:var(--red);"></div><div class="lgdot" style="background:var(--red);"></div></div><div><div class="lgt" style="color:var(--red);">Pessimistisches Szenario → $86</div><div class="lgx">Wenn Neutron scheitert oder sich stark verzögert und der Hype nachlässt</div></div></div>
       </div>
     </div>
-    <div class="card" id="card-rklb-scenarios">
-      <div class="ch">🎯 Wo könnte der Kurs in 12 Monaten stehen?</div>
-      <div id="rklb-scenarios-intro" style="font-size:15px;color:var(--text2);margin-bottom:12px;line-height:1.5;">Verschiedene Experten und Szenarien — die Balken zeigen wie "hoch" das jeweilige Ziel ist:</div>
-      <div id="rklb-scenarios-bars"><div class="scr"><div class="scl">Bestmöglicher Fall<br>(alles klappt)</div><div class="scb"><div class="scf" style="width:100%;background:var(--green);"></div></div><div class="scv up">$200–216</div></div>
-      <div class="scr"><div class="scl">Needham Bank<br>(optimistische Bank)</div><div class="scb"><div class="scf" style="width:56%;background:var(--rklb);"></div></div><div class="scv" style="color:var(--rklb);">$120</div></div>
-      <div class="scr"><div class="scl">Alle Banken<br>(Durchschniv class="scv wn">$86</div></div>
-      </div><div id="rklb-sentiment-box" style="background:var(--surface2);border-radius:8px;padding:12px;margin-top:14px;">
-        <div style="font-size:15px;font-weight:500;margin-bottom:8px;">💡 Was sagt die Internet-Community?</div>
-        <div id="rklb-sentiment-text" style="font-size:15px;color:var(--text2);line-height:1.6;">Reddit und WallStreetBets (grosse Internet-Foren für Privatanleger): <b>84% positive Kommentare</b> zu RKLB. Ein Post über das Rekordquartal hatte hunderte Upvotes. Aber Vorsicht: Internet-Euphorie kann schnell kippen!</div>
-      </div>
-    </div>
-  </div>
-    <div id="rklb-view-5y" style="display:none;padding-top:4px;">
+    id="rklb-view-5y" style="display:none;padding-top:4px;">
       <div class="f5-disclaimer-inline">⚠️ Spekulative Schätzung — kein Versprechen! Nutze dies als Denkrahmen, nicht als Prognose.</div>
       <div class="f5-chart-wrap" style="margin-top:4px;"><canvas id="rklb-chart5" role="img" aria-label="RKLB 5-Jahres Chart"></canvas></div>
       <button class="f5-milestones-btn" id="rklb-f5-btn-txt" onclick="toggleF5Details('rklb')">▼ Jahres-Meilensteine & Annahmen anzeigen</button>
@@ -945,6 +931,27 @@ body{font-family:'DM Sans',sans-serif;background:var(--bg);color:var(--text);min
   </div>  </div>
 </div>
 
+
+
+<div class="collapsible-card open" id="card-rklb-scenarios-wrap">
+  <button class="section-toggle open" onclick="toggleCard('rklb-scenarios-wrap')">
+    <div class="st-left"><span class="st-icon">🎯</span><div><div class="st-title">Wo könnte der Kurs in 12 Monaten stehen?</div><div class="st-sub">Analysten-Ziele · Szenarien · Sentiment</div></div></div>
+    <div class="st-right"><span class="st-arrow">▲</span></div>
+  </button>
+  <div class="section-body open" id="body-rklb-scenarios-wrap">
+  <div class="card" id="card-rklb-scenarios">
+      <div class="ch">🎯 Wo könnte der Kurs in 12 Monaten stehen?</div>
+      <div id="rklb-scenarios-intro" style="font-size:15px;color:var(--text2);margin-bottom:12px;line-height:1.5;">Verschiedene Experten und Szenarien — die Balken zeigen wie "hoch" das jeweilige Ziel ist:</div>
+      <div id="rklb-scenarios-bars"><div class="scr"><div class="scl">Bestmöglicher Fall<br>(alles klappt)</div><div class="scb"><div class="scf" style="width:100%;background:var(--green);"></div></div><div class="scv up">$200–216</div></div>
+      <div class="scr"><div class="scl">Needham Bank<br>(optimistische Bank)</div><div class="scb"><div class="scf" style="width:56%;background:var(--rklb);"></div></div><div class="scv" style="color:var(--rklb);">$120</div></div>
+      <div class="scr"><div class="scl">Alle Banken<br>(Durchschniv class="scv wn">$86</div></div>
+      </div><div id="rklb-sentiment-box" style="background:var(--surface2);border-radius:8px;padding:12px;margin-top:14px;">
+        <div style="font-size:15px;font-weight:500;margin-bottom:8px;">💡 Was sagt die Internet-Community?</div>
+        <div id="rklb-sentiment-text" style="font-size:15px;color:var(--text2);line-height:1.6;">Reddit und WallStreetBets (grosse Internet-Foren für Privatanleger): <b>84% positive Kommentare</b> zu RKLB. Ein Post über das Rekordquartal hatte hunderte Upvotes. Aber Vorsicht: Internet-Euphorie kann schnell kippen!</div>
+      </div>
+    </div>
+  </div>
+</div>
 
 <div class="collapsible-card open" id="card-rklb-pf">
   <button class="section-toggle open" onclick="toggleCard('rklb-pf')">
@@ -1115,7 +1122,6 @@ body{font-family:'DM Sans',sans-serif;background:var(--bg);color:var(--text);min
   </div>
 </div>
 </div>
-</div>
 
 <!-- ════════════════ ASTS ════════════════ -->
 <div class="panel" id="p-asts">
@@ -1248,10 +1254,8 @@ body{font-family:'DM Sans',sans-serif;background:var(--bg);color:var(--text);min
       <button class="chart-tab active" id="asts-tab-1y" onclick="switchChartTab('asts','1y')">📊 12 Monate</button>
       <button class="chart-tab" id="asts-tab-5y" onclick="switchChartTab('asts','5y')">🔭 5-Jahres-Forecast</button>
     </div>
-    <div id="asts-view-1y" style="padding-top:16px;">
-
-  <div class="two">
-    <div class="card">
+    <div id="asts-view-1y" style="padding-top:4px;">
+  <div class="card">
       <div class="ch">📈 Kursverlauf der letzten 12 Monate + Zukunftsszenarien</div>
       <div class="cw"><canvas id="asts-chart" role="img" aria-label="ASTS Chart">ASTS Kursverlauf</canvas></div>
       <div class="lgbox" id="asts-lgbox">
@@ -1261,20 +1265,7 @@ body{font-family:'DM Sans',sans-serif;background:var(--bg);color:var(--text);min
         <div class="lgr"><div class="lgl"><div class="lgd" style="border-color:var(--red);"></div><div class="lgdot" style="background:var(--red);"></div></div><div><div class="lgt" style="color:var(--red);">Pessimistisches Szenario → $50</div><div class="lgx">Wenn Blue Origin dauerhaft ausfällt + Starlink gewinnt</div></div></div>
       </div>
     </div>
-    <div class="card" id="card-asts-scenarios">
-      <div class="ch">Wo könnte der Kurs in 12 Monaten stehen?</div>
-      <div id="asts-scenarios-intro" style="font-size:14px;color:var(--text2);margin-bottom:12px;line-height:1.5;">Die Bandbreite ist riesig — das zeigt das grosse Risiko und das grosse Potenzial:</div>
-      <div id="asts-scenarios-bars"><div class="scr"><div class="scl">Bestmöglicher Fall</div><div class="scb"><div class="scf" style="width:100%;background:var(--green);"></div></div><div class="scv up">$200+</div></div>
-      <div class="scr"><div class="scl">Roth Capital Bank</div><div class="scb"><div class="scf" style="width:54%;background:var(--asts);"></div></div><div class="scv" style="color:var(--asts);">$108</div></div>
-      <div class="scr"><div class="scl">Alle Banken<br>(Durchschnitt)</div><div class="scb"><div class="scf" style="width:42%;background:#bbb;"></div></div><div class="scv mu">$83</div></div>
-      <div class="scr"><div class="scl">Fairer Wert<br>(Berechnung)</div><div class="scb"><div class="scf" style="width:36%;background:var(--amber);"></div></div20,38,38,.05);border:1px solid rgba(220,38,38,.15);border-radius:8px;padding:14px;margin-top:14px;">
-        <div style="font-size:13px;font-weight:500;margin-bottom:6px;color:#991b1b;">⚠️ Wichtige Warnung</div>
-        <div id="asts-sentiment-text" style="font-size:13px;color:var(--text2);line-height:1.6;">Der aktuelle Kurs ($120) liegt deutlich über dem, was die meisten Experten für fair halten ($83). Nur mit Geld investieren, dessen Verlust du verkraften könntest.</div>
-      </div>
-    </div>
-  </div>
-
-    <div id="asts-view-5y" style="display:none;padding-top:4px;">
+    id="asts-view-5y" style="display:none;padding-top:4px;">
       <div class="f5-disclaimer-inline">⚠️ Spekulative Schätzung — kein Versprechen! Nutze dies als Denkrahmen, nicht als Prognose.</div>
       <div class="f5-chart-wrap" style="margin-top:4px;"><canvas id="asts-chart5" role="img" aria-label="ASTS 5-Jahres Chart"></canvas></div>
       <button class="f5-milestones-btn" id="asts-f5-btn-txt" onclick="toggleF5Details('asts')">▼ Jahres-Meilensteine &amp; Annahmen anzeigen</button>
@@ -1398,6 +1389,26 @@ body{font-family:'DM Sans',sans-serif;background:var(--bg);color:var(--text);min
   </div>  </div>
 </div>
 
+
+
+<div class="collapsible-card open" id="card-asts-scenarios-wrap">
+  <button class="section-toggle open" onclick="toggleCard('asts-scenarios-wrap')">
+    <div class="st-left"><span class="st-icon">🎯</span><div><div class="st-title">Wo könnte der Kurs in 12 Monaten stehen?</div><div class="st-sub">Analysten-Ziele · Szenarien · Sentiment</div></div></div>
+    <div class="st-right"><span class="st-arrow">▲</span></div>
+  </button>
+  <div class="section-body open" id="body-asts-scenarios-wrap">
+  <div class="card" id="card-asts-scenarios">
+      <div class="ch">Wo könnte der Kurs in 12 Monaten stehen?</div>
+      <div id="asts-scenarios-intro" style="font-size:14px;color:var(--text2);margin-bottom:12px;line-height:1.5;">Die Bandbreite ist riesig — das zeigt das grosse Risiko und das grosse Potenzial:</div>
+      <div id="asts-scenarios-bars"><div class="scr"><div class="scl">Bestmöglicher Fall</div><div class="scb"><div class="scf" style="width:100%;background:var(--green);"></div></div><div class="scv up">$200+</div></div>
+      <div class="scr"><div class="scl">Roth Capital Bank</div><div class="scb"><div class="scf" style="width:54%;background:var(--asts);"></div></div><div class="scv" style="color:var(--asts);">$108</div></div>
+      <div class="scr"><div class="scl">Alle Banken<br>(Durchschnitt)</div><div class="scb"><div class="scf" style="width:42%;background:#bbb;"></div></div><div class="scv mu">$83</div></div>
+      <div class="scr"><div class="scl">Fairer Wert<br>(Berechnung)</div><div class="scb"><div class="scf" style="width:36%;background:var(--amber);"></div></div20,38,38,.05);border:1px solid rgba(220,38,38,.15);border-radius:8px;padding:14px;margin-top:14px;">
+        <div style="font-size:13px;font-weight:500;margin-bottom:6px;color:#991b1b;">⚠️ Wichtige Warnung</div>
+        <div id="asts-sentiment-text" style="font-size:13px;color:var(--text2);line-height:1.6;">Der aktuelle Kurs ($120) liegt deutlich über dem, was die meisten Experten für fair halten ($83). Nur mit Geld investieren, dessen Verlust du verkraften könntest.</div>
+
+  </div>
+</div>
 
 <div class="collapsible-card open" id="card-asts-pf">
   <button class="section-toggle open" onclick="toggleCard('asts-pf')">
@@ -1562,6 +1573,10 @@ body{font-family:'DM Sans',sans-serif;background:var(--bg);color:var(--text);min
     </div>
   </div>
   </div>
+</div>
+</div>
+
+</div>
 </div>
 </div>
 
