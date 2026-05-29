@@ -1565,6 +1565,7 @@ function switchTab(id){
   $('p-'+id).classList.add('on');
   $('btn-'+id).className='sw '+(id==='rklb'?'ra':'ga');
   const actCtx=$('ctx-'+id);if(actCtx)actCtx.style.display='flex';
+  if(id==='asts') setTimeout(initAstsCharts, 50);
 }
 
 // ── Collapsible sections ───────────────────────────────
@@ -1784,12 +1785,18 @@ async function fetchQ(ticker){
     if(!r.ok)throw new Error(r.status);
     const d=await r.json();if(d.error)throw new Error(d.error);
     const res=d.chart.result[0],m=res.meta,q0=res.indicators.quote[0];
-    return{price:m.regularMarketPrice,prev:m.regularMarketPreviousClose||m.chartPreviousClose||m.previousClose,
+    const closes=q0.close.filter(x=>x!=null);
+    const highs=q0.high.filter(x=>x!=null);
+    const lows=q0.low.filter(x=>x!=null);
+    const vols=q0.volume.filter(x=>x!=null);
+    // Use second-to-last daily close as prev (most reliable = yesterday's close)
+    const prevFromChart=closes.length>=2?closes[closes.length-2]:null;
+    const prev=m.regularMarketPreviousClose||prevFromChart||m.chartPreviousClose||m.previousClose;
+    return{price:m.regularMarketPrice,prev,
       open:m.regularMarketOpen||m.regularMarketPrice,dayHi:m.regularMarketDayHigh,
       dayLo:m.regularMarketDayLow,vol:m.regularMarketVolume,cap:m.marketCap,
       hi52:m.fiftyTwoWeekHigh,lo52:m.fiftyTwoWeekLow,
-      closes:q0.close.filter(x=>x!=null),highs:q0.high.filter(x=>x!=null),
-      lows:q0.low.filter(x=>x!=null),vols:q0.volume.filter(x=>x!=null)};
+      closes,highs,lows,vols};
   }catch(e){return null;}
 }
 async function fetchSimple(ticker){
@@ -2002,11 +2009,24 @@ new Chart(document.getElementById('rklb-chart5'),{type:'line',data:{labels:yrs,d
   {label:'📊 Base',data:[150,120,140,175,210,260],borderColor:'#94a3b8',fill:false,tension:.4,pointRadius:4,borderWidth:2,borderDash:[6,3]},
   {label:'🐻 Bear',data:[150,86,70,55,45,35],borderColor:'#dc2626',fill:false,tension:.4,pointRadius:4,borderWidth:2,borderDash:[4,4]}
 ]},options:co5()});
-new Chart(document.getElementById('asts-chart5'),{type:'line',data:{labels:yrs,datasets:[
+
+// ── ASTS charts: lazy-init on first tab switch ────
+let _astsChartsInited = false;
+function initAstsCharts(){
+  if(_astsChartsInited) return;
+  _astsChartsInited = true;
+  new Chart($('asts-chart'),{type:'line',data:{labels:mo,datasets:[
+  {data:[25,30,38,45,55,48,62,58,72,90,73,129,null,null,null,null],borderColor:'#15803d',backgroundColor:'rgba(21,128,61,.06)',fill:true,tension:.4,pointRadius:2,borderWidth:2},
+  {data:[null,null,null,null,null,null,null,null,null,null,null,129,145,165,185,200],borderColor:'#16a34a',borderDash:[5,3],tension:.4,pointRadius:0,borderWidth:1.5,fill:false},
+  {data:[null,null,null,null,null,null,null,null,null,null,null,129,115,100,90,83],borderColor:'#bbb',borderDash:[5,3],tension:.4,pointRadius:0,borderWidth:1.5,fill:false},
+  {data:[null,null,null,null,null,null,null,null,null,null,null,129,100,75,60,50],borderColor:'#dc2626',borderDash:[5,3],tension:.4,pointRadius:0,borderWidth:1.5,fill:false}
+]},options:co(0)});
+  new Chart(document.getElementById('asts-chart5'),{type:'line',data:{labels:yrs,datasets:[
   {label:'🐂 Bull',data:[129,200,380,620,880,1200],borderColor:'#16a34a',fill:false,tension:.4,pointRadius:4,borderWidth:2.5},
   {label:'📊 Base',data:[129,83,95,110,130,150],borderColor:'#94a3b8',fill:false,tension:.4,pointRadius:4,borderWidth:2,borderDash:[6,3]},
   {label:'🐻 Bear',data:[129,50,25,12,8,5],borderColor:'#dc2626',fill:false,tension:.4,pointRadius:4,borderWidth:2,borderDash:[4,4]}
 ]},options:co5()});
+}
 
 const mo=['Jun','Jul','Aug','Sep','Okt','Nov','Dez','Jan','Feb','Mär','Apr','Mai','Jun→','Jul→','Aug→','Sep→'];
 const co=y=>({responsive:true,maintainAspectRatio:false,plugins:{legend:{display:false},tooltip:{callbacks:{label:c=>'$'+(c.parsed.y!=null?c.parsed.y.toFixed(0):'—')},backgroundColor:'#fff',titleColor:'#666',bodyColor:'#1a1a18',borderColor:'#e5e5e0',borderWidth:1}},scales:{x:{grid:{color:'rgba(0,0,0,.04)'},ticks:{color:'#aaa',font:{size:10},maxRotation:0}},y:{grid:{color:'rgba(0,0,0,.04)'},ticks:{color:'#aaa',font:{size:10},callback:v=>'$'+v},min:y}}});
@@ -2016,12 +2036,6 @@ new Chart($('rklb-chart'),{type:'line',data:{labels:mo,datasets:[
   {data:[null,null,null,null,null,null,null,null,null,null,null,150,143,134,126,120],borderColor:'#bbb',borderDash:[5,3],tension:.4,pointRadius:0,borderWidth:1.5,fill:false},
   {data:[null,null,null,null,null,null,null,null,null,null,null,150,132,110,95,86],borderColor:'#dc2626',borderDash:[5,3],tension:.4,pointRadius:0,borderWidth:1.5,fill:false}
 ]},options:co(20)});
-new Chart($('asts-chart'),{type:'line',data:{labels:mo,datasets:[
-  {data:[25,30,38,45,55,48,62,58,72,90,73,129,null,null,null,null],borderColor:'#15803d',backgroundColor:'rgba(21,128,61,.06)',fill:true,tension:.4,pointRadius:2,borderWidth:2},
-  {data:[null,null,null,null,null,null,null,null,null,null,null,129,145,165,185,200],borderColor:'#16a34a',borderDash:[5,3],tension:.4,pointRadius:0,borderWidth:1.5,fill:false},
-  {data:[null,null,null,null,null,null,null,null,null,null,null,129,115,100,90,83],borderColor:'#bbb',borderDash:[5,3],tension:.4,pointRadius:0,borderWidth:1.5,fill:false},
-  {data:[null,null,null,null,null,null,null,null,null,null,null,129,100,75,60,50],borderColor:'#dc2626',borderDash:[5,3],tension:.4,pointRadius:0,borderWidth:1.5,fill:false}
-]},options:co(0)});
 </script>
 </body>
 </html>
