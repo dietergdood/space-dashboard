@@ -328,6 +328,30 @@ body{font-family:'DM Sans',sans-serif;background:var(--bg);color:var(--text);min
 .f5-assumption{font-size:12px;color:var(--text2);padding:8px 0;border-bottom:1px solid var(--border);line-height:1.5;}
 .f5-assumption:last-child,.f5-assumption-row > .f5-assumption:nth-last-child(-n+3){border-bottom:none;}
 .f5-assumption b{color:var(--text);}
+
+/* ── Stock Context Bar ── */
+.ctx-bar{display:flex;align-items:center;gap:14px;background:var(--surface);border:1px solid var(--border);border-radius:var(--rl);padding:14px 20px;margin-bottom:18px;transition:border-color .3s;}
+.ctx-bar.rklb-bar{border-left:4px solid var(--rklb);}
+.ctx-bar.asts-bar{border-left:4px solid var(--asts);}
+.ctx-icon{font-size:28px;flex-shrink:0;}
+.ctx-body{flex:1;}
+.ctx-name{font-size:15px;font-weight:500;margin-bottom:3px;}
+.ctx-desc{font-size:13px;color:var(--text2);line-height:1.55;}
+.ctx-badges{display:flex;gap:6px;margin-top:8px;flex-wrap:wrap;}
+.ctx-badge{font-size:11px;padding:3px 9px;border-radius:20px;font-family:'DM Mono',monospace;border:1px solid;}
+.ctx-badge.green{background:var(--green-bg);border-color:var(--green-bd);color:var(--green);}
+.ctx-badge.red{background:var(--red-bg);border-color:var(--red-bd);color:var(--red);}
+.ctx-badge.blue{background:var(--blue-bg);border-color:rgba(37,99,235,.2);color:var(--blue);}
+.ctx-badge.amber{background:var(--amber-bg);border-color:rgba(217,119,6,.25);color:var(--amber);}
+.ctx-badge.purple{background:var(--purple-bg);border-color:rgba(124,58,237,.2);color:var(--purple);}
+.ctx-stats{display:flex;flex-direction:column;gap:8px;flex-shrink:0;text-align:right;}
+.ctx-stat{font-size:12px;color:var(--text2);}
+.ctx-stat b{color:var(--text);font-family:'DM Mono',monospace;}
+
+.f5-top-btn{width:100%;display:flex;align-items:center;justify-content:space-between;padding:16px 20px;background:transparent;border:none;cursor:pointer;font-size:15px;font-weight:500;color:var(--text);font-family:'DM Sans',sans-serif;text-align:left;transition:background .2s;}
+.f5-top-btn:hover{background:var(--surface2);}
+.f5-top-arrow{font-size:12px;color:var(--text3);transition:transform .2s;flex-shrink:0;}
+.f5-top-btn.open .f5-top-arrow{transform:rotate(180deg);}
 </style>
 </head>
 <body>
@@ -382,23 +406,56 @@ body{font-family:'DM Sans',sans-serif;background:var(--bg);color:var(--text);min
   </div>
 </div>
 
-<!-- Intro / Onboarding -->
+<!-- Context Bar (switches with tab) -->
+<div id="ctx-rklb" class="ctx-bar rklb-bar">
+  <div class="ctx-icon">🚀</div>
+  <div class="ctx-body">
+    <div class="ctx-name">Rocket Lab USA · RKLB</div>
+    <div class="ctx-desc">Baut kleine und mittlere Raketen und Satelliten für Firmen, Regierungen und das US-Militär — ein Lieferdienst für den Weltraum. Hat gerade das beste Quartal seiner Geschichte ($200 Mio.) und baut mit der <b>Neutron-Rakete</b> sein bislang grösstes Projekt. Seit 2025 auch Teil des US-Raketenabwehrsystems "Golden Dome".</div>
+    <div class="ctx-badges">
+      <span class="ctx-badge green">✓ Positiver Cashflow</span>
+      <span class="ctx-badge green">✓ $2.2 Mrd. Auftragsbestand</span>
+      <span class="ctx-badge blue">🛡 Golden Dome Partner</span>
+      <span class="ctx-badge amber">⚡ Neutron-Erstflug H2 2026</span>
+      <span class="ctx-badge purple">🌌 SpaceX-IPO-Halo</span>
+    </div>
+  </div>
+  <div class="ctx-stats">
+    <div class="ctx-stat">Gegründet <b>2006</b></div>
+    <div class="ctx-stat">Hauptsitz <b>Long Beach, CA</b></div>
+    <div class="ctx-stat">Mitarbeiter <b>~2'300</b></div>
+    <div class="ctx-stat">Sektor <b>Launch + Defense</b></div>
+  </div>
+</div>
+
+<div id="ctx-asts" class="ctx-bar asts-bar" style="display:none;">
+  <div class="ctx-icon">📡</div>
+  <div class="ctx-body">
+    <div class="ctx-name">AST SpaceMobile · ASTS</div>
+    <div class="ctx-desc">Baut riesige Satelliten die direkt mit deinem normalen Handy kommunizieren — <b>ohne Spezialgerät</b>. Satelliteninternet überall auf der Welt, einfach mit deiner SIM-Karte. Weltweit einziger Anbieter dieses Konzepts. Noch in der Aufbauphase: erst 7 Satelliten im Orbit, Ziel sind 45+ bis Ende 2026. <b>Sehr spekulativ — hohe Chance, hohes Risiko.</b></div>
+    <div class="ctx-badges">
+      <span class="ctx-badge green">✓ FCC-Genehmigung USA</span>
+      <span class="ctx-badge green">✓ AT&T + Verizon Partner</span>
+      <span class="ctx-badge red">⚠ Blue Origin explodiert</span>
+      <span class="ctx-badge amber">🛰 BlueBird 8–10 Launch Jun</span>
+      <span class="ctx-badge blue">60 Telko-Partner weltweit</span>
+    </div>
+  </div>
+  <div class="ctx-stats">
+    <div class="ctx-stat">Gegründet <b>2017</b></div>
+    <div class="ctx-stat">Hauptsitz <b>Midland, TX</b></div>
+    <div class="ctx-stat">Cash <b>$3.5 Mrd.</b></div>
+    <div class="ctx-stat">Sektor <b>Satellit D2D</b></div>
+  </div>
+</div>
+
+<!-- Einsteiger-Erklärung (ausblendbar) -->
 <div class="intro" id="intro-box">
-  <div class="intro-title">👋 Was ist das hier? Eine kurze Erklärung für Einsteiger.</div>
-  <div style="font-size:15px;color:var(--text);line-height:1.7;">
-    Dieses Dashboard beobachtet zwei Aktien aus der Raumfahrt-Branche für dich. <b>Eine Aktie</b> ist ein kleines Stück eines Unternehmens — wenn du 100 Rocket-Lab-Aktien kaufst, gehört dir ein winziger Teil des Unternehmens. Steigt der <b>Kurs</b> (= Preis der Aktie), machst du Gewinn. Fällt er, Verlust. Alle Zahlen und Begriffe werden dir erklärt — einfach mit der Maus über das <span style="display:inline-flex;align-items:center;gap:3px;vertical-align:middle;"><span style="width:15px;height:15px;border-radius:50%;background:rgba(37,99,235,.15);color:#2563eb;font-size:9px;display:inline-flex;align-items:center;justify-content:center;font-weight:500;font-family:'DM Mono',monospace;">?</span></span>-Symbol fahren.
+  <div class="intro-title">👋 Neu hier? Kurze Erklärung für Einsteiger</div>
+  <div style="font-size:14px;color:var(--text);line-height:1.65;">
+    Eine <b>Aktie</b> ist ein kleines Stück eines Unternehmens. Steigt der <b>Kurs</b> (= Preis der Aktie), machst du Gewinn. Fällt er, Verlust. Alle Begriffe mit dem <span style="display:inline-flex;align-items:center;gap:2px;vertical-align:middle;"><span style="width:15px;height:15px;border-radius:50%;background:rgba(37,99,235,.15);color:#2563eb;font-size:9px;display:inline-flex;align-items:center;justify-content:center;font-weight:500;font-family:'DM Mono',monospace;">?</span></span>-Symbol erklären sich beim Drüberfahren. Im Glossar unten findest du alle Fachbegriffe einfach erklärt.
   </div>
-  <div class="intro-grid">
-    <div class="intro-card">
-      <div class="intro-card-title">🚀 Rocket Lab (RKLB)</div>
-      <div class="intro-card-body">Baut kleine und mittlere Raketen und Satelliten für Firmen, Regierungen und das US-Militär. Ähnlich wie ein Lieferdienst — aber für den Weltraum. Hat gerade ein Rekordjahr und baut eine neue, grössere Rakete.</div>
-    </div>
-    <div class="intro-card">
-      <div class="intro-card-title">📡 AST SpaceMobile (ASTS)</div>
-      <div class="intro-card-body">Baut riesige Satelliten die direkt mit deinem normalen Handy kommunizieren können — ohne Spezialgerät. Stell dir Internetempfang überall auf der Welt vor. Noch in der Aufbauphase, sehr spekulativ.</div>
-    </div>
-  </div>
-  <div class="intro-toggle" onclick="document.getElementById('intro-box').style.display='none'">✕ Erklärung ausblenden</div>
+  <div class="intro-toggle" onclick="document.getElementById('intro-box').style.display='none'">✕ Ausblenden</div>
 </div>
 
 
@@ -688,14 +745,21 @@ body{font-family:'DM Sans',sans-serif;background:var(--bg);color:var(--text);min
 
 
   <!-- 5-Year Forecast RKLB -->
-  <div class="forecast5">
+  <div class="forecast5" style="padding:0;overflow:hidden;">
+    <button class="f5-top-btn" id="rklb-f5-top-btn" onclick="toggleF5('rklb')">
+      <span>🔭 5-Jahres-Forecast · Rocket Lab (RKLB)</span>
+      <span class="f5-top-arrow" id="rklb-f5-arrow">▼</span>
+    </button>
+    <div class="f5-collapsible" id="rklb-f5-body" style="display:none;">
+    <div style="padding:24px 28px 0;">
     <div class="f5-header">
-      <div class="f5-title">🔭 5-Jahres-Forecast · Rocket Lab (RKLB)</div>
       <div class="f5-disclaimer">⚠️ Spekulative Schätzung — kein Versprechen!</div>
     </div>
     <div class="f5-sub">Wo könnte Rocket Lab in 5 Jahren stehen? Drei Szenarien basierend auf den aktuellen Projekten und dem Marktumfeld. <b>Wichtig:</b> 5-Jahres-Forecasts sind sehr unsicher. Nutze sie als Denkrahmen, nicht als Prognose.</div>
     <div class="f5-chart-wrap"><canvas id="rklb-chart5" role="img" aria-label="RKLB 5-Jahres Chart"></canvas></div>
-    <button class="f5-toggle-btn" onclick="toggleF5('rklb')"><span id="rklb-f5-btn-txt">▼ Jahres-Meilensteine & Annahmen anzeigen</span></button>
+    <button class="f5-toggle-btn" onclick="toggleF5Details('rklb')"><span id="rklb-f5-btn-txt">▼ Jahres-Meilensteine & Annahmen anzeigen</span></button>
+    </div>
+    <div style="padding:0 28px 24px;">
     <div class="f5-milestones" id="rklb-f5-milestones">
       <div class="f5-year-grid" style="margin-top:16px;">
 
@@ -783,6 +847,7 @@ body{font-family:'DM Sans',sans-serif;background:var(--bg);color:var(--text);min
           <div class="f5-assumption"><b>Bear-Szenario ($35, 2030):</b> Neutron scheitert oder kommt zu spät. SpaceX/Starship dominiert den Markt. Golden Dome geht an Konkurrenten. Wachstum stagniert, Kapitalerhöhungen nötig.</div>
         </div>
       </div>
+    </div>
     </div>
   </div>
 
@@ -1062,14 +1127,21 @@ body{font-family:'DM Sans',sans-serif;background:var(--bg);color:var(--text);min
 
 
   <!-- 5-Year Forecast ASTS -->
-  <div class="forecast5">
+  <div class="forecast5" style="padding:0;overflow:hidden;">
+    <button class="f5-top-btn" id="asts-f5-top-btn" onclick="toggleF5('asts')">
+      <span>🔭 5-Jahres-Forecast · AST SpaceMobile (ASTS)</span>
+      <span class="f5-top-arrow" id="asts-f5-arrow">▼</span>
+    </button>
+    <div class="f5-collapsible" id="asts-f5-body" style="display:none;">
+    <div style="padding:24px 28px 0;">
     <div class="f5-header">
-      <div class="f5-title">🔭 5-Jahres-Forecast · AST SpaceMobile (ASTS)</div>
       <div class="f5-disclaimer">⚠️ Extrem spekulativ — nur mit Risikokapital!</div>
     </div>
     <div class="f5-sub">ASTS ist einer der riskantesten aber auch potenziell ertragreichsten Titel im Space-Sektor. Die Bandbreite der Szenarien ist gigantisch — von fast wertlos bis zum Vervielfacher. <b>Niemals mehr investieren als du verlieren kannst.</b></div>
     <div class="f5-chart-wrap"><canvas id="asts-chart5" role="img" aria-label="ASTS 5-Jahres Chart"></canvas></div>
-    <button class="f5-toggle-btn" onclick="toggleF5('asts')"><span id="asts-f5-btn-txt">▼ Jahres-Meilensteine & Annahmen anzeigen</span></button>
+    <button class="f5-toggle-btn" onclick="toggleF5Details('asts')"><span id="asts-f5-btn-txt">▼ Jahres-Meilensteine & Annahmen anzeigen</span></button>
+    </div>
+    <div style="padding:0 28px 24px;">
     <div class="f5-milestones" id="asts-f5-milestones">
       <div class="f5-year-grid" style="margin-top:16px;">
 
@@ -1158,572 +1230,10 @@ body{font-family:'DM Sans',sans-serif;background:var(--bg);color:var(--text);min
         </div>
       </div>
     </div>
+    </div>
+    </div>
   </div>
-
-  <div class="two">
+  </div>
+<div class="two">
     <div class="card">
       <div class="ch">📈 Kursverlauf der letzten 12 Monate + Zukunftsszenarien</div>
-      <div class="cw"><canvas id="asts-chart" role="img" aria-label="ASTS Chart">ASTS Kursverlauf</canvas></div>
-      <div class="lgbox">
-        <div class="lgr"><div class="lgl"><div class="lgs" style="background:var(--asts);"></div><div class="lgdot" style="background:var(--asts);"></div></div><div><div class="lgt">Was wirklich passiert ist</div><div class="lgx">Echter Kursverlauf — stark gestiegen, aber auch sehr schwankend</div></div></div>
-        <div class="lgr"><div class="lgl"><div class="lgd" style="border-color:var(--green);"></div><div class="lgdot" style="background:var(--green);"></div></div><div><div class="lgt" style="color:var(--green);">Optimistisches Szenario → $200+</div><div class="lgx">Wenn die Satelliten funktionieren und Umsatz kommt</div></div></div>
-        <div class="lgr"><div class="lgl"><div class="lgd" style="border-color:#bbb;"></div><div class="lgdot" style="background:#bbb;"></div></div><div><div class="lgt" style="color:#888;">Was Bankexperten erwarten → $83</div><div class="lgx">Nüchterne Mitte — der aktuelle Kurs liegt 44% darüber</div></div></div>
-        <div class="lgr"><div class="lgl"><div class="lgd" style="border-color:var(--red);"></div><div class="lgdot" style="background:var(--red);"></div></div><div><div class="lgt" style="color:var(--red);">Pessimistisches Szenario → $50</div><div class="lgx">Wenn Blue Origin dauerhaft ausfällt + Starlink gewinnt</div></div></div>
-      </div>
-    </div>
-    <div class="card">
-      <div class="ch">🎯 Wo könnte der Kurs in 12 Monaten stehen?</div>
-      <div style="font-size:15px;color:var(--text2);margin-bottom:12px;line-height:1.5;">Die Bandbreite ist riesig — das zeigt das grosse Risiko und das grosse Potenzial:</div>
-      <div class="scr"><div class="scl">Bestmöglicher Fall</div><div class="scb"><div class="scf" style="width:100%;background:var(--green);"></div></div><div class="scv up">$200+</div></div>
-      <div class="scr"><div class="scl">Roth Capital Bank</div><div class="scb"><div class="scf" style="width:54%;background:var(--rklb);"></div></div><div class="scv" style="color:var(--rklb);">$108</div></div>
-      <div class="scr"><div class="scl">Alle Banken<br>(Durchschnitt)</div><div class="scb"><div class="scf" style="width:42%;background:#bbb;"></div></div><div class="scv mu">$83</div></div>
-      <div class="scr"><div class="scl">Fairer Wert<br>(Berechnung)</div><div class="scb"><div class="scf" style="width:36%;background:var(--amber);"></div></div><div class="scv wn">$71</div></div>
-      <div class="scr"><div class="scl">Schlechtester Fall</div><div class="scb"><div class="scf" style="width:25%;background:var(--red);"></div></div><div class="scv dn">$50</div></div>
-      <div style="background:rgba(220,38,38,.05);border:1px solid rgba(220,38,38,.15);border-radius:8px;padding:12px;margin-top:14px;">
-        <div style="font-size:15px;font-weight:500;margin-bottom:6px;color:#991b1b;">⚠️ Wichtige Warnung</div>
-        <div style="font-size:15px;color:var(--text2);line-height:1.6;">Der aktuelle Kurs ($120) liegt deutlich über dem, was die meisten Experten für fair halten ($83). Das bedeutet: Viele Anleger spekulieren auf die Zukunft. Wenn diese Zukunft nicht so schnell kommt wie erhofft, kann der Kurs stark fallen. Nur mit Geld investieren, dessen Verlust du verkraften könntest.</div>
-      </div>
-    </div>
-  </div>
-</div>
-
-<!-- ════════════════ GLOSSAR ════════════════ -->
-<div class="glossar">
-  <div class="glossar-title">📚 Börsenbegriffe — einfach erklärt</div>
-  <div class="glossar-sub">Alle Fachbegriffe aus diesem Dashboard, so erklärt dass auch Börsenneueinsteiger sie sofort verstehen.</div>
-  <div class="glossar-grid">
-    <div class="gitem"><div class="gterm"><span class="gemoji">📄</span>Aktie<span class="gbadge">Grundlage</span></div><div class="gdef">Ein kleines Stück eines Unternehmens. Wenn Rocket Lab 1 Milliarde Aktien hat und du 100 kaufst, gehört dir 0.00001% des Unternehmens. Du profitierst wenn das Unternehmen wächst — aber verlierst wenn es schlecht läuft.</div></div>
-    <div class="gitem"><div class="gterm"><span class="gemoji">💰</span>Kurs<span class="gbadge">Grundlage</span></div><div class="gdef">Der aktuelle Marktpreis für eine Aktie. Wird durch Angebot und Nachfrage bestimmt — wenn viele kaufen wollen, steigt er. Wenn viele verkaufen, fällt er. Kein fixer Wert!</div></div>
-    <div class="gitem"><div class="gterm"><span class="gemoji">🏢</span>Marktkapitalisierung<span class="gbadge">Firmengrösse</span></div><div class="gdef">Kurs × Anzahl aller Aktien = wie viel das Unternehmen "laut Börse" wert ist. ASTS mit $41 Milliarden ist riesig — obwohl kaum Umsatz. Das zeigt wie viel Zukunftsfantasie eingepreist ist.</div><div class="gex">Beispiel: 100 Aktien × $150 = $15'000 "Marktkapitalisierung" im Kleinen</div></div>
-    <div class="gitem"><div class="gterm"><span class="gemoji">🏦</span>Analyst &amp; Kursziel<span class="gbadge">Prognose</span></div><div class="gdef">Bankexperten die Unternehmen monatelang analysieren und dann sagen wo sie den Kurs in 12 Monaten erwarten. "12× Kaufen" = 12 Experten empfehlen zu kaufen. Aber: Auch Experten liegen oft falsch!</div></div>
-    <div class="gitem"><div class="gterm"><span class="gemoji">🐂</span>Bull-Szenario (optimistisch)<span class="gbadge">Szenario</span></div><div class="gdef">Ein Bulle stösst mit den Hörnern nach oben — deshalb bedeutet "bullish" = Kurs steigt. Das Bull-Szenario zeigt was passiert wenn alles super läuft und alle Ziele erreicht werden.</div></div>
-    <div class="gitem"><div class="gterm"><span class="gemoji">🐻</span>Bear-Szenario (pessimistisch)<span class="gbadge">Szenario</span></div><div class="gdef">Ein Bär schlägt mit der Pfote nach unten — deshalb "bearish" = Kurs fällt. Das Bear-Szenario zeigt den schlimmsten realistischen Fall. Vor dem Investieren immer fragen: Kann ich diesen Verlust verkraften?</div></div>
-    <div class="gitem"><div class="gterm"><span class="gemoji">📦</span>Backlog (Auftragsbestand)<span class="gbadge">Geschäft</span></div><div class="gdef">Bereits gebuchte, aber noch nicht erledigte Aufträge. RKLB hat $2.2 Milliarden Backlog — Kunden haben schon für diesen Betrag Raketen und Satelliten bestellt, aber noch nicht bekommen. Zeigt wie sicher der zukünftige Umsatz ist.</div></div>
-    <div class="gitem"><div class="gterm"><span class="gemoji">🛡️</span>Stop-Loss<span class="gbadge">Risikoschutz</span></div><div class="gdef">Eine Grenze die du selbst festlegst: "Wenn der Kurs auf X fällt, verkaufe ich automatisch." Schützt dich vor Totalverlust. Beim Sporttippen: Stell dir vor du setzt ein Maximum pro Tag — der Stop-Loss macht dasselbe beim Investieren.</div><div class="gex">Beispiel: Kaufpreis $100, Stop-Loss bei $80 = maximal 20% Verlust</div></div>
-    <div class="gitem"><div class="gterm"><span class="gemoji">📐</span>ATR (Tagesschwankung)<span class="gbadge">Technisch</span></div><div class="gdef">Average True Range = durchschnittliche Kursschwankung pro Tag. Wenn ASTS die letzten 5 Tage täglich um 10% schwankte, schätzen wir auch heute ~10% Bewegung. Basis für die Tages-Prognose.</div></div>
-    <div class="gitem"><div class="gterm"><span class="gemoji">⚡</span>RSI (Kaufdruck-Messer)<span class="gbadge">Technisch</span></div><div class="gdef">Relative Stärke Index: Zahl zwischen 0–100. Über 70 = zu viele Käufer, Kursrückgang möglich ("überkauft"). Unter 30 = zu viele Verkäufer, Erholung möglich ("überverkauft"). Dazwischen = normal.</div></div>
-    <div class="gitem"><div class="gterm"><span class="gemoji">💡</span>Nicht realisierter Gewinn<span class="gbadge">Portfolio</span></div><div class="gdef">Was du gewonnen oder verloren hast — aber nur auf dem Papier, solange du nicht verkaufst. Erst wenn du verkaufst, ist der Gewinn/Verlust "realisiert" = wirklich vorhanden.</div><div class="gex">Aktie von $80 auf $150: +$70 Gewinn auf dem Papier, aber erst "echt" wenn verkauft</div></div>
-    <div class="gitem"><div class="gterm"><span class="gemoji">🌊</span>Volatilität<span class="gbadge">Risiko</span></div><div class="gdef">Wie stark der Kurs schwankt. Hohe Volatilität = grosse Auf-und-Abs täglich = mehr Chance auf schnellen Gewinn, aber auch mehr Risiko. ASTS hat sehr hohe Volatilität — nichts für schwache Nerven!</div></div>
-  </div>
-</div>
-
-<div class="disc">⚠ Kein Anlageberatung. Empfehlungen sind KI-generiert und dienen nur zur Information — keine Garantien, keine Haftung. Investieren beinhaltet das Risiko des Totalverlustes. Kursdaten: Yahoo Finance via Vercel-Proxy (auto-refresh 60s). KI-News: Anthropic Claude mit Web-Search (dein API-Key, deine Kosten). Statische Basisdaten Stand 29. Mai 2026.</div>
-</div>
-
-<script>
-const $=id=>document.getElementById(id);
-const quotes={rklb:null,asts:null};
-const CONS={rklb:120,asts:83};
-let autoTimer=null,progressTimer=null;
-const AUTO_INTERVAL=4*60*60*1000;
-
-function fmt(n,d=2){if(n==null||isNaN(n))return'—';return n.toLocaleString('de-CH',{minimumFractionDigits:d,maximumFractionDigits:d});}
-function fmtK(n){if(!n)return'—';if(n>=1e9)return(n/1e9).toFixed(1)+' Mrd.';if(n>=1e6)return(n/1e6).toFixed(1)+' Mio.';return(n/1e3).toFixed(0)+'K';}
-function fmtMC(n){if(!n)return'—';if(n>=1e12)return'$'+(n/1e12).toFixed(2)+' Bio.';if(n>=1e9)return'$'+(n/1e9).toFixed(1)+' Mrd.';return'$'+(n/1e6).toFixed(0)+' Mio.';}
-function fmtUSD(n){if(n==null||isNaN(n))return'—';const a=Math.abs(n),s=n<0?'−$':'$';if(a>=1e6)return s+(a/1e6).toFixed(2)+' Mio.';if(a>=1e3)return s+(a/1e3).toFixed(1)+'K';return s+a.toFixed(2);}
-
-function switchTab(id){
-  ['rklb','asts'].forEach(t=>{$('p-'+t).classList.remove('on');$('btn-'+t).className='sw';});
-  $('p-'+id).classList.add('on');
-  $('btn-'+id).className='sw '+(id==='rklb'?'ra':'ga');
-}
-
-function onKeyInput(){
-  const k=$('api-key').value.trim(),ok=k.startsWith('sk-ant-')&&k.length>20;
-  $('api-ok').style.display=ok?'inline':'none';
-  if(ok){startAutoRefresh();}
-  else{stopAutoRefresh();$('auto-dot').className='settings-auto-dot';$('auto-status-txt').textContent='KI-Schlüssel eingeben um automatische News-Aktualisierung zu starten';}
-}
-function getKey(){return $('api-key').value.trim();}
-
-function startAutoRefresh(){
-  stopAutoRefresh();
-  refreshAllNews();
-  autoTimer=setInterval(refreshAllNews,AUTO_INTERVAL);
-  startProgress();
-}
-function stopAutoRefresh(){
-  if(autoTimer){clearInterval(autoTimer);autoTimer=null;}
-  if(progressTimer){clearInterval(progressTimer);progressTimer=null;}
-}
-function startProgress(){
-  if(progressTimer)clearInterval(progressTimer);
-  const t0=Date.now();
-  progressTimer=setInterval(()=>{
-    const p=Math.min(100,(Date.now()-t0)/AUTO_INTERVAL*100);
-    $('auto-progress').style.width=p+'%';
-    if(p>=100)clearInterval(progressTimer);
-  },10000);
-}
-function manualRefreshAll(){refreshAllNews(true);}
-
-async function refreshAllNews(manual=false){
-  const key=getKey();if(!key||!key.startsWith('sk-ant-'))return;
-  const btn=$('auto-btn'),spin=$('auto-spin'),btntxt=$('auto-btn-txt');
-  btn.classList.add('busy');spin.style.display='block';btntxt.textContent='Suche...';
-  $('auto-dot').className='settings-auto-dot loading';
-  $('auto-status-txt').textContent='KI sucht gerade alle aktuellen Nachrichten — bitte warten...';
-  await Promise.all([fetchLiveNews('rklb'),fetchLiveNews('asts')]);
-  btn.classList.remove('busy');spin.style.display='none';btntxt.textContent='↺ Jetzt aktualisieren';
-  $('auto-dot').className='settings-auto-dot on';
-  $('auto-progress').style.width='0%';
-  const next=new Date(Date.now()+AUTO_INTERVAL);
-  $('auto-status-txt').textContent=`Zuletzt: ${new Date().toLocaleTimeString('de-CH')} · Nächste automatische Aktualisierung: ${next.toLocaleTimeString('de-CH')} Uhr`;
-  if(!manual)startProgress();
-}
-
-const STEPS=['Suche aktuelle Nachrichten...','Lese Reddit & Internet-Foren...','Prüfe Analystenberichte...','Checke Konkurrenzsituation...','Sammle alle Informationen...','Schreibe verständliche Zusammenfassung...'];
-
-const NEWS_PROMPTS={
-  rklb:`Du bist Finanzanalyst der für Börseneinsteiger schreibt. Analysiere Rocket Lab (RKLB) mit aktuellen Web-Suchen.
-
-Suche nach: aktuellen RKLB-News (letzte 48h), Neutron-Rakete Status, Golden Dome / Space-Based Interceptor Updates, SpaceX IPO Auswirkungen, Analysten-Updates, Reddit/WSB-Stimmung, Gerüchte, Insider-Käufe/-Verkäufe, Konkurrenz-News, Sektor-News.
-
-Schreibe auf Deutsch, SEHR einfach verständlich für jemanden der noch nie Aktien hatte. Erkläre Fachbegriffe sofort wenn du sie verwendest. Benutze Alltagssprache.
-
-Format (NUR diese Abschnitte, kein Markdown, keine Sternchen):
-
-NEUESTE NACHRICHTEN
-[Was ist in den letzten 48 Stunden wichtiges passiert? Erkläre kurz warum das für den Kurs wichtig ist.]
-
-RAKETEN & VERTEIDIGUNG
-[Neutron-Status, Golden Dome, Defense-Verträge — einfach erklärt]
-
-WAS EXPERTEN SAGEN
-[Neue Analysten-Empfehlungen, Kursziel-Änderungen]
-
-WAS DAS INTERNET SAGT
-[Reddit, WallStreetBets, Stocktwits — wie ist die Stimmung? Gibt es Gerüchte?]
-
-GESAMTLAGE
-[2-3 Sätze: Wie ist die Lage aktuell? Was sind die wichtigsten Chancen und Risiken gerade?]
-
-Max. 450 Wörter. Keine Sternchen, kein Markdown.`,
-
-  asts:`Du bist Finanzanalyst der für Börseneinsteiger schreibt. Analysiere AST SpaceMobile (ASTS) mit aktuellen Web-Suchen.
-
-Suche nach: ASTS-News (letzte 48h), Blue Origin New Glenn Status nach der Explosion vom 28. Mai, BlueBird 8-9-10 Launch-Datum (Falcon 9 Mitte Juni), SpaceX IPO Impact auf ASTS, Starlink Direct-to-Cell Stand, FCC-Updates, AT&T/Verizon Strategie, Analysten-Updates, Reddit/WSB-Stimmung nach Blue Origin Explosion, Amazon/Bezos-Gerüchte.
-
-Schreibe auf Deutsch, SEHR einfach verständlich für jemanden der noch nie Aktien hatte. Erkläre Fachbegriffe sofort.
-
-Format (NUR diese Abschnitte, kein Markdown, keine Sternchen):
-
-NEUESTE NACHRICHTEN
-[Was ist in den letzten 48h wichtiges passiert?]
-
-BLUE ORIGIN SITUATION
-[Aktueller Status nach der Explosion. Was bedeutet das konkret für ASTS? Einfach erklärt.]
-
-NÄCHSTER GROSSER TEST
-[BlueBird 8-10 Launch — gibt es ein konkretes Datum? Was passiert wenn er klappt oder scheitert?]
-
-WAS EXPERTEN SAGEN
-[Analysten-Updates, neue Kursziele]
-
-WAS DAS INTERNET SAGT
-[Reddit/WSB-Stimmung, Gerüchte (Amazon, etc.)]
-
-GESAMTLAGE
-[2-3 Sätze: Wie ist die Lage? Was sind die wichtigsten Chancen und Risiken gerade?]
-
-Max. 500 Wörter. Keine Sternchen, kein Markdown.`
-};
-
-async function fetchLiveNews(t){
-  const key=getKey();if(!key||!key.startsWith('sk-ant-'))return;
-  const ld=$(t+'-news-loading'),ldtxt=$(t+'-news-loading-txt');
-  const content=$(t+'-news-content'),ts=$(t+'-news-ts');
-  content.style.display='none';ld.style.display='flex';ldtxt.textContent=STEPS[0];
-  let step=0;const st=setInterval(()=>{step=(step+1)%STEPS.length;ldtxt.textContent=STEPS[step];},3000);
-  try{
-    const resp=await fetch('https://api.anthropic.com/v1/messages',{
-      method:'POST',
-      headers:{'Content-Type':'application/json','x-api-key':key,'anthropic-version':'2023-06-01','anthropic-dangerous-direct-browser-access':'true'},
-      body:JSON.stringify({model:'claude-sonnet-4-20250514',max_tokens:2000,tools:[{type:'web_search_20250305',name:'web_search'}],messages:[{role:'user',content:NEWS_PROMPTS[t]}]})
-    });
-    if(!resp.ok){const e=await resp.json().catch(()=>({}));throw new Error(e.error?.message||'Fehler '+resp.status);}
-    const data=await resp.json();
-    const text=data.content.filter(b=>b.type==='text').map(b=>b.text).join('\n').trim();
-    ts.textContent='Aktualisiert: '+new Date().toLocaleTimeString('de-CH')+' Uhr';
-    content.innerHTML=newsToHtml(text);
-    content.className='ln-content';
-  }catch(e){
-    content.innerHTML='<span style="color:var(--red);">Fehler beim Laden: '+e.message+'</span>';
-    content.className='ln-content';ts.textContent='Fehler';
-  }finally{clearInterval(st);ld.style.display='none';content.style.display='block';}
-}
-
-function newsToHtml(txt){
-  const lines=txt.split('\n');let html='';let inSection=false;
-  for(const line of lines){
-    const trimmed=line.trim();
-    if(!trimmed){if(inSection)html+='<br>';continue;}
-    // Section headers (all caps lines)
-    if(/^[A-ZÄÖÜ\s&\/\-]{4,}$/.test(trimmed)&&trimmed.length<60){
-      if(inSection)html+='</div>';
-      html+=`<div class="ln-section"><div class="ln-section-title">${trimmed}</div><div class="ln-section-body">`;
-      inSection=true;
-    } else {
-      html+=(inSection?'':'')+trimmed+'<br>';
-    }
-  }
-  if(inSection)html+='</div></div>';
-  return html||'<span style="color:var(--text3);">Keine Inhalte geladen.</span>';
-}
-
-// Recommendation
-const REC_PROMPTS={
-  rklb:`Analysiere Rocket Lab (RKLB) mit Web-Suchen. Berücksichtige aktuellen Kurs, Neutron-Rakete Status, Golden Dome Defense, SpaceX IPO, Analysten-Ratings. Gib KAUFEN/HALTEN/VERKAUFEN. Antworte NUR mit JSON (kein Text drumherum):
-{"empfehlung":"KAUFEN","titel":"Kurzer Titel max 80 Zeichen","begruendung":"2-4 Sätze einfach erklärt für Einsteiger — warum diese Empfehlung?","fundamentals":8,"momentum":7,"risiko":6,"bewertung":5,"einstieg":"$120-130","kursziel":"$180","stopp":"$105"}`,
-  asts:`Analysiere AST SpaceMobile (ASTS) mit Web-Suchen. Berücksichtige Blue Origin Explosion, BlueBird Launch Status, SpaceX IPO, Starlink Konkurrenz. Gib KAUFEN/HALTEN/VERKAUFEN. Antworte NUR mit JSON:
-{"empfehlung":"HALTEN","titel":"Kurzer Titel max 80 Zeichen","begruendung":"2-4 Sätze einfach erklärt für Einsteiger — warum diese Empfehlung?","fundamentals":5,"momentum":8,"risiko":4,"bewertung":3,"einstieg":"$80-90","kursziel":"$140","stopp":"$70"}`
-};
-
-async function fetchRec(t){
-  const key=getKey();if(!key||!key.startsWith('sk-ant-')){alert('Bitte KI-Schlüssel oben eingeben.');return;}
-  const btn=$(t+'-rec-btn'),spin=$(t+'-rec-spin'),txt=$(t+'-rec-btn-txt');
-  btn.classList.add('busy');spin.style.display='block';txt.textContent='KI analysiert mit Web-Search...';
-  try{
-    const resp=await fetch('https://api.anthropic.com/v1/messages',{method:'POST',headers:{'Content-Type':'application/json','x-api-key':key,'anthropic-version':'2023-06-01','anthropic-dangerous-direct-browser-access':'true'},body:JSON.stringify({model:'claude-sonnet-4-20250514',max_tokens:800,tools:[{type:'web_search_20250305',name:'web_search'}],messages:[{role:'user',content:REC_PROMPTS[t]}]})});
-    if(!resp.ok){const e=await resp.json().catch(()=>({}));throw new Error(e.error?.message||'Fehler '+resp.status);}
-    const data=await resp.json();
-    const raw=data.content.filter(b=>b.type==='text').map(b=>b.text).join('\n').trim();
-    const match=raw.match(/\{[\s\S]*\}/);
-    if(!match)throw new Error('Kein JSON erhalten');
-    applyRec(t,JSON.parse(match[0]));
-  }catch(e){txt.textContent='✗ Fehler: '+e.message;}
-  finally{btn.classList.remove('busy');spin.style.display='none';if(!txt.textContent.includes('✗'))txt.textContent='✦ Aktualisiert '+new Date().toLocaleTimeString('de-CH')+' Uhr';}
-}
-
-function applyRec(t,rec){
-  const banner=$(t+'-rec-banner'),pill=$(t+'-rec-pill');
-  banner.className='rec-banner';pill.className='rec-pill';
-  const emp=(rec.empfehlung||'HALTEN').toUpperCase();
-  if(emp==='KAUFEN'){banner.classList.add('rec-buy');pill.classList.add('rec-pill-buy');}
-  else if(emp==='VERKAUFEN'){banner.classList.add('rec-sell');pill.classList.add('rec-pill-sell');}
-  else{banner.classList.add('rec-hold');pill.classList.add('rec-pill-hold');}
-  pill.textContent=emp;
-  $(t+'-rec-title').textContent=rec.titel||'';
-  $(t+'-rec-ts').textContent='Aktualisiert: '+new Date().toLocaleTimeString('de-CH')+' Uhr (KI mit Web-Search)';
-  let sub='';
-  if(rec.begruendung)sub+=rec.begruendung;
-  if(rec.einstieg||rec.kursziel||rec.stopp){
-    // Update level pills
-    const levelsEl=$(t+'-rec-levels-row')||$(t+'-rec-levels');
-    // just update the sub text with the values
-    sub+=`\n\nGuter Einstieg: ${rec.einstieg||'—'} · Mein Ziel: ${rec.kursziel||'—'} · Stopp: ${rec.stopp||'—'}`;
-  }
-  $(t+'-rec-sub').textContent=sub;
-  // Update why box with the bold intro
-  const el=$(t+'-rec-sub');
-  el.innerHTML='<b>Warum "'+emp+'"?</b> '+sub.replace(/\n/g,'<br>');
-
-  [['fundamentals',t+'-s1',t+'-m1'],['momentum',t+'-s2',t+'-m2'],['risiko',t+'-s3',t+'-m3'],['bewertung',t+'-s4',t+'-m4']].forEach(([k,sid,mid])=>{
-    const v=rec[k]||5;
-    $(sid).textContent=v+'/10';$(sid).className='rec-score-val '+(v>=7?'up':v>=5?'wn':'dn');
-    $(mid).style.width=(v*10)+'%';$(mid).style.background=v>=7?'var(--green)':v>=5?'var(--amber)':'var(--red)';
-  });
-}
-
-// Quotes
-async function fetchQ(ticker){
-  try{
-    const r=await fetch('/api/quote?ticker='+ticker);
-    if(!r.ok)throw new Error(r.status);
-    const d=await r.json();if(d.error)throw new Error(d.error);
-    const res=d.chart.result[0],m=res.meta,q0=res.indicators.quote[0];
-    return{price:m.regularMarketPrice,prev:m.chartPreviousClose||m.previousClose,
-      open:m.regularMarketOpen||m.regularMarketPrice,dayHi:m.regularMarketDayHigh,
-      dayLo:m.regularMarketDayLow,vol:m.regularMarketVolume,cap:m.marketCap,
-      hi52:m.fiftyTwoWeekHigh,lo52:m.fiftyTwoWeekLow,
-      closes:q0.close.filter(x=>x!=null),highs:q0.high.filter(x=>x!=null),
-      lows:q0.low.filter(x=>x!=null),vols:q0.volume.filter(x=>x!=null)};
-  }catch(e){return null;}
-}
-async function fetchSimple(ticker){
-  try{const r=await fetch('/api/quote?ticker='+ticker);const d=await r.json();return d.chart?.result[0]?.meta?.regularMarketPrice||null;}catch(e){return null;}
-}
-
-function applyQ(t,q){
-  if(!q){$(t+'-price').textContent='Fehler';$(t+'-chg').textContent='Vercel-Proxy prüfen';return;}
-  quotes[t]=q;
-  const chg=q.price-q.prev,pct=chg/q.prev*100,up=chg>=0;
-  const pEl=$(t+'-price');
-  pEl.textContent='$'+fmt(q.price);pEl.className='mv '+(up?'up':'dn');
-  $(t+'-chg').textContent=(up?'↑ +':'↓ ')+fmt(chg)+' ('+(up?'+':'')+fmt(pct)+'%) heute';
-  $(t+'-chg').className='mc '+(up?'up':'dn');
-  $(t+'-vol').textContent=fmtK(q.vol);
-  $(t+'-cap').textContent='Firmenwert: '+fmtMC(q.cap);
-  $(t+'-52w').textContent='$'+fmt(q.lo52)+' → $'+fmt(q.hi52);
-  pEl.style.textShadow=up?'0 0 10px rgba(22,163,74,.25)':'0 0 10px rgba(220,38,38,.25)';
-  setTimeout(()=>pEl.style.textShadow='',900);
-  calcDF(t,q);calcPF(t);
-}
-
-function calcDF(t,q){
-  const c=q.closes.slice(-5),h=q.highs.slice(-5),l=q.lows.slice(-5),v=q.vols.slice(-5);
-  const trs=h.map((hi,i)=>{if(i===0)return hi-l[i];const cp=c[i-1];return Math.max(hi-l[i],Math.abs(hi-cp),Math.abs(l[i]-cp));});
-  const atr=trs.reduce((a,b)=>a+b,0)/trs.length,p=q.price;
-  const estHi=q.dayHi||(p+atr*0.55),estLo=q.dayLo||(p-atr*0.55);
-  const avg5=c.reduce((a,b)=>a+b,0)/c.length,mp=(p-avg5)/avg5*100;
-  const ml=mp>2?'↑ Kaufdruck':mp<-2?'↓ Verkaufsdruck':'→ Neutral',mc=mp>2?'up':mp<-2?'dn':'mu';
-  let g=0,lo=0;for(let i=1;i<c.length;i++){const d=c[i]-c[i-1];if(d>0)g+=d;else lo+=Math.abs(d);}
-  const rsi=Math.round(100-100/(1+(lo===0?100:g/lo)));
-  const rl=rsi>70?'RSI '+rsi+' — zu viele Käufer, Vorsicht!':rsi<30?'RSI '+rsi+' — viele Verkäufer, evtl. Erholung':'RSI '+rsi+' — normaler Bereich';
-  const pos=estHi>estLo?Math.min(100,Math.max(0,(p-estLo)/(estHi-estLo)*100)):50;
-  $(t+'-open').textContent='$'+fmt(q.open||p);
-  $(t+'-day-hi').textContent='$'+fmt(estHi);
-  $(t+'-day-lo').textContent='$'+fmt(estLo);
-  $(t+'-lo-lbl').textContent='$'+fmt(estLo,0);$(t+'-hi-lbl').textContent='$'+fmt(estHi,0);
-  $(t+'-rdot').style.left=pos+'%';
-  $(t+'-vol-avg').textContent='Ø '+fmtK(Math.round(v.reduce((a,b)=>a+b,0)/v.length))+' tägl.';
-  $(t+'-mom').textContent=ml;$(t+'-mom').className='df-val '+mc;
-  $(t+'-rsi').textContent=rl;
-  updDayPF(t,estHi,estLo);
-}
-
-// ── Portfolio Transaction System ──────────────────────
-const txData={rklb:[],asts:[]};
-
-function updateAddBtn(t){
-  const type=$(t+'-tx-type').value;
-  const btn=$(t+'-add-btn');
-  btn.textContent=type==='buy'?'+ Kauf eintragen':'+ Verkauf eintragen';
-  btn.className='pf-add-btn'+(type==='sell'?' sell':'');
-}
-
-function addTx(t){
-  const type=$(t+'-tx-type').value;
-  const qty=parseFloat($(t+'-tx-qty').value);
-  const price=parseFloat($(t+'-tx-price').value);
-  if(!qty||qty<=0||!price||price<=0){
-    alert('Bitte Anzahl und Preis eingeben (beide müssen grösser als 0 sein).');return;
-  }
-  // Check sell doesn't exceed holdings
-  if(type==='sell'){
-    const held=txData[t].reduce((s,tx)=>s+(tx.type==='buy'?tx.qty:-tx.qty),0);
-    if(qty>held+0.0001){alert('Du kannst nicht mehr Aktien verkaufen als du besitzt! Du hast '+held.toFixed(2)+' Aktien.');return;}
-  }
-  const date=$(t+'-tx-date').value||null;
-  const note=$(t+'-tx-note').value.trim()||null;
-  txData[t].push({id:Date.now(),type,qty,price,date,note});
-  // Clear inputs
-  $(t+'-tx-qty').value='';$(t+'-tx-price').value='';$(t+'-tx-date').value='';$(t+'-tx-note').value='';
-  renderTxList(t);
-  recalcPF(t);
-}
-
-function deleteTx(t,id){
-  txData[t]=txData[t].filter(tx=>tx.id!==id);
-  renderTxList(t);
-  recalcPF(t);
-}
-
-function renderTxList(t){
-  const list=$(t+'-tx-list');
-  const empty=$(t+'-tx-empty');
-  if(txData[t].length===0){
-    empty.style.display='block';list.innerHTML='';list.appendChild(empty);return;
-  }
-  empty.style.display='none';
-  // Build rows
-  let rows='';
-  // Running avg cost for P&L per row
-  let runQty=0,runCost=0;
-  txData[t].forEach(tx=>{
-    let rowPL='—',rowPLClass='';
-    const p=quotes[t]?.price||0;
-    if(tx.type==='buy'){
-      runCost+=tx.qty*tx.price;runQty+=tx.qty;
-      if(p>0){const pl=(p-tx.price)*tx.qty;rowPL=(pl>=0?'+':'')+fmtUSD(pl);rowPLClass=pl>=0?'up':'dn';}
-    } else {
-      // realized P&L: sell price vs avg cost at time of sell
-      const avgAtSell=runQty>0?runCost/runQty:tx.price;
-      const pl=(tx.price-avgAtSell)*tx.qty;
-      rowPL='Realisiert: '+(pl>=0?'+':'')+fmtUSD(pl);rowPLClass=pl>=0?'up':'dn';
-      runCost-=avgAtSell*tx.qty;runQty-=tx.qty;if(runQty<0.001){runQty=0;runCost=0;}
-    }
-    const dateStr=tx.date?new Date(tx.date).toLocaleDateString('de-CH',{day:'2-digit',month:'2-digit',year:'2-digit'}):'—';
-    rows+=`<div class="pf-tx-row ${tx.type}-row">
-      <span><span class="pf-tx-badge ${tx.type}">${tx.type==='buy'?'📈 Kauf':'📉 Verkauf'}</span></span>
-      <span>${tx.qty.toLocaleString('de-CH',{maximumFractionDigits:4})} Aktien</span>
-      <span>$${tx.price.toFixed(2)}/Stk</span>
-      <span>= ${fmtUSD(tx.qty*tx.price)}</span>
-      <span class="pf-tx-pl ${rowPLClass}">${tx.note?'<span style="color:var(--text3);margin-right:6px;">'+tx.note+'</span>':''}<span style="font-size:11px;color:var(--text3);">${dateStr}</span><br>${rowPL}</span>
-      <button class="pf-tx-del" onclick="deleteTx('${t}',${tx.id})" title="Löschen">✕</button>
-    </div>`;
-  });
-  list.innerHTML=rows;
-}
-
-function recalcPF(t){
-  const txs=txData[t];
-  const p=quotes[t]?.price||0;
-  const bull=parseFloat($(t+'-bull-in')?.value)||0;
-  const bear=parseFloat($(t+'-bear-in')?.value)||0;
-
-  // Calculate holdings using FIFO
-  let heldQty=0,totalInvested=0,realizedPL=0;
-  let buyQueue=[];
-  txs.forEach(tx=>{
-    if(tx.type==='buy'){
-      heldQty+=tx.qty;totalInvested+=tx.qty*tx.price;
-      buyQueue.push({qty:tx.qty,price:tx.price,remaining:tx.qty});
-    } else {
-      // FIFO: eat from oldest buys
-      let toSell=tx.qty;
-      for(let b of buyQueue){
-        if(b.remaining<=0)continue;
-        const used=Math.min(b.remaining,toSell);
-        realizedPL+=(tx.price-b.price)*used;
-        b.remaining-=used;toSell-=used;heldQty-=used;totalInvested-=b.price*used;
-        if(toSell<=0.0001)break;
-      }
-    }
-  });
-  heldQty=Math.max(0,heldQty);
-  totalInvested=Math.max(0,totalInvested);
-  const avgCost=heldQty>0.001?totalInvested/heldQty:0;
-
-  const summary=$(t+'-pf-summary');
-  const scenRow=$(t+'-scenario-row');
-  if(txs.length===0){summary.style.display='none';scenRow.style.display='none';return;}
-  summary.style.display='grid';scenRow.style.display='flex';
-
-  if(!p){
-    $(t+'-sum-qty').textContent=heldQty.toFixed(2);
-    $(t+'-sum-avgcost').textContent='Ø Kaufpreis: $'+avgCost.toFixed(2);
-    return;
-  }
-
-  const curVal=heldQty*p;
-  const unrealized=curVal-totalInvested;
-  const unrealizedPct=totalInvested>0?(unrealized/totalInvested*100):0;
-  const bullVal=heldQty*bull,bearVal=heldQty*bear;
-  const bullGain=bullVal-curVal,bearLoss=bearVal-curVal;
-
-  $(t+'-sum-qty').textContent=heldQty.toLocaleString('de-CH',{maximumFractionDigits:2});
-  $(t+'-sum-avgcost').textContent='Ø Kaufpreis: $'+avgCost.toFixed(2);
-  $(t+'-sum-val').textContent=fmtUSD(curVal);
-  $(t+'-sum-invested').textContent='Investiert: '+fmtUSD(totalInvested);
-  
-  const unEl=$(t+'-sum-unrealized');
-  unEl.textContent=(unrealized>=0?'+':'')+fmtUSD(unrealized);
-  unEl.className='pf-sum-val '+(unrealized>=0?'up':'dn');
-  $(t+'-sum-unrealized-pct').textContent=(unrealizedPct>=0?'↑ +':'↓ ')+unrealizedPct.toFixed(1)+'% auf offene Position';
-  $(t+'-sum-unrealized-pct').className='pf-sum-sub '+(unrealized>=0?'up':'dn');
-
-  const realEl=$(t+'-sum-realized');
-  realEl.textContent=(realizedPL>=0?'+':'')+fmtUSD(realizedPL);
-  realEl.className='pf-sum-val '+(realizedPL>0?'up':realizedPL<0?'dn':'mu');
-
-  if(bull>0){
-    $(t+'-sum-bull').textContent=fmtUSD(bullVal);
-    $(t+'-sum-bull-gain').textContent=(bullGain>=0?'+':'')+fmtUSD(bullGain)+' vs heute';
-    $(t+'-sum-bull-gain').className='pf-sum-sub '+(bullGain>=0?'up':'dn');
-  }
-  if(bear>0){
-    $(t+'-sum-bear').textContent=fmtUSD(bearVal);
-    $(t+'-sum-bear-loss').textContent=(bearLoss>=0?'+':'')+fmtUSD(bearLoss)+' vs heute';
-    $(t+'-sum-bear-loss').className='pf-sum-sub '+(bearLoss>=0?'up':'dn');
-  }
-
-  // Update day forecast portfolio impact
-  updDayPF(t);
-}
-
-function calcPF(t){recalcPF(t);}// alias for quote updates
-
-function updDayPF(t,hi,lo){
-  const heldQty=getHeldQty(t);
-  if(!heldQty){
-    const hiEl=$(t+'-hi-pf'),loEl=$(t+'-lo-pf');
-    if(hiEl)hiEl.textContent='Aktien eintragen';
-    if(loEl)loEl.textContent='';return;
-  }
-  const p=quotes[t]?.price||0;
-  if(!hi){hi=parseFloat($(t+'-day-hi')?.textContent?.replace('$','').replace(/[',]/g,''))||0;}
-  if(!lo){lo=parseFloat($(t+'-day-lo')?.textContent?.replace('$','').replace(/[',]/g,''))||0;}
-  if(!hi||!p)return;
-  const hg=(hi-p)*heldQty,lg=(lo-p)*heldQty;
-  const hiEl=$(t+'-hi-pf'),loEl=$(t+'-lo-pf');
-  if(hiEl){hiEl.textContent=(hg>=0?'+':'')+fmtUSD(hg)+' dein Portfolio';hiEl.className='df-sub '+(hg>=0?'up':'dn');}
-  if(loEl){loEl.textContent=(lg>=0?'+':'')+fmtUSD(lg)+' dein Portfolio';loEl.className='df-sub '+(lg>=0?'up':'dn');}
-}
-
-function getHeldQty(t){
-  let q=0;
-  txData[t].forEach(tx=>{q+=tx.type==='buy'?tx.qty:-tx.qty;});
-  return Math.max(0,q);
-}
-
-async function loadAll(){
-  const now=new Date();
-  $('last-upd').textContent='Kurse aktualisiert: '+now.toLocaleTimeString('de-CH')+' · '+now.toLocaleDateString('de-CH')+' (alle 60 Sek.)';
-  const[r,a,l,pl]=await Promise.all([fetchQ('RKLB'),fetchQ('ASTS'),fetchSimple('LUNR'),fetchSimple('PL')]);
-  applyQ('rklb',r);applyQ('asts',a);
-  if(l){$('lunr-price').textContent='$'+l.toFixed(2);$('lunr-price').className='sector-val '+(l>20?'up':'mu');}
-  if(pl){$('pl-price').textContent='$'+pl.toFixed(2);$('pl-price').className='sector-val '+(pl>5?'up':'mu');}
-}
-loadAll();setInterval(loadAll,60000);
-
-// Settings dropdown
-function toggleSettings(){
-  const dd=document.getElementById('settings-dropdown');
-  dd.classList.toggle('open');
-}
-// Close dropdown when clicking outside
-document.addEventListener('click',function(e){
-  const btn=document.getElementById('settings-btn');
-  if(btn && !btn.contains(e.target)){
-    document.getElementById('settings-dropdown').classList.remove('open');
-  }
-});
-
-// Charts
-// 5-Year forecast toggle
-function toggleF5(t){
-  const m=document.getElementById(t+'-f5-milestones');
-  const btn=document.getElementById(t+'-f5-btn-txt');
-  const open=m.classList.toggle('open');
-  btn.textContent=open?'▲ Jahres-Meilensteine ausblenden':'▼ Jahres-Meilensteine & Annahmen anzeigen';
-}
-
-// 5-Year charts
-const yrs=['2025','2026','2027','2028','2029','2030'];
-const co5=()=>({responsive:true,maintainAspectRatio:false,
-  plugins:{legend:{display:true,position:'top',labels:{font:{size:12,family:'DM Sans'},color:'#6b6b66',boxWidth:24,padding:16}},
-  tooltip:{callbacks:{label:c=>c.dataset.label+': $'+(c.parsed.y!=null?c.parsed.y.toFixed(0):'—')},backgroundColor:'#fff',titleColor:'#666',bodyColor:'#1a1a18',borderColor:'#e5e5e0',borderWidth:1}},
-  scales:{x:{grid:{color:'rgba(0,0,0,.04)'},ticks:{color:'#aaa',font:{size:11}}},
-  y:{grid:{color:'rgba(0,0,0,.04)'},ticks:{color:'#aaa',font:{size:11},callback:v=>'$'+v}}}
-});
-
-new Chart(document.getElementById('rklb-chart5'),{type:'line',data:{labels:yrs,datasets:[
-  {label:'🐂 Bull',data:[150,216,320,480,680,950],borderColor:'#16a34a',backgroundColor:'rgba(22,163,74,.06)',fill:false,tension:.4,pointRadius:4,borderWidth:2.5},
-  {label:'📊 Base',data:[150,120,140,175,210,260],borderColor:'#94a3b8',backgroundColor:'transparent',fill:false,tension:.4,pointRadius:4,borderWidth:2,borderDash:[6,3]},
-  {label:'🐻 Bear',data:[150,86,70,55,45,35],borderColor:'#dc2626',backgroundColor:'rgba(220,38,38,.04)',fill:false,tension:.4,pointRadius:4,borderWidth:2,borderDash:[4,4]}
-]},options:co5()});
-
-new Chart(document.getElementById('asts-chart5'),{type:'line',data:{labels:yrs,datasets:[
-  {label:'🐂 Bull',data:[129,200,380,620,880,1200],borderColor:'#16a34a',backgroundColor:'rgba(22,163,74,.06)',fill:false,tension:.4,pointRadius:4,borderWidth:2.5},
-  {label:'📊 Base',data:[129,83,95,110,130,150],borderColor:'#94a3b8',backgroundColor:'transparent',fill:false,tension:.4,pointRadius:4,borderWidth:2,borderDash:[6,3]},
-  {label:'🐻 Bear',data:[129,50,25,12,8,5],borderColor:'#dc2626',backgroundColor:'rgba(220,38,38,.04)',fill:false,tension:.4,pointRadius:4,borderWidth:2,borderDash:[4,4]}
-]},options:co5()});
-
-const mo=['Jun','Jul','Aug','Sep','Okt','Nov','Dez','Jan','Feb','Mär','Apr','Mai','Jun→','Jul→','Aug→','Sep→'];
-const co=y=>({responsive:true,maintainAspectRatio:false,plugins:{legend:{display:false},tooltip:{callbacks:{label:c=>'$'+(c.parsed.y!=null?c.parsed.y.toFixed(0):'—')},backgroundColor:'#fff',titleColor:'#666',bodyColor:'#1a1a18',borderColor:'#e5e5e0',borderWidth:1}},scales:{x:{grid:{color:'rgba(0,0,0,.04)'},ticks:{color:'#aaa',font:{size:10},maxRotation:0}},y:{grid:{color:'rgba(0,0,0,.04)'},ticks:{color:'#aaa',font:{size:10},callback:v=>'$'+v},min:y}}});
-new Chart($('rklb-chart'),{type:'line',data:{labels:mo,datasets:[
-  {data:[42,38,45,52,60,58,70,65,80,95,118,150,null,null,null,null],borderColor:'#1d4ed8',backgroundColor:'rgba(29,78,216,.06)',fill:true,tension:.4,pointRadius:2,borderWidth:2},
-  {data:[null,null,null,null,null,null,null,null,null,null,null,150,166,182,200,216],borderColor:'#16a34a',borderDash:[5,3],tension:.4,pointRadius:0,borderWidth:1.5,fill:false},
-  {data:[null,null,null,null,null,null,null,null,null,null,null,150,143,134,126,120],borderColor:'#bbb',borderDash:[5,3],tension:.4,pointRadius:0,borderWidth:1.5,fill:false},
-  {data:[null,null,null,null,null,null,null,null,null,null,null,150,132,110,95,86],borderColor:'#dc2626',borderDash:[5,3],tension:.4,pointRadius:0,borderWidth:1.5,fill:false}
-]},options:co(20)});
-new Chart($('asts-chart'),{type:'line',data:{labels:mo,datasets:[
-  {data:[25,30,38,45,55,48,62,58,72,90,73,129,null,null,null,null],borderColor:'#15803d',backgroundColor:'rgba(21,128,61,.06)',fill:true,tension:.4,pointRadius:2,borderWidth:2},
-  {data:[null,null,null,null,null,null,null,null,null,null,null,129,145,165,185,200],borderColor:'#16a34a',borderDash:[5,3],tension:.4,pointRadius:0,borderWidth:1.5,fill:false},
-  {data:[null,null,null,null,null,null,null,null,null,null,null,129,115,100,90,83],borderColor:'#bbb',borderDash:[5,3],tension:.4,pointRadius:0,borderWidth:1.5,fill:false},
-  {data:[null,null,null,null,null,null,null,null,null,null,null,129,100,75,60,50],borderColor:'#dc2626',borderDash:[5,3],tension:.4,pointRadius:0,borderWidth:1.5,fill:false}
-]},options:co(0)});
-</script>
-</body>
-</html>
