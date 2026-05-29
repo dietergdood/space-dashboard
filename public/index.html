@@ -6,7 +6,7 @@
 <title>Space Stocks Dashboard</title>
 <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🚀</text></svg>">
 <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet">
-    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/_supaClient.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
 <style>
 /* ── Reset & Base ── */
@@ -1062,9 +1062,9 @@ body{font-family:'DM Sans',sans-serif;background:var(--bg);color:var(--text);min
 // ══════════════════════════════════════════
 // SUPABASE AUTH + PORTFOLIO SYNC
 // ══════════════════════════════════════════
-const SUPA_URL = 'https://zqltpegdkdnpgvscjrqj.supabase.co';
+const SUPA_URL = 'https://zqltpegdkdnpgvscjrqj._supaClient.co';
 const SUPA_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InpxbHRwZWdka2RucGd2c2NqcnFqIiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODAwNzIxNTEsImV4cCI6MjA5NTY0ODE1MX0.VUU73nByKnui-ONTt8JswQ5Be8yHn5n7JfuGOganib8';
-let supabase = null, currentUser = null;
+let _supaClient = null, currentUser = null;
 // Init immediately when script loads
 document.addEventListener('DOMContentLoaded', () => { initSupabase(); checkAuth(); });
 
@@ -1072,7 +1072,7 @@ function initSupabase() {
   try {
     // UMD bundle exposes window.supabase.createClient
     if (window.supabase && window.supabase.createClient) {
-      supabase = window.supabase.createClient(SUPA_URL, SUPA_KEY);
+      _supaClient = window.supabase.createClient(SUPA_URL, SUPA_KEY);
     }
   } catch(e) { console.error('Supabase init failed:', e); }
 }
@@ -1081,14 +1081,14 @@ async function sendMagicLink() {
   const email = $('auth-email').value.trim();
   const btn = $('auth-btn'), msg = $('auth-msg');
   if (!email) { msg.textContent = 'Bitte Email eingeben.'; msg.className='auth-msg err'; return; }
-  if (!supabase) {
+  if (!_supaClient) {
     initSupabase();
-    if (!supabase) { msg.textContent = 'Verbindungsfehler — Seite neu laden.'; msg.className='auth-msg err'; return; }
+    if (!_supaClient) { msg.textContent = 'Verbindungsfehler — Seite neu laden.'; msg.className='auth-msg err'; return; }
   }
   btn.disabled = true; btn.textContent = 'Sendet...';
   msg.textContent = ''; msg.className = 'auth-msg';
   try {
-    const { error } = await supabase.auth.signInWithOtp({
+    const { error } = await _supaClient.auth.signInWithOtp({
       email,
       options: { emailRedirectTo: window.location.href }
     });
@@ -1103,10 +1103,10 @@ async function sendMagicLink() {
 }
 
 async function checkAuth() {
-  if (!supabase) initSupabase();
-  if (!supabase) { hideAuthOverlay(); return; } // Fallback if SDK fails
+  if (!_supaClient) initSupabase();
+  if (!_supaClient) { hideAuthOverlay(); return; } // Fallback if SDK fails
   
-  const { data: { session } } = await supabase.auth.getSession();
+  const { data: { session } } = await _supaClient.auth.getSession();
   if (session) {
     currentUser = session.user;
     hideAuthOverlay();
@@ -1117,7 +1117,7 @@ async function checkAuth() {
   }
   
   // Listen for auth changes (magic link click)
-  supabase.auth.onAuthStateChange(async (event, session) => {
+  _supaClient.auth.onAuthStateChange(async (event, session) => {
     if (event === 'SIGNED_IN' && session) {
       currentUser = session.user;
       hideAuthOverlay();
@@ -1143,7 +1143,7 @@ function showUserMenu(email) {
     userBtn.innerHTML = `<div class="user-avatar">${email.charAt(0).toUpperCase()}</div><span>${email.split('@')[0]}</span>`;
     userBtn.onclick = () => {
       if (confirm('Ausloggen?')) {
-        supabase.auth.signOut();
+        _supaClient.auth.signOut();
       }
     };
     hdrR.insertBefore(userBtn, hdrR.firstChild);
@@ -1152,10 +1152,10 @@ function showUserMenu(email) {
 
 // ── Portfolio DB Sync ──────────────────────
 async function savePortfolioToDB() {
-  if (!supabase || !currentUser) { return; }
+  if (!_supaClient || !currentUser) { return; }
   ['rklb','asts'].forEach(async t => {
     // Delete existing and reinsert (simple approach)
-    await supabase.from('transactions').delete().eq('user_id', currentUser.id).eq('ticker', t);
+    await _supaClient.from('transactions').delete().eq('user_id', currentUser.id).eq('ticker', t);
     if (txData[t].length > 0) {
       const rows = txData[t].map(tx => ({
         user_id: currentUser.id,
@@ -1166,13 +1166,13 @@ async function savePortfolioToDB() {
         date: tx.date,
         note: tx.note || ''
       }));
-      await supabase.from('transactions').insert(rows);
+      await _supaClient.from('transactions').insert(rows);
     }
   });
 }
 
 async function loadPortfolioFromDB() {
-  if (!supabase || !currentUser) return;
+  if (!_supaClient || !currentUser) return;
   try {
     const { data, error } = await supabase
       .from('transactions')
@@ -1804,26 +1804,7 @@ async function hdrRefresh() {
 
 </script>
 
-<!-- ═══ AUTH OVERLAY ═══ -->
-<div class="auth-overlay" id="auth-overlay">
-  <div class="auth-box">
-    <div class="auth-logo">🚀</div>
-    <div class="auth-title">Space Stocks Dashboard</div>
-    <div class="auth-sub">Gib deine Email ein — du bekommst einen Magic Link zum Einloggen. Kein Passwort nötig.</div>
-    <div id="auth-email-view">
-      <input class="auth-input" id="auth-email" type="email" placeholder="deine@email.com" onkeydown="if(event.key==='Enter')sendMagicLink()">
-      <button class="auth-btn" id="auth-btn" onclick="sendMagicLink()">Magic Link senden ✉️</button>
-      <div class="auth-msg" id="auth-msg"></div>
-    </div>
-    <div id="auth-sent-view" style="display:none;">
-      <div style="font-size:48px;margin-bottom:12px;">✉️</div>
-      <div style="font-weight:600;margin-bottom:8px;">Check deine Email!</div>
-      <div style="font-size:14px;color:var(--text2);">Wir haben dir einen Magic Link geschickt. Klick darauf um dich einzuloggen.</div>
-      <button class="auth-btn" style="margin-top:20px;background:var(--surface2);color:var(--text2);border:1px solid var(--border2);" onclick="document.getElementById('auth-sent-view').style.display='none';document.getElementById('auth-email-view').style.display='block';">Andere Email versuchen</button>
-    </div>
-    <div class="auth-footer">Dein Portfolio wird sicher in der Cloud gespeichert.<br>Dein API-Key bleibt nur auf deinem Gerät.</div>
-  </div>
-</div>
+
 
 </body>
 </html>
