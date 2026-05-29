@@ -1774,7 +1774,11 @@ function applyQ(t,q){
   $(t+'-chg').textContent=(up?'↑ +':'↓ ')+fmt(chg)+' ('+(up?'+':'')+fmt(pct)+'%) heute';
   $(t+'-chg').className='mc '+(up?'up':'dn');
   $(t+'-vol').textContent=fmtK(q.vol);
-  $(t+'-cap').textContent='Firmenwert: '+fmtMC(q.cap);
+  // Compute marketCap from price * shares if API doesn't return it
+  // Firmenwert: API-Wert oder Fallback Kurs×Aktien
+  const knownShares={rklb:490e6,asts:340e6};
+  const capVal=q.cap>0?q.cap:(q.price>0&&knownShares[t]?Math.round(q.price*knownShares[t]):0);
+  $(t+'-cap').textContent=capVal>0?('Firmenwert: '+fmtMC(capVal)):'Firmenwert: lädt...';
   $(t+'-52w').textContent='$'+fmt(q.lo52)+' → $'+fmt(q.hi52);
   pEl.style.textShadow=up?'0 0 10px rgba(22,163,74,.25)':'0 0 10px rgba(220,38,38,.25)';
   setTimeout(()=>pEl.style.textShadow='',900);
