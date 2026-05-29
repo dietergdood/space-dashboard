@@ -770,23 +770,23 @@ body{font-family:'DM Sans',sans-serif;background:var(--bg);color:var(--text);min
     <div class="card">
       <div class="ch">📈 Kursverlauf der letzten 12 Monate + Zukunftsszenarien</div>
       <div class="cw"><canvas id="rklb-chart" role="img" aria-label="RKLB Chart">RKLB Kursverlauf</canvas></div>
-      <div class="lgbox">
+      <div class="lgbox" id="rklb-lgbox">
         <div class="lgr"><div class="lgl"><div class="lgs" style="background:var(--rklb);"></div><div class="lgdot" style="background:var(--rklb);"></div></div><div><div class="lgt">Was wirklich passiert ist</div><div class="lgx">Der echte Kursverlauf der letzten 12 Monate — von $42 auf $150, ein Anstieg von 257%</div></div></div>
         <div class="lgr"><div class="lgl"><div class="lgd" style="border-color:var(--green);"></div><div class="lgdot" style="background:var(--green);"></div></div><div><div class="lgt" style="color:var(--green);">Optimistisches Szenario → $200–216</div><div class="lgx">Wenn Neutron-Rakete fliegt + Defense-Verträge kommen + SpaceX-IPO-Effekt hält an</div></div></div>
         <div class="lgr"><div class="lgl"><div class="lgd" style="border-color:#bbb;"></div><div class="lgdot" style="background:#bbb;"></div></div><div><div class="lgt" style="color:#888;">Was Bankexperten im Schnitt erwarten → $120</div><div class="lgx">Nüchterne Mitte der Profis — ohne übertriebenen Optimismus oder Pessimismus</div></div></div>
         <div class="lgr"><div class="lgl"><div class="lgd" style="border-color:var(--red);"></div><div class="lgdot" style="background:var(--red);"></div></div><div><div class="lgt" style="color:var(--red);">Pessimistisches Szenario → $86</div><div class="lgx">Wenn Neutron scheitert oder sich stark verzögert und der Hype nachlässt</div></div></div>
       </div>
     </div>
-    <div class="card">
+    <div class="card" id="card-rklb-scenarios">
       <div class="ch">🎯 Wo könnte der Kurs in 12 Monaten stehen?</div>
-      <div style="font-size:15px;color:var(--text2);margin-bottom:12px;line-height:1.5;">Verschiedene Experten und Szenarien — die Balken zeigen wie "hoch" das jeweilige Ziel ist:</div>
-      <div class="scr"><div class="scl">Bestmöglicher Fall<br>(alles klappt)</div><div class="scb"><div class="scf" style="width:100%;background:var(--green);"></div></div><div class="scv up">$200–216</div></div>
+      <div id="rklb-scenarios-intro" style="font-size:15px;color:var(--text2);margin-bottom:12px;line-height:1.5;">Verschiedene Experten und Szenarien — die Balken zeigen wie "hoch" das jeweilige Ziel ist:</div>
+      <div id="rklb-scenarios-bars"><div class="scr"><div class="scl">Bestmöglicher Fall<br>(alles klappt)</div><div class="scb"><div class="scf" style="width:100%;background:var(--green);"></div></div><div class="scv up">$200–216</div></div>
       <div class="scr"><div class="scl">Needham Bank<br>(optimistische Bank)</div><div class="scb"><div class="scf" style="width:56%;background:var(--rklb);"></div></div><div class="scv" style="color:var(--rklb);">$120</div></div>
       <div class="scr"><div class="scl">Alle Banken<br>(Durchschnitt)</div><div class="scb"><div class="scf" style="width:56%;background:#bbb;"></div></div><div class="scv mu">$120</div></div>
       <div class="scr"><div class="scl">Vorsichtige<br>Schätzung</div><div class="scb"><div class="scf" style="width:40%;background:var(--amber);"></div></div><div class="scv wn">$86</div></div>
-      <div style="background:var(--surface2);border-radius:8px;padding:12px;margin-top:14px;">
+      </div><div id="rklb-sentiment-box" style="background:var(--surface2);border-radius:8px;padding:12px;margin-top:14px;">
         <div style="font-size:15px;font-weight:500;margin-bottom:8px;">💡 Was sagt die Internet-Community?</div>
-        <div style="font-size:15px;color:var(--text2);line-height:1.6;">Reddit und WallStreetBets (grosse Internet-Foren für Privatanleger): <b>84% positive Kommentare</b> zu RKLB. Ein Post über das Rekordquartal hatte hunderte Upvotes. Aber Vorsicht: Internet-Euphorie kann schnell kippen!</div>
+        <div id="rklb-sentiment-text" style="font-size:15px;color:var(--text2);line-height:1.6;">Reddit und WallStreetBets (grosse Internet-Foren für Privatanleger): <b>84% positive Kommentare</b> zu RKLB. Ein Post über das Rekordquartal hatte hunderte Upvotes. Aber Vorsicht: Internet-Euphorie kann schnell kippen!</div>
       </div>
     </div>
   </div>
@@ -1075,8 +1075,8 @@ body{font-family:'DM Sans',sans-serif;background:var(--bg);color:var(--text);min
   <!-- Sector Context RKLB -->
   <div class="card one">
     <div class="ch">Was sonst noch den RKLB-Kurs beeinflusst</div>
-    <div style="font-size:15px;color:var(--text2);margin-bottom:12px;line-height:1.5;">Rocket-Lab-Aktien werden nicht nur durch eigene Nachrichten bewegt. Auch diese externen Faktoren spielen eine grosse Rolle:</div>
-    <div class="sector-grid">
+    <div id="rklb-sector-intro" style="font-size:15px;color:var(--text2);margin-bottom:12px;line-height:1.5;">Rocket-Lab-Aktien werden nicht nur durch eigene Nachrichten bewegt. Auch diese externen Faktoren spielen eine grosse Rolle:</div>
+    <div class="sector-grid" id="rklb-sector-grid">
       <div class="sector-card">
         <div class="sector-emoji">🌌</div>
         <div class="sector-name">SpaceX Börsengang</div>
@@ -1245,24 +1245,24 @@ body{font-family:'DM Sans',sans-serif;background:var(--bg);color:var(--text);min
     <div class="card">
       <div class="ch">📈 Kursverlauf der letzten 12 Monate + Zukunftsszenarien</div>
       <div class="cw"><canvas id="asts-chart" role="img" aria-label="ASTS Chart">ASTS Kursverlauf</canvas></div>
-      <div class="lgbox">
+      <div class="lgbox" id="asts-lgbox">
         <div class="lgr"><div class="lgl"><div class="lgs" style="background:var(--asts);"></div><div class="lgdot" style="background:var(--asts);"></div></div><div><div class="lgt">Was wirklich passiert ist</div><div class="lgx">Echter historischer Kurs — stark gestiegen, aber auch sehr schwankend</div></div></div>
         <div class="lgr"><div class="lgl"><div class="lgd" style="border-color:var(--green);"></div><div class="lgdot" style="background:var(--green);"></div></div><div><div class="lgt" style="color:var(--green);">Optimistisches Szenario → $200+</div><div class="lgx">Wenn die Satelliten funktionieren und Umsatz kommt</div></div></div>
         <div class="lgr"><div class="lgl"><div class="lgd" style="border-color:#bbb;"></div><div class="lgdot" style="background:#bbb;"></div></div><div><div class="lgt" style="color:#888;">Was Bankexperten erwarten → $83</div><div class="lgx">Nüchterne Mitte — der aktuelle Kurs liegt 44% darüber</div></div></div>
         <div class="lgr"><div class="lgl"><div class="lgd" style="border-color:var(--red);"></div><div class="lgdot" style="background:var(--red);"></div></div><div><div class="lgt" style="color:var(--red);">Pessimistisches Szenario → $50</div><div class="lgx">Wenn Blue Origin dauerhaft ausfällt + Starlink gewinnt</div></div></div>
       </div>
     </div>
-    <div class="card">
+    <div class="card" id="card-asts-scenarios">
       <div class="ch">Wo könnte der Kurs in 12 Monaten stehen?</div>
-      <div style="font-size:14px;color:var(--text2);margin-bottom:12px;line-height:1.5;">Die Bandbreite ist riesig — das zeigt das grosse Risiko und das grosse Potenzial:</div>
-      <div class="scr"><div class="scl">Bestmöglicher Fall</div><div class="scb"><div class="scf" style="width:100%;background:var(--green);"></div></div><div class="scv up">$200+</div></div>
+      <div id="asts-scenarios-intro" style="font-size:14px;color:var(--text2);margin-bottom:12px;line-height:1.5;">Die Bandbreite ist riesig — das zeigt das grosse Risiko und das grosse Potenzial:</div>
+      <div id="asts-scenarios-bars"><div class="scr"><div class="scl">Bestmöglicher Fall</div><div class="scb"><div class="scf" style="width:100%;background:var(--green);"></div></div><div class="scv up">$200+</div></div>
       <div class="scr"><div class="scl">Roth Capital Bank</div><div class="scb"><div class="scf" style="width:54%;background:var(--asts);"></div></div><div class="scv" style="color:var(--asts);">$108</div></div>
       <div class="scr"><div class="scl">Alle Banken<br>(Durchschnitt)</div><div class="scb"><div class="scf" style="width:42%;background:#bbb;"></div></div><div class="scv mu">$83</div></div>
       <div class="scr"><div class="scl">Fairer Wert<br>(Berechnung)</div><div class="scb"><div class="scf" style="width:36%;background:var(--amber);"></div></div><div class="scv wn">$71</div></div>
       <div class="scr"><div class="scl">Schlechtester Fall</div><div class="scb"><div class="scf" style="width:25%;background:var(--red);"></div></div><div class="scv dn">$50</div></div>
-      <div style="background:rgba(220,38,38,.05);border:1px solid rgba(220,38,38,.15);border-radius:8px;padding:14px;margin-top:14px;">
+      </div><div id="asts-sentiment-box" style="background:rgba(220,38,38,.05);border:1px solid rgba(220,38,38,.15);border-radius:8px;padding:14px;margin-top:14px;">
         <div style="font-size:13px;font-weight:500;margin-bottom:6px;color:#991b1b;">⚠️ Wichtige Warnung</div>
-        <div style="font-size:13px;color:var(--text2);line-height:1.6;">Der aktuelle Kurs ($120) liegt deutlich über dem, was die meisten Experten für fair halten ($83). Nur mit Geld investieren, dessen Verlust du verkraften könntest.</div>
+        <div id="asts-sentiment-text" style="font-size:13px;color:var(--text2);line-height:1.6;">Der aktuelle Kurs ($120) liegt deutlich über dem, was die meisten Experten für fair halten ($83). Nur mit Geld investieren, dessen Verlust du verkraften könntest.</div>
       </div>
     </div>
   </div>
@@ -1526,8 +1526,8 @@ body{font-family:'DM Sans',sans-serif;background:var(--bg);color:var(--text);min
   <!-- Sector context ASTS -->
   <div class="card one">
     <div class="ch">Was sonst noch den ASTS-Kurs beeinflusst</div>
-    <div style="font-size:15px;color:var(--text2);margin-bottom:12px;line-height:1.5;">ASTS wird von sehr vielen externen Faktoren beeinflusst — das macht die Aktie so unberechenbar:</div>
-    <div class="sector-grid">
+    <div id="asts-sector-intro" style="font-size:15px;color:var(--text2);margin-bottom:12px;line-height:1.5;">ASTS wird von sehr vielen externen Faktoren beeinflusst — das macht die Aktie so unberechenbar:</div>
+    <div class="sector-grid" id="asts-sector-grid">
       <div class="sector-card">
         <div class="sector-emoji">🌌</div>
         <div class="sector-name">SpaceX Börsengang</div>
@@ -1675,7 +1675,7 @@ async function refreshAllNews(manual=false){
   btn.classList.add('busy');spin.style.display='block';btntxt.textContent='Suche...';
   $('auto-dot').className='settings-auto-dot loading';
   $('auto-status-txt').textContent='KI sucht gerade alle aktuellen Nachrichten...';
-  await Promise.all([fetchLiveNews('rklb'),fetchLiveNews('asts')]);
+  await Promise.all([fetchLiveNews('rklb'),fetchLiveNews('asts'),fetchSectorContext('rklb'),fetchSectorContext('asts'),fetchScenarios('rklb'),fetchScenarios('asts')]);
   btn.classList.remove('busy');spin.style.display='none';btntxt.textContent='↺ Jetzt';
   $('auto-dot').className='settings-auto-dot on';
   $('auto-progress').style.width='0%';
@@ -1992,6 +1992,57 @@ function recalcPF(t){
 function calcPF(t){recalcPF(t);}
 
 // ── Load quotes ────────────────────────────────────────
+
+// ── Scenarios & Sentiment AI Update ──────────────
+const SCENARIOS_PROMPTS={
+  rklb:`Analysiere Rocket Lab (RKLB) Kursziele und Sentiment mit Web-Suchen. Suche nach aktuellen Analysten-Kurszielen, Reddit/WSB Stimmung. Antworte NUR mit JSON ohne Markdown-Backticks: {"intro":"1 Satz Bandbreite","max_val":216,"bars":[{"label":"Bestmöglicher Fall\n(alles klappt)","val":"$200-216","pct":100,"color":"green"},{"label":"Optimistischste Bank","val":"$120","pct":56,"color":"rklb"},{"label":"Alle Banken\n(Durchschnitt)","val":"$120","pct":56,"color":"grey"},{"label":"Vorsichtige\nSchätzung","val":"$86","pct":40,"color":"amber"}],"bull_desc":"Optimistisches Szenario → $200-216","base_desc":"Was Bankexperten im Schnitt erwarten → $120","bear_desc":"Pessimistisches Szenario → $86","sentiment":"Reddit/WSB Stimmung in 2 Sätzen","sentiment_warning":false}`,
+  asts:`Analysiere AST SpaceMobile (ASTS) Kursziele und Sentiment mit Web-Suchen. Suche nach aktuellen Analysten-Kurszielen, Reddit/WSB Stimmung. Antworte NUR mit JSON ohne Markdown-Backticks: {"intro":"1 Satz Bandbreite","max_val":200,"bars":[{"label":"Bestmöglicher Fall","val":"$200+","pct":100,"color":"green"},{"label":"Optimistischste Bank","val":"$108","pct":54,"color":"asts"},{"label":"Alle Banken\n(Durchschnitt)","val":"$83","pct":42,"color":"grey"},{"label":"Fairer Wert\n(Berechnung)","val":"$71","pct":36,"color":"amber"}],"bull_desc":"Optimistisches Szenario → $200+","base_desc":"Was Bankexperten im Schnitt erwarten → $83","bear_desc":"Pessimistisches Szenario → $50","sentiment":"Aktuelle Warnung Kurs vs. Expertenmeinung in 2 Sätzen","sentiment_warning":true}`
+};
+
+async function fetchScenarios(t){
+  const key=getKey();if(!key||!key.startsWith('sk-ant-'))return;
+  const barsEl=document.getElementById(t+'-scenarios-bars');
+  const introEl=document.getElementById(t+'-scenarios-intro');
+  const sentEl=document.getElementById(t+'-sentiment-text');
+  const lgbox=document.getElementById(t+'-lgbox');
+  if(!barsEl)return;
+  barsEl.style.opacity='0.5';
+  try{
+    const resp=await fetch('https://api.anthropic.com/v1/messages',{method:'POST',
+      headers:{'Content-Type':'application/json','x-api-key':key,'anthropic-version':'2023-06-01','anthropic-dangerous-direct-browser-access':'true'},
+      body:JSON.stringify({model:'claude-sonnet-4-20250514',max_tokens:1000,
+        tools:[{type:'web_search_20250305',name:'web_search'}],
+        messages:[{role:'user',content:SCENARIOS_PROMPTS[t]}]})
+    });
+    if(!resp.ok)throw new Error('API '+resp.status);
+    const data=await resp.json();
+    const raw=data.content.filter(b=>b.type==='text').map(b=>b.text).join('').trim();
+    const match=raw.match(/\{[\s\S]*\}/);
+    if(!match)throw new Error('No JSON');
+    const p=JSON.parse(match[0]);
+    if(introEl&&p.intro)introEl.textContent=p.intro;
+    if(p.bars&&p.bars.length){
+      const cmap={green:'var(--green)',grey:'#bbb',amber:'var(--amber)',red:'var(--red)',rklb:'var(--rklb)',asts:'var(--asts)'};
+      const vmap={green:'up',grey:'mu',amber:'wn',red:'dn',rklb:'',asts:''};
+      barsEl.innerHTML=p.bars.map(b=>{
+        const col=cmap[b.color]||'#bbb',cls=vmap[b.color]||'';
+        const lbl=(b.label||'').replace(/\\n/g,'<br>');
+        const vstyle=(b.color==='rklb'||b.color==='asts')?'style="color:var(--'+b.color+')"':'';
+        return '<div class="scr"><div class="scl">'+lbl+'</div><div class="scb"><div class="scf" style="width:'+(b.pct||50)+'%;background:'+col+';"></div></div><div class="scv '+cls+'" '+vstyle+'>'+( b.val||'—')+'</div></div>';
+      }).join('');
+    }
+    if(lgbox&&p.bull_desc&&p.base_desc&&p.bear_desc){
+      const first=lgbox.querySelector('.lgr');
+      lgbox.innerHTML=(first?first.outerHTML:'')+
+        '<div class="lgr"><div class="lgl"><div class="lgd" style="border-color:var(--green);"></div><div class="lgdot" style="background:var(--green);"></div></div><div><div class="lgt" style="color:var(--green);">'+p.bull_desc+'</div></div></div>'+
+        '<div class="lgr"><div class="lgl"><div class="lgd" style="border-color:#bbb;"></div><div class="lgdot" style="background:#bbb;"></div></div><div><div class="lgt" style="color:#888;">'+p.base_desc+'</div></div></div>'+
+        '<div class="lgr"><div class="lgl"><div class="lgd" style="border-color:var(--red);"></div><div class="lgdot" style="background:var(--red);"></div></div><div><div class="lgt" style="color:var(--red);">'+p.bear_desc+'</div></div></div>';
+    }
+    if(sentEl&&p.sentiment)sentEl.innerHTML=p.sentiment;
+  }catch(e){console.warn('Scenarios update failed:',e.message);}
+  finally{barsEl.style.opacity='1';}
+}
+
 async function loadAll(){
   const now=new Date();
   $('last-upd').textContent='Kurse: '+now.toLocaleTimeString('de-CH')+' · '+now.toLocaleDateString('de-CH')+' (15s)';
