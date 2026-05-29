@@ -746,7 +746,7 @@ body{font-family:'DM Sans',sans-serif;background:var(--bg);color:var(--text);min
         <div class="rec-score-top"><div class="rec-score-emoji">⚠️</div><div class="rec-score-label">Wie hoch ist<br>das Risiko?</div></div>
         <div class="rec-score-val wn" id="rklb-s3">—</div>
         <div class="rec-meter"><div class="rec-meter-fill" style="width:60%;background:var(--amber);" id="rklb-m3"></div></div>
-        <div class="rec-score-explain" id="rklb-explain-risiko"><b>Risiko</b> — <b>Höherer Score = niedrigeres Risiko.</b> 6/10 = mittleres Risiko. Hauptgefahr: Neutron-Rakete scheitert oder verzögert sich stark → Kurs könnte 40%+ fallen.</div>
+        <div class="rec-score-explain" id="rklb-explain-risiko" style="color:var(--text3);font-style:italic;"><b>Risiko</b> — wird mit KI aktualisiert</div>
       </div>
       <div class="rec-score-card">
         <div class="rec-score-top"><div class="rec-score-emoji">💎</div><div class="rec-score-label">Ist der Preis<br>fair?</div></div>
@@ -885,6 +885,19 @@ body{font-family:'DM Sans',sans-serif;background:var(--bg);color:var(--text);min
   </div>
 </div>
 
+
+
+
+
+
+
+
+
+  
+
+
+</div>
+
 <div class="collapsible-card open" id="card-rklb-df">
   <button class="section-toggle open" onclick="toggleCard('rklb-df')">
     <div class="st-left"><span class="st-icon">📅</span><div><div class="st-title">Was heute passieren könnte</div><div class="st-sub">ATR-basierte Tagesschätzung</div></div></div>
@@ -933,8 +946,6 @@ body{font-family:'DM Sans',sans-serif;background:var(--bg);color:var(--text);min
     </div>
   </div>  </div>
 </div>
-
-
 
 <div class="collapsible-card open" id="card-rklb-scenarios-wrap">
   <button class="section-toggle open" onclick="toggleCard('rklb-scenarios-wrap')">
@@ -1065,7 +1076,7 @@ body{font-family:'DM Sans',sans-serif;background:var(--bg);color:var(--text);min
   </div>
 </div>
 
-  <div class="collapsible-card open" id="card-rklb-news">
+<div class="collapsible-card open" id="card-rklb-news">
   <button class="section-toggle open" onclick="toggleCard('rklb-news')">
     <div class="st-left"><span class="st-icon">📰</span><div><div class="st-title">Live-Nachrichten & Marktanalyse</div><div class="st-sub">Automatisch alle 2h aktualisiert</div></div></div>
     <div class="st-right"><span class="st-arrow">▲</span></div>
@@ -1124,6 +1135,7 @@ body{font-family:'DM Sans',sans-serif;background:var(--bg);color:var(--text);min
   </div>
   </div>
 </div>
+
 </div>
 
 <!-- ════════════════ ASTS ════════════════ -->
@@ -1226,7 +1238,7 @@ body{font-family:'DM Sans',sans-serif;background:var(--bg);color:var(--text);min
         <div class="rec-score-top"><div class="rec-score-emoji">💣</div><div class="rec-score-label">Wie hoch ist<br>das Risiko?</div></div>
         <div class="rec-score-val dn" id="asts-s3">—</div>
         <div class="rec-meter"><div class="rec-meter-fill" style="width:40%;background:var(--red);" id="asts-m3"></div></div>
-        <div class="rec-score-explain" id="asts-explain-risiko"><b>Risiko</b> — <b>Höherer Score = niedrigeres Risiko.</b> 4/10 = hohes Risiko. Blue Origin Explosion, Starlink-Konkurrenz, kaum Umsatz, starke Kursschwankungen. Nur für risikobereite Anleger geeignet.</div>
+        <div class="rec-score-explain" id="asts-explain-risiko" style="color:var(--text3);font-style:italic;"><b>Risiko</b> — wird mit KI aktualisiert</div>
       </div>
       <div class="rec-score-card">
         <div class="rec-score-top"><div class="rec-score-emoji">💸</div><div class="rec-score-label">Ist der Preis<br>fair?</div></div>
@@ -1413,6 +1425,17 @@ body{font-family:'DM Sans',sans-serif;background:var(--bg);color:var(--text);min
   </div>
 </div>
 
+
+
+  
+
+
+</div>
+
+</div>
+</div>
+</div>
+
 <div class="collapsible-card open" id="card-asts-pf">
   <button class="section-toggle open" onclick="toggleCard('asts-pf')">
     <div class="st-left"><span class="st-icon">🧮</span><div><div class="st-title">Dein Portfolio</div><div class="st-sub">Käufe & Verkäufe eintragen</div></div></div>
@@ -1518,7 +1541,7 @@ body{font-family:'DM Sans',sans-serif;background:var(--bg);color:var(--text);min
   </div>
 </div>
 
-  <div class="collapsible-card open" id="card-asts-news">
+<div class="collapsible-card open" id="card-asts-news">
   <button class="section-toggle open" onclick="toggleCard('asts-news')">
     <div class="st-left"><span class="st-icon">📰</span><div><div class="st-title">Live-Nachrichten & Marktanalyse</div><div class="st-sub">Automatisch alle 2h aktualisiert</div></div></div>
     <div class="st-right"><span class="st-arrow">▲</span></div>
@@ -1577,10 +1600,7 @@ body{font-family:'DM Sans',sans-serif;background:var(--bg);color:var(--text);min
   </div>
   </div>
 </div>
-</div>
 
-</div>
-</div>
 </div>
 
 <!-- ════════════════ Glossar ════════════════ -->
@@ -2122,6 +2142,43 @@ async function hdrRefresh(){
   btn.classList.remove('busy');
   txt.textContent='✓ Aktualisiert';
   setTimeout(()=>txt.textContent='↺ Aktualisieren',3000);
+}
+
+
+// ── Sector Context AI Update ─────────────────────
+const SECTOR_PROMPTS = {
+  rklb: `Analysiere Sektor-Kontext für Rocket Lab (RKLB). Suche nach: SpaceX IPO, Golden Dome Status, LUNR/PL Performance, Defense Budget. Antworte NUR mit JSON: {"intro":"1 Satz","cards":[{"emoji":"🌌","name":"SpaceX IPO","val":"Status","val_color":"purple","desc":"2 Sätze"},{"emoji":"🛡","name":"Golden Dome","val":"Status","val_color":"green","desc":"2 Sätze"},{"emoji":"🌍","name":"Sektor-Peers","val":"Status","val_color":"blue","desc":"LUNR/PL kurz"},{"emoji":"📈","name":"Defense Budget","val":"Status","val_color":"green","desc":"Einfluss"}]}`,
+  asts: `Analysiere Sektor-Kontext für AST SpaceMobile (ASTS). Suche nach: Blue Origin Status, Starlink D2D, SpaceX IPO Einfluss, AT&T/Verizon. Antworte NUR mit JSON: {"intro":"1 Satz","cards":[{"emoji":"🌌","name":"SpaceX Börsengang","val":"Status","val_color":"purple","desc":"2 Sätze"},{"emoji":"💥","name":"Blue Origin","val":"Status","val_color":"red","desc":"Aktuell"},{"emoji":"📶","name":"Starlink D2D","val":"Status","val_color":"red","desc":"Konkurrenz"},{"emoji":"📱","name":"AT&T & Verizon","val":"Status","val_color":"green","desc":"Partnership"}]}`
+};
+
+async function fetchSectorContext(t) {
+  const key = getKey();
+  if (!key || !key.startsWith('sk-ant-')) return;
+  const grid = document.getElementById(t + '-sector-grid');
+  const intro = document.getElementById(t + '-sector-intro');
+  if (!grid) return;
+  grid.style.opacity = '0.5';
+  try {
+    const resp = await fetch('https://api.anthropic.com/v1/messages', {
+      method: 'POST',
+      headers: {'Content-Type':'application/json','x-api-key':key,'anthropic-version':'2023-06-01','anthropic-dangerous-direct-browser-access':'true'},
+      body: JSON.stringify({model:'claude-sonnet-4-20250514',max_tokens:600,
+        tools:[{type:'web_search_20250305',name:'web_search'}],
+        messages:[{role:'user',content:SECTOR_PROMPTS[t]}]})
+    });
+    if (!resp.ok) throw new Error('API ' + resp.status);
+    const data = await resp.json();
+    const raw = data.content.filter(b=>b.type==='text').map(b=>b.text).join('').trim();
+    const match = raw.match(/\{[\s\S]*\}/);
+    if (!match) throw new Error('No JSON');
+    const p = JSON.parse(match[0]);
+    if (intro && p.intro) intro.textContent = p.intro;
+    if (p.cards && p.cards.length) {
+      const cmap={green:'var(--green)',red:'var(--red)',purple:'var(--purple)',blue:'var(--blue)',amber:'var(--amber)',grey:'var(--text3)'};
+      grid.innerHTML = p.cards.map(c=>`<div class="sector-card"><div class="sector-emoji">${c.emoji||'🌌'}</div><div class="sector-name">${c.name||''}</div><div class="sector-val" style="color:${cmap[c.val_color]||'var(--text)'}">${c.val||''}</div><div class="sector-desc">${c.desc||''}</div></div>`).join('');
+    }
+  } catch(e) { console.warn('Sector update failed:', e.message); }
+  finally { grid.style.opacity = '1'; }
 }
 
 async function loadAll(){
