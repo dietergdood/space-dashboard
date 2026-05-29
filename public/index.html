@@ -530,6 +530,12 @@ body{font-family:'DM Sans',sans-serif;background:var(--bg);color:var(--text);min
 
 .rec-banner.rec-empty{background:var(--surface2);border-color:var(--border);}
 .rec-pill-empty{background:var(--surface2);color:var(--text3);border:1px solid var(--border2);font-size:13px;padding:5px 14px;border-radius:6px;}
+
+.hdr-refresh-btn{display:flex;align-items:center;gap:7px;padding:8px 16px;border-radius:8px;border:1px solid var(--border2);background:var(--surface);color:var(--text2);font-size:13px;font-weight:500;cursor:pointer;font-family:'DM Sans',sans-serif;transition:all .2s;white-space:nowrap;flex-shrink:0;}
+.hdr-refresh-btn:hover{border-color:var(--blue);color:var(--blue);background:var(--blue-bg);}
+.hdr-refresh-btn.busy{opacity:.6;cursor:not-allowed;pointer-events:none;}
+.hdr-refresh-spin{width:13px;height:13px;border:2px solid currentColor;border-top-color:transparent;border-radius:50%;animation:spin .7s linear infinite;display:none;flex-shrink:0;}
+.hdr-refresh-btn.busy .hdr-refresh-spin{display:block;}
 </style>
 </head>
 <body>
@@ -551,6 +557,10 @@ body{font-family:'DM Sans',sans-serif;background:var(--bg);color:var(--text);min
       <div class="sw-sep"></div>
       <button class="sw" id="btn-asts" onclick="switchTab('asts')">📡 AST SpaceMobile (ASTS)</button>
     </div>
+    <button class="hdr-refresh-btn" id="hdr-refresh-btn" onclick="hdrRefresh()" title="KI-Analyse aktualisieren">
+      <div class="hdr-refresh-spin" id="hdr-refresh-spin"></div>
+      <span id="hdr-refresh-txt">↺ Aktualisieren</span>
+    </button>
     <!-- Settings Button -->
     <div class="settings-btn" id="settings-btn" onclick="toggleSettings()" title="Einstellungen">⚙️
       <div class="settings-dropdown" id="settings-dropdown">
@@ -721,31 +731,31 @@ body{font-family:'DM Sans',sans-serif;background:var(--bg);color:var(--text);min
         <div class="rec-score-top"><div class="rec-score-emoji">📈</div><div class="rec-score-label">Wie gut läuft<br>das Geschäft?</div></div>
         <div class="rec-score-val up" id="rklb-s1">—</div>
         <div class="rec-meter"><div class="rec-meter-fill" style="width:80%;background:var(--green);" id="rklb-m1"></div></div>
-        <div class="rec-score-explain"><b>Fundamentals</b> — Umsatzwachstum, Auftragsbestand, Marge. 8/10 = Rocket Lab wächst stark: +64% Umsatz, $2.2 Mrd. Backlog, erste Profitabilität in Sicht.</div>
+        <div class="rec-score-explain" id="rklb-explain-fundamentals" style="color:var(--text3);font-style:italic;"><b>Fundamentals</b> — wird mit KI aktualisiert</div>
       </div>
       <div class="rec-score-card">
         <div class="rec-score-top"><div class="rec-score-emoji">🚀</div><div class="rec-score-label">Wie stark steigt<br>der Kurs gerade?</div></div>
         <div class="rec-score-val up" id="rklb-s2">—</div>
         <div class="rec-meter"><div class="rec-meter-fill" style="width:70%;background:var(--green);" id="rklb-m2"></div></div>
-        <div class="rec-score-explain"><b>Momentum</b> — Kursrichtung der letzten Wochen. 7/10 = +80% in einem Monat. Vorsicht: Starkes Momentum kann schnell drehen wenn Enttäuschungen kommen.</div>
+        <div class="rec-score-explain" id="rklb-explain-momentum" style="color:var(--text3);font-style:italic;"><b>Momentum</b> — wird mit KI aktualisiert</div>
       </div>
       <div class="rec-score-card">
         <div class="rec-score-top"><div class="rec-score-emoji">⚠️</div><div class="rec-score-label">Wie hoch ist<br>das Risiko?</div></div>
         <div class="rec-score-val wn" id="rklb-s3">—</div>
         <div class="rec-meter"><div class="rec-meter-fill" style="width:60%;background:var(--amber);" id="rklb-m3"></div></div>
-        <div class="rec-score-explain"><b>Risiko</b> — <b>Höherer Score = niedrigeres Risiko.</b> 6/10 = mittleres Risiko. Hauptgefahr: Neutron-Rakete scheitert oder verzögert sich stark → Kurs könnte 40%+ fallen.</div>
+        <div class="rec-score-explain" id="rklb-explain-risiko"><b>Risiko</b> — <b>Höherer Score = niedrigeres Risiko.</b> 6/10 = mittleres Risiko. Hauptgefahr: Neutron-Rakete scheitert oder verzögert sich stark → Kurs könnte 40%+ fallen.</div>
       </div>
       <div class="rec-score-card">
         <div class="rec-score-top"><div class="rec-score-emoji">💎</div><div class="rec-score-label">Ist der Preis<br>fair?</div></div>
         <div class="rec-score-val wn" id="rklb-s4">—</div>
         <div class="rec-meter"><div class="rec-meter-fill" style="width:50%;background:var(--amber);" id="rklb-m4"></div></div>
-        <div class="rec-score-explain"><b>Bewertung</b> — Ist der Kurs gemessen am Unternehmenswert günstig oder teuer? 5/10 = leicht teuer. Kurs ($150) liegt 25% über Analysten-Konsens ($120). Wachstum rechtfertigt einen Teil davon.</div>
+        <div class="rec-score-explain" id="rklb-explain-bewertung" style="color:var(--text3);font-style:italic;"><b>Bewertung</b> — wird mit KI aktualisiert</div>
       </div>
     </div>
     <div class="rec-levels-row">
-      <span class="tip"><div class="rec-level-pill"><b>Guter Einstieg:</b> $120–130 <span class="tip-icon">?</span></div><span class="tip-box"><b>Warum nicht sofort kaufen?</b> Weil der aktuelle Kurs ($150) schon über dem liegt, was Experten erwarten ($120). Wenn du auf einen Rücksetzer wartest, kaufst du günstiger und hast mehr Sicherheitspuffer.</span></span>
-      <span class="tip"><div class="rec-level-pill"><b>Mein Ziel:</b> $180 <span class="tip-icon">?</span></div><span class="tip-box"><b>Was bedeutet "Kursziel"?</b> Wo der Kurs hinlaufen könnte wenn alles gut geht — in etwa 12 Monaten. Kein Versprechen, nur eine Schätzung basierend auf den aktuellen Zahlen und Plänen.</span></span>
-      <span class="tip"><div class="rec-level-pill"><b>Stopp:</b> $105 <span class="tip-icon">?</span></div><span class="tip-box"><b>Was ist ein Stop-Loss?</b> Eine Grenze die du selbst setzt: "Wenn der Kurs auf $105 fällt, verkaufe ich — egal was." Das schützt dich vor zu grossen Verlusten. Wie ein Sicherheitsnetz unter einem Seiltänzer.</span></span>
+      <span class="tip"><div class="rec-level-pill" id="rklb-pill-einstieg"><b>Guter Einstieg:</b> <span id="rklb-pill-einstieg-val">—</span><span class="tip-icon">?</span></div><span class="tip-box"><b>Warum nicht sofort kaufen?</b> Weil der aktuelle Kurs ($150) schon über dem liegt, was Experten erwarten ($120). Wenn du auf einen Rücksetzer wartest, kaufst du günstiger und hast mehr Sicherheitspuffer.</span></span>
+      <span class="tip"><div class="rec-level-pill" id="rklb-pill-ziel"><b>Mein Ziel:</b> <span id="rklb-pill-ziel-val">—</span><span class="tip-icon">?</span></div><span class="tip-box"><b>Was bedeutet "Kursziel"?</b> Wo der Kurs hinlaufen könnte wenn alles gut geht — in etwa 12 Monaten. Kein Versprechen, nur eine Schätzung basierend auf den aktuellen Zahlen und Plänen.</span></span>
+      <span class="tip"><div class="rec-level-pill" id="rklb-pill-stopp"><b>Stopp:</b> <span id="rklb-pill-stopp-val">—</span><span class="tip-icon">?</span></div><span class="tip-box"><b>Was ist ein Stop-Loss?</b> Eine Grenze die du selbst setzt: "Wenn der Kurs auf $105 fällt, verkaufe ich — egal was." Das schützt dich vor zu grossen Verlusten. Wie ein Sicherheitsnetz unter einem Seiltänzer.</span></span>
     </div>
     <div class="rec-footer">
       <button class="rec-update-btn" id="rklb-rec-btn" onclick="fetchRec('rklb')"><div class="rec-spin" id="rklb-rec-spin"></div><span id="rklb-rec-btn-txt">✦ Einschätzung mit KI aktualisieren</span></button>
@@ -782,8 +792,7 @@ body{font-family:'DM Sans',sans-serif;background:var(--bg);color:var(--text);min
       <div id="rklb-scenarios-intro" style="font-size:15px;color:var(--text2);margin-bottom:12px;line-height:1.5;">Verschiedene Experten und Szenarien — die Balken zeigen wie "hoch" das jeweilige Ziel ist:</div>
       <div id="rklb-scenarios-bars"><div class="scr"><div class="scl">Bestmöglicher Fall<br>(alles klappt)</div><div class="scb"><div class="scf" style="width:100%;background:var(--green);"></div></div><div class="scv up">$200–216</div></div>
       <div class="scr"><div class="scl">Needham Bank<br>(optimistische Bank)</div><div class="scb"><div class="scf" style="width:56%;background:var(--rklb);"></div></div><div class="scv" style="color:var(--rklb);">$120</div></div>
-      <div class="scr"><div class="scl">Alle Banken<br>(Durchschnitt)</div><div class="scb"><div class="scf" style="width:56%;background:#bbb;"></div></div><div class="scv mu">$120</div></div>
-      <div class="scr"><div class="scl">Vorsichtige<br>Schätzung</div><div class="scb"><div class="scf" style="width:40%;background:var(--amber);"></div></div><div class="scv wn">$86</div></div>
+      <div class="scr"><div class="scl">Alle Banken<br>(Durchschniv class="scv wn">$86</div></div>
       </div><div id="rklb-sentiment-box" style="background:var(--surface2);border-radius:8px;padding:12px;margin-top:14px;">
         <div style="font-size:15px;font-weight:500;margin-bottom:8px;">💡 Was sagt die Internet-Community?</div>
         <div id="rklb-sentiment-text" style="font-size:15px;color:var(--text2);line-height:1.6;">Reddit und WallStreetBets (grosse Internet-Foren für Privatanleger): <b>84% positive Kommentare</b> zu RKLB. Ein Post über das Rekordquartal hatte hunderte Upvotes. Aber Vorsicht: Internet-Euphorie kann schnell kippen!</div>
@@ -1196,31 +1205,31 @@ body{font-family:'DM Sans',sans-serif;background:var(--bg);color:var(--text);min
         <div class="rec-score-top"><div class="rec-score-emoji">📈</div><div class="rec-score-label">Wie gut läuft<br>das Geschäft?</div></div>
         <div class="rec-score-val wn" id="asts-s1">—</div>
         <div class="rec-meter"><div class="rec-meter-fill" style="width:50%;background:var(--amber);" id="asts-m1"></div></div>
-        <div class="rec-score-explain"><b>Fundamentals</b> — 5/10 = mittelmässig. ASTS macht erst $14.7 Mio. Quartalsumsatz, schreibt hohe Verluste. Cash ($3.5 Mrd.) hält die Firma am Leben. Potenzial ist riesig, aber noch kaum bewiesen.</div>
+        <div class="rec-score-explain" id="asts-explain-fundamentals" style="color:var(--text3);font-style:italic;"><b>Fundamentals</b> — wird mit KI aktualisiert</div>
       </div>
       <div class="rec-score-card">
         <div class="rec-score-top"><div class="rec-score-emoji">🚀</div><div class="rec-score-label">Wie stark steigt<br>der Kurs gerade?</div></div>
         <div class="rec-score-val up" id="asts-s2">—</div>
         <div class="rec-meter"><div class="rec-meter-fill" style="width:80%;background:var(--green);" id="asts-m2"></div></div>
-        <div class="rec-score-explain"><b>Momentum</b> — 8/10 = sehr starkes Momentum. +77% in 2 Wochen vor Blue Origin Explosion. Nach der Explosion −7% — Momentum könnte sich abschwächen. Nur für Kurzfrist relevant.</div>
+        <div class="rec-score-explain" id="asts-explain-momentum" style="color:var(--text3);font-style:italic;"><b>Momentum</b> — wird mit KI aktualisiert</div>
       </div>
       <div class="rec-score-card">
         <div class="rec-score-top"><div class="rec-score-emoji">💣</div><div class="rec-score-label">Wie hoch ist<br>das Risiko?</div></div>
         <div class="rec-score-val dn" id="asts-s3">—</div>
         <div class="rec-meter"><div class="rec-meter-fill" style="width:40%;background:var(--red);" id="asts-m3"></div></div>
-        <div class="rec-score-explain"><b>Risiko</b> — <b>Höherer Score = niedrigeres Risiko.</b> 4/10 = hohes Risiko. Blue Origin Explosion, Starlink-Konkurrenz, kaum Umsatz, starke Kursschwankungen. Nur für risikobereite Anleger geeignet.</div>
+        <div class="rec-score-explain" id="asts-explain-risiko"><b>Risiko</b> — <b>Höherer Score = niedrigeres Risiko.</b> 4/10 = hohes Risiko. Blue Origin Explosion, Starlink-Konkurrenz, kaum Umsatz, starke Kursschwankungen. Nur für risikobereite Anleger geeignet.</div>
       </div>
       <div class="rec-score-card">
         <div class="rec-score-top"><div class="rec-score-emoji">💸</div><div class="rec-score-label">Ist der Preis<br>fair?</div></div>
         <div class="rec-score-val dn" id="asts-s4">—</div>
         <div class="rec-meter"><div class="rec-meter-fill" style="width:30%;background:var(--red);" id="asts-m4"></div></div>
-        <div class="rec-score-explain"><b>Bewertung</b> — 3/10 = deutlich überbewertet. Kurs ($120) liegt 44% über Analysten-Konsens ($83) und 68% über DCF-Fairer-Wert ($71). Man bezahlt fast nur für Zukunftshoffnung.</div>
+        <div class="rec-score-explain" id="asts-explain-bewertung" style="color:var(--text3);font-style:italic;"><b>Bewertung</b> — wird mit KI aktualisiert</div>
       </div>
     </div>
     <div class="rec-levels-row">
-      <span class="tip"><div class="rec-level-pill"><b>Besser einsteigen bei:</b> $80–90 <span class="tip-icon">?</span></div><span class="tip-box">Nach einem erfolgreichen Satelliten-Start Mitte Juni wäre $80–90 ein besserer Einstieg als der aktuelle Kurs. Dann weisst du ob die Technologie wirklich funktioniert.</span></span>
-      <span class="tip"><div class="rec-level-pill"><b>Mein Ziel:</b> $140 <span class="tip-icon">?</span></div><span class="tip-box">Wenn die Satelliten funktionieren und Umsatz kommt, könnte $140 möglich sein. Aber sehr unsicher!</span></span>
-      <span class="tip"><div class="rec-level-pill"><b>Stopp:</b> $70 <span class="tip-icon">?</span></div><span class="tip-box">Wenn der Kurs auf $70 fällt: Verkaufen um grössere Verluste zu vermeiden. Bei ASTS besonders wichtig wegen des hohen Risikos!</span></span>
+      <span class="tip"><div class="rec-level-pill" id="asts-pill-einstieg"><b>Besser einsteigen bei:</b> <span id="asts-pill-einstieg-val">—</span><span class="tip-icon">?</span></div><span class="tip-box">Nach einem erfolgreichen Satelliten-Start Mitte Juni wäre $80–90 ein besserer Einstieg als der aktuelle Kurs. Dann weisst du ob die Technologie wirklich funktioniert.</span></span>
+      <span class="tip"><div class="rec-level-pill" id="asts-pill-ziel"><b>Mein Ziel:</b> <span id="asts-pill-ziel-val">—</span><span class="tip-icon">?</span></div><span class="tip-box">Wenn die Satelliten funktionieren und Umsatz kommt, könnte $140 möglich sein. Aber sehr unsicher!</span></span>
+      <span class="tip"><div class="rec-level-pill" id="asts-pill-stopp"><b>Stopp:</b> <span id="asts-pill-stopp-val">—</span><span class="tip-icon">?</span></div><span class="tip-box">Wenn der Kurs auf $70 fällt: Verkaufen um grössere Verluste zu vermeiden. Bei ASTS besonders wichtig wegen des hohen Risikos!</span></span>
     </div>
     <div class="rec-footer">
       <button class="rec-update-btn" id="asts-rec-btn" onclick="fetchRec('asts')"><div class="rec-spin" id="asts-rec-spin"></div><span id="asts-rec-btn-txt">✦ Einschätzung mit KI aktualisieren</span></button>
@@ -1258,9 +1267,7 @@ body{font-family:'DM Sans',sans-serif;background:var(--bg);color:var(--text);min
       <div id="asts-scenarios-bars"><div class="scr"><div class="scl">Bestmöglicher Fall</div><div class="scb"><div class="scf" style="width:100%;background:var(--green);"></div></div><div class="scv up">$200+</div></div>
       <div class="scr"><div class="scl">Roth Capital Bank</div><div class="scb"><div class="scf" style="width:54%;background:var(--asts);"></div></div><div class="scv" style="color:var(--asts);">$108</div></div>
       <div class="scr"><div class="scl">Alle Banken<br>(Durchschnitt)</div><div class="scb"><div class="scf" style="width:42%;background:#bbb;"></div></div><div class="scv mu">$83</div></div>
-      <div class="scr"><div class="scl">Fairer Wert<br>(Berechnung)</div><div class="scb"><div class="scf" style="width:36%;background:var(--amber);"></div></div><div class="scv wn">$71</div></div>
-      <div class="scr"><div class="scl">Schlechtester Fall</div><div class="scb"><div class="scf" style="width:25%;background:var(--red);"></div></div><div class="scv dn">$50</div></div>
-      </div><div id="asts-sentiment-box" style="background:rgba(220,38,38,.05);border:1px solid rgba(220,38,38,.15);border-radius:8px;padding:14px;margin-top:14px;">
+      <div class="scr"><div class="scl">Fairer Wert<br>(Berechnung)</div><div class="scb"><div class="scf" style="width:36%;background:var(--amber);"></div></div20,38,38,.05);border:1px solid rgba(220,38,38,.15);border-radius:8px;padding:14px;margin-top:14px;">
         <div style="font-size:13px;font-weight:500;margin-bottom:6px;color:#991b1b;">⚠️ Wichtige Warnung</div>
         <div id="asts-sentiment-text" style="font-size:13px;color:var(--text2);line-height:1.6;">Der aktuelle Kurs ($120) liegt deutlich über dem, was die meisten Experten für fair halten ($83). Nur mit Geld investieren, dessen Verlust du verkraften könntest.</div>
       </div>
@@ -1762,10 +1769,10 @@ function newsToHtml(txt){
 
 // ── Recommendation ─────────────────────────────────────
 const REC_PROMPTS={
-  rklb:`Analysiere Rocket Lab (RKLB) mit Web-Suchen. Berücksichtige aktuellen Kurs, Neutron-Status, Golden Dome, SpaceX IPO. Antworte NUR mit JSON:
-{"empfehlung":"KAUFEN","titel":"Max 80 Zeichen","begruendung":"2-4 Sätze für Einsteiger","fundamentals":8,"momentum":7,"risiko":6,"bewertung":5,"einstieg":"$120-130","kursziel":"$180","stopp":"$105"}`,
-  asts:`Analysiere AST SpaceMobile (ASTS) mit Web-Suchen. Berücksichtige Blue Origin Explosion, BlueBird Launch, SpaceX IPO, Starlink. Antworte NUR mit JSON:
-{"empfehlung":"HALTEN","titel":"Max 80 Zeichen","begruendung":"2-4 Sätze für Einsteiger","fundamentals":5,"momentum":8,"risiko":4,"bewertung":3,"einstieg":"$80-90","kursziel":"$140","stopp":"$70"}`
+  rklb:`Analysiere Rocket Lab (RKLB) mit Web-Suchen. Berücksichtige aktuellen Kurs, Neutron-Status, Golden Dome, SpaceX IPO. Antworte NUR mit JSON ohne Markdown:
+{"empfehlung":"KAUFEN","titel":"Max 80 Zeichen","begruendung":"2-4 Sätze für Einsteiger","fundamentals":8,"momentum":7,"risiko":6,"bewertung":5,"explain_fundamentals":"<b>Fundamentals</b> — 1 Satz mit aktuellen Zahlen zu Umsatz/Wachstum","explain_momentum":"<b>Momentum</b> — 1 Satz zur aktuellen Kursbewegung","explain_risiko":"<b>Risiko</b> — <b>Höherer Score = niedrigeres Risiko.</b> 1 Satz zum Hauptrisiko","explain_bewertung":"<b>Bewertung</b> — 1 Satz: Kurs vs. Analysten-Konsens","einstieg":"$120-130","kursziel":"$180","stopp":"$105"}`,
+  asts:`Analysiere AST SpaceMobile (ASTS) mit Web-Suchen. Berücksichtige Blue Origin Explosion, BlueBird Launch, SpaceX IPO, Starlink. Antworte NUR mit JSON ohne Markdown:
+{"empfehlung":"HALTEN","titel":"Max 80 Zeichen","begruendung":"2-4 Sätze für Einsteiger","fundamentals":5,"momentum":8,"risiko":4,"bewertung":3,"explain_fundamentals":"<b>Fundamentals</b> — 1 Satz zu Umsatz/Cash-Lage","explain_momentum":"<b>Momentum</b> — 1 Satz zur aktuellen Kursbewegung","explain_risiko":"<b>Risiko</b> — <b>Höherer Score = niedrigeres Risiko.</b> 1 Satz zu Hauptrisiken","explain_bewertung":"<b>Bewertung</b> — 1 Satz: Kurs vs. Analysten-Konsens","einstieg":"$80-90","kursziel":"$140","stopp":"$70"}`
 };
 
 async function fetchRec(t){
@@ -1796,26 +1803,17 @@ function applyRec(t,rec){
   let sub='<b>Warum "'+emp+'"?</b> '+(rec.begruendung||'');
   if(rec.einstieg||rec.kursziel||rec.stopp)sub+='<br><br>Einstieg: '+(rec.einstieg||'—')+' · Kursziel: '+(rec.kursziel||'—')+' · Stop-Loss: '+(rec.stopp||'—');
   $(t+'-rec-sub').innerHTML=sub;
-  // Score labels & explain texts
-  const scoreLabels={
-    fundamentals:{en:'Fundamentals',emoji:'📈'},
-    momentum:{en:'Momentum',emoji:'🚀'},
-    risiko:{en:'Risiko',emoji:'⚠️'},
-    bewertung:{en:'Bewertung',emoji:'💎'}
-  };
-  const scoreExplains={
-    fundamentals:(v,t)=>v>=7?`<b>Fundamentals</b> — ${v}/10 = stark. Umsatz, Wachstum und Auftragsbestand überzeugen.`:`<b>Fundamentals</b> — ${v}/10 = ${v>=5?'solide, aber Verbesserungspotenzial':'schwach. Kaum Umsatz, hohe Verluste — alles auf Zukunft gesetzt.'}`,
-    momentum:(v,t)=>v>=7?`<b>Momentum</b> — ${v}/10 = starker Aufwärtstrend. Vorsicht: Hohe Kursgewinne können schnell drehen.`:`<b>Momentum</b> — ${v}/10 = ${v>=5?'neutral bis leicht positiv.':'schwaches Momentum — Kurs unter Druck.'}`,
-    risiko:(v,t)=>`<b>Risiko</b> — <b>Höherer Score = niedrigeres Risiko.</b> ${v}/10 = ${v>=7?'vergleichsweise sicher für eine Wachstumsaktie.':v>=5?'mittleres Risiko — Kurs kann stark schwanken.':'hohes Risiko. Nur für risikobereite Anleger.'}`,
-    bewertung:(v,t)=>`<b>Bewertung</b> — ${v}/10 = ${v>=7?'günstig bewertet — Kurs liegt unter oder nahe Expertenschätzungen.':v>=5?'leicht teuer, aber Wachstum rechtfertigt einen Teil.':'deutlich überbewertet — Kurs liegt weit über Analysten-Konsens.'}`
-  };
   [['fundamentals',t+'-s1',t+'-m1'],['momentum',t+'-s2',t+'-m2'],['risiko',t+'-s3',t+'-m3'],['bewertung',t+'-s4',t+'-m4']].forEach(([k,sid,mid])=>{
     const v=rec[k]||5;$(sid).textContent=v+'/10';$(sid).className='rec-score-val '+(v>=7?'up':v>=5?'wn':'dn');
     $(mid).style.width=(v*10)+'%';$(mid).style.background=v>=7?'var(--green)':v>=5?'var(--amber)':'var(--red)';
-    // Update explain text if element exists
-    const explainEl=document.getElementById(t+'-score-explain-'+k);
-    if(explainEl&&scoreExplains[k])explainEl.innerHTML=scoreExplains[k](v,t);
+    // Update explain text
+    const explainEl=document.getElementById(t+'-explain-'+k);
+    if(explainEl&&rec['explain_'+k])explainEl.innerHTML=rec['explain_'+k];
   });
+  // Update level pills
+  if(rec.einstieg){const el=document.getElementById(t+'-pill-einstieg-val');if(el)el.textContent=rec.einstieg;}
+  if(rec.kursziel){const el=document.getElementById(t+'-pill-ziel-val');if(el)el.textContent=rec.kursziel;}
+  if(rec.stopp){const el=document.getElementById(t+'-pill-stopp-val');if(el)el.textContent=rec.stopp;}
 }
 
 // ── Yahoo Finance via Vercel proxy ─────────────────────
@@ -2041,6 +2039,29 @@ async function fetchScenarios(t){
     if(sentEl&&p.sentiment)sentEl.innerHTML=p.sentiment;
   }catch(e){console.warn('Scenarios update failed:',e.message);}
   finally{barsEl.style.opacity='1';}
+}
+
+
+// ── Header refresh button ──────────────────────
+async function hdrRefresh(){
+  const btn=document.getElementById('hdr-refresh-btn');
+  const spin=document.getElementById('hdr-refresh-spin');
+  const txt=document.getElementById('hdr-refresh-txt');
+  const key=getKey();
+  if(!key||!key.startsWith('sk-ant-')){
+    // Flash a hint
+    txt.textContent='⚙️ API-Key nötig';
+    setTimeout(()=>txt.textContent='↺ Aktualisieren',2500);
+    // Open settings
+    document.getElementById('settings-dropdown').classList.add('open');
+    return;
+  }
+  btn.classList.add('busy');
+  txt.textContent='Lädt...';
+  await manualRefreshAll();
+  btn.classList.remove('busy');
+  txt.textContent='✓ Aktualisiert';
+  setTimeout(()=>txt.textContent='↺ Aktualisieren',3000);
 }
 
 async function loadAll(){
