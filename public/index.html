@@ -257,6 +257,47 @@ body{font-family:'DM Sans',sans-serif;background:var(--bg);color:var(--text);min
 .settings-refresh-btn{display:inline-flex;align-items:center;gap:6px;background:transparent;border:1px solid var(--border2);border-radius:7px;padding:7px 12px;font-size:13px;color:var(--text2);cursor:pointer;font-family:'DM Sans',sans-serif;transition:all .2s;white-space:nowrap;flex-shrink:0;}
 .settings-refresh-btn:hover,.settings-refresh-btn.busy{border-color:var(--purple);color:var(--purple);background:var(--purple-bg);}
 .settings-spin{width:12px;height:12px;border:2px solid rgba(124,58,237,.2);border-top-color:var(--purple);border-radius:50%;animation:spin .7s linear infinite;display:none;}
+
+/* ── Portfolio Transactions ── */
+.pf-new{background:var(--surface);border:1px solid var(--border);border-radius:var(--rl);padding:24px 28px;margin-bottom:20px;}
+.pf-tx-header{display:flex;align-items:center;justify-content:space-between;margin-bottom:16px;flex-wrap:wrap;gap:10px;}
+.pf-tx-title{font-size:16px;font-weight:500;display:flex;align-items:center;gap:8px;}
+.pf-tx-sub{font-size:13px;color:var(--text2);margin-top:3px;}
+.pf-add-row{display:grid;grid-template-columns:100px 120px 120px 120px 1fr auto;gap:10px;align-items:end;margin-bottom:14px;padding-bottom:14px;border-bottom:1px solid var(--border);}
+.pf-add-field label{font-size:12px;color:var(--text2);display:block;margin-bottom:5px;}
+.pf-add-field input,.pf-add-field select{width:100%;background:var(--surface2);border:1px solid var(--border2);border-radius:7px;padding:9px 12px;color:var(--text);font-family:'DM Mono',monospace;font-size:14px;outline:none;transition:border-color .2s;}
+.pf-add-field input:focus,.pf-add-field select:focus{border-color:var(--blue);}
+.pf-add-btn{padding:9px 18px;border-radius:7px;font-size:14px;font-weight:500;cursor:pointer;border:none;background:var(--blue);color:#fff;font-family:'DM Sans',sans-serif;transition:all .2s;white-space:nowrap;}
+.pf-add-btn:hover{background:#1d4ed8;}
+.pf-add-btn.sell{background:var(--red);}
+.pf-tx-type-sel{font-family:'DM Sans',sans-serif !important;cursor:pointer;}
+.pf-tx-list{margin-bottom:16px;}
+.pf-tx-empty{font-size:13px;color:var(--text3);font-style:italic;padding:10px 0;}
+.pf-tx-row{display:grid;grid-template-columns:80px 90px 100px 100px 1fr 28px;gap:10px;align-items:center;padding:9px 12px;border-radius:8px;margin-bottom:6px;font-size:13px;font-family:'DM Mono',monospace;}
+.pf-tx-row.buy-row{background:rgba(22,163,74,.06);border:1px solid rgba(22,163,74,.15);}
+.pf-tx-row.sell-row{background:rgba(220,38,38,.05);border:1px solid rgba(220,38,38,.12);}
+.pf-tx-badge{font-size:11px;font-weight:500;padding:2px 8px;border-radius:4px;font-family:'DM Sans',monospace;}
+.pf-tx-badge.buy{background:var(--green-bg);color:var(--green);}
+.pf-tx-badge.sell{background:var(--red-bg);color:var(--red);}
+.pf-tx-del{width:24px;height:24px;border-radius:5px;background:transparent;border:1px solid var(--border2);color:var(--text3);font-size:14px;cursor:pointer;display:flex;align-items:center;justify-content:center;transition:all .2s;}
+.pf-tx-del:hover{background:var(--red-bg);border-color:var(--red-bd);color:var(--red);}
+.pf-tx-pl{text-align:right;}
+.pf-tx-pl.up{color:var(--green);}
+.pf-tx-pl.dn{color:var(--red);}
+.pf-summary{display:grid;grid-template-columns:repeat(6,1fr);gap:12px;margin-top:4px;}
+.pf-sum-card{background:var(--surface2);border-radius:var(--r);padding:14px 15px;border:1px solid var(--border);}
+.pf-sum-card.hl{background:var(--surface);border-color:var(--border2);}
+.pf-sum-emoji{font-size:18px;margin-bottom:6px;}
+.pf-sum-lbl{font-size:12px;color:var(--text2);margin-bottom:5px;line-height:1.4;}
+.pf-sum-val{font-size:18px;font-weight:500;font-family:'DM Mono',monospace;}
+.pf-sum-sub{font-size:12px;color:var(--text2);margin-top:3px;font-family:'DM Mono',monospace;}
+.pf-scenario-row{display:flex;align-items:center;gap:10px;margin-top:14px;padding-top:14px;border-top:1px solid var(--border);flex-wrap:wrap;gap:8px;}
+.pf-scenario-lbl{font-size:13px;color:var(--text2);flex-shrink:0;}
+.pf-scenario-inputs{display:flex;align-items:center;gap:8px;flex-wrap:wrap;}
+.pf-scenario-field{display:flex;align-items:center;gap:6px;}
+.pf-scenario-field label{font-size:12px;color:var(--text2);white-space:nowrap;}
+.pf-scenario-field input{width:90px;background:var(--surface2);border:1px solid var(--border2);border-radius:6px;padding:6px 10px;font-family:'DM Mono',monospace;font-size:13px;color:var(--text);outline:none;}
+.pf-scenario-field input:focus{border-color:var(--blue);}
 </style>
 </head>
 <body>
@@ -441,70 +482,107 @@ body{font-family:'DM Sans',sans-serif;background:var(--bg);color:var(--text);min
   </div>
 
   <!-- Portfolio RKLB -->
-  <div class="portfolio-bar">
-    <div class="section-title">🧮 Dein Portfolio-Rechner</div>
-    <div class="section-sub">Gib hier ein wie viele Aktien du hast und zu welchem Preis du gekauft hast. Das Dashboard berechnet dann automatisch: Was ist deine Position heute wert? Wie viel Gewinn oder Verlust hast du? Was passiert wenn der Kurs steigt oder fällt?</div>
-    <div class="pf-inputs">
-      <div class="pf-field">
-        <label>
-          <span class="tip">Anzahl Aktien die du besitzt <span class="tip-icon">?</span><span class="tip-box">Wie viele RKLB-Aktien hast du? Wenn du z.B. 100 eingibst und der Kurs bei $150 steht, ist deine Position $15'000 wert.</span></span>
-        </label>
-        <input type="number" id="rklb-qty" placeholder="z.B. 100" oninput="calcPF('rklb')" min="0"/>
-      </div>
-      <div class="pf-field">
-        <label>
-          <span class="tip">Dein Kaufpreis pro Aktie ($) <span class="tip-icon">?</span><span class="tip-box">Was hast du pro Aktie bezahlt als du gekauft hast? Damit berechnen wir ob du aktuell im Plus (Gewinn) oder Minus (Verlust) bist.</span></span>
-        </label>
-        <input type="number" id="rklb-buy" placeholder="z.B. 80.00" oninput="calcPF('rklb')" step="0.01" min="0"/>
-      </div>
-      <div class="pf-field">
-        <label>
-          <span class="tip">Dein optimistisches Ziel ($) <span class="tip-icon">?</span><span class="tip-box">Wo könnte der Kurs im besten Fall landen? Wir zeigen dir dann wie viel du dabei verdienen würdest. Standard: $216 (Bull-Szenario).</span></span>
-        </label>
-        <input type="number" id="rklb-bull-in" value="216" oninput="calcPF('rklb')" step="0.01" min="0"/>
-      </div>
-      <div class="pf-field">
-        <label>
-          <span class="tip">Dein pessimistisches Ziel ($) <span class="tip-icon">?</span><span class="tip-box">Was ist der schlimmste realistische Fall? Wichtig zu wissen, bevor du investierst! Standard: $86 (Bear-Szenario).</span></span>
-        </label>
-        <input type="number" id="rklb-bear-in" value="86" oninput="calcPF('rklb')" step="0.01" min="0"/>
+  <div class="pf-new" id="rklb-pf-section">
+    <div class="pf-tx-header">
+      <div>
+        <div class="pf-tx-title">🧮 Dein Portfolio — Rocket Lab (RKLB)</div>
+        <div class="pf-tx-sub">Trag jeden Kauf und Verkauf einzeln ein. Alles wird automatisch berechnet.</div>
       </div>
     </div>
-    <div class="pf-results">
-      <div class="pf-card">
-        <div class="pf-emoji">💼</div>
-        <div class="pf-lbl">Was deine Aktien heute wert sind</div>
-        <div class="pf-val" id="rklb-cur-val">—</div>
-        <div class="pf-sub" id="rklb-cur-cost">Bezahlt: —</div>
+
+    <!-- Add transaction row -->
+    <div class="pf-add-row">
+      <div class="pf-add-field">
+        <label>Typ</label>
+        <select id="rklb-tx-type" class="pf-tx-type-sel" onchange="updateAddBtn('rklb')">
+          <option value="buy">📈 Kauf</option>
+          <option value="sell">📉 Verkauf</option>
+        </select>
       </div>
-      <div class="pf-card">
-        <div class="pf-emoji">📊</div>
-        <div class="pf-lbl">Dein Gewinn oder Verlust</div>
-        <div class="pf-val" id="rklb-pnl">—</div>
-        <div class="pf-sub" id="rklb-pnl-pct">—</div>
+      <div class="pf-add-field">
+        <label>Anzahl Aktien</label>
+        <input type="number" id="rklb-tx-qty" placeholder="z.B. 50" min="0.01" step="any"/>
       </div>
-      <div class="pf-card hl">
-        <div class="pf-emoji">🌟</div>
-        <div class="pf-lbl">Wenn alles super läuft</div>
-        <div class="pf-val up" id="rklb-bull-val">—</div>
-        <div class="pf-sub up" id="rklb-bull-gain">—</div>
+      <div class="pf-add-field">
+        <label>Preis pro Aktie ($)</label>
+        <input type="number" id="rklb-tx-price" placeholder="z.B. 120.00" min="0.01" step="any"/>
       </div>
-      <div class="pf-card hl">
-        <div class="pf-emoji">⚠️</div>
-        <div class="pf-lbl">Wenn es schlecht läuft</div>
-        <div class="pf-val dn" id="rklb-bear-val">—</div>
-        <div class="pf-sub dn" id="rklb-bear-gain">—</div>
+      <div class="pf-add-field">
+        <label>Datum (optional)</label>
+        <input type="date" id="rklb-tx-date"/>
       </div>
-      <div class="pf-card">
-        <div class="pf-emoji">🏦</div>
-        <div class="pf-lbl">Was Bankexperten erwarten</div>
-        <div class="pf-val" id="rklb-cons-val">—</div>
-        <div class="pf-sub" id="rklb-cons-gain">Ziel: $120</div>
+      <div class="pf-add-field">
+        <label>Notiz (optional)</label>
+        <input type="text" id="rklb-tx-note" placeholder="z.B. Nach Earnings"/>
+      </div>
+      <div class="pf-add-field">
+        <label>&nbsp;</label>
+        <button class="pf-add-btn" id="rklb-add-btn" onclick="addTx('rklb')">+ Hinzufügen</button>
+      </div>
+    </div>
+
+    <!-- Transaction list -->
+    <div class="pf-tx-list" id="rklb-tx-list">
+      <div class="pf-tx-empty" id="rklb-tx-empty">Noch keine Transaktionen — trag oben deinen ersten Kauf ein.</div>
+    </div>
+
+    <!-- Summary cards -->
+    <div class="pf-summary" id="rklb-pf-summary" style="display:none;">
+      <div class="pf-sum-card">
+        <div class="pf-sum-emoji">📦</div>
+        <div class="pf-sum-lbl">Aktien im Besitz</div>
+        <div class="pf-sum-val" id="rklb-sum-qty">—</div>
+        <div class="pf-sum-sub" id="rklb-sum-avgcost">Ø Kaufpreis: —</div>
+      </div>
+      <div class="pf-sum-card">
+        <div class="pf-sum-emoji">💼</div>
+        <div class="pf-sum-lbl">Aktueller Wert</div>
+        <div class="pf-sum-val" id="rklb-sum-val">—</div>
+        <div class="pf-sum-sub" id="rklb-sum-invested">Investiert: —</div>
+      </div>
+      <div class="pf-sum-card hl">
+        <div class="pf-sum-emoji">📊</div>
+        <div class="pf-sum-lbl">Offener Gewinn/Verlust</div>
+        <div class="pf-sum-val" id="rklb-sum-unrealized">—</div>
+        <div class="pf-sum-sub" id="rklb-sum-unrealized-pct">—</div>
+      </div>
+      <div class="pf-sum-card hl">
+        <div class="pf-sum-emoji">💵</div>
+        <div class="pf-sum-lbl">Realisierter Gewinn</div>
+        <div class="pf-sum-val" id="rklb-sum-realized">—</div>
+        <div class="pf-sum-sub">Aus Verkäufen</div>
+      </div>
+      <div class="pf-sum-card">
+        <div class="pf-sum-emoji">🌟</div>
+        <div class="pf-sum-lbl">Wenn alles super läuft</div>
+        <div class="pf-sum-val up" id="rklb-sum-bull">—</div>
+        <div class="pf-sum-sub up" id="rklb-sum-bull-gain">—</div>
+      </div>
+      <div class="pf-sum-card">
+        <div class="pf-sum-emoji">⚠️</div>
+        <div class="pf-sum-lbl">Wenn es schlecht läuft</div>
+        <div class="pf-sum-val dn" id="rklb-sum-bear">—</div>
+        <div class="pf-sum-sub dn" id="rklb-sum-bear-loss">—</div>
+      </div>
+    </div>
+
+    <!-- Scenario targets -->
+    <div class="pf-scenario-row" id="rklb-scenario-row" style="display:none;">
+      <span class="pf-scenario-lbl">🎯 Meine Ziele:</span>
+      <div class="pf-scenario-inputs">
+        <div class="pf-scenario-field">
+          <label>Optimistisch ($)</label>
+          <input type="number" id="rklb-bull-in" value="216" step="any" oninput="recalcPF('rklb')"/>
+        </div>
+        <div class="pf-scenario-field">
+          <label>Pessimistisch ($)</label>
+          <input type="number" id="rklb-bear-in" value="86" step="any" oninput="recalcPF('rklb')"/>
+        </div>
       </div>
     </div>
   </div>
 
-  <!-- Day Forecast RKLB -->
+    <!-- Day Forecast RKLB -->
   <div class="day-forecast">
     <div class="section-title">📅 Was heute passieren könnte</div>
     <div class="section-sub" style="margin-bottom:12px;">Basierend auf der durchschnittlichen Kursschwankung der letzten 5 Tage. <b>Wichtig:</b> Das ist eine statistische Schätzung, kein Versprechen! Jeder Tag kann anders sein.</div>
@@ -704,25 +782,103 @@ body{font-family:'DM Sans',sans-serif;background:var(--bg);color:var(--text);min
   </div>
 
   <!-- Portfolio ASTS -->
-  <div class="portfolio-bar">
-    <div class="section-title">🧮 Dein Portfolio-Rechner</div>
-    <div class="section-sub">Gib ein wie viele Aktien du hast und was du bezahlt hast. Alle Werte werden automatisch berechnet.</div>
-    <div class="pf-inputs">
-      <div class="pf-field"><label>Anzahl ASTS-Aktien die du besitzt</label><input type="number" id="asts-qty" placeholder="z.B. 200" oninput="calcPF('asts')" min="0"/></div>
-      <div class="pf-field"><label>Dein Kaufpreis pro Aktie ($)</label><input type="number" id="asts-buy" placeholder="z.B. 70.00" oninput="calcPF('asts')" step="0.01" min="0"/></div>
-      <div class="pf-field"><label>Optimistisches Ziel ($) — Standard: $200</label><input type="number" id="asts-bull-in" value="200" oninput="calcPF('asts')" step="0.01" min="0"/></div>
-      <div class="pf-field"><label>Pessimistisches Ziel ($) — Standard: $50</label><input type="number" id="asts-bear-in" value="50" oninput="calcPF('asts')" step="0.01" min="0"/></div>
+  <div class="pf-new" id="asts-pf-section">
+    <div class="pf-tx-header">
+      <div>
+        <div class="pf-tx-title">🧮 Dein Portfolio — AST SpaceMobile (ASTS)</div>
+        <div class="pf-tx-sub">Trag jeden Kauf und Verkauf einzeln ein. Alles wird automatisch berechnet.</div>
+      </div>
     </div>
-    <div class="pf-results">
-      <div class="pf-card"><div class="pf-emoji">💼</div><div class="pf-lbl">Was deine Aktien heute wert sind</div><div class="pf-val" id="asts-cur-val">—</div><div class="pf-sub" id="asts-cur-cost">Bezahlt: —</div></div>
-      <div class="pf-card"><div class="pf-emoji">📊</div><div class="pf-lbl">Dein Gewinn oder Verlust</div><div class="pf-val" id="asts-pnl">—</div><div class="pf-sub" id="asts-pnl-pct">—</div></div>
-      <div class="pf-card hl"><div class="pf-emoji">🌟</div><div class="pf-lbl">Wenn alles super läuft</div><div class="pf-val up" id="asts-bull-val">—</div><div class="pf-sub up" id="asts-bull-gain">—</div></div>
-      <div class="pf-card hl"><div class="pf-emoji">💣</div><div class="pf-lbl">Wenn es schlecht läuft</div><div class="pf-val dn" id="asts-bear-val">—</div><div class="pf-sub dn" id="asts-bear-gain">—</div></div>
-      <div class="pf-card"><div class="pf-emoji">🏦</div><div class="pf-lbl">Was Bankexperten erwarten</div><div class="pf-val" id="asts-cons-val">—</div><div class="pf-sub" id="asts-cons-gain">Ziel: $83</div></div>
+
+    <div class="pf-add-row">
+      <div class="pf-add-field">
+        <label>Typ</label>
+        <select id="asts-tx-type" class="pf-tx-type-sel" onchange="updateAddBtn('asts')">
+          <option value="buy">📈 Kauf</option>
+          <option value="sell">📉 Verkauf</option>
+        </select>
+      </div>
+      <div class="pf-add-field">
+        <label>Anzahl Aktien</label>
+        <input type="number" id="asts-tx-qty" placeholder="z.B. 100" min="0.01" step="any"/>
+      </div>
+      <div class="pf-add-field">
+        <label>Preis pro Aktie ($)</label>
+        <input type="number" id="asts-tx-price" placeholder="z.B. 70.00" min="0.01" step="any"/>
+      </div>
+      <div class="pf-add-field">
+        <label>Datum (optional)</label>
+        <input type="date" id="asts-tx-date"/>
+      </div>
+      <div class="pf-add-field">
+        <label>Notiz (optional)</label>
+        <input type="text" id="asts-tx-note" placeholder="z.B. Vor Launch"/>
+      </div>
+      <div class="pf-add-field">
+        <label>&nbsp;</label>
+        <button class="pf-add-btn" id="asts-add-btn" onclick="addTx('asts')">+ Hinzufügen</button>
+      </div>
+    </div>
+
+    <div class="pf-tx-list" id="asts-tx-list">
+      <div class="pf-tx-empty" id="asts-tx-empty">Noch keine Transaktionen — trag oben deinen ersten Kauf ein.</div>
+    </div>
+
+    <div class="pf-summary" id="asts-pf-summary" style="display:none;">
+      <div class="pf-sum-card">
+        <div class="pf-sum-emoji">📦</div>
+        <div class="pf-sum-lbl">Aktien im Besitz</div>
+        <div class="pf-sum-val" id="asts-sum-qty">—</div>
+        <div class="pf-sum-sub" id="asts-sum-avgcost">Ø Kaufpreis: —</div>
+      </div>
+      <div class="pf-sum-card">
+        <div class="pf-sum-emoji">💼</div>
+        <div class="pf-sum-lbl">Aktueller Wert</div>
+        <div class="pf-sum-val" id="asts-sum-val">—</div>
+        <div class="pf-sum-sub" id="asts-sum-invested">Investiert: —</div>
+      </div>
+      <div class="pf-sum-card hl">
+        <div class="pf-sum-emoji">📊</div>
+        <div class="pf-sum-lbl">Offener Gewinn/Verlust</div>
+        <div class="pf-sum-val" id="asts-sum-unrealized">—</div>
+        <div class="pf-sum-sub" id="asts-sum-unrealized-pct">—</div>
+      </div>
+      <div class="pf-sum-card hl">
+        <div class="pf-sum-emoji">💵</div>
+        <div class="pf-sum-lbl">Realisierter Gewinn</div>
+        <div class="pf-sum-val" id="asts-sum-realized">—</div>
+        <div class="pf-sum-sub">Aus Verkäufen</div>
+      </div>
+      <div class="pf-sum-card">
+        <div class="pf-sum-emoji">🌟</div>
+        <div class="pf-sum-lbl">Wenn alles super läuft</div>
+        <div class="pf-sum-val up" id="asts-sum-bull">—</div>
+        <div class="pf-sum-sub up" id="asts-sum-bull-gain">—</div>
+      </div>
+      <div class="pf-sum-card">
+        <div class="pf-sum-emoji">💣</div>
+        <div class="pf-sum-lbl">Wenn es schlecht läuft</div>
+        <div class="pf-sum-val dn" id="asts-sum-bear">—</div>
+        <div class="pf-sum-sub dn" id="asts-sum-bear-loss">—</div>
+      </div>
+    </div>
+
+    <div class="pf-scenario-row" id="asts-scenario-row" style="display:none;">
+      <span class="pf-scenario-lbl">🎯 Meine Ziele:</span>
+      <div class="pf-scenario-inputs">
+        <div class="pf-scenario-field">
+          <label>Optimistisch ($)</label>
+          <input type="number" id="asts-bull-in" value="200" step="any" oninput="recalcPF('asts')"/>
+        </div>
+        <div class="pf-scenario-field">
+          <label>Pessimistisch ($)</label>
+          <input type="number" id="asts-bear-in" value="50" step="any" oninput="recalcPF('asts')"/>
+        </div>
+      </div>
     </div>
   </div>
 
-  <!-- Day Forecast ASTS -->
+    <!-- Day Forecast ASTS -->
   <div class="day-forecast">
     <div class="section-title">📅 Was heute passieren könnte</div>
     <div class="section-sub" style="margin-bottom:12px;"><b>Achtung:</b> ASTS schwankt täglich oft 8–15%! Diese Schätzung ist sehr ungenau. Nie mehr investieren als du verlieren kannst.</div>
@@ -1096,32 +1252,179 @@ function calcDF(t,q){
   updDayPF(t,estHi,estLo);
 }
 
-function updDayPF(t,hi,lo){
-  const qty=parseFloat($(t+'-qty')?.value)||0;
-  if(!qty){$(t+'-hi-pf').textContent='Stückzahl eingeben';$(t+'-lo-pf').textContent='';return;}
-  const p=quotes[t]?.price||0,hg=(hi-p)*qty,lg=(lo-p)*qty;
-  $(t+'-hi-pf').textContent=(hg>=0?'+':'')+fmtUSD(hg)+' dein Portfolio';
-  $(t+'-hi-pf').className='df-sub '+(hg>=0?'up':'dn');
-  $(t+'-lo-pf').textContent=(lg>=0?'+':'')+fmtUSD(lg)+' dein Portfolio';
-  $(t+'-lo-pf').className='df-sub '+(lg>=0?'up':'dn');
+// ── Portfolio Transaction System ──────────────────────
+const txData={rklb:[],asts:[]};
+
+function updateAddBtn(t){
+  const type=$(t+'-tx-type').value;
+  const btn=$(t+'-add-btn');
+  btn.textContent=type==='buy'?'+ Kauf eintragen':'+ Verkauf eintragen';
+  btn.className='pf-add-btn'+(type==='sell'?' sell':'');
 }
 
-function calcPF(t){
-  const p=quotes[t]?.price||0,qty=parseFloat($(t+'-qty')?.value)||0;
-  const bp=parseFloat($(t+'-buy')?.value)||0,bul=parseFloat($(t+'-bull-in')?.value)||0;
-  const ber=parseFloat($(t+'-bear-in')?.value)||0,con=CONS[t];
-  if(!qty||!p){[t+'-cur-val',t+'-pnl',t+'-bull-val',t+'-bear-val',t+'-cons-val'].forEach(i=>$(i).textContent='—');return;}
-  const cv=p*qty,cost=bp?bp*qty:null,pnl=cost?cv-cost:null,pct=cost&&bp?(p-bp)/bp*100:null;
-  $(t+'-cur-val').textContent=fmtUSD(cv);
-  $(t+'-cur-cost').textContent=cost?'Bezahlt: '+fmtUSD(cost):'Kaufpreis eingeben';
-  if(pnl!=null){$(t+'-pnl').textContent=(pnl>=0?'+':'')+fmtUSD(pnl);$(t+'-pnl').className='pf-val '+(pnl>=0?'up':'dn');$(t+'-pnl-pct').textContent=(pct>=0?'↑ +':'↓ ')+pct.toFixed(1)+'% seit Kauf';$(t+'-pnl-pct').className=pnl>=0?'pf-sub up':'pf-sub dn';}
-  else{$(t+'-pnl').textContent='—';$(t+'-pnl-pct').textContent='Kaufpreis eingeben';}
-  const bv=bul*qty,brv=ber*qty,conv=con*qty,cg=conv-cv;
-  $(t+'-bull-val').textContent=fmtUSD(bv);$(t+'-bull-gain').textContent=(bv-cv>=0?'+':'')+fmtUSD(bv-cv)+' mehr als heute';
-  $(t+'-bear-val').textContent=fmtUSD(brv);$(t+'-bear-gain').textContent=(brv-cv>=0?'+':'')+fmtUSD(brv-cv)+' verglichen mit heute';
-  $(t+'-cons-val').textContent=fmtUSD(conv);$(t+'-cons-val').className='pf-val '+(cg>=0?'up':'dn');
-  $(t+'-cons-gain').textContent=(cg>=0?'+':'')+fmtUSD(cg)+' verglichen mit heute';$(t+'-cons-gain').className='pf-sub '+(cg>=0?'up':'dn');
-  if(quotes[t]){const hi=parseFloat($(t+'-day-hi')?.textContent?.replace('$','').replace(/[',]/g,''))||0;const lo=parseFloat($(t+'-day-lo')?.textContent?.replace('$','').replace(/[',]/g,''))||0;if(hi>0)updDayPF(t,hi,lo);}
+function addTx(t){
+  const type=$(t+'-tx-type').value;
+  const qty=parseFloat($(t+'-tx-qty').value);
+  const price=parseFloat($(t+'-tx-price').value);
+  if(!qty||qty<=0||!price||price<=0){
+    alert('Bitte Anzahl und Preis eingeben (beide müssen grösser als 0 sein).');return;
+  }
+  // Check sell doesn't exceed holdings
+  if(type==='sell'){
+    const held=txData[t].reduce((s,tx)=>s+(tx.type==='buy'?tx.qty:-tx.qty),0);
+    if(qty>held+0.0001){alert('Du kannst nicht mehr Aktien verkaufen als du besitzt! Du hast '+held.toFixed(2)+' Aktien.');return;}
+  }
+  const date=$(t+'-tx-date').value||null;
+  const note=$(t+'-tx-note').value.trim()||null;
+  txData[t].push({id:Date.now(),type,qty,price,date,note});
+  // Clear inputs
+  $(t+'-tx-qty').value='';$(t+'-tx-price').value='';$(t+'-tx-date').value='';$(t+'-tx-note').value='';
+  renderTxList(t);
+  recalcPF(t);
+}
+
+function deleteTx(t,id){
+  txData[t]=txData[t].filter(tx=>tx.id!==id);
+  renderTxList(t);
+  recalcPF(t);
+}
+
+function renderTxList(t){
+  const list=$(t+'-tx-list');
+  const empty=$(t+'-tx-empty');
+  if(txData[t].length===0){
+    empty.style.display='block';list.innerHTML='';list.appendChild(empty);return;
+  }
+  empty.style.display='none';
+  // Build rows
+  let rows='';
+  // Running avg cost for P&L per row
+  let runQty=0,runCost=0;
+  txData[t].forEach(tx=>{
+    let rowPL='—',rowPLClass='';
+    const p=quotes[t]?.price||0;
+    if(tx.type==='buy'){
+      runCost+=tx.qty*tx.price;runQty+=tx.qty;
+      if(p>0){const pl=(p-tx.price)*tx.qty;rowPL=(pl>=0?'+':'')+fmtUSD(pl);rowPLClass=pl>=0?'up':'dn';}
+    } else {
+      // realized P&L: sell price vs avg cost at time of sell
+      const avgAtSell=runQty>0?runCost/runQty:tx.price;
+      const pl=(tx.price-avgAtSell)*tx.qty;
+      rowPL='Realisiert: '+(pl>=0?'+':'')+fmtUSD(pl);rowPLClass=pl>=0?'up':'dn';
+      runCost-=avgAtSell*tx.qty;runQty-=tx.qty;if(runQty<0.001){runQty=0;runCost=0;}
+    }
+    const dateStr=tx.date?new Date(tx.date).toLocaleDateString('de-CH',{day:'2-digit',month:'2-digit',year:'2-digit'}):'—';
+    rows+=`<div class="pf-tx-row ${tx.type}-row">
+      <span><span class="pf-tx-badge ${tx.type}">${tx.type==='buy'?'📈 Kauf':'📉 Verkauf'}</span></span>
+      <span>${tx.qty.toLocaleString('de-CH',{maximumFractionDigits:4})} Aktien</span>
+      <span>$${tx.price.toFixed(2)}/Stk</span>
+      <span>= ${fmtUSD(tx.qty*tx.price)}</span>
+      <span class="pf-tx-pl ${rowPLClass}">${tx.note?'<span style="color:var(--text3);margin-right:6px;">'+tx.note+'</span>':''}<span style="font-size:11px;color:var(--text3);">${dateStr}</span><br>${rowPL}</span>
+      <button class="pf-tx-del" onclick="deleteTx('${t}',${tx.id})" title="Löschen">✕</button>
+    </div>`;
+  });
+  list.innerHTML=rows;
+}
+
+function recalcPF(t){
+  const txs=txData[t];
+  const p=quotes[t]?.price||0;
+  const bull=parseFloat($(t+'-bull-in')?.value)||0;
+  const bear=parseFloat($(t+'-bear-in')?.value)||0;
+
+  // Calculate holdings using FIFO
+  let heldQty=0,totalInvested=0,realizedPL=0;
+  let buyQueue=[];
+  txs.forEach(tx=>{
+    if(tx.type==='buy'){
+      heldQty+=tx.qty;totalInvested+=tx.qty*tx.price;
+      buyQueue.push({qty:tx.qty,price:tx.price,remaining:tx.qty});
+    } else {
+      // FIFO: eat from oldest buys
+      let toSell=tx.qty;
+      for(let b of buyQueue){
+        if(b.remaining<=0)continue;
+        const used=Math.min(b.remaining,toSell);
+        realizedPL+=(tx.price-b.price)*used;
+        b.remaining-=used;toSell-=used;heldQty-=used;totalInvested-=b.price*used;
+        if(toSell<=0.0001)break;
+      }
+    }
+  });
+  heldQty=Math.max(0,heldQty);
+  totalInvested=Math.max(0,totalInvested);
+  const avgCost=heldQty>0.001?totalInvested/heldQty:0;
+
+  const summary=$(t+'-pf-summary');
+  const scenRow=$(t+'-scenario-row');
+  if(txs.length===0){summary.style.display='none';scenRow.style.display='none';return;}
+  summary.style.display='grid';scenRow.style.display='flex';
+
+  if(!p){
+    $(t+'-sum-qty').textContent=heldQty.toFixed(2);
+    $(t+'-sum-avgcost').textContent='Ø Kaufpreis: $'+avgCost.toFixed(2);
+    return;
+  }
+
+  const curVal=heldQty*p;
+  const unrealized=curVal-totalInvested;
+  const unrealizedPct=totalInvested>0?(unrealized/totalInvested*100):0;
+  const bullVal=heldQty*bull,bearVal=heldQty*bear;
+  const bullGain=bullVal-curVal,bearLoss=bearVal-curVal;
+
+  $(t+'-sum-qty').textContent=heldQty.toLocaleString('de-CH',{maximumFractionDigits:2});
+  $(t+'-sum-avgcost').textContent='Ø Kaufpreis: $'+avgCost.toFixed(2);
+  $(t+'-sum-val').textContent=fmtUSD(curVal);
+  $(t+'-sum-invested').textContent='Investiert: '+fmtUSD(totalInvested);
+  
+  const unEl=$(t+'-sum-unrealized');
+  unEl.textContent=(unrealized>=0?'+':'')+fmtUSD(unrealized);
+  unEl.className='pf-sum-val '+(unrealized>=0?'up':'dn');
+  $(t+'-sum-unrealized-pct').textContent=(unrealizedPct>=0?'↑ +':'↓ ')+unrealizedPct.toFixed(1)+'% auf offene Position';
+  $(t+'-sum-unrealized-pct').className='pf-sum-sub '+(unrealized>=0?'up':'dn');
+
+  const realEl=$(t+'-sum-realized');
+  realEl.textContent=(realizedPL>=0?'+':'')+fmtUSD(realizedPL);
+  realEl.className='pf-sum-val '+(realizedPL>0?'up':realizedPL<0?'dn':'mu');
+
+  if(bull>0){
+    $(t+'-sum-bull').textContent=fmtUSD(bullVal);
+    $(t+'-sum-bull-gain').textContent=(bullGain>=0?'+':'')+fmtUSD(bullGain)+' vs heute';
+    $(t+'-sum-bull-gain').className='pf-sum-sub '+(bullGain>=0?'up':'dn');
+  }
+  if(bear>0){
+    $(t+'-sum-bear').textContent=fmtUSD(bearVal);
+    $(t+'-sum-bear-loss').textContent=(bearLoss>=0?'+':'')+fmtUSD(bearLoss)+' vs heute';
+    $(t+'-sum-bear-loss').className='pf-sum-sub '+(bearLoss>=0?'up':'dn');
+  }
+
+  // Update day forecast portfolio impact
+  updDayPF(t);
+}
+
+function calcPF(t){recalcPF(t);}// alias for quote updates
+
+function updDayPF(t,hi,lo){
+  const heldQty=getHeldQty(t);
+  if(!heldQty){
+    const hiEl=$(t+'-hi-pf'),loEl=$(t+'-lo-pf');
+    if(hiEl)hiEl.textContent='Aktien eintragen';
+    if(loEl)loEl.textContent='';return;
+  }
+  const p=quotes[t]?.price||0;
+  if(!hi){hi=parseFloat($(t+'-day-hi')?.textContent?.replace('$','').replace(/[',]/g,''))||0;}
+  if(!lo){lo=parseFloat($(t+'-day-lo')?.textContent?.replace('$','').replace(/[',]/g,''))||0;}
+  if(!hi||!p)return;
+  const hg=(hi-p)*heldQty,lg=(lo-p)*heldQty;
+  const hiEl=$(t+'-hi-pf'),loEl=$(t+'-lo-pf');
+  if(hiEl){hiEl.textContent=(hg>=0?'+':'')+fmtUSD(hg)+' dein Portfolio';hiEl.className='df-sub '+(hg>=0?'up':'dn');}
+  if(loEl){loEl.textContent=(lg>=0?'+':'')+fmtUSD(lg)+' dein Portfolio';loEl.className='df-sub '+(lg>=0?'up':'dn');}
+}
+
+function getHeldQty(t){
+  let q=0;
+  txData[t].forEach(tx=>{q+=tx.type==='buy'?tx.qty:-tx.qty;});
+  return Math.max(0,q);
 }
 
 async function loadAll(){
