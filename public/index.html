@@ -779,27 +779,38 @@ body{font-family:'DM Sans',sans-serif;background:var(--bg);color:var(--text);min
   </div>
   <div class="card-body" id="body-rklb-df">
     <div class="day-fc">
-      <div class="day-row">
-        <div class="day-stat"><div class="day-stat-label">Eröffnung</div><div class="day-stat-val mono" id="rklb-open">—</div></div>
-        <div class="day-stat"><div class="day-stat-label">Tageshoch (gesch.)</div><div class="day-stat-val up mono" id="rklb-day-hi">—</div></div>
-        <div class="day-stat"><div class="day-stat-label">Tagestief (gesch.)</div><div class="day-stat-val dn mono" id="rklb-day-lo">—</div></div>
-      </div>
-      <div class="range-bar" style="margin:20px 0 4px;">
-        <div class="range-fill" id="rklb-range-fill" style="width:0%"></div>
-        <div class="range-dot" id="rklb-rdot" style="left:50%;color:var(--rklb);">
-          <div class="range-dot-label" id="rklb-rdot-lbl">—</div>
+      <div class="df-range-wrap">
+        <div class="df-range-labels">
+          <div class="df-edge">
+            <div class="df-edge-lbl">📉 Tagestief</div>
+            <div class="df-edge-val dn mono" id="rklb-day-lo">—</div>
+          </div>
+          <div class="df-center">
+            <div class="df-edge-lbl">Eröffnung</div>
+            <div class="df-edge-val mono" id="rklb-open">—</div>
+          </div>
+          <div class="df-edge" style="text-align:right;">
+            <div class="df-edge-lbl">📈 Tageshoch</div>
+            <div class="df-edge-val up mono" id="rklb-day-hi">—</div>
+          </div>
+        </div>
+        <div class="range-bar" style="margin:12px 0 4px;">
+          <div class="range-fill" id="rklb-range-fill" style="width:0%"></div>
+          <div class="range-dot" id="rklb-rdot" style="left:50%;color:var(--rklb);">
+            <div class="range-dot-label" id="rklb-rdot-lbl">—</div>
+          </div>
+        </div>
+        <div class="range-labels">
+          <span id="rklb-lo-lbl" style="color:var(--red);font-size:11px;">—</span>
+          <span style="font-size:11px;color:var(--text3);">← Tagesbereich →</span>
+          <span id="rklb-hi-lbl" style="color:var(--green);font-size:11px;">—</span>
         </div>
       </div>
-      <div class="range-labels">
-        <span id="rklb-lo-lbl">—</span>
-        <span id="rklb-hi-lbl">—</span>
-      </div>
-      <div class="df-note">
-        <b>Heutige Schwankungsschätzung (ATR-Methode):</b>
-        Durchschnittliche Tagesbewegung: <b id="rklb-vol-avg">—</b> |
-        Momentum: <b id="rklb-mom">—</b> |
-        RSI: <b id="rklb-rsi">—</b>
-      </div>
+      <div class="df-stats-row" id="rklb-df-stats">
+        <div class="df-stat-pill" id="rklb-df-atr">⚡ ATR lädt...</div>
+        <div class="df-stat-pill" id="rklb-df-mom">📊 Momentum lädt...</div>
+        <div class="df-stat-pill" id="rklb-df-rsi">🔬 RSI lädt...</div>
+      </div></div>
     </div>
   </div>
 </div>
@@ -1065,27 +1076,38 @@ body{font-family:'DM Sans',sans-serif;background:var(--bg);color:var(--text);min
   </div>
   <div class="card-body" id="body-asts-df">
     <div class="day-fc">
-      <div class="day-row">
-        <div class="day-stat"><div class="day-stat-label">Eröffnung</div><div class="day-stat-val mono" id="asts-open">—</div></div>
-        <div class="day-stat"><div class="day-stat-label">Tageshoch (gesch.)</div><div class="day-stat-val up mono" id="asts-day-hi">—</div></div>
-        <div class="day-stat"><div class="day-stat-label">Tagestief (gesch.)</div><div class="day-stat-val dn mono" id="asts-day-lo">—</div></div>
-      </div>
-      <div class="range-bar" style="margin:20px 0 4px;">
-        <div class="range-fill" id="asts-range-fill" style="width:0%"></div>
-        <div class="range-dot" id="asts-rdot" style="left:50%;color:var(--asts);">
-          <div class="range-dot-label" id="asts-rdot-lbl">—</div>
+      <div class="df-range-wrap">
+        <div class="df-range-labels">
+          <div class="df-edge">
+            <div class="df-edge-lbl">📉 Tagestief</div>
+            <div class="df-edge-val dn mono" id="asts-day-lo">—</div>
+          </div>
+          <div class="df-center">
+            <div class="df-edge-lbl">Eröffnung</div>
+            <div class="df-edge-val mono" id="asts-open">—</div>
+          </div>
+          <div class="df-edge" style="text-align:right;">
+            <div class="df-edge-lbl">📈 Tageshoch</div>
+            <div class="df-edge-val up mono" id="asts-day-hi">—</div>
+          </div>
+        </div>
+        <div class="range-bar" style="margin:12px 0 4px;">
+          <div class="range-fill" id="asts-range-fill" style="width:0%"></div>
+          <div class="range-dot" id="asts-rdot" style="left:50%;color:var(--asts);">
+            <div class="range-dot-label" id="asts-rdot-lbl">—</div>
+          </div>
+        </div>
+        <div class="range-labels">
+          <span id="asts-lo-lbl" style="color:var(--red);font-size:11px;">—</span>
+          <span style="font-size:11px;color:var(--text3);">← Tagesbereich →</span>
+          <span id="asts-hi-lbl" style="color:var(--green);font-size:11px;">—</span>
         </div>
       </div>
-      <div class="range-labels">
-        <span id="asts-lo-lbl">—</span>
-        <span id="asts-hi-lbl">—</span>
-      </div>
-      <div class="df-note">
-        <b>Heutige Schwankungsschätzung (ATR-Methode):</b>
-        Durchschnittliche Tagesbewegung: <b id="asts-vol-avg">—</b> |
-        Momentum: <b id="asts-mom">—</b> |
-        RSI: <b id="asts-rsi">—</b>
-      </div>
+      <div class="df-stats-row" id="asts-df-stats">
+        <div class="df-stat-pill" id="asts-df-atr">⚡ ATR lädt...</div>
+        <div class="df-stat-pill" id="asts-df-mom">📊 Momentum lädt...</div>
+        <div class="df-stat-pill" id="asts-df-rsi">🔬 RSI lädt...</div>
+      </div></div>
     </div>
   </div>
 </div>
