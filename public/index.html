@@ -1035,6 +1035,28 @@ body{font-family:'DM Sans',sans-serif;background:var(--bg);color:var(--text);min
 
 </main>
 
+<!-- ═══ AUTH OVERLAY ═══ -->
+<div class="auth-overlay" id="auth-overlay">
+  <div class="auth-box">
+    <div class="auth-logo">🚀</div>
+    <div class="auth-title">Space Stocks Dashboard</div>
+    <div class="auth-sub">Gib deine Email ein — du bekommst einen Magic Link zum Einloggen. Kein Passwort nötig.</div>
+    <div id="auth-email-view">
+      <input class="auth-input" id="auth-email" type="email" placeholder="deine@email.com" onkeydown="if(event.key==='Enter')sendMagicLink()">
+      <button class="auth-btn" id="auth-btn" onclick="sendMagicLink()">Magic Link senden ✉️</button>
+      <div class="auth-msg" id="auth-msg"></div>
+    </div>
+    <div id="auth-sent-view" style="display:none;">
+      <div style="font-size:48px;margin-bottom:12px;">✉️</div>
+      <div style="font-weight:600;margin-bottom:8px;">Check deine Email!</div>
+      <div style="font-size:14px;color:var(--text2);">Wir haben dir einen Magic Link geschickt. Klick darauf um dich einzuloggen.</div>
+      <button class="auth-btn" style="margin-top:20px;background:var(--surface2);color:var(--text2);border:1px solid var(--border2);" onclick="document.getElementById('auth-sent-view').style.display='none';document.getElementById('auth-email-view').style.display='block';">Andere Email versuchen</button>
+    </div>
+    <div class="auth-footer">Dein Portfolio wird sicher in der Cloud gespeichert.<br>Dein API-Key bleibt nur auf deinem Gerät.</div>
+  </div>
+</div>
+
+
 <script>
 
 // ══════════════════════════════════════════
