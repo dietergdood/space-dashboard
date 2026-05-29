@@ -166,7 +166,7 @@ body{font-family:'DM Sans',sans-serif;background:var(--bg);color:var(--text);min
 .df-range-dot{position:absolute;top:-4px;width:12px;height:12px;border-radius:50%;background:var(--text);border:2px solid var(--surface);transform:translateX(-50%);}
 
 /* Two col */
-.panel{display:none;}.panel.on{display:block;}
+.panel{display:none;}.panel.on{display:flex;flex-direction:column;gap:12px;}
 .two{display:grid;grid-template-columns:1fr 1fr;gap:20px;margin-bottom:20px;}
 .one{margin-bottom:18px;}
 .card{background:var(--surface);border:1px solid var(--border);border-radius:var(--rl);padding:24px 28px;}
@@ -472,7 +472,7 @@ body{font-family:'DM Sans',sans-serif;background:var(--bg);color:var(--text);min
 .section-toggle.open .st-arrow{transform:rotate(180deg);}
 .section-body{display:none;}
 .section-body.open{display:block;border-top:1px solid var(--border);padding:16px;}
-.collapsible-card{background:var(--surface);border:1px solid var(--border);border-radius:var(--rl);margin-bottom:10px;overflow:hidden;transition:border-color .2s;}
+.collapsible-card{background:var(--surface);border:1px solid var(--border);border-radius:var(--rl);overflow:hidden;transition:border-color .2s;}
 .collapsible-card .section-toggle{border-radius:0;}
 .collapsible-card.open{border-color:rgba(0,0,0,.16);}
 
@@ -536,7 +536,7 @@ body{font-family:'DM Sans',sans-serif;background:var(--bg);color:var(--text);min
 .hdr-refresh-btn.busy .hdr-refresh-spin{display:block;}
 
 /* ── Better card separation ── */
-.collapsible-card+.collapsible-card{margin-top:8px;}
+
 .collapsible-card:not(.open) .section-toggle{opacity:.85;}
 .collapsible-card:not(.open):hover .section-toggle{opacity:1;}
 </style>
