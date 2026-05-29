@@ -394,7 +394,7 @@ input:checked + .toggle-slider:before{transform:translateX(18px);}
           <div class="divider"></div>
           <div class="settings-label">↺ Aktualisierung</div>
           <div class="auto-bar">
-            <div class="auto-label"><div class="auto-dot on" id="auto-dot"></div><span id="auto-label-txt">Cron läuft 4× täglich automatisch</span></div>
+            <div class="auto-label"><div class="auto-dot on" id="auto-dot"></div><span id="auto-label-txt">Cron läuft 1× täglich automatisch</span></div>
           </div>
           <div style="margin-top:10px;" id="manual-refresh-wrap">
             <button class="auto-btn" style="width:100%;padding:8px;font-size:13px;" onclick="manualRefreshFromSettings()" id="manual-refresh-btn">
@@ -407,7 +407,7 @@ input:checked + .toggle-slider:before{transform:translateX(18px);}
           <div class="settings-label">ℹ️ Aktualisierungs-Übersicht</div>
           <div style="font-size:12px;color:var(--text2);line-height:1.8;">
             <div>⚡ <b>Kurse</b> — alle 15 Sekunden (Yahoo Finance)</div>
-            <div>🤖 <b>KI-Analysen</b> — 4× täglich (09:00, 14:00, 19:00, 00:00)</div>
+            <div>🤖 <b>KI-Analysen</b> — täglich um 09:00 Uhr</div>
             <div>📦 <b>Beim Öffnen</b> — letzte gespeicherte Daten sofort</div>
             <div style="margin-top:6px;color:var(--text3);">Letzte KI-Aktualisierung: <span id="last-sync-label">—</span></div>
           </div>
@@ -420,7 +420,7 @@ input:checked + .toggle-slider:before{transform:translateX(18px);}
               <span class="toggle-slider"></span>
             </label>
           </div>
-          <div style="font-size:11px;color:var(--text3);margin-top:6px;">4× täglich automatisch aktualisieren (~$6/Monat)</div>
+          <div style="font-size:11px;color:var(--text3);margin-top:6px;">Täglich um 09:00 Uhr automatisch aktualisieren (~$1.50/Monat)</div>
         </div>
       </div>
     </div>
@@ -448,7 +448,7 @@ input:checked + .toggle-slider:before{transform:translateX(18px);}
 </div>
 
 <div class="ctx-bar" id="ctx-asts" style="display:none;">
-  <div class="ctx-logo-emoji">📡</div>
+  <img src="/asts-logo.png" class="ctx-logo" alt="AST SpaceMobile" style="width:44px;height:44px;border-radius:8px;object-fit:cover;border:1px solid var(--border);">
   <div class="ctx-info">
     <div class="ctx-name">AST SpaceMobile · ASTS</div>
     <div class="ctx-desc" id="asts-ctx-desc">Baut riesige Satelliten die direkt mit normalen Handys kommunizieren — ohne Spezialgerät. Weltweit einziger Anbieter dieses Konzepts. Sehr spekulativ — hohe Chance, hohes Risiko.</div>
@@ -477,7 +477,7 @@ input:checked + .toggle-slider:before{transform:translateX(18px);}
   <div class="card-body" id="body-rklb-alert">
     <div class="alert neutral" id="rklb-alert-box">
       <div class="alert-dot"></div>
-      <div id="rklb-alert-text" style="font-style:italic;color:var(--text3);">⏳ Wird beim nächsten Cron-Lauf aktualisiert (4× täglich)</div>
+      <div id="rklb-alert-text" style="font-style:italic;color:var(--text3);">⏳ Wird beim nächsten Cron-Lauf aktualisiert (täglich um 09:00)</div>
     </div>
   </div>
 </div>
@@ -763,7 +763,7 @@ input:checked + .toggle-slider:before{transform:translateX(18px);}
   <div class="card-body" id="body-asts-alert">
     <div class="alert neutral" id="asts-alert-box">
       <div class="alert-dot"></div>
-      <div id="asts-alert-text" style="font-style:italic;color:var(--text3);">⏳ Wird beim nächsten Cron-Lauf aktualisiert (4× täglich)</div>
+      <div id="asts-alert-text" style="font-style:italic;color:var(--text3);">⏳ Wird beim nächsten Cron-Lauf aktualisiert (täglich um 09:00)</div>
     </div>
   </div>
 </div>
