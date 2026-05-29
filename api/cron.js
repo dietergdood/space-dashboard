@@ -12,17 +12,20 @@ async function supa(path, method='GET', body=null) {
       'apikey': SUPABASE_SERVICE_KEY,
       'Authorization': `Bearer ${SUPABASE_SERVICE_KEY}`,
       'Content-Type': 'application/json',
-      'Prefer': method==='POST' ? 'resolution=merge-duplicates' : '',
+      'Prefer': method==='POST' ? 'return=minimal,resolution=merge-duplicates' : '',
     }
   };
   if (body) opts.body = JSON.stringify(body);
   const r = await fetch(`${SUPABASE_URL}/rest/v1${path}`, opts);
   if (!r.ok) {
     const errText = await r.text();
-    console.error('Supabase error:', r.status, errText, 'URL:', SUPABASE_URL, 'Has key:', !!SUPABASE_SERVICE_KEY);
+    console.error('Supabase error:', r.status, errText);
     throw new Error(`Supabase ${r.status}: ${errText}`);
   }
-  return r.json();
+  // 204 No Content is success for upsert
+  if (r.status === 204) return {};
+  const text = await r.text();
+  return text ? JSON.parse(text) : {};
 }
 
 async function kiCall(prompt) {
