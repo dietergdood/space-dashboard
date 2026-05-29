@@ -1439,7 +1439,7 @@ async function fetchQ(ticker) {
       dayHi: m.regularMarketDayHigh,
       dayLo: m.regularMarketDayLow,
       vol: m.regularMarketVolume,
-      cap: m.marketCap,
+      cap: m.marketCap || (m.sharesOutstanding && m.regularMarketPrice ? m.sharesOutstanding * m.regularMarketPrice : null),
       hi52: m.fiftyTwoWeekHigh,
       lo52: m.fiftyTwoWeekLow,
       closes,

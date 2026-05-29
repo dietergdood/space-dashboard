@@ -23,17 +23,18 @@ export default async function handler(req, res) {
       const crumbRes = await fetch('https://query1.finance.yahoo.com/v1/test/getcrumb', { headers });
       if (crumbRes.ok) {
         const text = await crumbRes.text();
-        if (text && !text.includes('{')) crumb = text.trim();
+        if (text && !text.includes('{') && text.length < 50) crumb = text.trim();
       }
     } catch (_) {}
 
     const crumbParam = crumb ? '&crumb=' + encodeURIComponent(crumb) : '';
 
-    // Fetch: 5d daily (for prev close calc) + 1y weekly (for chart) + quote (for real-time)
+    // Fetch all three in parallel
     const [chart5dRes, chart1yRes, quoteRes] = await Promise.all([
       fetch(`https://query1.finance.yahoo.com/v8/finance/chart/${sym}?interval=1d&range=5d${crumbParam}`, { headers }),
       fetch(`https://query1.finance.yahoo.com/v8/finance/chart/${sym}?interval=1wk&range=1y${crumbParam}`, { headers }),
-      fetch(`https://query2.finance.yahoo.com/v7/finance/quote?symbols=${sym}&fields=regularMarketPrice,regularMarketPreviousClose,marketCap,regularMarketVolume,fiftyTwoWeekHigh,fiftyTwoWeekLow${crumbParam}`, { headers }),
+      // Use v8 chart endpoint for marketCap - more reliable than v7/quote
+      fetch(`https://query1.finance.yahoo.com/v8/finance/chart/${sym}?interval=1d&range=1d&includePrePost=false${crumbParam}`, { headers }),
     ]);
 
     if (!chart5dRes.ok) throw new Error(`Chart5d: ${chart5dRes.status}`);
@@ -53,19 +54,20 @@ export default async function handler(req, res) {
       } catch (_) {}
     }
 
-    // Inject real-time quote fields
+    // Inject real-time fields from 1d chart (has marketCap reliably)
     if (quoteRes.ok) {
       try {
-        const quoteData = await quoteRes.json();
-        const q = quoteData?.quoteResponse?.result?.[0];
-        if (q && chartData?.chart?.result?.[0]?.meta) {
+        const qData = await quoteRes.json();
+        const qMeta = qData?.chart?.result?.[0]?.meta;
+        if (qMeta && chartData?.chart?.result?.[0]?.meta) {
           const meta = chartData.chart.result[0].meta;
-          if (q.regularMarketPreviousClose) meta.regularMarketPreviousClose = q.regularMarketPreviousClose;
-          if (q.regularMarketPrice)         meta.regularMarketPrice         = q.regularMarketPrice;
-          if (q.marketCap)                  meta.marketCap                  = q.marketCap;
-          if (q.regularMarketVolume)        meta.regularMarketVolume        = q.regularMarketVolume;
-          if (q.fiftyTwoWeekHigh)           meta.fiftyTwoWeekHigh           = q.fiftyTwoWeekHigh;
-          if (q.fiftyTwoWeekLow)            meta.fiftyTwoWeekLow            = q.fiftyTwoWeekLow;
+          // Prefer 1d values which are more current
+          if (qMeta.regularMarketPreviousClose) meta.regularMarketPreviousClose = qMeta.regularMarketPreviousClose;
+          if (qMeta.marketCap)                  meta.marketCap                  = qMeta.marketCap;
+          if (qMeta.regularMarketVolume)        meta.regularMarketVolume        = qMeta.regularMarketVolume;
+          if (qMeta.fiftyTwoWeekHigh)           meta.fiftyTwoWeekHigh           = qMeta.fiftyTwoWeekHigh;
+          if (qMeta.fiftyTwoWeekLow)            meta.fiftyTwoWeekLow            = qMeta.fiftyTwoWeekLow;
+          if (qMeta.sharesOutstanding)          meta.sharesOutstanding          = qMeta.sharesOutstanding;
         }
       } catch (_) {}
     }
