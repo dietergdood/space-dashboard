@@ -29,22 +29,37 @@ export default async function handler(req, res) {
 
     const crumbParam = crumb ? '&crumb=' + encodeURIComponent(crumb) : '';
 
-    // Fetch chart (5d daily) + quote in parallel
-    const [chartRes, quoteRes] = await Promise.all([
+    // Fetch: 5d daily (for prev close calc) + 1y weekly (for chart) + quote (for real-time)
+    const [chart5dRes, chart1yRes, quoteRes] = await Promise.all([
       fetch(`https://query1.finance.yahoo.com/v8/finance/chart/${sym}?interval=1d&range=5d${crumbParam}`, { headers }),
+      fetch(`https://query1.finance.yahoo.com/v8/finance/chart/${sym}?interval=1wk&range=1y${crumbParam}`, { headers }),
       fetch(`https://query2.finance.yahoo.com/v7/finance/quote?symbols=${sym}&fields=regularMarketPrice,regularMarketPreviousClose,marketCap,regularMarketVolume,fiftyTwoWeekHigh,fiftyTwoWeekLow${crumbParam}`, { headers }),
     ]);
 
-    if (!chartRes.ok) throw new Error(`Chart: ${chartRes.status}`);
-    const chartData = await chartRes.json();
+    if (!chart5dRes.ok) throw new Error(`Chart5d: ${chart5dRes.status}`);
+    const chartData = await chart5dRes.json();
 
+    // Inject 1y weekly history
+    if (chart1yRes.ok) {
+      try {
+        const hist = await chart1yRes.json();
+        const r = hist?.chart?.result?.[0];
+        if (r && chartData?.chart?.result?.[0]) {
+          chartData.chart.result[0].history = {
+            timestamps: r.timestamp,
+            closes: r.indicators?.quote?.[0]?.close,
+          };
+        }
+      } catch (_) {}
+    }
+
+    // Inject real-time quote fields
     if (quoteRes.ok) {
       try {
         const quoteData = await quoteRes.json();
         const q = quoteData?.quoteResponse?.result?.[0];
         if (q && chartData?.chart?.result?.[0]?.meta) {
           const meta = chartData.chart.result[0].meta;
-          // Inject real-time fields — prioritize quote endpoint values
           if (q.regularMarketPreviousClose) meta.regularMarketPreviousClose = q.regularMarketPreviousClose;
           if (q.regularMarketPrice)         meta.regularMarketPrice         = q.regularMarketPrice;
           if (q.marketCap)                  meta.marketCap                  = q.marketCap;
