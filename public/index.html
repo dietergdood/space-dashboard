@@ -608,7 +608,9 @@ body{font-family:'DM Sans',sans-serif;background:var(--bg);color:var(--text);min
       <div class="chart-disclaimer">⚠️ Spekulative Schätzung — kein Versprechen! Nutze dies als Denkrahmen, nicht als Prognose.</div>
       <div class="chart-wrap" style="height:220px;"><canvas id="rklb-chart5" role="img"></canvas></div>
       <div id="rklb-f5-milestones" class="f5-milestones">
-        <div class="empty-state">5-Jahres-Szenarien werden nach KI-Analyse geladen</div>
+        <div class="f5-year"><div class="f5-yr-label">🐂 Bull-Szenario</div><div class="f5-assumption" id="rklb-f5-bull-note" style="color:var(--text3);font-style:italic;">Wird mit KI aktualisiert</div></div>
+        <div class="f5-year"><div class="f5-yr-label">📊 Base-Szenario</div><div class="f5-assumption" id="rklb-f5-base-note" style="color:var(--text3);font-style:italic;">Wird mit KI aktualisiert</div></div>
+        <div class="f5-year"><div class="f5-yr-label">🐻 Bear-Szenario</div><div class="f5-assumption" id="rklb-f5-bear-note" style="color:var(--text3);font-style:italic;">Wird mit KI aktualisiert</div></div>
       </div>
     </div>
   </div>
@@ -896,7 +898,9 @@ body{font-family:'DM Sans',sans-serif;background:var(--bg);color:var(--text);min
       <div class="chart-disclaimer">⚠️ Spekulative Schätzung — kein Versprechen! Nutze dies als Denkrahmen, nicht als Prognose.</div>
       <div class="chart-wrap" style="height:220px;"><canvas id="asts-chart5" role="img"></canvas></div>
       <div id="asts-f5-milestones" class="f5-milestones">
-        <div class="empty-state">5-Jahres-Szenarien werden nach KI-Analyse geladen</div>
+        <div class="f5-year"><div class="f5-yr-label">🐂 Bull-Szenario</div><div class="f5-assumption" id="asts-f5-bull-note" style="color:var(--text3);font-style:italic;">Wird mit KI aktualisiert</div></div>
+        <div class="f5-year"><div class="f5-yr-label">📊 Base-Szenario</div><div class="f5-assumption" id="asts-f5-base-note" style="color:var(--text3);font-style:italic;">Wird mit KI aktualisiert</div></div>
+        <div class="f5-year"><div class="f5-yr-label">🐻 Bear-Szenario</div><div class="f5-assumption" id="asts-f5-bear-note" style="color:var(--text3);font-style:italic;">Wird mit KI aktualisiert</div></div>
       </div>
     </div>
   </div>
@@ -1354,11 +1358,15 @@ function build5yrChart(ticker, canvasId) {
   const cur = quotes[ticker]?.price || (ticker==='rklb'?150:129);
   const yrs = ['2025','2026','2027','2028','2029','2030'];
   const interp = (s,e) => [s, s+(e-s)*.15, s+(e-s)*.35, s+(e-s)*.6, s+(e-s)*.8, e];
+  // Use 5yr targets if available, else estimate from 1yr targets realistically
+  const bull5 = ft.bull5 || Math.round(cur * (ft.bull/cur) * 2.2);
+  const base5 = ft.base5 || Math.round(cur * (ft.base/cur) * 1.6);
+  const bear5 = ft.bear5 || Math.round(cur * (ft.bear/cur) * 0.7);
   chartInstances[canvasId] = new Chart(el, {
     type:'line', data:{labels:yrs, datasets:[
-      {label:'🐂 Bull', data:interp(cur,ft.bull*5.5), borderColor:'#16a34a', backgroundColor:'rgba(22,163,74,.06)', fill:false, tension:.4, pointRadius:4, borderWidth:2.5},
-      {label:'📊 Base', data:interp(cur,ft.base*1.8), borderColor:'#94a3b8', fill:false, tension:.4, pointRadius:4, borderWidth:2, borderDash:[6,3]},
-      {label:'🐻 Bear', data:interp(cur,ft.bear*.5),  borderColor:'#dc2626', fill:false, tension:.4, pointRadius:4, borderWidth:2, borderDash:[4,4]},
+      {label:'🐂 Bull', data:interp(cur,bull5), borderColor:'#16a34a', backgroundColor:'rgba(22,163,74,.06)', fill:false, tension:.4, pointRadius:4, borderWidth:2.5},
+      {label:'📊 Base', data:interp(cur,base5), borderColor:'#94a3b8', fill:false, tension:.4, pointRadius:4, borderWidth:2, borderDash:[6,3]},
+      {label:'🐻 Bear', data:interp(cur,bear5), borderColor:'#dc2626', fill:false, tension:.4, pointRadius:4, borderWidth:2, borderDash:[4,4]},
     ]},
     options: chartOpts5()
   });
@@ -1424,7 +1432,11 @@ function applyQ(t, q) {
   cEl.textContent = (up?'↑ +':'↓ ') + fmt(Math.abs(chg)) + ' (' + (up?'+':'') + fmt(pct) + '%) heute';
   cEl.className = 'met-chg ' + (up?'up':'dn');
   if ($(t+'-vol')) $(t+'-vol').textContent = fmtK(q.vol)||'—';
-  if ($(t+'-cap')) $(t+'-cap').textContent = q.cap ? fmtB(q.cap) : '—';
+  if ($(t+'-cap')) {
+    const shares = t==='rklb' ? 490e6 : 350e6; // approx shares outstanding
+    const cap = q.cap || (q.price * shares);
+    $(t+'-cap').textContent = cap ? 'Mktcap ~$'+fmtB(cap) : '—';
+  }
   if ($(t+'-52w') && q.lo52 && q.hi52) $(t+'-52w').textContent = '$'+fmt(q.lo52)+' → $'+fmt(q.hi52);
   calcDF(t, q);
   recalcPF(t);
@@ -1584,9 +1596,9 @@ const NEWS_PROMPTS = {
 
 const SCENARIOS_PROMPTS = {
   rklb: `Analysiere RKLB Kursziele und Sentiment. Suche nach aktuellen Analysten-Kurszielen, Reddit/WSB Stimmung. Antworte NUR mit JSON ohne Markdown:
-{"intro":"1 Satz","bull_label":"$200-216","bull_pct":100,"opt_label":"$120","opt_pct":56,"base_label":"$120","base_pct":56,"bear_label":"$86","bear_pct":40,"bull_target":216,"base_target":120,"bear_target":86,"bull_desc":"Optimistisches Szenario → $XXX","base_desc":"Bankexperten-Konsens → $XXX","bear_desc":"Pessimistisches Szenario → $XX","sentiment":"2 Sätze Reddit/WSB Stimmung","sentiment_warning":false}`,
+{"intro":"1 Satz","bull_label":"$200-216","bull_pct":100,"opt_label":"$120","opt_pct":56,"base_label":"$120","base_pct":56,"bear_label":"$86","bear_pct":40,"bull_target":216,"base_target":120,"bear_target":86,"bull5yr":450,"base5yr":220,"bear5yr":70,"bull_desc":"Optimistisches Szenario → $XXX","base_desc":"Bankexperten-Konsens → $XXX","bear_desc":"Pessimistisches Szenario → $XX","sentiment":"2 Sätze Reddit/WSB Stimmung","sentiment_warning":false}`,
   asts: `Analysiere ASTS Kursziele und Sentiment. Suche nach aktuellen Analysten-Kurszielen, Reddit/WSB Stimmung. Antworte NUR mit JSON ohne Markdown:
-{"intro":"1 Satz","bull_label":"$200+","bull_pct":100,"opt_label":"$108","opt_pct":54,"base_label":"$83","base_pct":42,"bear_label":"$50","bear_pct":36,"bull_target":200,"base_target":83,"bear_target":50,"bull_desc":"Optimistisches Szenario → $XXX","base_desc":"Bankexperten-Konsens → $XX","bear_desc":"Pessimistisches Szenario → $XX","sentiment":"2 Sätze aktueller Stand","sentiment_warning":true}`
+{"intro":"1 Satz","bull_label":"$200+","bull_pct":100,"opt_label":"$108","opt_pct":54,"base_label":"$83","base_pct":42,"bear_label":"$50","bear_pct":36,"bull_target":200,"base_target":83,"bear_target":50,"bull5yr":380,"base5yr":120,"bear5yr":25,"bull_desc":"Optimistisches Szenario → $XXX","base_desc":"Bankexperten-Konsens → $XX","bear_desc":"Pessimistisches Szenario → $XX","sentiment":"2 Sätze aktueller Stand","sentiment_warning":true}`
 };
 
 const SECTOR_PROMPTS = {
@@ -1708,7 +1720,10 @@ async function fetchScenarios(t) {
     }
     // Update forecast targets + charts
     if (p.bull_target && p.base_target && p.bear_target) {
-      forecastTargets[t] = {bull:p.bull_target, base:p.base_target, bear:p.bear_target};
+      forecastTargets[t] = {
+        bull:p.bull_target, base:p.base_target, bear:p.bear_target,
+        bull5:p.bull5yr||null, base5:p.base5yr||null, bear5:p.bear5yr||null
+      };
       if (t==='rklb') { buildHistoryChart('rklb','rklb-chart','#1d4ed8','rgba(29,78,216,.06)',p.bull_target,p.base_target,p.bear_target); build5yrChart('rklb','rklb-chart5'); }
       else if (_astsChartsInited) { buildHistoryChart('asts','asts-chart','#15803d','rgba(21,128,61,.06)',p.bull_target,p.base_target,p.bear_target); build5yrChart('asts','asts-chart5'); }
     }
@@ -1716,6 +1731,10 @@ async function fetchScenarios(t) {
     if ($(t+'-lg-bull') && p.bull_desc) $(t+'-lg-bull').textContent = p.bull_desc;
     if ($(t+'-lg-base') && p.base_desc) $(t+'-lg-base').textContent = p.base_desc;
     if ($(t+'-lg-bear') && p.bear_desc) $(t+'-lg-bear').textContent = p.bear_desc;
+    // Update 5yr milestone notes
+    if ($(t+'-f5-bull-note') && p.bull5yr) $(t+'-f5-bull-note').textContent = 'Ziel 2030: $'+p.bull5yr+' — '+( p.bull_desc||'Optimistisches Szenario');
+    if ($(t+'-f5-base-note') && p.base5yr) $(t+'-f5-base-note').textContent = 'Ziel 2030: $'+p.base5yr+' — '+(p.base_desc||'Bankexperten-Konsens');
+    if ($(t+'-f5-bear-note') && p.bear5yr) $(t+'-f5-bear-note').textContent = 'Ziel 2030: $'+p.bear5yr+' — '+(p.bear_desc||'Pessimistisches Szenario');
     if ($(t+'-sentiment-text') && p.sentiment) $(t+'-sentiment-text').innerHTML = p.sentiment;
     if ($(t+'-sentiment-box') && p.sentiment_warning) $(t+'-sentiment-box').style.background='var(--red-bg)';
   } catch(e) { console.warn('fetchScenarios failed:', e.message); }
