@@ -298,6 +298,36 @@ body{font-family:'DM Sans',sans-serif;background:var(--bg);color:var(--text);min
 .pf-scenario-field label{font-size:12px;color:var(--text2);white-space:nowrap;}
 .pf-scenario-field input{width:90px;background:var(--surface2);border:1px solid var(--border2);border-radius:6px;padding:6px 10px;font-family:'DM Mono',monospace;font-size:13px;color:var(--text);outline:none;}
 .pf-scenario-field input:focus{border-color:var(--blue);}
+
+/* ── 5-Year Forecast ── */
+.forecast5{background:var(--surface);border:1px solid var(--border);border-radius:var(--rl);padding:24px 28px;margin-bottom:20px;}
+.f5-header{display:flex;align-items:center;justify-content:space-between;margin-bottom:6px;flex-wrap:wrap;gap:8px;}
+.f5-title{font-size:16px;font-weight:500;display:flex;align-items:center;gap:8px;}
+.f5-sub{font-size:13px;color:var(--text2);margin-bottom:16px;line-height:1.55;}
+.f5-disclaimer{display:inline-flex;align-items:center;gap:6px;background:var(--amber-bg);border:1px solid rgba(217,119,6,.25);border-radius:6px;padding:4px 10px;font-size:12px;color:var(--amber);}
+.f5-chart-wrap{position:relative;width:100%;height:260px;margin-bottom:20px;}
+.f5-toggle-btn{display:inline-flex;align-items:center;gap:6px;background:transparent;border:1px solid var(--border2);border-radius:7px;padding:6px 14px;font-size:13px;color:var(--text2);cursor:pointer;font-family:'DM Sans',sans-serif;transition:all .2s;}
+.f5-toggle-btn:hover{border-color:var(--blue);color:var(--blue);background:var(--blue-bg);}
+.f5-milestones{display:none;margin-top:18px;}
+.f5-milestones.open{display:block;}
+.f5-year-grid{display:grid;grid-template-columns:repeat(5,1fr);gap:12px;margin-bottom:20px;}
+.f5-year-card{border-radius:var(--r);padding:16px;border:1px solid var(--border);position:relative;overflow:hidden;}
+.f5-year-card::before{content:'';position:absolute;top:0;left:0;right:0;height:3px;}
+.f5-year-label{font-size:11px;font-weight:500;text-transform:uppercase;letter-spacing:.07em;color:var(--text3);font-family:'DM Mono',monospace;margin-bottom:10px;}
+.f5-year-prices{display:flex;flex-direction:column;gap:5px;margin-bottom:10px;}
+.f5-year-price{display:flex;align-items:center;justify-content:space-between;font-size:13px;}
+.f5-year-price-dot{width:8px;height:8px;border-radius:50%;flex-shrink:0;margin-right:6px;}
+.f5-year-price-val{font-weight:500;font-family:'DM Mono',monospace;}
+.f5-year-price-lbl{font-size:11px;color:var(--text3);}
+.f5-year-events{margin-top:10px;padding-top:10px;border-top:1px solid var(--border);}
+.f5-year-event{font-size:12px;color:var(--text2);display:flex;align-items:flex-start;gap:5px;margin-bottom:4px;line-height:1.4;}
+.f5-year-event-dot{width:5px;height:5px;border-radius:50%;flex-shrink:0;margin-top:5px;}
+.f5-assumptions{background:var(--surface2);border-radius:var(--r);padding:16px 18px;}
+.f5-assumptions-title{font-size:13px;font-weight:500;margin-bottom:10px;}
+.f5-assumption-row{display:grid;grid-template-columns:1fr 1fr 1fr;gap:10px;}
+.f5-assumption{font-size:12px;color:var(--text2);padding:8px 0;border-bottom:1px solid var(--border);line-height:1.5;}
+.f5-assumption:last-child,.f5-assumption-row > .f5-assumption:nth-last-child(-n+3){border-bottom:none;}
+.f5-assumption b{color:var(--text);}
 </style>
 </head>
 <body>
@@ -656,6 +686,106 @@ body{font-family:'DM Sans',sans-serif;background:var(--bg);color:var(--text);min
     </div>
   </div>
 
+
+  <!-- 5-Year Forecast RKLB -->
+  <div class="forecast5">
+    <div class="f5-header">
+      <div class="f5-title">🔭 5-Jahres-Forecast · Rocket Lab (RKLB)</div>
+      <div class="f5-disclaimer">⚠️ Spekulative Schätzung — kein Versprechen!</div>
+    </div>
+    <div class="f5-sub">Wo könnte Rocket Lab in 5 Jahren stehen? Drei Szenarien basierend auf den aktuellen Projekten und dem Marktumfeld. <b>Wichtig:</b> 5-Jahres-Forecasts sind sehr unsicher. Nutze sie als Denkrahmen, nicht als Prognose.</div>
+    <div class="f5-chart-wrap"><canvas id="rklb-chart5" role="img" aria-label="RKLB 5-Jahres Chart"></canvas></div>
+    <button class="f5-toggle-btn" onclick="toggleF5('rklb')"><span id="rklb-f5-btn-txt">▼ Jahres-Meilensteine & Annahmen anzeigen</span></button>
+    <div class="f5-milestones" id="rklb-f5-milestones">
+      <div class="f5-year-grid" style="margin-top:16px;">
+
+        <div class="f5-year-card" style="background:rgba(29,78,216,.04);border-color:rgba(29,78,216,.2);">
+          <div style="position:absolute;top:0;left:0;right:0;height:3px;background:var(--rklb);"></div>
+          <div class="f5-year-label">2026 · Jetzt</div>
+          <div class="f5-year-prices">
+            <div class="f5-year-price"><span style="display:flex;align-items:center;"><div class="f5-year-price-dot" style="background:var(--green);"></div>Bull</span><span class="f5-year-price-val up">$216</span></div>
+            <div class="f5-year-price"><span style="display:flex;align-items:center;"><div class="f5-year-price-dot" style="background:#bbb;"></div>Base</span><span class="f5-year-price-val mu">$120</span></div>
+            <div class="f5-year-price"><span style="display:flex;align-items:center;"><div class="f5-year-price-dot" style="background:var(--red);"></div>Bear</span><span class="f5-year-price-val dn">$86</span></div>
+          </div>
+          <div class="f5-year-events">
+            <div class="f5-year-event"><div class="f5-year-event-dot" style="background:var(--blue);"></div>Neutron-Erstflug H2 2026</div>
+            <div class="f5-year-event"><div class="f5-year-event-dot" style="background:var(--blue);"></div>Golden Dome Demo 2028 vorbereiten</div>
+            <div class="f5-year-event"><div class="f5-year-event-dot" style="background:var(--blue);"></div>SpaceX-IPO-Halo-Effekt</div>
+          </div>
+        </div>
+
+        <div class="f5-year-card" style="background:var(--surface2);">
+          <div style="position:absolute;top:0;left:0;right:0;height:3px;background:var(--amber);"></div>
+          <div class="f5-year-label">2027</div>
+          <div class="f5-year-prices">
+            <div class="f5-year-price"><span style="display:flex;align-items:center;"><div class="f5-year-price-dot" style="background:var(--green);"></div>Bull</span><span class="f5-year-price-val up">$320</span></div>
+            <div class="f5-year-price"><span style="display:flex;align-items:center;"><div class="f5-year-price-dot" style="background:#bbb;"></div>Base</span><span class="f5-year-price-val mu">$140</span></div>
+            <div class="f5-year-price"><span style="display:flex;align-items:center;"><div class="f5-year-price-dot" style="background:var(--red);"></div>Bear</span><span class="f5-year-price-val dn">$70</span></div>
+          </div>
+          <div class="f5-year-events">
+            <div class="f5-year-event"><div class="f5-year-event-dot" style="background:var(--green);"></div>Neutron kommerziell (3–5 Flüge)</div>
+            <div class="f5-year-event"><div class="f5-year-event-dot" style="background:var(--green);"></div>Umsatz Ziel: ~$1 Mrd.</div>
+            <div class="f5-year-event"><div class="f5-year-event-dot" style="background:var(--amber);"></div>Erste EBITDA-Profitabilität möglich</div>
+          </div>
+        </div>
+
+        <div class="f5-year-card" style="background:var(--surface2);">
+          <div style="position:absolute;top:0;left:0;right:0;height:3px;background:var(--amber);"></div>
+          <div class="f5-year-label">2028</div>
+          <div class="f5-year-prices">
+            <div class="f5-year-price"><span style="display:flex;align-items:center;"><div class="f5-year-price-dot" style="background:var(--green);"></div>Bull</span><span class="f5-year-price-val up">$480</span></div>
+            <div class="f5-year-price"><span style="display:flex;align-items:center;"><div class="f5-year-price-dot" style="background:#bbb;"></div>Base</span><span class="f5-year-price-val mu">$175</span></div>
+            <div class="f5-year-price"><span style="display:flex;align-items:center;"><div class="f5-year-price-dot" style="background:var(--red);"></div>Bear</span><span class="f5-year-price-val dn">$55</span></div>
+          </div>
+          <div class="f5-year-events">
+            <div class="f5-year-event"><div class="f5-year-event-dot" style="background:var(--green);"></div>Golden Dome Demo-Phase entschieden</div>
+            <div class="f5-year-event"><div class="f5-year-event-dot" style="background:var(--green);"></div>10+ Neutron-Flüge / Jahr</div>
+            <div class="f5-year-event"><div class="f5-year-event-dot" style="background:var(--amber);"></div>Starship-Konkurrenz nimmt zu</div>
+          </div>
+        </div>
+
+        <div class="f5-year-card" style="background:var(--surface2);">
+          <div style="position:absolute;top:0;left:0;right:0;height:3px;background:var(--green);"></div>
+          <div class="f5-year-label">2029</div>
+          <div class="f5-year-prices">
+            <div class="f5-year-price"><span style="display:flex;align-items:center;"><div class="f5-year-price-dot" style="background:var(--green);"></div>Bull</span><span class="f5-year-price-val up">$680</span></div>
+            <div class="f5-year-price"><span style="display:flex;align-items:center;"><div class="f5-year-price-dot" style="background:#bbb;"></div>Base</span><span class="f5-year-price-val mu">$210</span></div>
+            <div class="f5-year-price"><span style="display:flex;align-items:center;"><div class="f5-year-price-dot" style="background:var(--red);"></div>Bear</span><span class="f5-year-price-val dn">$45</span></div>
+          </div>
+          <div class="f5-year-events">
+            <div class="f5-year-event"><div class="f5-year-event-dot" style="background:var(--green);"></div>Golden Dome Hauptverträge möglich</div>
+            <div class="f5-year-event"><div class="f5-year-event-dot" style="background:var(--green);"></div>Umsatz Ziel: ~$2 Mrd.</div>
+            <div class="f5-year-event"><div class="f5-year-event-dot" style="background:var(--green);"></div>Vertragslieferungen 5×Neutron+3×Electron</div>
+          </div>
+        </div>
+
+        <div class="f5-year-card" style="background:var(--surface2);">
+          <div style="position:absolute;top:0;left:0;right:0;height:3px;background:var(--green);"></div>
+          <div class="f5-year-label">2030</div>
+          <div class="f5-year-prices">
+            <div class="f5-year-price"><span style="display:flex;align-items:center;"><div class="f5-year-price-dot" style="background:var(--green);"></div>Bull</span><span class="f5-year-price-val up">$950</span></div>
+            <div class="f5-year-price"><span style="display:flex;align-items:center;"><div class="f5-year-price-dot" style="background:#bbb;"></div>Base</span><span class="f5-year-price-val mu">$260</span></div>
+            <div class="f5-year-price"><span style="display:flex;align-items:center;"><div class="f5-year-price-dot" style="background:var(--red);"></div>Bear</span><span class="f5-year-price-val dn">$35</span></div>
+          </div>
+          <div class="f5-year-events">
+            <div class="f5-year-event"><div class="f5-year-event-dot" style="background:var(--green);"></div>Raumfahrt-Markt ~$1 Bio. laut BoA</div>
+            <div class="f5-year-event"><div class="f5-year-event-dot" style="background:var(--green);"></div>Etabliert als SpaceX-Alternative</div>
+            <div class="f5-year-event"><div class="f5-year-event-dot" style="background:var(--red);"></div>Oder: Von SpaceX verdrängt</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="f5-assumptions">
+        <div class="f5-assumptions-title">📋 Auf welchen Annahmen basiert dieser Forecast?</div>
+        <div class="f5-assumption-row">
+          <div class="f5-assumption"><b>Bull-Szenario ($950, 2030):</b> Neutron läuft zuverlässig, Golden Dome bringt Milliardenverträge, RKLB wird zum SpaceX-Pendant für mittelgrosse Nutzlasten. Wachstum 60%+/Jahr.</div>
+          <div class="f5-assumption"><b>Base-Szenario ($260, 2030):</b> Neutron fliegt, aber kleinere Marktanteile als erhofft. Golden Dome bringt moderate Einnahmen. Wachstum 25–35%/Jahr. Umsatz ~$2 Mrd. 2030.</div>
+          <div class="f5-assumption"><b>Bear-Szenario ($35, 2030):</b> Neutron scheitert oder kommt zu spät. SpaceX/Starship dominiert den Markt. Golden Dome geht an Konkurrenten. Wachstum stagniert, Kapitalerhöhungen nötig.</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
   <div class="two">
     <div class="card">
       <div class="ch">📈 Kursverlauf der letzten 12 Monate + Zukunftsszenarien</div>
@@ -926,6 +1056,106 @@ body{font-family:'DM Sans',sans-serif;background:var(--bg);color:var(--text);min
         <div class="sector-name">AT&T & Verizon</div>
         <div class="sector-val" style="color:var(--green);">Partner</div>
         <div class="sector-desc">Die grossen US-Telekonanbieter unterstützen ASTS aktiv — sie wollen kein Starlink-Monopol. Gibt ASTS strukturellen Rückhalt.</div>
+      </div>
+    </div>
+  </div>
+
+
+  <!-- 5-Year Forecast ASTS -->
+  <div class="forecast5">
+    <div class="f5-header">
+      <div class="f5-title">🔭 5-Jahres-Forecast · AST SpaceMobile (ASTS)</div>
+      <div class="f5-disclaimer">⚠️ Extrem spekulativ — nur mit Risikokapital!</div>
+    </div>
+    <div class="f5-sub">ASTS ist einer der riskantesten aber auch potenziell ertragreichsten Titel im Space-Sektor. Die Bandbreite der Szenarien ist gigantisch — von fast wertlos bis zum Vervielfacher. <b>Niemals mehr investieren als du verlieren kannst.</b></div>
+    <div class="f5-chart-wrap"><canvas id="asts-chart5" role="img" aria-label="ASTS 5-Jahres Chart"></canvas></div>
+    <button class="f5-toggle-btn" onclick="toggleF5('asts')"><span id="asts-f5-btn-txt">▼ Jahres-Meilensteine & Annahmen anzeigen</span></button>
+    <div class="f5-milestones" id="asts-f5-milestones">
+      <div class="f5-year-grid" style="margin-top:16px;">
+
+        <div class="f5-year-card" style="background:rgba(21,128,61,.04);border-color:rgba(21,128,61,.2);">
+          <div style="position:absolute;top:0;left:0;right:0;height:3px;background:var(--asts);"></div>
+          <div class="f5-year-label">2026 · Jetzt</div>
+          <div class="f5-year-prices">
+            <div class="f5-year-price"><span style="display:flex;align-items:center;"><div class="f5-year-price-dot" style="background:var(--green);"></div>Bull</span><span class="f5-year-price-val up">$200+</span></div>
+            <div class="f5-year-price"><span style="display:flex;align-items:center;"><div class="f5-year-price-dot" style="background:#bbb;"></div>Base</span><span class="f5-year-price-val mu">$83</span></div>
+            <div class="f5-year-price"><span style="display:flex;align-items:center;"><div class="f5-year-price-dot" style="background:var(--red);"></div>Bear</span><span class="f5-year-price-val dn">$50</span></div>
+          </div>
+          <div class="f5-year-events">
+            <div class="f5-year-event"><div class="f5-year-event-dot" style="background:var(--red);"></div>Blue Origin explodiert — Zeitplan fraglich</div>
+            <div class="f5-year-event"><div class="f5-year-event-dot" style="background:var(--blue);"></div>BlueBird 8–10 Launch Mitte Juni</div>
+            <div class="f5-year-event"><div class="f5-year-event-dot" style="background:var(--blue);"></div>FCC-Genehmigung USA erteilt</div>
+          </div>
+        </div>
+
+        <div class="f5-year-card" style="background:var(--surface2);">
+          <div style="position:absolute;top:0;left:0;right:0;height:3px;background:var(--amber);"></div>
+          <div class="f5-year-label">2027</div>
+          <div class="f5-year-prices">
+            <div class="f5-year-price"><span style="display:flex;align-items:center;"><div class="f5-year-price-dot" style="background:var(--green);"></div>Bull</span><span class="f5-year-price-val up">$380</span></div>
+            <div class="f5-year-price"><span style="display:flex;align-items:center;"><div class="f5-year-price-dot" style="background:#bbb;"></div>Base</span><span class="f5-year-price-val mu">$95</span></div>
+            <div class="f5-year-price"><span style="display:flex;align-items:center;"><div class="f5-year-price-dot" style="background:var(--red);"></div>Bear</span><span class="f5-year-price-val dn">$25</span></div>
+          </div>
+          <div class="f5-year-events">
+            <div class="f5-year-event"><div class="f5-year-event-dot" style="background:var(--green);"></div>Ziel: 45+ Satelliten im Orbit</div>
+            <div class="f5-year-event"><div class="f5-year-event-dot" style="background:var(--green);"></div>Erste kommerzielle Umsätze AT&T/Verizon</div>
+            <div class="f5-year-event"><div class="f5-year-event-dot" style="background:var(--amber);"></div>Kapitalerhöhung wahrscheinlich nötig</div>
+          </div>
+        </div>
+
+        <div class="f5-year-card" style="background:var(--surface2);">
+          <div style="position:absolute;top:0;left:0;right:0;height:3px;background:var(--green);"></div>
+          <div class="f5-year-label">2028</div>
+          <div class="f5-year-prices">
+            <div class="f5-year-price"><span style="display:flex;align-items:center;"><div class="f5-year-price-dot" style="background:var(--green);"></div>Bull</span><span class="f5-year-price-val up">$620</span></div>
+            <div class="f5-year-price"><span style="display:flex;align-items:center;"><div class="f5-year-price-dot" style="background:#bbb;"></div>Base</span><span class="f5-year-price-val mu">$110</span></div>
+            <div class="f5-year-price"><span style="display:flex;align-items:center;"><div class="f5-year-price-dot" style="background:var(--red);"></div>Bear</span><span class="f5-year-price-val dn">$12</span></div>
+          </div>
+          <div class="f5-year-events">
+            <div class="f5-year-event"><div class="f5-year-event-dot" style="background:var(--green);"></div>Block-2: 168 Sats geplant (1MW/Sat)</div>
+            <div class="f5-year-event"><div class="f5-year-event-dot" style="background:var(--green);"></div>Umsatz Ziel: $500 Mio.+</div>
+            <div class="f5-year-event"><div class="f5-year-event-dot" style="background:var(--red);"></div>Starlink D2D direkte Konkurrenz</div>
+          </div>
+        </div>
+
+        <div class="f5-year-card" style="background:var(--surface2);">
+          <div style="position:absolute;top:0;left:0;right:0;height:3px;background:var(--green);"></div>
+          <div class="f5-year-label">2029</div>
+          <div class="f5-year-prices">
+            <div class="f5-year-price"><span style="display:flex;align-items:center;"><div class="f5-year-price-dot" style="background:var(--green);"></div>Bull</span><span class="f5-year-price-val up">$880</span></div>
+            <div class="f5-year-price"><span style="display:flex;align-items:center;"><div class="f5-year-price-dot" style="background:#bbb;"></div>Base</span><span class="f5-year-price-val mu">$130</span></div>
+            <div class="f5-year-price"><span style="display:flex;align-items:center;"><div class="f5-year-price-dot" style="background:var(--red);"></div>Bear</span><span class="f5-year-price-val dn">$8</span></div>
+          </div>
+          <div class="f5-year-events">
+            <div class="f5-year-event"><div class="f5-year-event-dot" style="background:var(--green);"></div>$1.2 Mrd. MNO-Verträge laufen</div>
+            <div class="f5-year-event"><div class="f5-year-event-dot" style="background:var(--green);"></div>Globale D2D-Abdeckung möglich</div>
+            <div class="f5-year-event"><div class="f5-year-event-dot" style="background:var(--amber);"></div>Profitabilität entscheidet alles</div>
+          </div>
+        </div>
+
+        <div class="f5-year-card" style="background:var(--surface2);">
+          <div style="position:absolute;top:0;left:0;right:0;height:3px;background:var(--green);"></div>
+          <div class="f5-year-label">2030</div>
+          <div class="f5-year-prices">
+            <div class="f5-year-price"><span style="display:flex;align-items:center;"><div class="f5-year-price-dot" style="background:var(--green);"></div>Bull</span><span class="f5-year-price-val up">$1'200</span></div>
+            <div class="f5-year-price"><span style="display:flex;align-items:center;"><div class="f5-year-price-dot" style="background:#bbb;"></div>Base</span><span class="f5-year-price-val mu">$150</span></div>
+            <div class="f5-year-price"><span style="display:flex;align-items:center;"><div class="f5-year-price-dot" style="background:var(--red);"></div>Bear</span><span class="f5-year-price-val dn">$5</span></div>
+          </div>
+          <div class="f5-year-events">
+            <div class="f5-year-event"><div class="f5-year-event-dot" style="background:var(--green);"></div>5 Mrd. potenzielle Nutzer erreichbar</div>
+            <div class="f5-year-event"><div class="f5-year-event-dot" style="background:var(--green);"></div>Oder: Übernahme durch Telko/Amazon</div>
+            <div class="f5-year-event"><div class="f5-year-event-dot" style="background:var(--red);"></div>Oder: Insolvenz bei Misserfolg</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="f5-assumptions">
+        <div class="f5-assumptions-title">📋 Auf welchen Annahmen basiert dieser Forecast?</div>
+        <div class="f5-assumption-row">
+          <div class="f5-assumption"><b>Bull ($1'200, 2030):</b> Alle Satelliten funktionieren, AT&T+Verizon bringen Millionen Nutzer, Blue Origin wird ersetzt (SpaceX Falcon), Übernahme durch Amazon/Telko. Starlink verliert D2D-Rennen.</div>
+          <div class="f5-assumption"><b>Base ($150, 2030):</b> Satellitenaufbau gelingt mit Verzögerungen, moderater kommerzieller Erfolg, aber Starlink-Konkurrenz begrenzt Marktanteil. Umsatz ~$1–2 Mrd. 2030, kein Gewinn.</div>
+          <div class="f5-assumption"><b>Bear ($5–35, 2030):</b> Blue Origin-Probleme verzögern Aufbau dauerhaft, Starlink D2D-Produkt gewinnt Markt, Kapitalerhöhungen verwässern Aktie massiv. Technologie funktioniert, aber Business Case kollabiert.</div>
+        </div>
       </div>
     </div>
   </div>
@@ -1451,6 +1681,35 @@ document.addEventListener('click',function(e){
 });
 
 // Charts
+// 5-Year forecast toggle
+function toggleF5(t){
+  const m=document.getElementById(t+'-f5-milestones');
+  const btn=document.getElementById(t+'-f5-btn-txt');
+  const open=m.classList.toggle('open');
+  btn.textContent=open?'▲ Jahres-Meilensteine ausblenden':'▼ Jahres-Meilensteine & Annahmen anzeigen';
+}
+
+// 5-Year charts
+const yrs=['2025','2026','2027','2028','2029','2030'];
+const co5=()=>({responsive:true,maintainAspectRatio:false,
+  plugins:{legend:{display:true,position:'top',labels:{font:{size:12,family:'DM Sans'},color:'#6b6b66',boxWidth:24,padding:16}},
+  tooltip:{callbacks:{label:c=>c.dataset.label+': $'+(c.parsed.y!=null?c.parsed.y.toFixed(0):'—')},backgroundColor:'#fff',titleColor:'#666',bodyColor:'#1a1a18',borderColor:'#e5e5e0',borderWidth:1}},
+  scales:{x:{grid:{color:'rgba(0,0,0,.04)'},ticks:{color:'#aaa',font:{size:11}}},
+  y:{grid:{color:'rgba(0,0,0,.04)'},ticks:{color:'#aaa',font:{size:11},callback:v=>'$'+v}}}
+});
+
+new Chart(document.getElementById('rklb-chart5'),{type:'line',data:{labels:yrs,datasets:[
+  {label:'🐂 Bull',data:[150,216,320,480,680,950],borderColor:'#16a34a',backgroundColor:'rgba(22,163,74,.06)',fill:false,tension:.4,pointRadius:4,borderWidth:2.5},
+  {label:'📊 Base',data:[150,120,140,175,210,260],borderColor:'#94a3b8',backgroundColor:'transparent',fill:false,tension:.4,pointRadius:4,borderWidth:2,borderDash:[6,3]},
+  {label:'🐻 Bear',data:[150,86,70,55,45,35],borderColor:'#dc2626',backgroundColor:'rgba(220,38,38,.04)',fill:false,tension:.4,pointRadius:4,borderWidth:2,borderDash:[4,4]}
+]},options:co5()});
+
+new Chart(document.getElementById('asts-chart5'),{type:'line',data:{labels:yrs,datasets:[
+  {label:'🐂 Bull',data:[129,200,380,620,880,1200],borderColor:'#16a34a',backgroundColor:'rgba(22,163,74,.06)',fill:false,tension:.4,pointRadius:4,borderWidth:2.5},
+  {label:'📊 Base',data:[129,83,95,110,130,150],borderColor:'#94a3b8',backgroundColor:'transparent',fill:false,tension:.4,pointRadius:4,borderWidth:2,borderDash:[6,3]},
+  {label:'🐻 Bear',data:[129,50,25,12,8,5],borderColor:'#dc2626',backgroundColor:'rgba(220,38,38,.04)',fill:false,tension:.4,pointRadius:4,borderWidth:2,borderDash:[4,4]}
+]},options:co5()});
+
 const mo=['Jun','Jul','Aug','Sep','Okt','Nov','Dez','Jan','Feb','Mär','Apr','Mai','Jun→','Jul→','Aug→','Sep→'];
 const co=y=>({responsive:true,maintainAspectRatio:false,plugins:{legend:{display:false},tooltip:{callbacks:{label:c=>'$'+(c.parsed.y!=null?c.parsed.y.toFixed(0):'—')},backgroundColor:'#fff',titleColor:'#666',bodyColor:'#1a1a18',borderColor:'#e5e5e0',borderWidth:1}},scales:{x:{grid:{color:'rgba(0,0,0,.04)'},ticks:{color:'#aaa',font:{size:10},maxRotation:0}},y:{grid:{color:'rgba(0,0,0,.04)'},ticks:{color:'#aaa',font:{size:10},callback:v=>'$'+v},min:y}}});
 new Chart($('rklb-chart'),{type:'line',data:{labels:mo,datasets:[
