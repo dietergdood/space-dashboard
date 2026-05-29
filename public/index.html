@@ -1724,20 +1724,34 @@ const SECTOR_PROMPTS = {
 };
 
 // ── KI API Helper ──────────────────────────────────────────
-async function kiCall(prompt) {
+async function kiCall(prompt, retries=3) {
   const key = getKey();
   if (!key || !key.startsWith('sk-ant-')) return null;
-  const resp = await fetch('https://api.anthropic.com/v1/messages', {
-    method: 'POST',
-    headers: {'Content-Type':'application/json','x-api-key':key,'anthropic-version':'2023-06-01','anthropic-dangerous-direct-browser-access':'true'},
-    body: JSON.stringify({model:'claude-sonnet-4-5',max_tokens:1000,tools:[{type:'web_search_20250305',name:'web_search'}],messages:[{role:'user',content:prompt}]})
-  });
-  if (!resp.ok) throw new Error('API '+resp.status);
-  const data = await resp.json();
-  const raw = data.content.filter(b=>b.type==='text').map(b=>b.text).join('').trim();
-  const match = raw.match(/\{[\s\S]*\}/);
-  if (!match) throw new Error('No JSON in response');
-  return JSON.parse(match[0]);
+  for (let attempt = 0; attempt < retries; attempt++) {
+    try {
+      const resp = await fetch('https://api.anthropic.com/v1/messages', {
+        method: 'POST',
+        headers: {'Content-Type':'application/json','x-api-key':key,'anthropic-version':'2023-06-01','anthropic-dangerous-direct-browser-access':'true'},
+        body: JSON.stringify({model:'claude-sonnet-4-5',max_tokens:1000,tools:[{type:'web_search_20250305',name:'web_search'}],messages:[{role:'user',content:prompt}]})
+      });
+      if (resp.status === 429) {
+        const wait = (attempt + 1) * 15000; // 15s, 30s, 45s
+        console.log('Rate limited, waiting ' + wait/1000 + 's...');
+        await new Promise(r => setTimeout(r, wait));
+        continue;
+      }
+      if (!resp.ok) throw new Error('API ' + resp.status);
+      const data = await resp.json();
+      const raw = data.content.filter(b=>b.type==='text').map(b=>b.text).join('').trim();
+      const match = raw.match(/\{[\s\S]*\}/);
+      if (!match) throw new Error('No JSON in response');
+      return JSON.parse(match[0]);
+    } catch(e) {
+      if (attempt === retries - 1) throw e;
+      await new Promise(r => setTimeout(r, 5000));
+    }
+  }
+  return null;
 }
 
 // ── fetchRec ───────────────────────────────────────────────
@@ -1895,7 +1909,7 @@ async function refreshAllNews(manual=false) {
   ];
   for (const call of calls) {
     try { await call(); } catch(e) { console.warn('refresh call failed:', e.message); }
-    await delay(3000); // 3s between calls to respect rate limits
+    await delay(8000); // 8s between calls to respect rate limits
   }
   if (lbl) lbl.textContent = 'Nächste Aktualisierung in 2h';
   if (!manual) startAutoRefresh();
