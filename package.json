@@ -1,0 +1,6 @@
+{
+  "name": "space-stocks-dashboard",
+  "version": "1.0.0",
+  "description": "Live dashboard for RKLB and ASTS space stocks",
+  "engines": { "node": ">=18" }
+}
