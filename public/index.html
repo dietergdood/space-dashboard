@@ -1038,6 +1038,8 @@ body{font-family:'DM Sans',sans-serif;background:var(--bg);color:var(--text);min
       </div>
     </div>
   </div>
+  </div>
+</div>
 
   <div class="collapsible-card" id="card-rklb-news">
   <button class="section-toggle open" onclick="toggleCard('rklb-news')">
@@ -1098,8 +1100,7 @@ body{font-family:'DM Sans',sans-serif;background:var(--bg);color:var(--text);min
   </div>
   </div>
 </div>
-
-
+</div>
 
 <!-- ════════════════ ASTS ════════════════ -->
 <div class="panel" id="p-asts">
@@ -1234,6 +1235,104 @@ body{font-family:'DM Sans',sans-serif;background:var(--bg);color:var(--text);min
       </div>
     </div>
   </div>
+
+    </div>
+    <div id="asts-view-5y" style="display:none;padding-top:4px;">
+      <div class="f5-disclaimer-inline">⚠️ Spekulative Schätzung — kein Versprechen! Nutze dies als Denkrahmen, nicht als Prognose.</div>
+      <div class="f5-chart-wrap" style="margin-top:4px;"><canvas id="asts-chart5" role="img" aria-label="ASTS 5-Jahres Chart"></canvas></div>
+      <button class="f5-milestones-btn" id="asts-f5-btn-txt" onclick="toggleF5Details('asts')">▼ Jahres-Meilensteine &amp; Annahmen anzeigen</button>
+      <div class="f5-milestones" id="asts-f5-milestones">
+      <div class="f5-year-grid" style="margin-top:16px;">
+
+        <div class="f5-year-card" style="background:rgba(21,128,61,.04);border-color:rgba(21,128,61,.2);">
+          <div style="position:absolute;top:0;left:0;right:0;height:3px;background:var(--asts);"></div>
+          <div class="f5-year-label">2026 · Jetzt</div>
+          <div class="f5-year-prices">
+            <div class="f5-year-price"><span style="display:flex;align-items:center;"><div class="f5-year-price-dot" style="background:var(--green);"></div>Bull</span><span class="f5-year-price-val up">$200+</span></div>
+            <div class="f5-year-price"><span style="display:flex;align-items:center;"><div class="f5-year-price-dot" style="background:#bbb;"></div>Base</span><span class="f5-year-price-val mu">$83</span></div>
+            <div class="f5-year-price"><span style="display:flex;align-items:center;"><div class="f5-year-price-dot" style="background:var(--red);"></div>Bear</span><span class="f5-year-price-val dn">$50</span></div>
+          </div>
+          <div class="f5-year-events">
+            <div class="f5-year-event"><div class="f5-year-event-dot" style="background:var(--red);"></div>Blue Origin explodiert — Zeitplan fraglich</div>
+            <div class="f5-year-event"><div class="f5-year-event-dot" style="background:var(--blue);"></div>BlueBird 8–10 Launch Mitte Juni (Falcon 9)</div>
+            <div class="f5-year-event"><div class="f5-year-event-dot" style="background:var(--green);"></div>FCC-Genehmigung USA erteilt</div>
+          </div>
+        </div>
+
+        <div class="f5-year-card" style="background:var(--surface2);">
+          <div style="position:absolute;top:0;left:0;right:0;height:3px;background:var(--amber);"></div>
+          <div class="f5-year-label">2027</div>
+          <div class="f5-year-prices">
+            <div class="f5-year-price"><span style="display:flex;align-items:center;"><div class="f5-year-price-dot" style="background:var(--green);"></div>Bull</span><span class="f5-year-price-val up">$380</span></div>
+            <div class="f5-year-price"><span style="display:flex;align-items:center;"><div class="f5-year-price-dot" style="background:#bbb;"></div>Base</span><span class="f5-year-price-val mu">$95</span></div>
+            <div class="f5-year-price"><span style="display:flex;align-items:center;"><div class="f5-year-price-dot" style="background:var(--red);"></div>Bear</span><span class="f5-year-price-val dn">$25</span></div>
+          </div>
+          <div class="f5-year-events">
+            <div class="f5-year-event"><div class="f5-year-event-dot" style="background:var(--green);"></div>Ziel: 45+ Satelliten im Orbit</div>
+            <div class="f5-year-event"><div class="f5-year-event-dot" style="background:var(--green);"></div>Erste kommerzielle Umsätze AT&amp;T/Verizon</div>
+            <div class="f5-year-event"><div class="f5-year-event-dot" style="background:var(--amber);"></div>Kapitalerhöhung wahrscheinlich nötig</div>
+          </div>
+        </div>
+
+        <div class="f5-year-card" style="background:var(--surface2);">
+          <div style="position:absolute;top:0;left:0;right:0;height:3px;background:var(--green);"></div>
+          <div class="f5-year-label">2028</div>
+          <div class="f5-year-prices">
+            <div class="f5-year-price"><span style="display:flex;align-items:center;"><div class="f5-year-price-dot" style="background:var(--green);"></div>Bull</span><span class="f5-year-price-val up">$620</span></div>
+            <div class="f5-year-price"><span style="display:flex;align-items:center;"><div class="f5-year-price-dot" style="background:#bbb;"></div>Base</span><span class="f5-year-price-val mu">$110</span></div>
+            <div class="f5-year-price"><span style="display:flex;align-items:center;"><div class="f5-year-price-dot" style="background:var(--red);"></div>Bear</span><span class="f5-year-price-val dn">$12</span></div>
+          </div>
+          <div class="f5-year-events">
+            <div class="f5-year-event"><div class="f5-year-event-dot" style="background:var(--green);"></div>Block-2: 168 Sats geplant (1MW/Sat)</div>
+            <div class="f5-year-event"><div class="f5-year-event-dot" style="background:var(--green);"></div>Umsatz Ziel: $500 Mio.+</div>
+            <div class="f5-year-event"><div class="f5-year-event-dot" style="background:var(--red);"></div>Starlink D2D direkte Konkurrenz</div>
+          </div>
+        </div>
+
+        <div class="f5-year-card" style="background:var(--surface2);">
+          <div style="position:absolute;top:0;left:0;right:0;height:3px;background:var(--green);"></div>
+          <div class="f5-year-label">2029</div>
+          <div class="f5-year-prices">
+            <div class="f5-year-price"><span style="display:flex;align-items:center;"><div class="f5-year-price-dot" style="background:var(--green);"></div>Bull</span><span class="f5-year-price-val up">$880</span></div>
+            <div class="f5-year-price"><span style="display:flex;align-items:center;"><div class="f5-year-price-dot" style="background:#bbb;"></div>Base</span><span class="f5-year-price-val mu">$130</span></div>
+            <div class="f5-year-price"><span style="display:flex;align-items:center;"><div class="f5-year-price-dot" style="background:var(--red);"></div>Bear</span><span class="f5-year-price-val dn">$8</span></div>
+          </div>
+          <div class="f5-year-events">
+            <div class="f5-year-event"><div class="f5-year-event-dot" style="background:var(--green);"></div>$1.2 Mrd. MNO-Verträge laufen</div>
+            <div class="f5-year-event"><div class="f5-year-event-dot" style="background:var(--green);"></div>Globale D2D-Abdeckung möglich</div>
+            <div class="f5-year-event"><div class="f5-year-event-dot" style="background:var(--amber);"></div>Profitabilität entscheidet alles</div>
+          </div>
+        </div>
+
+        <div class="f5-year-card" style="background:var(--surface2);">
+          <div style="position:absolute;top:0;left:0;right:0;height:3px;background:var(--green);"></div>
+          <div class="f5-year-label">2030</div>
+          <div class="f5-year-prices">
+            <div class="f5-year-price"><span style="display:flex;align-items:center;"><div class="f5-year-price-dot" style="background:var(--green);"></div>Bull</span><span class="f5-year-price-val up">$1'200</span></div>
+            <div class="f5-year-price"><span style="display:flex;align-items:center;"><div class="f5-year-price-dot" style="background:#bbb;"></div>Base</span><span class="f5-year-price-val mu">$150</span></div>
+            <div class="f5-year-price"><span style="display:flex;align-items:center;"><div class="f5-year-price-dot" style="background:var(--red);"></div>Bear</span><span class="f5-year-price-val dn">$5</span></div>
+          </div>
+          <div class="f5-year-events">
+            <div class="f5-year-event"><div class="f5-year-event-dot" style="background:var(--green);"></div>5 Mrd. potenzielle Nutzer erreichbar</div>
+            <div class="f5-year-event"><div class="f5-year-event-dot" style="background:var(--green);"></div>Oder: Übernahme durch Telko/Amazon</div>
+            <div class="f5-year-event"><div class="f5-year-event-dot" style="background:var(--red);"></div>Oder: Insolvenz bei Misserfolg</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="f5-assumptions">
+        <div class="f5-assumptions-title">📋 Auf welchen Annahmen basiert dieser Forecast?</div>
+        <div class="f5-assumption-row">
+          <div class="f5-assumption"><b>Bull ($1'200, 2030):</b> Alle Satelliten funktionieren, AT&T+Verizon bringen Millionen Nutzer, Blue Origin wird ersetzt, Übernahme durch Amazon/Telko. Starlink verliert D2D-Rennen.</div>
+          <div class="f5-assumption"><b>Base ($150, 2030):</b> Satellitenaufbau gelingt mit Verzögerungen, moderater kommerzieller Erfolg, aber Starlink-Konkurrenz begrenzt Marktanteil. Umsatz ~$1–2 Mrd. 2030, kein Gewinn.</div>
+          <div class="f5-assumption"><b>Bear ($5–35, 2030):</b> Blue Origin-Probleme verzögern Aufbau dauerhaft, Starlink D2D gewinnt Markt, Kapitalerhöhungen verwässern Aktie massiv.</div>
+        </div>
+      </div>
+      </div>
+    </div>
+  </div>
+</div>
+
 </div>
 <div class="collapsible-card" id="card-asts-df">
   <button class="section-toggle" onclick="toggleCard('asts-df')">
@@ -1365,6 +1464,8 @@ body{font-family:'DM Sans',sans-serif;background:var(--bg);color:var(--text);min
       </div>
     </div>
   </div>
+  </div>
+</div>
 
   <div class="collapsible-card" id="card-asts-news">
   <button class="section-toggle open" onclick="toggleCard('asts-news')">
@@ -1425,8 +1526,7 @@ body{font-family:'DM Sans',sans-serif;background:var(--bg);color:var(--text);min
   </div>
   </div>
 </div>
-
-
+</div>
 
 <!-- ════════════════ Glossar ════════════════ -->
 <div class="collapsible-card" id="card-glossar">
@@ -1492,6 +1592,17 @@ function toggleCard(id){
 // ── Settings ───────────────────────────────────────────
 function toggleSettings(){
   document.getElementById('settings-dropdown').classList.toggle('open');
+}
+
+// Chart tab switcher
+function switchChartTab(t,tab){
+  const v1=document.getElementById(t+'-view-1y');
+  const v5=document.getElementById(t+'-view-5y');
+  const tb1=document.getElementById(t+'-tab-1y');
+  const tb5=document.getElementById(t+'-tab-5y');
+  if(!v1||!v5)return;
+  if(tab==='1y'){v1.style.display='block';v5.style.display='none';tb1.classList.add('active');tb5.classList.remove('active');}
+  else{v1.style.display='none';v5.style.display='block';tb1.classList.remove('active');tb5.classList.add('active');window.dispatchEvent(new Event('resize'));}
 }
 document.addEventListener('click',function(e){
   const btn=document.getElementById('settings-btn');
