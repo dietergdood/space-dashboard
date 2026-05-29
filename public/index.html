@@ -907,7 +907,6 @@ body{font-family:'DM Sans',sans-serif;background:var(--bg);color:var(--text);min
     </div>
   </div>
 </div>
-</div>
 
 <!-- ═══ ASTS PANEL ═══ -->
 <div class="panel" id="p-asts">
@@ -1204,7 +1203,6 @@ body{font-family:'DM Sans',sans-serif;background:var(--bg);color:var(--text);min
     </div>
   </div>
 </div>
-</div>
 
 <!-- ═══ GLOSSAR ═══ -->
 <div class="card open" id="card-glossar" style="margin-top:10px;">
@@ -1270,7 +1268,7 @@ body{font-family:'DM Sans',sans-serif;background:var(--bg);color:var(--text);min
 // ══════════════════════════════════════════
 // SUPABASE AUTH + PORTFOLIO SYNC
 // ══════════════════════════════════════════
-const SUPA_URL = 'https://zqltpegdkdnpgvscjrqj._supaClient.co';
+const SUPA_URL = 'https://zqltpegdkdnpgvscjrqj.supabase.co';
 const SUPA_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InpxbHRwZWdka2RucGd2c2NqcnFqIiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODAwNzIxNTEsImV4cCI6MjA5NTY0ODE1MX0.VUU73nByKnui-ONTt8JswQ5Be8yHn5n7JfuGOganib8';
 let _supaClient = null, currentUser = null;
 // Init immediately when script loads
@@ -1383,7 +1381,7 @@ async function savePortfolioToDB() {
 async function loadPortfolioFromDB() {
   if (!_supaClient || !currentUser) return;
   try {
-    const { data, error } = await supabase
+    const { data, error } = await _supaClient
       .from('transactions')
       .select('*')
       .eq('user_id', currentUser.id)
@@ -1631,17 +1629,7 @@ async function fetchQ(ticker) {
   } catch(e) { return null; }
 }
 
-async function fetchSimple(ticker) {
-  try {
-    const r = await fetch('/api/quote?ticker='+ticker);
-    if (!r.ok) return null;
-    const d = await r.json();
-    const m = d?.chart?.result?.[0]?.meta;
-    return m ? {price:m.regularMarketPrice,prev:m.regularMarketPreviousClose||m.chartPreviousClose} : null;
-  } catch(e){ return null; }
-}
-
-// ── Apply Quote ────────────────────────────────────────────
+async 
 function applyQ(t, q) {
   if (!q) { $(t+'-price').textContent='Fehler'; $(t+'-chg').textContent='Vercel-Proxy prüfen'; return; }
   quotes[t] = q;
@@ -2257,46 +2245,6 @@ async function refreshAllNews(manual=false) {
   setTimeout(clearStatus, 4000);
   if (lbl) lbl.textContent = 'Nächste Aktualisierung in 2h';
   if (!manual) startAutoRefresh();
-}
-
-function manualRefreshAll() { refreshAllNews(true); }
-
-function startAutoRefresh() {
-  stopAutoRefresh();
-  let secs = 7200;
-  const prog = $('auto-progress'), nextLbl = $('next-label');
-  autoCountdown = setInterval(() => {
-    secs--;
-    if (prog) prog.style.width = ((7200-secs)/7200*100)+'%';
-    if (nextLbl) {
-      const h = Math.floor(secs/3600), m = Math.floor((secs%3600)/60);
-      nextLbl.textContent = `Nächste KI-Analyse in ${h>0?h+'h ':''} ${m}min`;
-    }
-    if (secs <= 0) { clearInterval(autoCountdown); refreshAllNews(); }
-  }, 1000);
-}
-
-function stopAutoRefresh() {
-  if (autoCountdown) { clearInterval(autoCountdown); autoCountdown = null; }
-  if (autoTimer) { clearInterval(autoTimer); autoTimer = null; }
-}
-
-// ── Header Refresh ─────────────────────────────────────────
-async function hdrRefresh() {
-  const btn = $('refresh-btn'), spin = $('refresh-spin'), txt = $('refresh-txt');
-  const key = getKey();
-  if (!key || !key.startsWith('sk-ant-')) {
-    if (txt) txt.textContent = '⚙️ API-Key nötig';
-    $('settings-dd').classList.add('open');
-    setTimeout(() => { if(txt) txt.textContent='↺ Aktualisieren'; }, 2500);
-    return;
-  }
-  if (btn) btn.classList.add('busy');
-  if (txt) txt.textContent = 'Lädt...';
-  await refreshAllNews(true);
-  if (btn) btn.classList.remove('busy');
-  if (txt) txt.textContent = '✓ Aktualisiert';
-  setTimeout(() => { if(txt) txt.textContent='↺ Aktualisieren'; }, 3000);
 }
 
 // ── Init ───────────────────────────────────────────────────
