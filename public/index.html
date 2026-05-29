@@ -21,70 +21,70 @@
   --r:10px;--rl:14px;
 }
 *{box-sizing:border-box;margin:0;padding:0;}
-body{font-family:'DM Sans',sans-serif;background:var(--bg);color:var(--text);min-height:100vh;font-size:14px;line-height:1.5;}
-.container{max-width:980px;margin:0 auto;padding:24px 20px 60px;}
+body{font-family:'DM Sans',sans-serif;background:var(--bg);color:var(--text);min-height:100vh;font-size:16px;line-height:1.6;}
+.container{max-width:1280px;margin:0 auto;padding:32px 40px 90px;}
 
 /* Tooltip */
 .tip{display:inline-flex;align-items:center;gap:3px;cursor:help;position:relative;}
-.tip-icon{width:15px;height:15px;border-radius:50%;background:rgba(37,99,235,.15);color:var(--blue);font-size:9px;display:inline-flex;align-items:center;justify-content:center;font-weight:500;flex-shrink:0;font-family:'DM Mono',monospace;}
-.tip-box{position:absolute;bottom:calc(100% + 8px);left:50%;transform:translateX(-50%);background:#1a1a18;color:#f0f0ec;font-size:12px;line-height:1.6;padding:11px 14px;border-radius:10px;width:260px;z-index:200;pointer-events:none;opacity:0;transition:opacity .15s;white-space:normal;font-family:'DM Sans',sans-serif;font-weight:400;box-shadow:0 4px 20px rgba(0,0,0,.2);}
+.tip-icon{width:15px;height:15px;border-radius:50%;background:rgba(37,99,235,.15);color:var(--blue);font-size:10px;display:inline-flex;align-items:center;justify-content:center;font-weight:500;flex-shrink:0;font-family:'DM Mono',monospace;}
+.tip-box{position:absolute;bottom:calc(100% + 8px);left:50%;transform:translateX(-50%);background:#1a1a18;color:#f0f0ec;font-size:14px;line-height:1.6;padding:12px 15px;border-radius:10px;width:290px;z-index:200;pointer-events:none;opacity:0;transition:opacity .15s;white-space:normal;font-family:'DM Sans',sans-serif;font-weight:400;box-shadow:0 4px 20px rgba(0,0,0,.2);}
 .tip-box b{color:#fff;font-weight:500;}
 .tip-box::after{content:'';position:absolute;top:100%;left:50%;transform:translateX(-50%);border:5px solid transparent;border-top-color:#1a1a18;}
 .tip:hover .tip-box,.tip:focus .tip-box{opacity:1;}
 
 /* Header */
-.hdr{display:flex;align-items:flex-start;justify-content:space-between;margin-bottom:16px;gap:12px;flex-wrap:wrap;}
+.hdr{display:flex;align-items:flex-start;justify-content:space-between;margin-bottom:24px;gap:16px;flex-wrap:wrap;}
 .hdr-l{display:flex;align-items:center;gap:12px;}
-.logo{width:40px;height:40px;border-radius:10px;background:linear-gradient(135deg,#1d4ed8,#15803d);display:flex;align-items:center;justify-content:center;font-size:20px;flex-shrink:0;}
-.hdr-title{font-size:18px;font-weight:500;}
-.hdr-sub{font-size:11px;color:var(--text2);margin-top:3px;font-family:'DM Mono',monospace;}
+.logo{width:44px;height:44px;border-radius:10px;background:linear-gradient(135deg,#1d4ed8,#15803d);display:flex;align-items:center;justify-content:center;font-size:22px;flex-shrink:0;}
+.hdr-title{font-size:22px;font-weight:500;}
+.hdr-sub{font-size:13px;color:var(--text2);margin-top:3px;font-family:'DM Mono',monospace;}
 .hdr-r{display:flex;gap:8px;align-items:center;flex-wrap:wrap;}
-.live-badge{display:inline-flex;align-items:center;gap:5px;background:var(--green-bg);border:1px solid var(--green-bd);border-radius:20px;padding:3px 10px;font-size:11px;color:var(--green);font-family:'DM Mono',monospace;}
+.live-badge{display:inline-flex;align-items:center;gap:5px;background:var(--green-bg);border:1px solid var(--green-bd);border-radius:20px;padding:3px 10px;font-size:12px;color:var(--green);font-family:'DM Mono',monospace;}
 .live-dot{width:6px;height:6px;border-radius:50%;background:var(--green);animation:pulse 1.5s infinite;}
 @keyframes pulse{0%,100%{opacity:1}50%{opacity:.3}}
 @keyframes spin{to{transform:rotate(360deg)}}
 .switcher{display:flex;border:1px solid var(--border2);border-radius:var(--r);overflow:hidden;flex-shrink:0;}
-.sw{padding:8px 18px;font-size:13px;font-weight:500;cursor:pointer;background:transparent;color:var(--text2);border:none;transition:all .18s;font-family:'DM Sans',sans-serif;}
+.sw{padding:10px 22px;font-size:15px;font-weight:500;cursor:pointer;background:transparent;color:var(--text2);border:none;transition:all .18s;font-family:'DM Sans',sans-serif;}
 .sw:hover{color:var(--text);background:var(--surface2);}
 .sw.ra{background:rgba(29,78,216,.1);color:var(--rklb);}
 .sw.ga{background:rgba(21,128,61,.1);color:var(--asts);}
 .sw-sep{width:1px;background:var(--border2);}
 
 /* API Key */
-.api-box{background:var(--surface);border:1px solid var(--border);border-radius:var(--rl);padding:14px 16px;margin-bottom:14px;}
+.api-box{background:var(--surface);border:1px solid var(--border);border-radius:var(--rl);padding:16px 20px;margin-bottom:18px;}
 .api-row{display:flex;align-items:center;gap:10px;flex-wrap:wrap;}
-.api-lbl{font-size:12px;color:var(--text2);flex-shrink:0;}
-.api-in{flex:1;min-width:180px;background:var(--surface2);border:1px solid var(--border2);border-radius:7px;padding:8px 12px;color:var(--text);font-family:'DM Mono',monospace;font-size:12px;outline:none;transition:border-color .2s;}
+.api-lbl{font-size:14px;color:var(--text2);flex-shrink:0;}
+.api-in{flex:1;min-width:200px;background:var(--surface2);border:1px solid var(--border2);border-radius:7px;padding:9px 14px;color:var(--text);font-family:'DM Mono',monospace;font-size:15px;outline:none;transition:border-color .2s;}
 .api-in:focus{border-color:var(--blue);}
-.api-ok{font-size:12px;color:var(--green);display:none;flex-shrink:0;}
-.api-hint{font-size:12px;color:var(--text2);margin-top:8px;line-height:1.55;padding-top:8px;border-top:1px solid var(--border);}
+.api-ok{font-size:14px;color:var(--green);display:none;flex-shrink:0;}
+.api-hint{font-size:14px;color:var(--text2);margin-top:10px;line-height:1.6;padding-top:10px;border-top:1px solid var(--border);}
 .api-hint b{color:var(--text);}
 
 /* Intro / Onboarding */
-.intro{background:var(--blue-bg);border:1px solid rgba(37,99,235,.2);border-radius:var(--rl);padding:16px 18px;margin-bottom:14px;}
-.intro-title{font-size:14px;font-weight:500;margin-bottom:8px;}
+.intro{background:var(--blue-bg);border:1px solid rgba(37,99,235,.2);border-radius:var(--rl);padding:20px 22px;margin-bottom:18px;}
+.intro-title{font-size:17px;font-weight:500;margin-bottom:10px;}
 .intro-grid{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-top:10px;}
-.intro-card{background:var(--surface);border-radius:8px;padding:11px 13px;border:1px solid var(--border);}
-.intro-card-title{font-size:12px;font-weight:500;margin-bottom:4px;}
-.intro-card-body{font-size:12px;color:var(--text2);line-height:1.5;}
-.intro-toggle{cursor:pointer;color:var(--blue);font-size:12px;margin-top:10px;display:inline-block;}
+.intro-card{background:var(--surface);border-radius:8px;padding:14px 16px;border:1px solid var(--border);}
+.intro-card-title{font-size:15px;font-weight:500;margin-bottom:5px;}
+.intro-card-body{font-size:14px;color:var(--text2);line-height:1.55;}
+.intro-toggle{cursor:pointer;color:var(--blue);font-size:13px;margin-top:10px;display:inline-block;}
 
 /* Auto-Refresh Bar */
-.auto-bar{background:var(--surface);border:1px solid var(--border);border-radius:var(--rl);padding:12px 16px;margin-bottom:14px;display:flex;align-items:center;gap:12px;flex-wrap:wrap;}
+.auto-bar{background:var(--surface);border:1px solid var(--border);border-radius:var(--rl);padding:14px 20px;margin-bottom:18px;display:flex;align-items:center;gap:14px;flex-wrap:wrap;}
 .auto-status{flex:1;min-width:0;}
-.auto-label{font-size:10px;text-transform:uppercase;letter-spacing:.06em;color:var(--text3);font-family:'DM Mono',monospace;margin-bottom:3px;}
-.auto-detail{font-size:12px;color:var(--text);display:flex;align-items:center;gap:8px;flex-wrap:wrap;}
+.auto-label{font-size:11px;text-transform:uppercase;letter-spacing:.06em;color:var(--text3);font-family:'DM Mono',monospace;margin-bottom:3px;}
+.auto-detail{font-size:14px;color:var(--text);display:flex;align-items:center;gap:8px;flex-wrap:wrap;}
 .auto-dot{width:8px;height:8px;border-radius:50%;background:var(--green);flex-shrink:0;}
 .auto-dot.loading{animation:pulse .8s infinite;}
 .auto-dot.off{background:var(--text3);}
 .auto-progress{height:3px;background:var(--surface2);border-radius:2px;overflow:hidden;margin-top:6px;}
 .auto-progress-fill{height:3px;background:var(--purple);border-radius:2px;width:0%;transition:width .5s;}
-.auto-btn{display:inline-flex;align-items:center;gap:6px;background:transparent;border:1px solid var(--border2);border-radius:7px;padding:7px 14px;font-size:12px;color:var(--text2);cursor:pointer;font-family:'DM Sans',sans-serif;transition:all .2s;white-space:nowrap;}
+.auto-btn{display:inline-flex;align-items:center;gap:6px;background:transparent;border:1px solid var(--border2);border-radius:7px;padding:9px 16px;font-size:14px;color:var(--text2);cursor:pointer;font-family:'DM Sans',sans-serif;transition:all .2s;white-space:nowrap;}
 .auto-btn:hover,.auto-btn.busy{border-color:var(--purple);color:var(--purple);background:var(--purple-bg);}
 .auto-spin{width:12px;height:12px;border:2px solid rgba(124,58,237,.2);border-top-color:var(--purple);border-radius:50%;animation:spin .7s linear infinite;display:none;}
 
 /* Alert Banner */
-.alert{display:flex;align-items:flex-start;gap:10px;padding:12px 15px;border-radius:var(--r);font-size:12px;line-height:1.6;margin-bottom:14px;}
+.alert{display:flex;align-items:flex-start;gap:12px;padding:14px 18px;border-radius:var(--r);font-size:14px;line-height:1.65;margin-bottom:18px;}
 .al-r{background:var(--red-bg);border:1px solid var(--red-bd);color:#991b1b;}
 .al-g{background:var(--green-bg);border:1px solid var(--green-bd);color:#166534;}
 .al-a{background:var(--amber-bg);border:1px solid rgba(217,119,6,.3);color:#854f0b;}
@@ -94,82 +94,82 @@ body{font-family:'DM Sans',sans-serif;background:var(--bg);color:var(--text);min
 .da{background:var(--amber);}
 
 /* Live Metrics */
-.mets{display:grid;grid-template-columns:repeat(4,1fr);gap:10px;margin-bottom:14px;}
-.met{background:var(--surface);border:1px solid var(--border);border-radius:var(--r);padding:14px 15px;}
-.met-icon{font-size:18px;margin-bottom:6px;}
-.ml{font-size:11px;color:var(--text2);margin-bottom:4px;display:flex;align-items:center;gap:4px;}
-.mv{font-size:22px;font-weight:500;font-family:'DM Mono',monospace;transition:color .4s;}
-.mc{font-size:11px;margin-top:3px;font-family:'DM Mono',monospace;}
-.mc-explain{font-size:11px;color:var(--text3);margin-top:2px;}
+.mets{display:grid;grid-template-columns:repeat(4,1fr);gap:16px;margin-bottom:20px;}
+.met{background:var(--surface);border:1px solid var(--border);border-radius:var(--r);padding:18px 20px;}
+.met-icon{font-size:26px;margin-bottom:8px;}
+.ml{font-size:13px;color:var(--text2);margin-bottom:6px;display:flex;align-items:center;gap:4px;}
+.mv{font-size:30px;font-weight:500;font-family:'DM Mono',monospace;transition:color .4s;}
+.mc{font-size:13px;margin-top:4px;font-family:'DM Mono',monospace;}
+.mc-explain{font-size:13px;color:var(--text3);margin-top:3px;}
 .up{color:var(--green);}.dn{color:var(--red);}.wn{color:var(--amber);}.mu{color:var(--text2);}
 
 /* Recommendation */
-.rec-banner{border-radius:var(--rl);padding:18px 20px;margin-bottom:14px;border:1.5px solid;}
+.rec-banner{border-radius:var(--rl);padding:24px 28px;margin-bottom:20px;border:1.5px solid;}
 .rec-buy{background:rgba(22,163,74,.06);border-color:rgba(22,163,74,.3);}
 .rec-sell{background:rgba(220,38,38,.06);border-color:rgba(220,38,38,.3);}
 .rec-hold{background:rgba(217,119,6,.06);border-color:rgba(217,119,6,.3);}
 .rec-head{display:flex;align-items:flex-start;gap:12px;margin-bottom:12px;flex-wrap:wrap;}
-.rec-pill{font-size:14px;font-weight:500;padding:5px 16px;border-radius:20px;font-family:'DM Mono',monospace;flex-shrink:0;}
+.rec-pill{font-size:16px;font-weight:500;padding:6px 18px;border-radius:20px;font-family:'DM Mono',monospace;flex-shrink:0;}
 .rec-pill-buy{background:var(--green);color:#fff;}
 .rec-pill-sell{background:var(--red);color:#fff;}
 .rec-pill-hold{background:var(--amber);color:#fff;}
 .rec-head-right{flex:1;}
-.rec-title{font-size:14px;font-weight:500;color:var(--text);margin-bottom:3px;}
-.rec-ts{font-size:10px;color:var(--text3);font-family:'DM Mono',monospace;}
-.rec-explain{font-size:12px;color:var(--text2);line-height:1.65;margin-bottom:14px;}
-.rec-scores{display:grid;grid-template-columns:repeat(4,1fr);gap:8px;margin-bottom:14px;}
-.rec-score-card{background:var(--surface);border-radius:9px;padding:10px 12px;border:1px solid var(--border);}
-.rec-score-emoji{font-size:16px;margin-bottom:4px;}
-.rec-score-label{font-size:11px;color:var(--text2);margin-bottom:6px;line-height:1.3;}
-.rec-score-val{font-size:18px;font-weight:500;font-family:'DM Mono',monospace;}
+.rec-title{font-size:17px;font-weight:500;color:var(--text);margin-bottom:4px;}
+.rec-ts{font-size:12px;color:var(--text3);font-family:'DM Mono',monospace;}
+.rec-explain{font-size:14px;color:var(--text2);line-height:1.7;margin-bottom:16px;}
+.rec-scores{display:grid;grid-template-columns:repeat(4,1fr);gap:14px;margin-bottom:18px;}
+.rec-score-card{background:var(--surface);border-radius:9px;padding:14px 16px;border:1px solid var(--border);}
+.rec-score-emoji{font-size:22px;margin-bottom:6px;}
+.rec-score-label{font-size:13px;color:var(--text2);margin-bottom:7px;line-height:1.4;}
+.rec-score-val{font-size:26px;font-weight:500;font-family:'DM Mono',monospace;}
 .rec-meter{height:4px;border-radius:2px;background:var(--surface2);margin-top:5px;overflow:hidden;}
 .rec-meter-fill{height:4px;border-radius:2px;transition:width .6s;}
 .rec-levels-row{display:flex;align-items:center;gap:8px;flex-wrap:wrap;margin-bottom:12px;}
-.rec-level-pill{background:var(--surface2);border:1px solid var(--border);border-radius:6px;padding:5px 10px;font-size:11px;font-family:'DM Mono',monospace;}
+.rec-level-pill{background:var(--surface2);border:1px solid var(--border);border-radius:6px;padding:7px 13px;font-size:17px;font-family:'DM Mono',monospace;}
 .rec-level-pill b{color:var(--text);font-weight:500;}
 .rec-footer{display:flex;align-items:center;justify-content:flex-end;}
-.rec-update-btn{display:inline-flex;align-items:center;gap:6px;background:transparent;border:1px solid var(--border2);border-radius:7px;padding:7px 14px;font-size:12px;color:var(--text2);cursor:pointer;font-family:'DM Sans',sans-serif;transition:all .2s;}
+.rec-update-btn{display:inline-flex;align-items:center;gap:6px;background:transparent;border:1px solid var(--border2);border-radius:7px;padding:7px 14px;font-size:17px;color:var(--text2);cursor:pointer;font-family:'DM Sans',sans-serif;transition:all .2s;}
 .rec-update-btn:hover,.rec-update-btn.busy{border-color:var(--purple);color:var(--purple);background:var(--purple-bg);}
 .rec-spin{width:12px;height:12px;border:2px solid rgba(124,58,237,.2);border-top-color:var(--purple);border-radius:50%;animation:spin .7s linear infinite;display:none;}
 
 /* Live News */
-.live-news{background:var(--surface);border:1px solid var(--border);border-radius:var(--rl);padding:18px 20px;margin-bottom:14px;}
+.live-news{background:var(--surface);border:1px solid var(--border);border-radius:var(--rl);padding:24px 28px;margin-bottom:20px;}
 .ln-header{display:flex;align-items:center;justify-content:space-between;margin-bottom:14px;gap:8px;flex-wrap:wrap;}
-.ln-title{font-size:13px;font-weight:500;display:flex;align-items:center;gap:7px;}
-.ln-ts{font-size:11px;color:var(--text3);font-family:'DM Mono',monospace;}
-.ln-loading{display:none;align-items:center;gap:10px;padding:14px;background:var(--purple-bg);border-radius:8px;margin-bottom:10px;font-size:12px;color:var(--purple);}
+.ln-title{font-size:15px;font-weight:500;display:flex;align-items:center;gap:8px;}
+.ln-ts{font-size:12px;color:var(--text3);font-family:'DM Mono',monospace;}
+.ln-loading{display:none;align-items:center;gap:10px;padding:14px;background:var(--purple-bg);border-radius:8px;margin-bottom:10px;font-size:13px;color:var(--purple);}
 .ln-loading-dot{width:8px;height:8px;border-radius:50%;background:var(--purple);animation:pulse .9s infinite;flex-shrink:0;}
-.ln-content{font-size:13px;color:var(--text);line-height:1.8;}
-.ln-content.empty{color:var(--text3);font-size:13px;font-style:italic;}
-.ln-section{margin-top:14px;padding-top:14px;border-top:1px solid var(--border);}
+.ln-content{font-size:14px;color:var(--text);line-height:1.85;}
+.ln-content.empty{color:var(--text3);font-size:14px;font-style:italic;}
+.ln-section{margin-top:18px;padding-top:18px;border-top:1px solid var(--border);}
 .ln-section:first-child{margin-top:0;padding-top:0;border-top:none;}
-.ln-section-title{font-size:11px;font-weight:500;text-transform:uppercase;letter-spacing:.07em;color:var(--text3);font-family:'DM Mono',monospace;margin-bottom:6px;}
-.ln-section-body{font-size:13px;color:var(--text);line-height:1.75;}
+.ln-section-title{font-size:11px;font-weight:500;text-transform:uppercase;letter-spacing:.08em;color:var(--text3);font-family:'DM Mono',monospace;margin-bottom:8px;}
+.ln-section-body{font-size:14px;color:var(--text);line-height:1.8;}
 
 /* Portfolio */
-.portfolio-bar{background:var(--surface);border:1px solid var(--border);border-radius:var(--rl);padding:18px 20px;margin-bottom:14px;}
-.section-title{font-size:13px;font-weight:500;margin-bottom:4px;display:flex;align-items:center;gap:6px;}
-.section-sub{font-size:12px;color:var(--text2);margin-bottom:14px;line-height:1.5;}
-.pf-inputs{display:grid;grid-template-columns:1fr 1fr 1fr 1fr;gap:10px;margin-bottom:14px;}
-.pf-field label{font-size:12px;color:var(--text2);display:block;margin-bottom:5px;line-height:1.4;}
-.pf-field input{width:100%;background:var(--surface2);border:1px solid var(--border2);border-radius:7px;padding:9px 12px;color:var(--text);font-family:'DM Mono',monospace;font-size:14px;outline:none;transition:border-color .2s;}
+.portfolio-bar{background:var(--surface);border:1px solid var(--border);border-radius:var(--rl);padding:24px 28px;margin-bottom:20px;}
+.section-title{font-size:16px;font-weight:500;margin-bottom:5px;display:flex;align-items:center;gap:7px;}
+.section-sub{font-size:14px;color:var(--text2);margin-bottom:16px;line-height:1.6;}
+.pf-inputs{display:grid;grid-template-columns:1fr 1fr 1fr 1fr;gap:14px;margin-bottom:16px;}
+.pf-field label{font-size:14px;color:var(--text2);display:block;margin-bottom:6px;line-height:1.4;}
+.pf-field input{width:100%;background:var(--surface2);border:1px solid var(--border2);border-radius:7px;padding:10px 14px;color:var(--text);font-family:'DM Mono',monospace;font-size:15px;outline:none;transition:border-color .2s;}
 .pf-field input:focus{border-color:var(--blue);}
-.pf-results{display:grid;grid-template-columns:repeat(5,1fr);gap:10px;}
-.pf-card{background:var(--surface2);border-radius:var(--r);padding:12px 13px;border:1px solid var(--border);}
+.pf-results{display:grid;grid-template-columns:repeat(5,1fr);gap:14px;}
+.pf-card{background:var(--surface2);border-radius:var(--r);padding:16px 16px;border:1px solid var(--border);}
 .pf-card.hl{background:var(--surface);border-color:var(--border2);}
-.pf-emoji{font-size:16px;margin-bottom:5px;}
-.pf-lbl{font-size:11px;color:var(--text2);margin-bottom:5px;line-height:1.4;}
-.pf-val{font-size:17px;font-weight:500;font-family:'DM Mono',monospace;}
-.pf-sub{font-size:11px;color:var(--text2);margin-top:3px;font-family:'DM Mono',monospace;}
+.pf-emoji{font-size:22px;margin-bottom:7px;}
+.pf-lbl{font-size:13px;color:var(--text2);margin-bottom:6px;line-height:1.4;}
+.pf-val{font-size:21px;font-weight:500;font-family:'DM Mono',monospace;}
+.pf-sub{font-size:13px;color:var(--text2);margin-top:4px;font-family:'DM Mono',monospace;}
 
 /* Day Forecast */
-.day-forecast{background:var(--surface);border:1px solid var(--border);border-radius:var(--rl);padding:18px 20px;margin-bottom:14px;}
-.df-grid{display:grid;grid-template-columns:repeat(5,1fr);gap:10px;}
-.df-card{background:var(--surface2);border-radius:var(--r);padding:12px 13px;border:1px solid var(--border);text-align:center;}
-.df-emoji{font-size:16px;margin-bottom:5px;}
-.df-lbl{font-size:11px;color:var(--text2);margin-bottom:5px;line-height:1.4;}
-.df-val{font-size:16px;font-weight:500;font-family:'DM Mono',monospace;}
-.df-sub{font-size:11px;margin-top:3px;font-family:'DM Mono',monospace;}
+.day-forecast{background:var(--surface);border:1px solid var(--border);border-radius:var(--rl);padding:24px 28px;margin-bottom:20px;}
+.df-grid{display:grid;grid-template-columns:repeat(5,1fr);gap:14px;}
+.df-card{background:var(--surface2);border-radius:var(--r);padding:16px 14px;border:1px solid var(--border);text-align:center;}
+.df-emoji{font-size:26px;margin-bottom:8px;}
+.df-lbl{font-size:13px;color:var(--text2);margin-bottom:6px;line-height:1.45;}
+.df-val{font-size:21px;font-weight:500;font-family:'DM Mono',monospace;}
+.df-sub{font-size:13px;margin-top:4px;font-family:'DM Mono',monospace;}
 .df-range-wrap{margin-top:10px;}
 .df-range{display:flex;align-items:center;gap:6px;}
 .df-range-bar{flex:1;height:4px;background:var(--border2);border-radius:2px;position:relative;}
@@ -177,52 +177,52 @@ body{font-family:'DM Sans',sans-serif;background:var(--bg);color:var(--text);min
 
 /* Two col */
 .panel{display:none;}.panel.on{display:block;}
-.two{display:grid;grid-template-columns:1fr 1fr;gap:14px;margin-bottom:14px;}
-.one{margin-bottom:14px;}
-.card{background:var(--surface);border:1px solid var(--border);border-radius:var(--rl);padding:18px 20px;}
-.ch{font-size:11px;font-weight:500;color:var(--text3);text-transform:uppercase;letter-spacing:.07em;margin-bottom:12px;font-family:'DM Mono',monospace;}
-.cw{position:relative;width:100%;height:190px;}
+.two{display:grid;grid-template-columns:1fr 1fr;gap:20px;margin-bottom:20px;}
+.one{margin-bottom:18px;}
+.card{background:var(--surface);border:1px solid var(--border);border-radius:var(--rl);padding:24px 28px;}
+.ch{font-size:12px;font-weight:500;color:var(--text3);text-transform:uppercase;letter-spacing:.08em;margin-bottom:14px;font-family:'DM Mono',monospace;}
+.cw{position:relative;width:100%;height:240px;}
 
 /* Legend */
-.lgbox{background:var(--surface2);border-radius:9px;padding:12px 14px;margin-top:14px;}
-.lgr{display:flex;align-items:flex-start;gap:12px;padding:8px 0;border-bottom:1px solid var(--border);}
+.lgbox{background:var(--surface2);border-radius:9px;padding:14px 16px;margin-top:16px;}
+.lgr{display:flex;align-items:flex-start;gap:14px;padding:10px 0;border-bottom:1px solid var(--border);}
 .lgr:last-child{border-bottom:none;padding-bottom:0;}
 .lgl{display:flex;align-items:center;gap:4px;flex-shrink:0;width:50px;}
 .lgd{width:18px;height:0;border-top:2px dashed;}
 .lgs{width:18px;height:2px;}
 .lgdot{width:7px;height:7px;border-radius:50%;}
-.lgt{font-size:13px;font-weight:500;}
-.lgx{font-size:12px;color:var(--text2);line-height:1.5;margin-top:2px;}
+.lgt{font-size:15px;font-weight:500;}
+.lgx{font-size:13px;color:var(--text2);line-height:1.55;margin-top:3px;}
 
 /* Scenarios */
-.scr{display:flex;align-items:center;gap:10px;margin-bottom:9px;}
-.scl{font-size:12px;color:var(--text2);width:115px;flex-shrink:0;line-height:1.35;}
-.scb{flex:1;height:5px;background:var(--surface2);border-radius:3px;overflow:hidden;}
-.scf{height:5px;border-radius:3px;}
-.scv{font-size:12px;font-weight:500;min-width:58px;text-align:right;font-family:'DM Mono',monospace;}
+.scr{display:flex;align-items:center;gap:12px;margin-bottom:11px;}
+.scl{font-size:14px;color:var(--text2);width:130px;flex-shrink:0;line-height:1.4;}
+.scb{flex:1;height:6px;background:var(--surface2);border-radius:3px;overflow:hidden;}
+.scf{height:6px;border-radius:3px;}
+.scv{font-size:14px;font-weight:500;min-width:64px;text-align:right;font-family:'DM Mono',monospace;}
 
 /* Sector context */
-.sector-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:10px;}
-.sector-card{background:var(--surface2);border-radius:var(--r);padding:12px 13px;border:1px solid var(--border);}
-.sector-emoji{font-size:18px;margin-bottom:5px;}
-.sector-name{font-size:12px;font-weight:500;margin-bottom:3px;}
-.sector-val{font-size:16px;font-weight:500;font-family:'DM Mono',monospace;margin-bottom:4px;}
-.sector-desc{font-size:11px;color:var(--text2);line-height:1.45;}
+.sector-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:14px;}
+.sector-card{background:var(--surface2);border-radius:var(--r);padding:16px 16px;border:1px solid var(--border);}
+.sector-emoji{font-size:26px;margin-bottom:8px;}
+.sector-name{font-size:14px;font-weight:500;margin-bottom:4px;}
+.sector-val{font-size:19px;font-weight:500;font-family:'DM Mono',monospace;margin-bottom:5px;}
+.sector-desc{font-size:13px;color:var(--text2);line-height:1.5;}
 
 /* Glossar */
-.glossar{background:var(--surface);border:1px solid var(--border);border-radius:var(--rl);padding:22px;margin-top:22px;}
-.glossar-title{font-size:16px;font-weight:500;margin-bottom:5px;}
-.glossar-sub{font-size:13px;color:var(--text2);margin-bottom:18px;line-height:1.5;}
+.glossar{background:var(--surface);border:1px solid var(--border);border-radius:var(--rl);padding:28px;margin-top:28px;}
+.glossar-title{font-size:19px;font-weight:500;margin-bottom:6px;}
+.glossar-sub{font-size:15px;color:var(--text2);margin-bottom:20px;line-height:1.55;}
 .glossar-grid{display:grid;grid-template-columns:1fr 1fr;gap:0;}
-.gitem{padding:14px 16px;border-bottom:1px solid var(--border);}
+.gitem{padding:18px 20px;border-bottom:1px solid var(--border);}
 .gitem:nth-child(odd){border-right:1px solid var(--border);}
-.gterm{font-size:13px;font-weight:500;color:var(--text);margin-bottom:5px;display:flex;align-items:center;gap:8px;}
-.gemoji{font-size:16px;}
-.gbadge{font-size:10px;padding:2px 7px;border-radius:4px;background:var(--surface2);color:var(--text2);font-family:'DM Mono',monospace;font-weight:400;}
-.gdef{font-size:12px;color:var(--text2);line-height:1.6;}
-.gex{font-size:11px;color:var(--text3);margin-top:4px;font-style:italic;}
+.gterm{font-size:15px;font-weight:500;color:var(--text);margin-bottom:6px;display:flex;align-items:center;gap:9px;}
+.gemoji{font-size:22px;}
+.gbadge{font-size:11px;padding:2px 7px;border-radius:4px;background:var(--surface2);color:var(--text2);font-family:'DM Mono',monospace;font-weight:400;}
+.gdef{font-size:14px;color:var(--text2);line-height:1.65;}
+.gex{font-size:13px;color:var(--text3);margin-top:5px;font-style:italic;}
 
-.disc{font-size:11px;color:var(--text3);padding:14px 0;line-height:1.6;border-top:1px solid var(--border);margin-top:8px;font-family:'DM Mono',monospace;}
+.disc{font-size:12px;color:var(--text3);padding:16px 0;line-height:1.65;border-top:1px solid var(--border);margin-top:10px;font-family:'DM Mono',monospace;}
 
 @media(max-width:640px){
   .mets,.pf-inputs,.pf-results,.df-grid,.rec-scores,.sector-grid{grid-template-columns:1fr 1fr;}
@@ -258,7 +258,7 @@ body{font-family:'DM Sans',sans-serif;background:var(--bg);color:var(--text);min
 <!-- Intro / Onboarding -->
 <div class="intro" id="intro-box">
   <div class="intro-title">👋 Was ist das hier? Eine kurze Erklärung für Einsteiger.</div>
-  <div style="font-size:13px;color:var(--text);line-height:1.65;">
+  <div style="font-size:15px;color:var(--text);line-height:1.7;">
     Dieses Dashboard beobachtet zwei Aktien aus der Raumfahrt-Branche für dich. <b>Eine Aktie</b> ist ein kleines Stück eines Unternehmens — wenn du 100 Rocket-Lab-Aktien kaufst, gehört dir ein winziger Teil des Unternehmens. Steigt der <b>Kurs</b> (= Preis der Aktie), machst du Gewinn. Fällt er, Verlust. Alle Zahlen und Begriffe werden dir erklärt — einfach mit der Maus über das <span style="display:inline-flex;align-items:center;gap:3px;vertical-align:middle;"><span style="width:15px;height:15px;border-radius:50%;background:rgba(37,99,235,.15);color:#2563eb;font-size:9px;display:inline-flex;align-items:center;justify-content:center;font-weight:500;font-family:'DM Mono',monospace;">?</span></span>-Symbol fahren.
   </div>
   <div class="intro-grid">
@@ -335,7 +335,7 @@ body{font-family:'DM Sans',sans-serif;background:var(--bg);color:var(--text);min
       <div class="ml">
         <span class="tip">Jahresspanne (Hoch/Tief) <span class="tip-icon">?</span><span class="tip-box"><b>Was zeigt die Jahresspanne?</b> Der höchste und tiefste Preis der letzten 12 Monate. Das hilft dir einzuschätzen: Ist die Aktie gerade eher teuer (nahe am Jahreshoch) oder günstig (nahe am Jahrestief)? Rocket Lab ist von ~$42 auf ~$150 gestiegen — ein starkes Jahr!</span></span>
       </div>
-      <div class="mv" id="rklb-52w" style="font-size:14px;padding-top:4px;">—</div>
+      <div class="mv" id="rklb-52w" style="font-size:15px;padding-top:4px;">—</div>
       <div class="mc-explain">Tief → Hoch (12 Monate)</div>
     </div>
     <div class="met">
@@ -501,9 +501,9 @@ body{font-family:'DM Sans',sans-serif;background:var(--bg);color:var(--text);min
         <div class="df-emoji">📍</div>
         <div class="df-lbl">Wo steht der Kurs gerade?</div>
         <div class="df-range-wrap">
-          <div style="font-size:10px;color:var(--text2);display:flex;justify-content:space-between;margin-bottom:4px;font-family:'DM Mono',monospace;"><span id="rklb-lo-lbl">Tief</span><span id="rklb-hi-lbl">Hoch</span></div>
+          <div style="font-size:15px;color:var(--text2);display:flex;justify-content:space-between;margin-bottom:4px;font-family:'DM Mono',monospace;"><span id="rklb-lo-lbl">Tief</span><span id="rklb-hi-lbl">Hoch</span></div>
           <div class="df-range-bar"><div class="df-range-dot" id="rklb-rdot" style="left:50%;"></div></div>
-          <div style="font-size:10px;color:var(--text3);margin-top:6px;text-align:center;">Links = nahe Tief · Rechts = nahe Hoch</div>
+          <div style="font-size:15px;color:var(--text3);margin-top:6px;text-align:center;">Links = nahe Tief · Rechts = nahe Hoch</div>
         </div>
         <div class="df-sub mu" style="margin-top:6px;" id="rklb-vol-avg">—</div>
       </div>
@@ -519,7 +519,7 @@ body{font-family:'DM Sans',sans-serif;background:var(--bg);color:var(--text);min
   <!-- Sector Context RKLB -->
   <div class="card one">
     <div class="ch">Was sonst noch den RKLB-Kurs beeinflusst</div>
-    <div style="font-size:12px;color:var(--text2);margin-bottom:12px;line-height:1.5;">Rocket-Lab-Aktien werden nicht nur durch eigene Nachrichten bewegt. Auch diese externen Faktoren spielen eine grosse Rolle:</div>
+    <div style="font-size:15px;color:var(--text2);margin-bottom:12px;line-height:1.5;">Rocket-Lab-Aktien werden nicht nur durch eigene Nachrichten bewegt. Auch diese externen Faktoren spielen eine grosse Rolle:</div>
     <div class="sector-grid">
       <div class="sector-card">
         <div class="sector-emoji">🌌</div>
@@ -561,14 +561,14 @@ body{font-family:'DM Sans',sans-serif;background:var(--bg);color:var(--text);min
     </div>
     <div class="card">
       <div class="ch">🎯 Wo könnte der Kurs in 12 Monaten stehen?</div>
-      <div style="font-size:12px;color:var(--text2);margin-bottom:12px;line-height:1.5;">Verschiedene Experten und Szenarien — die Balken zeigen wie "hoch" das jeweilige Ziel ist:</div>
+      <div style="font-size:15px;color:var(--text2);margin-bottom:12px;line-height:1.5;">Verschiedene Experten und Szenarien — die Balken zeigen wie "hoch" das jeweilige Ziel ist:</div>
       <div class="scr"><div class="scl">Bestmöglicher Fall<br>(alles klappt)</div><div class="scb"><div class="scf" style="width:100%;background:var(--green);"></div></div><div class="scv up">$200–216</div></div>
       <div class="scr"><div class="scl">Needham Bank<br>(optimistische Bank)</div><div class="scb"><div class="scf" style="width:56%;background:var(--rklb);"></div></div><div class="scv" style="color:var(--rklb);">$120</div></div>
       <div class="scr"><div class="scl">Alle Banken<br>(Durchschnitt)</div><div class="scb"><div class="scf" style="width:56%;background:#bbb;"></div></div><div class="scv mu">$120</div></div>
       <div class="scr"><div class="scl">Vorsichtige<br>Schätzung</div><div class="scb"><div class="scf" style="width:40%;background:var(--amber);"></div></div><div class="scv wn">$86</div></div>
       <div style="background:var(--surface2);border-radius:8px;padding:12px;margin-top:14px;">
-        <div style="font-size:12px;font-weight:500;margin-bottom:8px;">💡 Was sagt die Internet-Community?</div>
-        <div style="font-size:12px;color:var(--text2);line-height:1.6;">Reddit und WallStreetBets (grosse Internet-Foren für Privatanleger): <b>84% positive Kommentare</b> zu RKLB. Ein Post über das Rekordquartal hatte hunderte Upvotes. Aber Vorsicht: Internet-Euphorie kann schnell kippen!</div>
+        <div style="font-size:15px;font-weight:500;margin-bottom:8px;">💡 Was sagt die Internet-Community?</div>
+        <div style="font-size:15px;color:var(--text2);line-height:1.6;">Reddit und WallStreetBets (grosse Internet-Foren für Privatanleger): <b>84% positive Kommentare</b> zu RKLB. Ein Post über das Rekordquartal hatte hunderte Upvotes. Aber Vorsicht: Internet-Euphorie kann schnell kippen!</div>
       </div>
     </div>
   </div>
@@ -600,7 +600,7 @@ body{font-family:'DM Sans',sans-serif;background:var(--bg);color:var(--text);min
     <div class="met">
       <div class="met-icon">📏</div>
       <div class="ml"><span class="tip">Jahresspanne <span class="tip-icon">?</span><span class="tip-box">ASTS schwankt extrem — das zeigt wie spekulativ und riskant diese Aktie ist. Nur wer starke Nerven hat, sollte investieren.</span></span></div>
-      <div class="mv" id="asts-52w" style="font-size:14px;padding-top:4px;">—</div>
+      <div class="mv" id="asts-52w" style="font-size:15px;padding-top:4px;">—</div>
       <div class="mc-explain">Tief → Hoch (12 Monate)</div>
     </div>
     <div class="met">
@@ -702,9 +702,9 @@ body{font-family:'DM Sans',sans-serif;background:var(--bg);color:var(--text);min
       <div class="df-card"><div class="df-emoji">📉</div><div class="df-lbl">Mögliches Tagestief</div><div class="df-val dn" id="asts-day-lo">—</div><div class="df-sub dn" id="asts-lo-pf">—</div></div>
       <div class="df-card"><div class="df-emoji">📍</div><div class="df-lbl">Wo steht der Kurs gerade?</div>
         <div class="df-range-wrap">
-          <div style="font-size:10px;color:var(--text2);display:flex;justify-content:space-between;margin-bottom:4px;font-family:'DM Mono',monospace;"><span id="asts-lo-lbl">Tief</span><span id="asts-hi-lbl">Hoch</span></div>
+          <div style="font-size:15px;color:var(--text2);display:flex;justify-content:space-between;margin-bottom:4px;font-family:'DM Mono',monospace;"><span id="asts-lo-lbl">Tief</span><span id="asts-hi-lbl">Hoch</span></div>
           <div class="df-range-bar"><div class="df-range-dot" id="asts-rdot" style="left:50%;"></div></div>
-          <div style="font-size:10px;color:var(--text3);margin-top:6px;text-align:center;">Links = nahe Tief · Rechts = nahe Hoch</div>
+          <div style="font-size:15px;color:var(--text3);margin-top:6px;text-align:center;">Links = nahe Tief · Rechts = nahe Hoch</div>
         </div>
         <div class="df-sub mu" style="margin-top:6px;" id="asts-vol-avg">—</div>
       </div>
@@ -715,7 +715,7 @@ body{font-family:'DM Sans',sans-serif;background:var(--bg);color:var(--text);min
   <!-- Sector context ASTS -->
   <div class="card one">
     <div class="ch">Was sonst noch den ASTS-Kurs beeinflusst</div>
-    <div style="font-size:12px;color:var(--text2);margin-bottom:12px;line-height:1.5;">ASTS wird von sehr vielen externen Faktoren beeinflusst — das macht die Aktie so unberechenbar:</div>
+    <div style="font-size:15px;color:var(--text2);margin-bottom:12px;line-height:1.5;">ASTS wird von sehr vielen externen Faktoren beeinflusst — das macht die Aktie so unberechenbar:</div>
     <div class="sector-grid">
       <div class="sector-card">
         <div class="sector-emoji">🌌</div>
@@ -757,15 +757,15 @@ body{font-family:'DM Sans',sans-serif;background:var(--bg);color:var(--text);min
     </div>
     <div class="card">
       <div class="ch">🎯 Wo könnte der Kurs in 12 Monaten stehen?</div>
-      <div style="font-size:12px;color:var(--text2);margin-bottom:12px;line-height:1.5;">Die Bandbreite ist riesig — das zeigt das grosse Risiko und das grosse Potenzial:</div>
+      <div style="font-size:15px;color:var(--text2);margin-bottom:12px;line-height:1.5;">Die Bandbreite ist riesig — das zeigt das grosse Risiko und das grosse Potenzial:</div>
       <div class="scr"><div class="scl">Bestmöglicher Fall</div><div class="scb"><div class="scf" style="width:100%;background:var(--green);"></div></div><div class="scv up">$200+</div></div>
       <div class="scr"><div class="scl">Roth Capital Bank</div><div class="scb"><div class="scf" style="width:54%;background:var(--rklb);"></div></div><div class="scv" style="color:var(--rklb);">$108</div></div>
       <div class="scr"><div class="scl">Alle Banken<br>(Durchschnitt)</div><div class="scb"><div class="scf" style="width:42%;background:#bbb;"></div></div><div class="scv mu">$83</div></div>
       <div class="scr"><div class="scl">Fairer Wert<br>(Berechnung)</div><div class="scb"><div class="scf" style="width:36%;background:var(--amber);"></div></div><div class="scv wn">$71</div></div>
       <div class="scr"><div class="scl">Schlechtester Fall</div><div class="scb"><div class="scf" style="width:25%;background:var(--red);"></div></div><div class="scv dn">$50</div></div>
       <div style="background:rgba(220,38,38,.05);border:1px solid rgba(220,38,38,.15);border-radius:8px;padding:12px;margin-top:14px;">
-        <div style="font-size:12px;font-weight:500;margin-bottom:6px;color:#991b1b;">⚠️ Wichtige Warnung</div>
-        <div style="font-size:12px;color:var(--text2);line-height:1.6;">Der aktuelle Kurs ($120) liegt deutlich über dem, was die meisten Experten für fair halten ($83). Das bedeutet: Viele Anleger spekulieren auf die Zukunft. Wenn diese Zukunft nicht so schnell kommt wie erhofft, kann der Kurs stark fallen. Nur mit Geld investieren, dessen Verlust du verkraften könntest.</div>
+        <div style="font-size:15px;font-weight:500;margin-bottom:6px;color:#991b1b;">⚠️ Wichtige Warnung</div>
+        <div style="font-size:15px;color:var(--text2);line-height:1.6;">Der aktuelle Kurs ($120) liegt deutlich über dem, was die meisten Experten für fair halten ($83). Das bedeutet: Viele Anleger spekulieren auf die Zukunft. Wenn diese Zukunft nicht so schnell kommt wie erhofft, kann der Kurs stark fallen. Nur mit Geld investieren, dessen Verlust du verkraften könntest.</div>
       </div>
     </div>
   </div>
