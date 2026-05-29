@@ -6,7 +6,7 @@
 <title>Space Stocks Dashboard</title>
 <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🚀</text></svg>">
 <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet">
-    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
 <style>
 /* ── Reset & Base ── */
@@ -1043,24 +1043,28 @@ body{font-family:'DM Sans',sans-serif;background:var(--bg);color:var(--text);min
 const SUPA_URL = 'https://zqltpegdkdnpgvscjrqj.supabase.co';
 const SUPA_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InpxbHRwZWdka2RucGd2c2NqcnFqIiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODAwNzIxNTEsImV4cCI6MjA5NTY0ODE1MX0.VUU73nByKnui-ONTt8JswQ5Be8yHn5n7JfuGOganib8';
 let supabase = null, currentUser = null;
+// Init immediately when script loads
+document.addEventListener('DOMContentLoaded', () => { initSupabase(); checkAuth(); });
 
 function initSupabase() {
-  if (typeof window.supabase !== 'undefined') {
-    supabase = window.supabase.createClient(SUPA_URL, SUPA_KEY);
-  } else if (typeof supabaseJs !== 'undefined') {
-    supabase = supabaseJs.createClient(SUPA_URL, SUPA_KEY);
-  } else {
-    // Supabase SDK loaded as module
-    const { createClient } = window.supabase || {};
-    if (createClient) supabase = createClient(SUPA_URL, SUPA_KEY);
-  }
+  try {
+    // UMD bundle exposes window.supabase.createClient
+    if (window.supabase && window.supabase.createClient) {
+      supabase = window.supabase.createClient(SUPA_URL, SUPA_KEY);
+    }
+  } catch(e) { console.error('Supabase init failed:', e); }
 }
 
 async function sendMagicLink() {
   const email = $('auth-email').value.trim();
   const btn = $('auth-btn'), msg = $('auth-msg');
   if (!email) { msg.textContent = 'Bitte Email eingeben.'; msg.className='auth-msg err'; return; }
+  if (!supabase) {
+    initSupabase();
+    if (!supabase) { msg.textContent = 'Verbindungsfehler — Seite neu laden.'; msg.className='auth-msg err'; return; }
+  }
   btn.disabled = true; btn.textContent = 'Sendet...';
+  msg.textContent = ''; msg.className = 'auth-msg';
   try {
     const { error } = await supabase.auth.signInWithOtp({
       email,
@@ -1077,7 +1081,7 @@ async function sendMagicLink() {
 }
 
 async function checkAuth() {
-  initSupabase();
+  if (!supabase) initSupabase();
   if (!supabase) { hideAuthOverlay(); return; } // Fallback if SDK fails
   
   const { data: { session } } = await supabase.auth.getSession();
@@ -1749,8 +1753,7 @@ async function hdrRefresh() {
 // ── Init ───────────────────────────────────────────────────
 (function init() {
   loadKey();
-  loadTx(); // local fallback
-  checkAuth(); // will load from DB if logged in
+  loadTx(); // local fallback (overridden by DB if logged in)
   // Show context bar for active tab
   $('ctx-rklb').classList.add('show');
   // Open all cards
