@@ -1578,6 +1578,37 @@ async function fetchCtxBar(t) {
   } catch(e) { console.warn('fetchCtxBar failed:', e.message); }
 }
 
+
+// ── Glossar AI Update ──────────────────────
+const GLOSSAR_PROMPT = `Du bist Finanz-Erklärer für Einsteiger. Analysiere die aktuellen Entwicklungen bei RKLB und ASTS.
+Welche 3-5 neuen Fachbegriffe tauchen gerade in den News auf die Anleger kennen sollten?
+(z.B. neue Technologien, Programme, Verträge, Firmen die erwähnt werden)
+Antworte NUR mit JSON ohne Markdown:
+{"terms":[{"term":"Begriff","def":"Einfache Erklärung in 1-2 Sätzen für Einsteiger"}]}`;
+
+async function fetchGlossar() {
+  const grid = document.getElementById('glossar-grid');
+  if (!grid) return;
+  try {
+    const p = await kiCall(GLOSSAR_PROMPT);
+    if (!p || !p.terms || !p.terms.length) return;
+    // Add new terms (don't replace existing ones)
+    const existing = Array.from(grid.querySelectorAll('.gitem-term')).map(el => el.textContent.toLowerCase());
+    let added = 0;
+    p.terms.forEach(item => {
+      if (!item.term || !item.def) return;
+      if (existing.includes(item.term.toLowerCase())) return; // skip duplicates
+      const div = document.createElement('div');
+      div.className = 'gitem';
+      div.style.border = '1px solid var(--blue-bg)'; // highlight new terms
+      div.innerHTML = '<div class="gitem-term">✨ '+item.term+'</div><div class="gitem-def">'+item.def+'</div>';
+      grid.appendChild(div);
+      added++;
+    });
+    if (added > 0) console.log('Glossar: added '+added+' new terms');
+  } catch(e) { console.warn('fetchGlossar failed:', e.message); }
+}
+
 async function loadAll() {
   const now = new Date();
   if ($('last-upd')) $('last-upd').textContent = 'Kurse: '+now.toLocaleTimeString('de-CH')+' · '+now.toLocaleDateString('de-CH')+' (15s)';
@@ -1778,6 +1809,7 @@ async function refreshAllNews(manual=false) {
       fetchScenarios('rklb'), fetchScenarios('asts'),
       fetchSectorContext('rklb'), fetchSectorContext('asts'),
       fetchCtxBar('rklb'), fetchCtxBar('asts'),
+      fetchGlossar(),
     ]);
   } catch(e) { console.warn('refreshAllNews error:', e.message); }
   if (lbl) lbl.textContent = 'Nächste Aktualisierung in 2h';
