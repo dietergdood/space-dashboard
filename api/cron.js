@@ -17,7 +17,11 @@ async function supa(path, method='GET', body=null) {
   };
   if (body) opts.body = JSON.stringify(body);
   const r = await fetch(`${SUPABASE_URL}/rest/v1${path}`, opts);
-  if (!r.ok) throw new Error(`Supabase ${r.status}: ${await r.text()}`);
+  if (!r.ok) {
+    const errText = await r.text();
+    console.error('Supabase error:', r.status, errText, 'URL:', SUPABASE_URL, 'Has key:', !!SUPABASE_SERVICE_KEY);
+    throw new Error(`Supabase ${r.status}: ${errText}`);
+  }
   return r.json();
 }
 
@@ -45,19 +49,29 @@ async function kiCall(prompt) {
 }
 
 async function saveToCache(ticker, section, data) {
-  await supa('/ki_cache', 'POST', {
-    ticker: ticker || 'global',
-    section,
-    data,
-    updated_at: new Date().toISOString()
-  });
+  try {
+    const result = await supa('/ki_cache', 'POST', {
+      ticker: ticker || 'global',
+      section,
+      data,
+      updated_at: new Date().toISOString()
+    });
+    console.log('Saved:', ticker, section);
+    return result;
+  } catch(e) {
+    console.error('saveToCache failed:', ticker, section, e.message);
+    throw e;
+  }
 }
 
 const delay = ms => new Promise(r => setTimeout(r, ms));
 
 export default async function handler(req, res) {
   // Vercel automatically secures cron endpoints
-  if (!ANTHROPIC_KEY) return res.status(500).json({ error: 'No API key configured' });
+  if (!ANTHROPIC_KEY) return res.status(500).json({ error: 'No ANTHROPIC_API_KEY configured' });
+  if (!SUPABASE_URL) return res.status(500).json({ error: 'No SUPABASE_URL configured' });
+  if (!SUPABASE_SERVICE_KEY) return res.status(500).json({ error: 'No SUPABASE_SERVICE_KEY configured' });
+  console.log('Env check OK, starting cron...');
 
   try {
     // Check if sync is enabled

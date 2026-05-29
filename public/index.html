@@ -412,6 +412,18 @@ input:checked + .toggle-slider:before{transform:translateX(18px);}
 .ki-status-pill.success{background:var(--green-bg);border-color:var(--green-bd);color:var(--green);}
 .ki-status-pill.error{background:var(--red-bg);border-color:var(--red-bd);color:var(--red);}
 @keyframes fadeIn{from{opacity:0;transform:translateY(-4px);}to{opacity:1;transform:translateY(0);}}
+
+.tab-logo{width:18px;height:18px;border-radius:3px;object-fit:cover;vertical-align:middle;margin-right:6px;flex-shrink:0;}
+.tab-rklb-label::after{content:'Rocket Lab (RKLB)';}
+.tab-asts-label::after{content:'AST SpaceMobile (ASTS)';}
+@media(max-width:640px){
+  .tab-logo{width:16px;height:16px;margin-right:4px;}
+  .hdr-mid{flex:1;min-width:0;}
+  .tabs{width:100%;}
+}
+@media(max-width:420px){
+  .tab{padding:7px 10px;font-size:12px;}
+}
 </style>
   <!-- PWA -->
   <link rel="manifest" href="/manifest.json">
@@ -435,8 +447,8 @@ input:checked + .toggle-slider:before{transform:translateX(18px);}
     </div>
     <div class="hdr-mid">
       <div class="tabs" id="main-tabs">
-        <button class="tab rklb-tab active" onclick="switchTab('rklb')"><img src="/rklb-logo.png" style="width:18px;height:18px;border-radius:3px;object-fit:contain;vertical-align:middle;margin-right:6px;background:#fff;">Rocket Lab (RKLB)</button>
-        <button class="tab asts-tab" onclick="switchTab('asts')"><img src="/asts-logo.png" style="width:18px;height:18px;border-radius:3px;object-fit:cover;vertical-align:middle;margin-right:6px;">AST SpaceMobile (ASTS)</button>
+        <button class="tab rklb-tab active" onclick="switchTab('rklb')"><img src="/rklb-logo.png" class="tab-logo">Rocket Lab (RKLB)</button>
+        <button class="tab asts-tab" onclick="switchTab('asts')"><img src="/asts-logo.png" class="tab-logo">AST SpaceMobile (ASTS)</button>
       </div>
     </div>
     <div class="hdr-r">
