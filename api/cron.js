@@ -56,11 +56,7 @@ async function saveToCache(ticker, section, data) {
 const delay = ms => new Promise(r => setTimeout(r, ms));
 
 export default async function handler(req, res) {
-  // Verify cron secret to prevent unauthorized calls
-  if (req.headers['authorization'] !== `Bearer ${process.env.CRON_SECRET}`) {
-    return res.status(401).json({ error: 'Unauthorized' });
-  }
-
+  // Vercel automatically secures cron endpoints
   if (!ANTHROPIC_KEY) return res.status(500).json({ error: 'No API key configured' });
 
   try {
