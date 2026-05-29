@@ -1701,6 +1701,36 @@ async function fetchGlossar() {
   } catch(e) { console.warn('fetchGlossar failed:', e.message); }
 }
 
+
+// ── Sync Toggle ────────────────────────────────────────────
+async function toggleSync(enabled) {
+  const lbl = document.getElementById('sync-status-label');
+  if (lbl) lbl.textContent = enabled ? 'Wird aktiviert...' : 'Wird deaktiviert...';
+  try {
+    await fetch('/api/sync-toggle', {
+      method: 'POST',
+      headers: {'Content-Type':'application/json'},
+      body: JSON.stringify({ enabled })
+    });
+    if (lbl) lbl.textContent = enabled ? '✅ Auto-Sync aktiv (4× täglich)' : '⏸ Auto-Sync pausiert';
+  } catch(e) {
+    if (lbl) lbl.textContent = 'Fehler beim Speichern';
+  }
+}
+
+// ── Manual Refresh from Settings ──────────────────────────
+async function manualRefreshFromSettings() {
+  const key = getKey();
+  const btn = document.getElementById('manual-refresh-btn');
+  if (!key || !key.startsWith('sk-ant-')) {
+    if (btn) { btn.textContent = '⚠️ API-Key eingeben'; setTimeout(() => btn.textContent = '↺ Jetzt manuell aktualisieren', 2000); }
+    return;
+  }
+  if (btn) { btn.disabled = true; btn.textContent = '⏳ Lädt...'; }
+  await refreshAllNews(true);
+  if (btn) { btn.disabled = false; btn.textContent = '✓ Fertig'; setTimeout(() => btn.textContent = '↺ Jetzt manuell aktualisieren', 3000); }
+}
+
 async function loadAll() {
   const now = new Date();
   if ($('last-upd')) $('last-upd').textContent = 'Kurse: '+now.toLocaleTimeString('de-CH')+' · '+now.toLocaleDateString('de-CH')+' (15s)';
