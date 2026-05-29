@@ -231,6 +231,32 @@ body{font-family:'DM Sans',sans-serif;background:var(--bg);color:var(--text);min
   .gitem:nth-child(odd){border-right:none;}
   .gitem:last-child{border-bottom:none;}
 }
+
+/* ── Settings Dropdown ── */
+.settings-btn{width:36px;height:36px;border-radius:8px;background:var(--surface);border:1px solid var(--border2);display:flex;align-items:center;justify-content:center;cursor:pointer;font-size:17px;transition:all .2s;flex-shrink:0;position:relative;}
+.settings-btn:hover{background:var(--surface2);border-color:var(--border2);}
+.settings-dropdown{position:absolute;top:calc(100% + 8px);right:0;width:420px;background:var(--surface);border:1px solid var(--border2);border-radius:var(--rl);box-shadow:0 8px 32px rgba(0,0,0,.12);z-index:200;display:none;overflow:hidden;}
+.settings-dropdown.open{display:block;}
+.settings-section{padding:16px 20px;border-bottom:1px solid var(--border);}
+.settings-section:last-child{border-bottom:none;}
+.settings-section-title{font-size:11px;font-weight:500;text-transform:uppercase;letter-spacing:.08em;color:var(--text3);font-family:'DM Mono',monospace;margin-bottom:12px;}
+.settings-api-row{display:flex;align-items:center;gap:10px;margin-bottom:10px;}
+.settings-api-lbl{font-size:13px;color:var(--text2);flex-shrink:0;}
+.settings-api-in{flex:1;background:var(--surface2);border:1px solid var(--border2);border-radius:7px;padding:8px 12px;color:var(--text);font-family:'DM Mono',monospace;font-size:13px;outline:none;transition:border-color .2s;}
+.settings-api-in:focus{border-color:var(--blue);}
+.settings-api-ok{font-size:12px;color:var(--green);flex-shrink:0;display:none;}
+.settings-hint{font-size:13px;color:var(--text2);line-height:1.55;}
+.settings-hint a{color:var(--blue);}
+.settings-auto-row{display:flex;align-items:center;gap:10px;}
+.settings-auto-status{flex:1;font-size:13px;color:var(--text2);display:flex;align-items:center;gap:8px;}
+.settings-auto-dot{width:8px;height:8px;border-radius:50%;background:var(--text3);flex-shrink:0;}
+.settings-auto-dot.on{background:var(--green);}
+.settings-auto-dot.loading{background:var(--purple);animation:pulse .8s infinite;}
+.settings-auto-progress{height:3px;background:var(--surface2);border-radius:2px;overflow:hidden;margin-top:8px;}
+.settings-auto-progress-fill{height:3px;background:var(--purple);border-radius:2px;width:0%;transition:width .5s;}
+.settings-refresh-btn{display:inline-flex;align-items:center;gap:6px;background:transparent;border:1px solid var(--border2);border-radius:7px;padding:7px 12px;font-size:13px;color:var(--text2);cursor:pointer;font-family:'DM Sans',sans-serif;transition:all .2s;white-space:nowrap;flex-shrink:0;}
+.settings-refresh-btn:hover,.settings-refresh-btn.busy{border-color:var(--purple);color:var(--purple);background:var(--purple-bg);}
+.settings-spin{width:12px;height:12px;border:2px solid rgba(124,58,237,.2);border-top-color:var(--purple);border-radius:50%;animation:spin .7s linear infinite;display:none;}
 </style>
 </head>
 <body>
@@ -251,6 +277,36 @@ body{font-family:'DM Sans',sans-serif;background:var(--bg);color:var(--text);min
       <button class="sw ra" id="btn-rklb" onclick="switchTab('rklb')">🚀 Rocket Lab (RKLB)</button>
       <div class="sw-sep"></div>
       <button class="sw" id="btn-asts" onclick="switchTab('asts')">📡 AST SpaceMobile (ASTS)</button>
+    </div>
+    <!-- Settings Button -->
+    <div class="settings-btn" id="settings-btn" onclick="toggleSettings()" title="Einstellungen">⚙️
+      <div class="settings-dropdown" id="settings-dropdown">
+        <!-- KI-Schlüssel -->
+        <div class="settings-section">
+          <div class="settings-section-title">🔑 KI-Analyse Schlüssel</div>
+          <div class="settings-api-row">
+            <span class="settings-api-lbl">API-Key:</span>
+            <input class="settings-api-in" type="password" id="api-key" placeholder="sk-ant-api03-..." oninput="onKeyInput()"/>
+            <span class="settings-api-ok" id="api-ok">✓</span>
+          </div>
+          <div class="settings-hint">Ohne Schlüssel: Live-Kurse (immer kostenlos). Mit Schlüssel: KI sucht alle 4 Stunden automatisch News, Reddit-Diskussionen und Analysten-Berichte. <a href="https://console.anthropic.com/settings/keys" target="_blank">Key holen →</a> Wird niemals gespeichert.</div>
+        </div>
+        <!-- Auto-Refresh -->
+        <div class="settings-section">
+          <div class="settings-section-title">↺ Automatische News-Aktualisierung</div>
+          <div class="settings-auto-row">
+            <div class="settings-auto-status">
+              <div class="settings-auto-dot" id="auto-dot"></div>
+              <span id="auto-status-txt">KI-Schlüssel eingeben um zu starten</span>
+            </div>
+            <button class="settings-refresh-btn" id="auto-btn" onclick="manualRefreshAll();event.stopPropagation();">
+              <div class="settings-spin" id="auto-spin"></div>
+              <span id="auto-btn-txt">↺ Jetzt</span>
+            </button>
+          </div>
+          <div class="settings-auto-progress"><div class="settings-auto-progress-fill" id="auto-progress"></div></div>
+        </div>
+      </div>
     </div>
   </div>
 </div>
@@ -274,33 +330,7 @@ body{font-family:'DM Sans',sans-serif;background:var(--bg);color:var(--text);min
   <div class="intro-toggle" onclick="document.getElementById('intro-box').style.display='none'">✕ Erklärung ausblenden</div>
 </div>
 
-<!-- API Key -->
-<div class="api-box">
-  <div class="api-row">
-    <span class="api-lbl">🔑 KI-Analyse Schlüssel (optional):</span>
-    <input class="api-in" type="password" id="api-key" placeholder="sk-ant-api03-..." oninput="onKeyInput()"/>
-    <span class="api-ok" id="api-ok">✓ Aktiviert</span>
-  </div>
-  <div class="api-hint">
-    <b>Wozu brauche ich das?</b> Ohne Schlüssel siehst du Live-Kurse — das funktioniert immer kostenlos. Mit einem Schlüssel wird die KI (Claude) aktiviert: Sie durchsucht automatisch alle paar Stunden das Internet nach Neuigkeiten, Reddit-Diskussionen, Analysten-Berichten und Gerüchten zu deinen Aktien und fasst alles verständlich zusammen. Den Schlüssel bekommst du kostenlos auf <a href="https://console.anthropic.com/settings/keys" target="_blank" style="color:var(--blue);">console.anthropic.com</a>. Er wird niemals gespeichert oder übertragen — nur in deinem Browser.
-  </div>
-</div>
 
-<!-- Auto-Refresh Status Bar -->
-<div class="auto-bar">
-  <div class="auto-status">
-    <div class="auto-label">KI-News Auto-Aktualisierung</div>
-    <div class="auto-detail">
-      <div class="auto-dot off" id="auto-dot"></div>
-      <span id="auto-status-txt">KI-Schlüssel eingeben um automatische News-Aktualisierung zu starten</span>
-    </div>
-    <div class="auto-progress"><div class="auto-progress-fill" id="auto-progress"></div></div>
-  </div>
-  <button class="auto-btn" id="auto-btn" onclick="manualRefreshAll()">
-    <div class="auto-spin" id="auto-spin"></div>
-    <span id="auto-btn-txt">↺ Jetzt aktualisieren</span>
-  </button>
-</div>
 
 <!-- ════════════════ RKLB ════════════════ -->
 <div class="panel on" id="p-rklb">
@@ -816,7 +846,7 @@ function onKeyInput(){
   const k=$('api-key').value.trim(),ok=k.startsWith('sk-ant-')&&k.length>20;
   $('api-ok').style.display=ok?'inline':'none';
   if(ok){startAutoRefresh();}
-  else{stopAutoRefresh();$('auto-dot').className='auto-dot off';$('auto-status-txt').textContent='KI-Schlüssel eingeben um automatische News-Aktualisierung zu starten';}
+  else{stopAutoRefresh();$('auto-dot').className='settings-auto-dot';$('auto-status-txt').textContent='KI-Schlüssel eingeben um automatische News-Aktualisierung zu starten';}
 }
 function getKey(){return $('api-key').value.trim();}
 
@@ -845,11 +875,11 @@ async function refreshAllNews(manual=false){
   const key=getKey();if(!key||!key.startsWith('sk-ant-'))return;
   const btn=$('auto-btn'),spin=$('auto-spin'),btntxt=$('auto-btn-txt');
   btn.classList.add('busy');spin.style.display='block';btntxt.textContent='Suche...';
-  $('auto-dot').className='auto-dot loading';
+  $('auto-dot').className='settings-auto-dot loading';
   $('auto-status-txt').textContent='KI sucht gerade alle aktuellen Nachrichten — bitte warten...';
   await Promise.all([fetchLiveNews('rklb'),fetchLiveNews('asts')]);
   btn.classList.remove('busy');spin.style.display='none';btntxt.textContent='↺ Jetzt aktualisieren';
-  $('auto-dot').className='auto-dot';
+  $('auto-dot').className='settings-auto-dot on';
   $('auto-progress').style.width='0%';
   const next=new Date(Date.now()+AUTO_INTERVAL);
   $('auto-status-txt').textContent=`Zuletzt: ${new Date().toLocaleTimeString('de-CH')} · Nächste automatische Aktualisierung: ${next.toLocaleTimeString('de-CH')} Uhr`;
@@ -1103,6 +1133,19 @@ async function loadAll(){
   if(pl){$('pl-price').textContent='$'+pl.toFixed(2);$('pl-price').className='sector-val '+(pl>5?'up':'mu');}
 }
 loadAll();setInterval(loadAll,60000);
+
+// Settings dropdown
+function toggleSettings(){
+  const dd=document.getElementById('settings-dropdown');
+  dd.classList.toggle('open');
+}
+// Close dropdown when clicking outside
+document.addEventListener('click',function(e){
+  const btn=document.getElementById('settings-btn');
+  if(btn && !btn.contains(e.target)){
+    document.getElementById('settings-dropdown').classList.remove('open');
+  }
+});
 
 // Charts
 const mo=['Jun','Jul','Aug','Sep','Okt','Nov','Dez','Jan','Feb','Mär','Apr','Mai','Jun→','Jul→','Aug→','Sep→'];
