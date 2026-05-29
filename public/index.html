@@ -2025,11 +2025,8 @@ async function hdrRefresh() {
   // Load cached data first (instant, no rate limits)
   loadFromCache();
   loadSyncStatus();
-  // If user has own key, also schedule a live refresh after 60s
-  const key = getKey();
-  if (key && key.startsWith('sk-ant-')) {
-    setTimeout(() => refreshAllNews(), 60000);
-  }
+  // No auto-refresh on page load - Cron handles KI updates
+  // Manual refresh available in ⚙️ settings
 })();
 
 </script>
