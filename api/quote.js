@@ -17,33 +17,40 @@ export default async function handler(req, res) {
   };
 
   try {
-    // Step 1: Get crumb (needed for authenticated endpoints)
+    // Step 1: Get crumb
     let crumb = null;
     try {
       const crumbRes = await fetch('https://query1.finance.yahoo.com/v1/test/getcrumb', { headers });
       if (crumbRes.ok) crumb = await crumbRes.text();
     } catch (_) {}
 
-    // Step 2: Fetch chart data
-    const chartUrl = `https://query1.finance.yahoo.com/v8/finance/chart/${sym}?interval=1d&range=5d${crumb ? '&crumb=' + encodeURIComponent(crumb) : ''}`;
-    const chartRes = await fetch(chartUrl, { headers });
+    // Step 2: Fetch chart + quote in parallel
+    const crumbParam = crumb ? '&crumb=' + encodeURIComponent(crumb) : '';
+    const [chartRes, quoteRes] = await Promise.all([
+      fetch(`https://query1.finance.yahoo.com/v8/finance/chart/${sym}?interval=1d&range=5d${crumbParam}`, { headers }),
+      fetch(`https://query1.finance.yahoo.com/v7/finance/quote?symbols=${sym}&fields=regularMarketPrice,regularMarketPreviousClose,regularMarketChangePercent,regularMarketChange,marketCap,regularMarketVolume,fiftyTwoWeekHigh,fiftyTwoWeekLow${crumbParam}`, { headers }),
+    ]);
+
     if (!chartRes.ok) throw new Error(`Chart: ${chartRes.status}`);
     const chartData = await chartRes.json();
 
-    // Step 3: Try to get marketCap from quote endpoint (no crumb needed)
-    try {
-      const quoteUrl = `https://query1.finance.yahoo.com/v7/finance/quote?symbols=${sym}&fields=marketCap,regularMarketVolume${crumb ? '&crumb=' + encodeURIComponent(crumb) : ''}`;
-      const quoteRes = await fetch(quoteUrl, { headers });
-      if (quoteRes.ok) {
+    // Step 3: Inject accurate real-time fields from quote endpoint
+    if (quoteRes.ok) {
+      try {
         const quoteData = await quoteRes.json();
         const q = quoteData?.quoteResponse?.result?.[0];
         if (q && chartData?.chart?.result?.[0]?.meta) {
           const meta = chartData.chart.result[0].meta;
-          if (q.marketCap) meta.marketCap = q.marketCap;
-          if (q.regularMarketVolume) meta.regularMarketVolume = q.regularMarketVolume;
+          // Override with accurate real-time data
+          if (q.regularMarketPrice)         meta.regularMarketPrice = q.regularMarketPrice;
+          if (q.regularMarketPreviousClose) meta.regularMarketPreviousClose = q.regularMarketPreviousClose;
+          if (q.marketCap)                  meta.marketCap = q.marketCap;
+          if (q.regularMarketVolume)        meta.regularMarketVolume = q.regularMarketVolume;
+          if (q.fiftyTwoWeekHigh)           meta.fiftyTwoWeekHigh = q.fiftyTwoWeekHigh;
+          if (q.fiftyTwoWeekLow)            meta.fiftyTwoWeekLow = q.fiftyTwoWeekLow;
         }
-      }
-    } catch (_) { /* optional */ }
+      } catch (_) {}
+    }
 
     res.status(200).json(chartData);
   } catch (e) {
