@@ -469,6 +469,27 @@ body{font-family:'DM Sans',sans-serif;background:var(--bg);color:var(--text);min
 .df-edge-val{font-size:18px;font-weight:700;}
 .df-stats-row{display:flex;gap:8px;margin-top:14px;flex-wrap:wrap;}
 .df-stat-pill{flex:1;min-width:0;padding:8px 12px;background:var(--surface2);border:1px solid var(--border);border-radius:10px;font-size:13px;color:var(--text2);text-align:center;white-space:nowrap;}
+
+/* ── Auth Overlay ── */
+.auth-overlay{position:fixed;inset:0;background:var(--bg);z-index:1000;display:flex;align-items:center;justify-content:center;padding:20px;}
+.auth-overlay.hidden{display:none;}
+.auth-box{background:var(--surface);border:1px solid var(--border);border-radius:20px;padding:40px;width:360px;max-width:100%;text-align:center;box-shadow:var(--shadow-md);}
+.auth-logo{font-size:48px;margin-bottom:16px;}
+.auth-title{font-size:22px;font-weight:700;margin-bottom:6px;}
+.auth-sub{font-size:14px;color:var(--text2);margin-bottom:28px;line-height:1.5;}
+.auth-input{width:100%;padding:11px 14px;border:1px solid var(--border2);border-radius:10px;font-family:inherit;font-size:15px;outline:none;margin-bottom:12px;transition:border-color .2s;box-sizing:border-box;}
+.auth-input:focus{border-color:var(--blue);}
+.auth-btn{width:100%;padding:12px;background:var(--blue);color:#fff;border:none;border-radius:10px;font-family:inherit;font-size:15px;font-weight:600;cursor:pointer;transition:opacity .2s;}
+.auth-btn:hover{opacity:.88;}
+.auth-btn:disabled{opacity:.5;cursor:not-allowed;}
+.auth-msg{font-size:13px;margin-top:12px;min-height:20px;}
+.auth-msg.ok{color:var(--green);}
+.auth-msg.err{color:var(--red);}
+.auth-footer{font-size:12px;color:var(--text3);margin-top:20px;line-height:1.5;}
+/* ── User Menu ── */
+.user-btn{display:flex;align-items:center;gap:6px;padding:6px 12px;border-radius:8px;border:1px solid var(--border);background:var(--surface);cursor:pointer;font-family:inherit;font-size:13px;font-weight:500;color:var(--text2);}
+.user-btn:hover{background:var(--surface2);}
+.user-avatar{width:22px;height:22px;border-radius:50%;background:var(--blue);color:#fff;display:flex;align-items:center;justify-content:center;font-size:11px;font-weight:700;}
 </style>
   <!-- PWA -->
   <link rel="manifest" href="/manifest.json">
