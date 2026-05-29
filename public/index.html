@@ -1,0 +1,1124 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Space Stocks Dashboard · RKLB & ASTS</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=DM+Mono:wght@400;500&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.js"></script>
+<style>
+:root{
+  --bg:#f5f5f2;--surface:#fff;--surface2:#f0f0ec;
+  --border:rgba(0,0,0,.08);--border2:rgba(0,0,0,.14);
+  --text:#1a1a18;--text2:#6b6b66;--text3:#9a9a94;
+  --green:#16a34a;--green-bg:rgba(22,163,74,.08);--green-bd:rgba(22,163,74,.2);
+  --red:#dc2626;--red-bg:rgba(220,38,38,.07);--red-bd:rgba(220,38,38,.18);
+  --blue:#2563eb;--blue-bg:rgba(37,99,235,.08);
+  --amber:#d97706;--amber-bg:rgba(217,119,6,.08);
+  --purple:#7c3aed;--purple-bg:rgba(124,58,237,.08);
+  --rklb:#1d4ed8;--asts:#15803d;
+  --r:10px;--rl:14px;
+}
+*{box-sizing:border-box;margin:0;padding:0;}
+body{font-family:'DM Sans',sans-serif;background:var(--bg);color:var(--text);min-height:100vh;font-size:14px;line-height:1.5;}
+.container{max-width:980px;margin:0 auto;padding:24px 20px 60px;}
+
+/* Tooltip */
+.tip{display:inline-flex;align-items:center;gap:3px;cursor:help;position:relative;}
+.tip-icon{width:15px;height:15px;border-radius:50%;background:rgba(37,99,235,.15);color:var(--blue);font-size:9px;display:inline-flex;align-items:center;justify-content:center;font-weight:500;flex-shrink:0;font-family:'DM Mono',monospace;}
+.tip-box{position:absolute;bottom:calc(100% + 8px);left:50%;transform:translateX(-50%);background:#1a1a18;color:#f0f0ec;font-size:12px;line-height:1.6;padding:11px 14px;border-radius:10px;width:260px;z-index:200;pointer-events:none;opacity:0;transition:opacity .15s;white-space:normal;font-family:'DM Sans',sans-serif;font-weight:400;box-shadow:0 4px 20px rgba(0,0,0,.2);}
+.tip-box b{color:#fff;font-weight:500;}
+.tip-box::after{content:'';position:absolute;top:100%;left:50%;transform:translateX(-50%);border:5px solid transparent;border-top-color:#1a1a18;}
+.tip:hover .tip-box,.tip:focus .tip-box{opacity:1;}
+
+/* Header */
+.hdr{display:flex;align-items:flex-start;justify-content:space-between;margin-bottom:16px;gap:12px;flex-wrap:wrap;}
+.hdr-l{display:flex;align-items:center;gap:12px;}
+.logo{width:40px;height:40px;border-radius:10px;background:linear-gradient(135deg,#1d4ed8,#15803d);display:flex;align-items:center;justify-content:center;font-size:20px;flex-shrink:0;}
+.hdr-title{font-size:18px;font-weight:500;}
+.hdr-sub{font-size:11px;color:var(--text2);margin-top:3px;font-family:'DM Mono',monospace;}
+.hdr-r{display:flex;gap:8px;align-items:center;flex-wrap:wrap;}
+.live-badge{display:inline-flex;align-items:center;gap:5px;background:var(--green-bg);border:1px solid var(--green-bd);border-radius:20px;padding:3px 10px;font-size:11px;color:var(--green);font-family:'DM Mono',monospace;}
+.live-dot{width:6px;height:6px;border-radius:50%;background:var(--green);animation:pulse 1.5s infinite;}
+@keyframes pulse{0%,100%{opacity:1}50%{opacity:.3}}
+@keyframes spin{to{transform:rotate(360deg)}}
+.switcher{display:flex;border:1px solid var(--border2);border-radius:var(--r);overflow:hidden;flex-shrink:0;}
+.sw{padding:8px 18px;font-size:13px;font-weight:500;cursor:pointer;background:transparent;color:var(--text2);border:none;transition:all .18s;font-family:'DM Sans',sans-serif;}
+.sw:hover{color:var(--text);background:var(--surface2);}
+.sw.ra{background:rgba(29,78,216,.1);color:var(--rklb);}
+.sw.ga{background:rgba(21,128,61,.1);color:var(--asts);}
+.sw-sep{width:1px;background:var(--border2);}
+
+/* API Key */
+.api-box{background:var(--surface);border:1px solid var(--border);border-radius:var(--rl);padding:14px 16px;margin-bottom:14px;}
+.api-row{display:flex;align-items:center;gap:10px;flex-wrap:wrap;}
+.api-lbl{font-size:12px;color:var(--text2);flex-shrink:0;}
+.api-in{flex:1;min-width:180px;background:var(--surface2);border:1px solid var(--border2);border-radius:7px;padding:8px 12px;color:var(--text);font-family:'DM Mono',monospace;font-size:12px;outline:none;transition:border-color .2s;}
+.api-in:focus{border-color:var(--blue);}
+.api-ok{font-size:12px;color:var(--green);display:none;flex-shrink:0;}
+.api-hint{font-size:12px;color:var(--text2);margin-top:8px;line-height:1.55;padding-top:8px;border-top:1px solid var(--border);}
+.api-hint b{color:var(--text);}
+
+/* Intro / Onboarding */
+.intro{background:var(--blue-bg);border:1px solid rgba(37,99,235,.2);border-radius:var(--rl);padding:16px 18px;margin-bottom:14px;}
+.intro-title{font-size:14px;font-weight:500;margin-bottom:8px;}
+.intro-grid{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-top:10px;}
+.intro-card{background:var(--surface);border-radius:8px;padding:11px 13px;border:1px solid var(--border);}
+.intro-card-title{font-size:12px;font-weight:500;margin-bottom:4px;}
+.intro-card-body{font-size:12px;color:var(--text2);line-height:1.5;}
+.intro-toggle{cursor:pointer;color:var(--blue);font-size:12px;margin-top:10px;display:inline-block;}
+
+/* Auto-Refresh Bar */
+.auto-bar{background:var(--surface);border:1px solid var(--border);border-radius:var(--rl);padding:12px 16px;margin-bottom:14px;display:flex;align-items:center;gap:12px;flex-wrap:wrap;}
+.auto-status{flex:1;min-width:0;}
+.auto-label{font-size:10px;text-transform:uppercase;letter-spacing:.06em;color:var(--text3);font-family:'DM Mono',monospace;margin-bottom:3px;}
+.auto-detail{font-size:12px;color:var(--text);display:flex;align-items:center;gap:8px;flex-wrap:wrap;}
+.auto-dot{width:8px;height:8px;border-radius:50%;background:var(--green);flex-shrink:0;}
+.auto-dot.loading{animation:pulse .8s infinite;}
+.auto-dot.off{background:var(--text3);}
+.auto-progress{height:3px;background:var(--surface2);border-radius:2px;overflow:hidden;margin-top:6px;}
+.auto-progress-fill{height:3px;background:var(--purple);border-radius:2px;width:0%;transition:width .5s;}
+.auto-btn{display:inline-flex;align-items:center;gap:6px;background:transparent;border:1px solid var(--border2);border-radius:7px;padding:7px 14px;font-size:12px;color:var(--text2);cursor:pointer;font-family:'DM Sans',sans-serif;transition:all .2s;white-space:nowrap;}
+.auto-btn:hover,.auto-btn.busy{border-color:var(--purple);color:var(--purple);background:var(--purple-bg);}
+.auto-spin{width:12px;height:12px;border:2px solid rgba(124,58,237,.2);border-top-color:var(--purple);border-radius:50%;animation:spin .7s linear infinite;display:none;}
+
+/* Alert Banner */
+.alert{display:flex;align-items:flex-start;gap:10px;padding:12px 15px;border-radius:var(--r);font-size:12px;line-height:1.6;margin-bottom:14px;}
+.al-r{background:var(--red-bg);border:1px solid var(--red-bd);color:#991b1b;}
+.al-g{background:var(--green-bg);border:1px solid var(--green-bd);color:#166534;}
+.al-a{background:var(--amber-bg);border:1px solid rgba(217,119,6,.3);color:#854f0b;}
+.adot{width:8px;height:8px;border-radius:50%;flex-shrink:0;margin-top:4px;}
+.dr{background:var(--red);animation:pulse 1.5s infinite;}
+.dg{background:var(--green);}
+.da{background:var(--amber);}
+
+/* Live Metrics */
+.mets{display:grid;grid-template-columns:repeat(4,1fr);gap:10px;margin-bottom:14px;}
+.met{background:var(--surface);border:1px solid var(--border);border-radius:var(--r);padding:14px 15px;}
+.met-icon{font-size:18px;margin-bottom:6px;}
+.ml{font-size:11px;color:var(--text2);margin-bottom:4px;display:flex;align-items:center;gap:4px;}
+.mv{font-size:22px;font-weight:500;font-family:'DM Mono',monospace;transition:color .4s;}
+.mc{font-size:11px;margin-top:3px;font-family:'DM Mono',monospace;}
+.mc-explain{font-size:11px;color:var(--text3);margin-top:2px;}
+.up{color:var(--green);}.dn{color:var(--red);}.wn{color:var(--amber);}.mu{color:var(--text2);}
+
+/* Recommendation */
+.rec-banner{border-radius:var(--rl);padding:18px 20px;margin-bottom:14px;border:1.5px solid;}
+.rec-buy{background:rgba(22,163,74,.06);border-color:rgba(22,163,74,.3);}
+.rec-sell{background:rgba(220,38,38,.06);border-color:rgba(220,38,38,.3);}
+.rec-hold{background:rgba(217,119,6,.06);border-color:rgba(217,119,6,.3);}
+.rec-head{display:flex;align-items:flex-start;gap:12px;margin-bottom:12px;flex-wrap:wrap;}
+.rec-pill{font-size:14px;font-weight:500;padding:5px 16px;border-radius:20px;font-family:'DM Mono',monospace;flex-shrink:0;}
+.rec-pill-buy{background:var(--green);color:#fff;}
+.rec-pill-sell{background:var(--red);color:#fff;}
+.rec-pill-hold{background:var(--amber);color:#fff;}
+.rec-head-right{flex:1;}
+.rec-title{font-size:14px;font-weight:500;color:var(--text);margin-bottom:3px;}
+.rec-ts{font-size:10px;color:var(--text3);font-family:'DM Mono',monospace;}
+.rec-explain{font-size:12px;color:var(--text2);line-height:1.65;margin-bottom:14px;}
+.rec-scores{display:grid;grid-template-columns:repeat(4,1fr);gap:8px;margin-bottom:14px;}
+.rec-score-card{background:var(--surface);border-radius:9px;padding:10px 12px;border:1px solid var(--border);}
+.rec-score-emoji{font-size:16px;margin-bottom:4px;}
+.rec-score-label{font-size:11px;color:var(--text2);margin-bottom:6px;line-height:1.3;}
+.rec-score-val{font-size:18px;font-weight:500;font-family:'DM Mono',monospace;}
+.rec-meter{height:4px;border-radius:2px;background:var(--surface2);margin-top:5px;overflow:hidden;}
+.rec-meter-fill{height:4px;border-radius:2px;transition:width .6s;}
+.rec-levels-row{display:flex;align-items:center;gap:8px;flex-wrap:wrap;margin-bottom:12px;}
+.rec-level-pill{background:var(--surface2);border:1px solid var(--border);border-radius:6px;padding:5px 10px;font-size:11px;font-family:'DM Mono',monospace;}
+.rec-level-pill b{color:var(--text);font-weight:500;}
+.rec-footer{display:flex;align-items:center;justify-content:flex-end;}
+.rec-update-btn{display:inline-flex;align-items:center;gap:6px;background:transparent;border:1px solid var(--border2);border-radius:7px;padding:7px 14px;font-size:12px;color:var(--text2);cursor:pointer;font-family:'DM Sans',sans-serif;transition:all .2s;}
+.rec-update-btn:hover,.rec-update-btn.busy{border-color:var(--purple);color:var(--purple);background:var(--purple-bg);}
+.rec-spin{width:12px;height:12px;border:2px solid rgba(124,58,237,.2);border-top-color:var(--purple);border-radius:50%;animation:spin .7s linear infinite;display:none;}
+
+/* Live News */
+.live-news{background:var(--surface);border:1px solid var(--border);border-radius:var(--rl);padding:18px 20px;margin-bottom:14px;}
+.ln-header{display:flex;align-items:center;justify-content:space-between;margin-bottom:14px;gap:8px;flex-wrap:wrap;}
+.ln-title{font-size:13px;font-weight:500;display:flex;align-items:center;gap:7px;}
+.ln-ts{font-size:11px;color:var(--text3);font-family:'DM Mono',monospace;}
+.ln-loading{display:none;align-items:center;gap:10px;padding:14px;background:var(--purple-bg);border-radius:8px;margin-bottom:10px;font-size:12px;color:var(--purple);}
+.ln-loading-dot{width:8px;height:8px;border-radius:50%;background:var(--purple);animation:pulse .9s infinite;flex-shrink:0;}
+.ln-content{font-size:13px;color:var(--text);line-height:1.8;}
+.ln-content.empty{color:var(--text3);font-size:13px;font-style:italic;}
+.ln-section{margin-top:14px;padding-top:14px;border-top:1px solid var(--border);}
+.ln-section:first-child{margin-top:0;padding-top:0;border-top:none;}
+.ln-section-title{font-size:11px;font-weight:500;text-transform:uppercase;letter-spacing:.07em;color:var(--text3);font-family:'DM Mono',monospace;margin-bottom:6px;}
+.ln-section-body{font-size:13px;color:var(--text);line-height:1.75;}
+
+/* Portfolio */
+.portfolio-bar{background:var(--surface);border:1px solid var(--border);border-radius:var(--rl);padding:18px 20px;margin-bottom:14px;}
+.section-title{font-size:13px;font-weight:500;margin-bottom:4px;display:flex;align-items:center;gap:6px;}
+.section-sub{font-size:12px;color:var(--text2);margin-bottom:14px;line-height:1.5;}
+.pf-inputs{display:grid;grid-template-columns:1fr 1fr 1fr 1fr;gap:10px;margin-bottom:14px;}
+.pf-field label{font-size:12px;color:var(--text2);display:block;margin-bottom:5px;line-height:1.4;}
+.pf-field input{width:100%;background:var(--surface2);border:1px solid var(--border2);border-radius:7px;padding:9px 12px;color:var(--text);font-family:'DM Mono',monospace;font-size:14px;outline:none;transition:border-color .2s;}
+.pf-field input:focus{border-color:var(--blue);}
+.pf-results{display:grid;grid-template-columns:repeat(5,1fr);gap:10px;}
+.pf-card{background:var(--surface2);border-radius:var(--r);padding:12px 13px;border:1px solid var(--border);}
+.pf-card.hl{background:var(--surface);border-color:var(--border2);}
+.pf-emoji{font-size:16px;margin-bottom:5px;}
+.pf-lbl{font-size:11px;color:var(--text2);margin-bottom:5px;line-height:1.4;}
+.pf-val{font-size:17px;font-weight:500;font-family:'DM Mono',monospace;}
+.pf-sub{font-size:11px;color:var(--text2);margin-top:3px;font-family:'DM Mono',monospace;}
+
+/* Day Forecast */
+.day-forecast{background:var(--surface);border:1px solid var(--border);border-radius:var(--rl);padding:18px 20px;margin-bottom:14px;}
+.df-grid{display:grid;grid-template-columns:repeat(5,1fr);gap:10px;}
+.df-card{background:var(--surface2);border-radius:var(--r);padding:12px 13px;border:1px solid var(--border);text-align:center;}
+.df-emoji{font-size:16px;margin-bottom:5px;}
+.df-lbl{font-size:11px;color:var(--text2);margin-bottom:5px;line-height:1.4;}
+.df-val{font-size:16px;font-weight:500;font-family:'DM Mono',monospace;}
+.df-sub{font-size:11px;margin-top:3px;font-family:'DM Mono',monospace;}
+.df-range-wrap{margin-top:10px;}
+.df-range{display:flex;align-items:center;gap:6px;}
+.df-range-bar{flex:1;height:4px;background:var(--border2);border-radius:2px;position:relative;}
+.df-range-dot{position:absolute;top:-4px;width:12px;height:12px;border-radius:50%;background:var(--text);border:2px solid var(--surface);transform:translateX(-50%);}
+
+/* Two col */
+.panel{display:none;}.panel.on{display:block;}
+.two{display:grid;grid-template-columns:1fr 1fr;gap:14px;margin-bottom:14px;}
+.one{margin-bottom:14px;}
+.card{background:var(--surface);border:1px solid var(--border);border-radius:var(--rl);padding:18px 20px;}
+.ch{font-size:11px;font-weight:500;color:var(--text3);text-transform:uppercase;letter-spacing:.07em;margin-bottom:12px;font-family:'DM Mono',monospace;}
+.cw{position:relative;width:100%;height:190px;}
+
+/* Legend */
+.lgbox{background:var(--surface2);border-radius:9px;padding:12px 14px;margin-top:14px;}
+.lgr{display:flex;align-items:flex-start;gap:12px;padding:8px 0;border-bottom:1px solid var(--border);}
+.lgr:last-child{border-bottom:none;padding-bottom:0;}
+.lgl{display:flex;align-items:center;gap:4px;flex-shrink:0;width:50px;}
+.lgd{width:18px;height:0;border-top:2px dashed;}
+.lgs{width:18px;height:2px;}
+.lgdot{width:7px;height:7px;border-radius:50%;}
+.lgt{font-size:13px;font-weight:500;}
+.lgx{font-size:12px;color:var(--text2);line-height:1.5;margin-top:2px;}
+
+/* Scenarios */
+.scr{display:flex;align-items:center;gap:10px;margin-bottom:9px;}
+.scl{font-size:12px;color:var(--text2);width:115px;flex-shrink:0;line-height:1.35;}
+.scb{flex:1;height:5px;background:var(--surface2);border-radius:3px;overflow:hidden;}
+.scf{height:5px;border-radius:3px;}
+.scv{font-size:12px;font-weight:500;min-width:58px;text-align:right;font-family:'DM Mono',monospace;}
+
+/* Sector context */
+.sector-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:10px;}
+.sector-card{background:var(--surface2);border-radius:var(--r);padding:12px 13px;border:1px solid var(--border);}
+.sector-emoji{font-size:18px;margin-bottom:5px;}
+.sector-name{font-size:12px;font-weight:500;margin-bottom:3px;}
+.sector-val{font-size:16px;font-weight:500;font-family:'DM Mono',monospace;margin-bottom:4px;}
+.sector-desc{font-size:11px;color:var(--text2);line-height:1.45;}
+
+/* Glossar */
+.glossar{background:var(--surface);border:1px solid var(--border);border-radius:var(--rl);padding:22px;margin-top:22px;}
+.glossar-title{font-size:16px;font-weight:500;margin-bottom:5px;}
+.glossar-sub{font-size:13px;color:var(--text2);margin-bottom:18px;line-height:1.5;}
+.glossar-grid{display:grid;grid-template-columns:1fr 1fr;gap:0;}
+.gitem{padding:14px 16px;border-bottom:1px solid var(--border);}
+.gitem:nth-child(odd){border-right:1px solid var(--border);}
+.gterm{font-size:13px;font-weight:500;color:var(--text);margin-bottom:5px;display:flex;align-items:center;gap:8px;}
+.gemoji{font-size:16px;}
+.gbadge{font-size:10px;padding:2px 7px;border-radius:4px;background:var(--surface2);color:var(--text2);font-family:'DM Mono',monospace;font-weight:400;}
+.gdef{font-size:12px;color:var(--text2);line-height:1.6;}
+.gex{font-size:11px;color:var(--text3);margin-top:4px;font-style:italic;}
+
+.disc{font-size:11px;color:var(--text3);padding:14px 0;line-height:1.6;border-top:1px solid var(--border);margin-top:8px;font-family:'DM Mono',monospace;}
+
+@media(max-width:640px){
+  .mets,.pf-inputs,.pf-results,.df-grid,.rec-scores,.sector-grid{grid-template-columns:1fr 1fr;}
+  .two,.glossar-grid,.intro-grid{grid-template-columns:1fr;}
+  .hdr{flex-direction:column;}
+  .gitem:nth-child(odd){border-right:none;}
+  .gitem:last-child{border-bottom:none;}
+}
+</style>
+</head>
+<body>
+<div class="container">
+
+<!-- Header -->
+<div class="hdr">
+  <div class="hdr-l">
+    <div class="logo">🚀</div>
+    <div>
+      <div class="hdr-title">Space Stocks Dashboard</div>
+      <div class="hdr-sub" id="last-upd">Kurse werden geladen...</div>
+    </div>
+  </div>
+  <div class="hdr-r">
+    <div class="live-badge"><div class="live-dot"></div>Echtzeitkurse</div>
+    <div class="switcher">
+      <button class="sw ra" id="btn-rklb" onclick="switchTab('rklb')">🚀 Rocket Lab (RKLB)</button>
+      <div class="sw-sep"></div>
+      <button class="sw" id="btn-asts" onclick="switchTab('asts')">📡 AST SpaceMobile (ASTS)</button>
+    </div>
+  </div>
+</div>
+
+<!-- Intro / Onboarding -->
+<div class="intro" id="intro-box">
+  <div class="intro-title">👋 Was ist das hier? Eine kurze Erklärung für Einsteiger.</div>
+  <div style="font-size:13px;color:var(--text);line-height:1.65;">
+    Dieses Dashboard beobachtet zwei Aktien aus der Raumfahrt-Branche für dich. <b>Eine Aktie</b> ist ein kleines Stück eines Unternehmens — wenn du 100 Rocket-Lab-Aktien kaufst, gehört dir ein winziger Teil des Unternehmens. Steigt der <b>Kurs</b> (= Preis der Aktie), machst du Gewinn. Fällt er, Verlust. Alle Zahlen und Begriffe werden dir erklärt — einfach mit der Maus über das <span style="display:inline-flex;align-items:center;gap:3px;vertical-align:middle;"><span style="width:15px;height:15px;border-radius:50%;background:rgba(37,99,235,.15);color:#2563eb;font-size:9px;display:inline-flex;align-items:center;justify-content:center;font-weight:500;font-family:'DM Mono',monospace;">?</span></span>-Symbol fahren.
+  </div>
+  <div class="intro-grid">
+    <div class="intro-card">
+      <div class="intro-card-title">🚀 Rocket Lab (RKLB)</div>
+      <div class="intro-card-body">Baut kleine und mittlere Raketen und Satelliten für Firmen, Regierungen und das US-Militär. Ähnlich wie ein Lieferdienst — aber für den Weltraum. Hat gerade ein Rekordjahr und baut eine neue, grössere Rakete.</div>
+    </div>
+    <div class="intro-card">
+      <div class="intro-card-title">📡 AST SpaceMobile (ASTS)</div>
+      <div class="intro-card-body">Baut riesige Satelliten die direkt mit deinem normalen Handy kommunizieren können — ohne Spezialgerät. Stell dir Internetempfang überall auf der Welt vor. Noch in der Aufbauphase, sehr spekulativ.</div>
+    </div>
+  </div>
+  <div class="intro-toggle" onclick="document.getElementById('intro-box').style.display='none'">✕ Erklärung ausblenden</div>
+</div>
+
+<!-- API Key -->
+<div class="api-box">
+  <div class="api-row">
+    <span class="api-lbl">🔑 KI-Analyse Schlüssel (optional):</span>
+    <input class="api-in" type="password" id="api-key" placeholder="sk-ant-api03-..." oninput="onKeyInput()"/>
+    <span class="api-ok" id="api-ok">✓ Aktiviert</span>
+  </div>
+  <div class="api-hint">
+    <b>Wozu brauche ich das?</b> Ohne Schlüssel siehst du Live-Kurse — das funktioniert immer kostenlos. Mit einem Schlüssel wird die KI (Claude) aktiviert: Sie durchsucht automatisch alle paar Stunden das Internet nach Neuigkeiten, Reddit-Diskussionen, Analysten-Berichten und Gerüchten zu deinen Aktien und fasst alles verständlich zusammen. Den Schlüssel bekommst du kostenlos auf <a href="https://console.anthropic.com/settings/keys" target="_blank" style="color:var(--blue);">console.anthropic.com</a>. Er wird niemals gespeichert oder übertragen — nur in deinem Browser.
+  </div>
+</div>
+
+<!-- Auto-Refresh Status Bar -->
+<div class="auto-bar">
+  <div class="auto-status">
+    <div class="auto-label">KI-News Auto-Aktualisierung</div>
+    <div class="auto-detail">
+      <div class="auto-dot off" id="auto-dot"></div>
+      <span id="auto-status-txt">KI-Schlüssel eingeben um automatische News-Aktualisierung zu starten</span>
+    </div>
+    <div class="auto-progress"><div class="auto-progress-fill" id="auto-progress"></div></div>
+  </div>
+  <button class="auto-btn" id="auto-btn" onclick="manualRefreshAll()">
+    <div class="auto-spin" id="auto-spin"></div>
+    <span id="auto-btn-txt">↺ Jetzt aktualisieren</span>
+  </button>
+</div>
+
+<!-- ════════════════ RKLB ════════════════ -->
+<div class="panel on" id="p-rklb">
+
+  <div class="alert al-g">
+    <div class="adot dg"></div>
+    <div><b>Gute Nachrichten:</b> Rocket Lab hat gerade das beste Quartal seiner Geschichte abgeliefert — $200 Millionen Umsatz in 3 Monaten! Dazu ist die Firma jetzt Teil von Trumps gigantischem $1.2 Billionen Raketenabwehrprogramm "Golden Dome". Die neue grosse Neutron-Rakete soll Ende 2026 erstmals fliegen — das könnte den Aktienkurs stark nach oben treiben.</div>
+  </div>
+
+  <!-- Live Metrics -->
+  <div class="mets">
+    <div class="met">
+      <div class="met-icon">💰</div>
+      <div class="ml">
+        <span class="tip">Aktueller Kurs <span class="tip-icon">?</span><span class="tip-box"><b>Was bedeutet "Kurs"?</b> Das ist der aktuelle Preis für eine einzelne Rocket-Lab-Aktie in US-Dollar. Dieser Preis ändert sich ständig — je nachdem wie viele Leute gerade kaufen oder verkaufen wollen. Während der Börsenwoche (Montag–Freitag, 15:30–22:00 Uhr Schweizer Zeit) wird er alle 60 Sekunden automatisch aktualisiert.</span></span>
+      </div>
+      <div class="mv" id="rklb-price">lädt...</div>
+      <div class="mc" id="rklb-chg">—</div>
+      <div class="mc-explain">pro Aktie</div>
+    </div>
+    <div class="met">
+      <div class="met-icon">📊</div>
+      <div class="ml">
+        <span class="tip">Handelsvolumen heute <span class="tip-icon">?</span><span class="tip-box"><b>Was bedeutet Volumen?</b> Wie viele Aktien heute insgesamt gekauft und verkauft wurden. Hohes Volumen = viele Menschen handeln aktiv = die Kursbewegung ist glaubwürdiger. Niedriges Volumen = wenig Interesse = Vorsicht bei starken Bewegungen.</span></span>
+      </div>
+      <div class="mv" id="rklb-vol">—</div>
+      <div class="mc mu" id="rklb-cap">—</div>
+      <div class="mc-explain">gehandelte Aktien</div>
+    </div>
+    <div class="met">
+      <div class="met-icon">📏</div>
+      <div class="ml">
+        <span class="tip">Jahresspanne (Hoch/Tief) <span class="tip-icon">?</span><span class="tip-box"><b>Was zeigt die Jahresspanne?</b> Der höchste und tiefste Preis der letzten 12 Monate. Das hilft dir einzuschätzen: Ist die Aktie gerade eher teuer (nahe am Jahreshoch) oder günstig (nahe am Jahrestief)? Rocket Lab ist von ~$42 auf ~$150 gestiegen — ein starkes Jahr!</span></span>
+      </div>
+      <div class="mv" id="rklb-52w" style="font-size:14px;padding-top:4px;">—</div>
+      <div class="mc-explain">Tief → Hoch (12 Monate)</div>
+    </div>
+    <div class="met">
+      <div class="met-icon">🎯</div>
+      <div class="ml">
+        <span class="tip">Was Experten erwarten <span class="tip-icon">?</span><span class="tip-box"><b>Was sind Analysten?</b> Bezahlte Börsenprofis von grossen Banken, die Unternehmen intensiv analysieren und dann ein Kursziel setzen — wo sie den Preis in 12 Monaten erwarten. "12× Kaufen" bedeutet: 12 von 17 Experten empfehlen Rocket Lab zu kaufen. Aber: Das sind Meinungen, keine Garantien!</span></span>
+      </div>
+      <div class="mv" style="font-family:'DM Mono',monospace;">$120</div>
+      <div class="mc mu">12× Kaufen · 5× Halten</div>
+      <div class="mc-explain">Ø Expertenziel (12 Monate)</div>
+    </div>
+  </div>
+
+  <!-- Recommendation RKLB -->
+  <div class="rec-banner rec-buy" id="rklb-rec-banner">
+    <div class="rec-head">
+      <span class="rec-pill rec-pill-buy" id="rklb-rec-pill">KAUFEN</span>
+      <div class="rec-head-right">
+        <div class="rec-title" id="rklb-rec-title">Starke Zahlen, Raketenabwehr-Vertrag und neue Neutron-Rakete als Kurs-Katalysator</div>
+        <div class="rec-ts" id="rklb-rec-ts">Statische Basis-Einschätzung — mit KI-Schlüssel aktualisierbar</div>
+      </div>
+    </div>
+    <div class="rec-explain" id="rklb-rec-sub">
+      <b>Warum "Kaufen"?</b> Rocket Lab läuft gerade sehr gut: Das Unternehmen hat mehr Aufträge als je zuvor ($2.2 Milliarden bereits gebucht), wächst 64% pro Jahr und ist neu Teil des US-Raketenabwehrsystems "Golden Dome". Die neue Neutron-Rakete (erster Flug geplant H2 2026) könnte den Kurs stark nach oben treiben, wenn sie funktioniert. <b>Aber:</b> Der aktuelle Kurs ($150) liegt bereits über dem, was die meisten Bankexperten erwarten ($120). Das heisst, viel Optimismus ist schon eingepreist. Wer einsteigen will, findet bei $120–130 (auf einem Rücksetzer) einen besseren Einstieg. Hauptrisiko: Wenn die Neutron-Rakete scheitert oder sich stark verzögert.
+    </div>
+    <div class="rec-scores">
+      <div class="rec-score-card">
+        <div class="rec-score-emoji">📈</div>
+        <div class="rec-score-label">Wie gut läuft<br>das Geschäft?</div>
+        <div class="rec-score-val up" id="rklb-s1">8/10</div>
+        <div class="rec-meter"><div class="rec-meter-fill" style="width:80%;background:var(--green);" id="rklb-m1"></div></div>
+      </div>
+      <div class="rec-score-card">
+        <div class="rec-score-emoji">🚀</div>
+        <div class="rec-score-label">Wie stark steigt<br>der Kurs gerade?</div>
+        <div class="rec-score-val up" id="rklb-s2">7/10</div>
+        <div class="rec-meter"><div class="rec-meter-fill" style="width:70%;background:var(--green);" id="rklb-m2"></div></div>
+      </div>
+      <div class="rec-score-card">
+        <div class="rec-score-emoji">⚠️</div>
+        <div class="rec-score-label">Wie hoch ist<br>das Risiko?</div>
+        <div class="rec-score-val wn" id="rklb-s3">6/10</div>
+        <div class="rec-meter"><div class="rec-meter-fill" style="width:60%;background:var(--amber);" id="rklb-m3"></div></div>
+      </div>
+      <div class="rec-score-card">
+        <div class="rec-score-emoji">💎</div>
+        <div class="rec-score-label">Ist der Preis<br>fair?</div>
+        <div class="rec-score-val wn" id="rklb-s4">5/10</div>
+        <div class="rec-meter"><div class="rec-meter-fill" style="width:50%;background:var(--amber);" id="rklb-m4"></div></div>
+      </div>
+    </div>
+    <div class="rec-levels-row">
+      <span class="tip"><div class="rec-level-pill"><b>Guter Einstieg:</b> $120–130 <span class="tip-icon">?</span></div><span class="tip-box"><b>Warum nicht sofort kaufen?</b> Weil der aktuelle Kurs ($150) schon über dem liegt, was Experten erwarten ($120). Wenn du auf einen Rücksetzer wartest, kaufst du günstiger und hast mehr Sicherheitspuffer.</span></span>
+      <span class="tip"><div class="rec-level-pill"><b>Mein Ziel:</b> $180 <span class="tip-icon">?</span></div><span class="tip-box"><b>Was bedeutet "Kursziel"?</b> Wo der Kurs hinlaufen könnte wenn alles gut geht — in etwa 12 Monaten. Kein Versprechen, nur eine Schätzung basierend auf den aktuellen Zahlen und Plänen.</span></span>
+      <span class="tip"><div class="rec-level-pill"><b>Stopp:</b> $105 <span class="tip-icon">?</span></div><span class="tip-box"><b>Was ist ein Stop-Loss?</b> Eine Grenze die du selbst setzt: "Wenn der Kurs auf $105 fällt, verkaufe ich — egal was." Das schützt dich vor zu grossen Verlusten. Wie ein Sicherheitsnetz unter einem Seiltänzer.</span></span>
+    </div>
+    <div class="rec-footer">
+      <button class="rec-update-btn" id="rklb-rec-btn" onclick="fetchRec('rklb')"><div class="rec-spin" id="rklb-rec-spin"></div><span id="rklb-rec-btn-txt">✦ Einschätzung mit KI aktualisieren</span></button>
+    </div>
+  </div>
+
+  <!-- Live News RKLB -->
+  <div class="live-news">
+    <div class="ln-header">
+      <div class="ln-title"><div class="live-dot"></div>Live-Nachrichten · Rocket Lab (RKLB)</div>
+      <span class="ln-ts" id="rklb-news-ts">Noch nicht geladen</span>
+    </div>
+    <div class="ln-loading" id="rklb-news-loading">
+      <div class="ln-loading-dot"></div>
+      <span id="rklb-news-loading-txt">KI durchsucht gerade das Internet nach aktuellen Nachrichten...</span>
+    </div>
+    <div class="ln-content empty" id="rklb-news-content">KI-Schlüssel eingeben → Nachrichten werden automatisch alle 4 Stunden von der KI gesucht und hier angezeigt. Die KI durchsucht Finanznachrichten, Reddit-Foren, Analystenberichte und fasst alles verständlich zusammen.</div>
+  </div>
+
+  <!-- Portfolio RKLB -->
+  <div class="portfolio-bar">
+    <div class="section-title">🧮 Dein Portfolio-Rechner</div>
+    <div class="section-sub">Gib hier ein wie viele Aktien du hast und zu welchem Preis du gekauft hast. Das Dashboard berechnet dann automatisch: Was ist deine Position heute wert? Wie viel Gewinn oder Verlust hast du? Was passiert wenn der Kurs steigt oder fällt?</div>
+    <div class="pf-inputs">
+      <div class="pf-field">
+        <label>
+          <span class="tip">Anzahl Aktien die du besitzt <span class="tip-icon">?</span><span class="tip-box">Wie viele RKLB-Aktien hast du? Wenn du z.B. 100 eingibst und der Kurs bei $150 steht, ist deine Position $15'000 wert.</span></span>
+        </label>
+        <input type="number" id="rklb-qty" placeholder="z.B. 100" oninput="calcPF('rklb')" min="0"/>
+      </div>
+      <div class="pf-field">
+        <label>
+          <span class="tip">Dein Kaufpreis pro Aktie ($) <span class="tip-icon">?</span><span class="tip-box">Was hast du pro Aktie bezahlt als du gekauft hast? Damit berechnen wir ob du aktuell im Plus (Gewinn) oder Minus (Verlust) bist.</span></span>
+        </label>
+        <input type="number" id="rklb-buy" placeholder="z.B. 80.00" oninput="calcPF('rklb')" step="0.01" min="0"/>
+      </div>
+      <div class="pf-field">
+        <label>
+          <span class="tip">Dein optimistisches Ziel ($) <span class="tip-icon">?</span><span class="tip-box">Wo könnte der Kurs im besten Fall landen? Wir zeigen dir dann wie viel du dabei verdienen würdest. Standard: $216 (Bull-Szenario).</span></span>
+        </label>
+        <input type="number" id="rklb-bull-in" value="216" oninput="calcPF('rklb')" step="0.01" min="0"/>
+      </div>
+      <div class="pf-field">
+        <label>
+          <span class="tip">Dein pessimistisches Ziel ($) <span class="tip-icon">?</span><span class="tip-box">Was ist der schlimmste realistische Fall? Wichtig zu wissen, bevor du investierst! Standard: $86 (Bear-Szenario).</span></span>
+        </label>
+        <input type="number" id="rklb-bear-in" value="86" oninput="calcPF('rklb')" step="0.01" min="0"/>
+      </div>
+    </div>
+    <div class="pf-results">
+      <div class="pf-card">
+        <div class="pf-emoji">💼</div>
+        <div class="pf-lbl">Was deine Aktien heute wert sind</div>
+        <div class="pf-val" id="rklb-cur-val">—</div>
+        <div class="pf-sub" id="rklb-cur-cost">Bezahlt: —</div>
+      </div>
+      <div class="pf-card">
+        <div class="pf-emoji">📊</div>
+        <div class="pf-lbl">Dein Gewinn oder Verlust</div>
+        <div class="pf-val" id="rklb-pnl">—</div>
+        <div class="pf-sub" id="rklb-pnl-pct">—</div>
+      </div>
+      <div class="pf-card hl">
+        <div class="pf-emoji">🌟</div>
+        <div class="pf-lbl">Wenn alles super läuft</div>
+        <div class="pf-val up" id="rklb-bull-val">—</div>
+        <div class="pf-sub up" id="rklb-bull-gain">—</div>
+      </div>
+      <div class="pf-card hl">
+        <div class="pf-emoji">⚠️</div>
+        <div class="pf-lbl">Wenn es schlecht läuft</div>
+        <div class="pf-val dn" id="rklb-bear-val">—</div>
+        <div class="pf-sub dn" id="rklb-bear-gain">—</div>
+      </div>
+      <div class="pf-card">
+        <div class="pf-emoji">🏦</div>
+        <div class="pf-lbl">Was Bankexperten erwarten</div>
+        <div class="pf-val" id="rklb-cons-val">—</div>
+        <div class="pf-sub" id="rklb-cons-gain">Ziel: $120</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Day Forecast RKLB -->
+  <div class="day-forecast">
+    <div class="section-title">📅 Was heute passieren könnte</div>
+    <div class="section-sub" style="margin-bottom:12px;">Basierend auf der durchschnittlichen Kursschwankung der letzten 5 Tage. <b>Wichtig:</b> Das ist eine statistische Schätzung, kein Versprechen! Jeder Tag kann anders sein.</div>
+    <div class="df-grid">
+      <div class="df-card">
+        <div class="df-emoji">🌅</div>
+        <div class="df-lbl">Kurs beim Börsenstart heute</div>
+        <div class="df-val" id="rklb-open">—</div>
+        <div class="df-sub mu">Vorbörslich</div>
+      </div>
+      <div class="df-card">
+        <div class="df-emoji">📈</div>
+        <div class="df-lbl">Mögliches Tageshoch (Schätzung)</div>
+        <div class="df-val up" id="rklb-day-hi">—</div>
+        <div class="df-sub up" id="rklb-hi-pf">—</div>
+      </div>
+      <div class="df-card">
+        <div class="df-emoji">📉</div>
+        <div class="df-lbl">Mögliches Tagestief (Schätzung)</div>
+        <div class="df-val dn" id="rklb-day-lo">—</div>
+        <div class="df-sub dn" id="rklb-lo-pf">—</div>
+      </div>
+      <div class="df-card">
+        <div class="df-emoji">📍</div>
+        <div class="df-lbl">Wo steht der Kurs gerade?</div>
+        <div class="df-range-wrap">
+          <div style="font-size:10px;color:var(--text2);display:flex;justify-content:space-between;margin-bottom:4px;font-family:'DM Mono',monospace;"><span id="rklb-lo-lbl">Tief</span><span id="rklb-hi-lbl">Hoch</span></div>
+          <div class="df-range-bar"><div class="df-range-dot" id="rklb-rdot" style="left:50%;"></div></div>
+          <div style="font-size:10px;color:var(--text3);margin-top:6px;text-align:center;">Links = nahe Tief · Rechts = nahe Hoch</div>
+        </div>
+        <div class="df-sub mu" style="margin-top:6px;" id="rklb-vol-avg">—</div>
+      </div>
+      <div class="df-card">
+        <div class="df-emoji">⚡</div>
+        <div class="df-lbl">Kaufdruck / Stärke heute</div>
+        <div class="df-val" id="rklb-mom">—</div>
+        <div class="df-sub mu" id="rklb-rsi">—</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Sector Context RKLB -->
+  <div class="card one">
+    <div class="ch">Was sonst noch den RKLB-Kurs beeinflusst</div>
+    <div style="font-size:12px;color:var(--text2);margin-bottom:12px;line-height:1.5;">Rocket-Lab-Aktien werden nicht nur durch eigene Nachrichten bewegt. Auch diese externen Faktoren spielen eine grosse Rolle:</div>
+    <div class="sector-grid">
+      <div class="sector-card">
+        <div class="sector-emoji">🌌</div>
+        <div class="sector-name">SpaceX Börsengang</div>
+        <div class="sector-val" style="color:var(--purple);">12. Juni</div>
+        <div class="sector-desc">SpaceX geht am 12. Juni für $1.75 Billionen an die Börse. Das zieht gerade alle Space-Aktien nach oben — wie eine Flut die alle Boote hebt.</div>
+      </div>
+      <div class="sector-card">
+        <div class="sector-emoji">🛡️</div>
+        <div class="sector-name">"Golden Dome" Abwehr</div>
+        <div class="sector-val" style="color:var(--rklb);">$1.2 Bio.</div>
+        <div class="sector-desc">Trumps riesiges US-Raketenabwehrsystem. RKLB ist direkt mit Raytheon daran beteiligt. Über 20 Jahre gigantisches Umsatzpotenzial.</div>
+      </div>
+      <div class="sector-card">
+        <div class="sector-emoji">🌕</div>
+        <div class="sector-name">Intuitive Machines</div>
+        <div class="sector-val mu" id="lunr-price">—</div>
+        <div class="sector-desc">Konkurrent/Sektor-Kollege. Baut Mondlander für NASA. +166% in 2026 — zeigt wie stark der Space-Sektor läuft.</div>
+      </div>
+      <div class="sector-card">
+        <div class="sector-emoji">🌍</div>
+        <div class="sector-name">Planet Labs</div>
+        <div class="sector-val mu" id="pl-price">—</div>
+        <div class="sector-desc">Fotografiert die Erde aus dem Weltraum. Sektor-Kollege. €240 Mio. Deutschlandvertrag, NRO-Deal.</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="two">
+    <div class="card">
+      <div class="ch">📈 Kursverlauf der letzten 12 Monate + Zukunftsszenarien</div>
+      <div class="cw"><canvas id="rklb-chart" role="img" aria-label="RKLB Chart">RKLB Kursverlauf</canvas></div>
+      <div class="lgbox">
+        <div class="lgr"><div class="lgl"><div class="lgs" style="background:var(--rklb);"></div><div class="lgdot" style="background:var(--rklb);"></div></div><div><div class="lgt">Was wirklich passiert ist</div><div class="lgx">Der echte Kursverlauf der letzten 12 Monate — von $42 auf $150, ein Anstieg von 257%</div></div></div>
+        <div class="lgr"><div class="lgl"><div class="lgd" style="border-color:var(--green);"></div><div class="lgdot" style="background:var(--green);"></div></div><div><div class="lgt" style="color:var(--green);">Optimistisches Szenario → $200–216</div><div class="lgx">Wenn Neutron-Rakete fliegt + Defense-Verträge kommen + SpaceX-IPO-Effekt hält an</div></div></div>
+        <div class="lgr"><div class="lgl"><div class="lgd" style="border-color:#bbb;"></div><div class="lgdot" style="background:#bbb;"></div></div><div><div class="lgt" style="color:#888;">Was Bankexperten im Schnitt erwarten → $120</div><div class="lgx">Nüchterne Mitte der Profis — ohne übertriebenen Optimismus oder Pessimismus</div></div></div>
+        <div class="lgr"><div class="lgl"><div class="lgd" style="border-color:var(--red);"></div><div class="lgdot" style="background:var(--red);"></div></div><div><div class="lgt" style="color:var(--red);">Pessimistisches Szenario → $86</div><div class="lgx">Wenn Neutron scheitert oder sich stark verzögert und der Hype nachlässt</div></div></div>
+      </div>
+    </div>
+    <div class="card">
+      <div class="ch">🎯 Wo könnte der Kurs in 12 Monaten stehen?</div>
+      <div style="font-size:12px;color:var(--text2);margin-bottom:12px;line-height:1.5;">Verschiedene Experten und Szenarien — die Balken zeigen wie "hoch" das jeweilige Ziel ist:</div>
+      <div class="scr"><div class="scl">Bestmöglicher Fall<br>(alles klappt)</div><div class="scb"><div class="scf" style="width:100%;background:var(--green);"></div></div><div class="scv up">$200–216</div></div>
+      <div class="scr"><div class="scl">Needham Bank<br>(optimistische Bank)</div><div class="scb"><div class="scf" style="width:56%;background:var(--rklb);"></div></div><div class="scv" style="color:var(--rklb);">$120</div></div>
+      <div class="scr"><div class="scl">Alle Banken<br>(Durchschnitt)</div><div class="scb"><div class="scf" style="width:56%;background:#bbb;"></div></div><div class="scv mu">$120</div></div>
+      <div class="scr"><div class="scl">Vorsichtige<br>Schätzung</div><div class="scb"><div class="scf" style="width:40%;background:var(--amber);"></div></div><div class="scv wn">$86</div></div>
+      <div style="background:var(--surface2);border-radius:8px;padding:12px;margin-top:14px;">
+        <div style="font-size:12px;font-weight:500;margin-bottom:8px;">💡 Was sagt die Internet-Community?</div>
+        <div style="font-size:12px;color:var(--text2);line-height:1.6;">Reddit und WallStreetBets (grosse Internet-Foren für Privatanleger): <b>84% positive Kommentare</b> zu RKLB. Ein Post über das Rekordquartal hatte hunderte Upvotes. Aber Vorsicht: Internet-Euphorie kann schnell kippen!</div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ════════════════ ASTS ════════════════ -->
+<div class="panel" id="p-asts">
+
+  <div class="alert al-r">
+    <div class="adot dr"></div>
+    <div><b>Wichtige Warnung:</b> Gestern Nacht (28. Mai) explodierte die Blue Origin Rakete beim Test. Das ist ein Problem für ASTS, weil ASTS einen Vertrag mit Blue Origin für Satelliten-Starts hat. ASTS fiel 7% über Nacht. Gleichzeitig: Drei neue Satelliten (BlueBird 8–10) starten Mitte Juni mit einer SpaceX-Rakete — das ist der nächste wichtige Test.</div>
+  </div>
+
+  <div class="mets">
+    <div class="met">
+      <div class="met-icon">💰</div>
+      <div class="ml"><span class="tip">Aktueller Kurs <span class="tip-icon">?</span><span class="tip-box"><b>ASTS ist sehr volatil!</b> Das bedeutet, der Kurs kann an einem Tag um 10–15% steigen oder fallen. Das zeigt das hohe Risiko dieser Aktie. Nur für Anleger geeignet, die Verluste aushalten können.</span></span></div>
+      <div class="mv" id="asts-price">lädt...</div>
+      <div class="mc" id="asts-chg">—</div>
+      <div class="mc-explain">pro Aktie</div>
+    </div>
+    <div class="met">
+      <div class="met-icon">📊</div>
+      <div class="ml"><span class="tip">Handelsvolumen heute <span class="tip-icon">?</span><span class="tip-box">Bei ASTS sehr hoch — viele spekulative Anleger handeln täglich aktiv mit dieser Aktie.</span></span></div>
+      <div class="mv" id="asts-vol">—</div>
+      <div class="mc mu" id="asts-cap">—</div>
+      <div class="mc-explain">gehandelte Aktien</div>
+    </div>
+    <div class="met">
+      <div class="met-icon">📏</div>
+      <div class="ml"><span class="tip">Jahresspanne <span class="tip-icon">?</span><span class="tip-box">ASTS schwankt extrem — das zeigt wie spekulativ und riskant diese Aktie ist. Nur wer starke Nerven hat, sollte investieren.</span></span></div>
+      <div class="mv" id="asts-52w" style="font-size:14px;padding-top:4px;">—</div>
+      <div class="mc-explain">Tief → Hoch (12 Monate)</div>
+    </div>
+    <div class="met">
+      <div class="met-icon">🎯</div>
+      <div class="ml"><span class="tip">Was Experten erwarten <span class="tip-icon">?</span><span class="tip-box"><b>Achtung:</b> Bankexperten erwarten $83 — aber der aktuelle Kurs liegt bei $120. Das heisst: Du bezahlst 44% mehr als was die Profis für fair halten. Das ist möglich wenn viel Zukunftsfantasie eingepreist ist — aber auch riskant.</span></span></div>
+      <div class="mv" style="font-family:'DM Mono',monospace;">$83</div>
+      <div class="mc dn">44% unter aktuellem Kurs</div>
+      <div class="mc-explain">Ø Expertenziel (12 Monate)</div>
+    </div>
+  </div>
+
+  <!-- Recommendation ASTS -->
+  <div class="rec-banner rec-hold" id="asts-rec-banner">
+    <div class="rec-head">
+      <span class="rec-pill rec-pill-hold" id="asts-rec-pill">HALTEN</span>
+      <div class="rec-head-right">
+        <div class="rec-title" id="asts-rec-title">Spannende Technologie, aber Kurs weit über Expertenmeinungen — und neue Blue-Origin-Krise</div>
+        <div class="rec-ts" id="asts-rec-ts">Statische Basis-Einschätzung — mit KI-Schlüssel aktualisierbar</div>
+      </div>
+    </div>
+    <div class="rec-explain" id="asts-rec-sub">
+      <b>Warum "Halten" und nicht Kaufen?</b> ASTS baut etwas Revolutionäres: Satelliteninternet direkt aufs normale Handy — ohne Spezialgerät. Weltweit einzigartig. Grosse Telekonanbieter wie AT&T und Verizon unterstützen ASTS aktiv. Das Problem: Der aktuelle Kurs ($120) ist 44% höher als was Bankexperten für fair halten ($83). Und die Blue Origin Rakete ist gestern explodiert — das verzögert weitere Satelliten-Starts. Wer bereits ASTS-Aktien hat: Halten und abwarten. Wer noch nicht investiert ist: Besser auf den Mitte-Juni-Satelliten-Start warten. Klappt er gut, zeigt das ob die Technologie wirklich funktioniert.
+    </div>
+    <div class="rec-scores">
+      <div class="rec-score-card">
+        <div class="rec-score-emoji">📈</div>
+        <div class="rec-score-label">Wie gut läuft<br>das Geschäft?</div>
+        <div class="rec-score-val wn" id="asts-s1">5/10</div>
+        <div class="rec-meter"><div class="rec-meter-fill" style="width:50%;background:var(--amber);" id="asts-m1"></div></div>
+      </div>
+      <div class="rec-score-card">
+        <div class="rec-score-emoji">🚀</div>
+        <div class="rec-score-label">Wie stark steigt<br>der Kurs gerade?</div>
+        <div class="rec-score-val up" id="asts-s2">8/10</div>
+        <div class="rec-meter"><div class="rec-meter-fill" style="width:80%;background:var(--green);" id="asts-m2"></div></div>
+      </div>
+      <div class="rec-score-card">
+        <div class="rec-score-emoji">💣</div>
+        <div class="rec-score-label">Wie hoch ist<br>das Risiko?</div>
+        <div class="rec-score-val dn" id="asts-s3">4/10</div>
+        <div class="rec-meter"><div class="rec-meter-fill" style="width:40%;background:var(--red);" id="asts-m3"></div></div>
+      </div>
+      <div class="rec-score-card">
+        <div class="rec-score-emoji">💸</div>
+        <div class="rec-score-label">Ist der Preis<br>fair?</div>
+        <div class="rec-score-val dn" id="asts-s4">3/10</div>
+        <div class="rec-meter"><div class="rec-meter-fill" style="width:30%;background:var(--red);" id="asts-m4"></div></div>
+      </div>
+    </div>
+    <div class="rec-levels-row">
+      <span class="tip"><div class="rec-level-pill"><b>Besser einsteigen bei:</b> $80–90 <span class="tip-icon">?</span></div><span class="tip-box">Nach einem erfolgreichen Satelliten-Start Mitte Juni wäre $80–90 ein besserer Einstieg als der aktuelle Kurs. Dann weisst du ob die Technologie wirklich funktioniert.</span></span>
+      <span class="tip"><div class="rec-level-pill"><b>Mein Ziel:</b> $140 <span class="tip-icon">?</span></div><span class="tip-box">Wenn die Satelliten funktionieren und Umsatz kommt, könnte $140 möglich sein. Aber sehr unsicher!</span></span>
+      <span class="tip"><div class="rec-level-pill"><b>Stopp:</b> $70 <span class="tip-icon">?</span></div><span class="tip-box">Wenn der Kurs auf $70 fällt: Verkaufen um grössere Verluste zu vermeiden. Bei ASTS besonders wichtig wegen des hohen Risikos!</span></span>
+    </div>
+    <div class="rec-footer">
+      <button class="rec-update-btn" id="asts-rec-btn" onclick="fetchRec('asts')"><div class="rec-spin" id="asts-rec-spin"></div><span id="asts-rec-btn-txt">✦ Einschätzung mit KI aktualisieren</span></button>
+    </div>
+  </div>
+
+  <!-- Live News ASTS -->
+  <div class="live-news">
+    <div class="ln-header">
+      <div class="ln-title"><div class="live-dot"></div>Live-Nachrichten · AST SpaceMobile (ASTS)</div>
+      <span class="ln-ts" id="asts-news-ts">Noch nicht geladen</span>
+    </div>
+    <div class="ln-loading" id="asts-news-loading">
+      <div class="ln-loading-dot"></div>
+      <span id="asts-news-loading-txt">KI durchsucht gerade das Internet nach aktuellen Nachrichten...</span>
+    </div>
+    <div class="ln-content empty" id="asts-news-content">KI-Schlüssel eingeben → Nachrichten werden automatisch alle 4 Stunden gesucht und hier angezeigt.</div>
+  </div>
+
+  <!-- Portfolio ASTS -->
+  <div class="portfolio-bar">
+    <div class="section-title">🧮 Dein Portfolio-Rechner</div>
+    <div class="section-sub">Gib ein wie viele Aktien du hast und was du bezahlt hast. Alle Werte werden automatisch berechnet.</div>
+    <div class="pf-inputs">
+      <div class="pf-field"><label>Anzahl ASTS-Aktien die du besitzt</label><input type="number" id="asts-qty" placeholder="z.B. 200" oninput="calcPF('asts')" min="0"/></div>
+      <div class="pf-field"><label>Dein Kaufpreis pro Aktie ($)</label><input type="number" id="asts-buy" placeholder="z.B. 70.00" oninput="calcPF('asts')" step="0.01" min="0"/></div>
+      <div class="pf-field"><label>Optimistisches Ziel ($) — Standard: $200</label><input type="number" id="asts-bull-in" value="200" oninput="calcPF('asts')" step="0.01" min="0"/></div>
+      <div class="pf-field"><label>Pessimistisches Ziel ($) — Standard: $50</label><input type="number" id="asts-bear-in" value="50" oninput="calcPF('asts')" step="0.01" min="0"/></div>
+    </div>
+    <div class="pf-results">
+      <div class="pf-card"><div class="pf-emoji">💼</div><div class="pf-lbl">Was deine Aktien heute wert sind</div><div class="pf-val" id="asts-cur-val">—</div><div class="pf-sub" id="asts-cur-cost">Bezahlt: —</div></div>
+      <div class="pf-card"><div class="pf-emoji">📊</div><div class="pf-lbl">Dein Gewinn oder Verlust</div><div class="pf-val" id="asts-pnl">—</div><div class="pf-sub" id="asts-pnl-pct">—</div></div>
+      <div class="pf-card hl"><div class="pf-emoji">🌟</div><div class="pf-lbl">Wenn alles super läuft</div><div class="pf-val up" id="asts-bull-val">—</div><div class="pf-sub up" id="asts-bull-gain">—</div></div>
+      <div class="pf-card hl"><div class="pf-emoji">💣</div><div class="pf-lbl">Wenn es schlecht läuft</div><div class="pf-val dn" id="asts-bear-val">—</div><div class="pf-sub dn" id="asts-bear-gain">—</div></div>
+      <div class="pf-card"><div class="pf-emoji">🏦</div><div class="pf-lbl">Was Bankexperten erwarten</div><div class="pf-val" id="asts-cons-val">—</div><div class="pf-sub" id="asts-cons-gain">Ziel: $83</div></div>
+    </div>
+  </div>
+
+  <!-- Day Forecast ASTS -->
+  <div class="day-forecast">
+    <div class="section-title">📅 Was heute passieren könnte</div>
+    <div class="section-sub" style="margin-bottom:12px;"><b>Achtung:</b> ASTS schwankt täglich oft 8–15%! Diese Schätzung ist sehr ungenau. Nie mehr investieren als du verlieren kannst.</div>
+    <div class="df-grid">
+      <div class="df-card"><div class="df-emoji">🌅</div><div class="df-lbl">Kurs beim Börsenstart heute</div><div class="df-val" id="asts-open">—</div><div class="df-sub mu">Vorbörslich</div></div>
+      <div class="df-card"><div class="df-emoji">📈</div><div class="df-lbl">Mögliches Tageshoch</div><div class="df-val up" id="asts-day-hi">—</div><div class="df-sub up" id="asts-hi-pf">—</div></div>
+      <div class="df-card"><div class="df-emoji">📉</div><div class="df-lbl">Mögliches Tagestief</div><div class="df-val dn" id="asts-day-lo">—</div><div class="df-sub dn" id="asts-lo-pf">—</div></div>
+      <div class="df-card"><div class="df-emoji">📍</div><div class="df-lbl">Wo steht der Kurs gerade?</div>
+        <div class="df-range-wrap">
+          <div style="font-size:10px;color:var(--text2);display:flex;justify-content:space-between;margin-bottom:4px;font-family:'DM Mono',monospace;"><span id="asts-lo-lbl">Tief</span><span id="asts-hi-lbl">Hoch</span></div>
+          <div class="df-range-bar"><div class="df-range-dot" id="asts-rdot" style="left:50%;"></div></div>
+          <div style="font-size:10px;color:var(--text3);margin-top:6px;text-align:center;">Links = nahe Tief · Rechts = nahe Hoch</div>
+        </div>
+        <div class="df-sub mu" style="margin-top:6px;" id="asts-vol-avg">—</div>
+      </div>
+      <div class="df-card"><div class="df-emoji">⚡</div><div class="df-lbl">Kaufdruck / Stärke heute</div><div class="df-val" id="asts-mom">—</div><div class="df-sub mu" id="asts-rsi">—</div></div>
+    </div>
+  </div>
+
+  <!-- Sector context ASTS -->
+  <div class="card one">
+    <div class="ch">Was sonst noch den ASTS-Kurs beeinflusst</div>
+    <div style="font-size:12px;color:var(--text2);margin-bottom:12px;line-height:1.5;">ASTS wird von sehr vielen externen Faktoren beeinflusst — das macht die Aktie so unberechenbar:</div>
+    <div class="sector-grid">
+      <div class="sector-card">
+        <div class="sector-emoji">🌌</div>
+        <div class="sector-name">SpaceX Börsengang</div>
+        <div class="sector-val" style="color:var(--purple);">12. Juni</div>
+        <div class="sector-desc">SpaceX nennt ASTS direkt als Konkurrenten im Börsenprospekt. Das gab ASTS grosse Sichtbarkeit. Nach dem IPO droht aber ein Vergleich — und SpaceX hat 9'600 Satelliten, ASTS nur 7.</div>
+      </div>
+      <div class="sector-card">
+        <div class="sector-emoji">💥</div>
+        <div class="sector-name">Blue Origin Status</div>
+        <div class="sector-val dn">Geerdet</div>
+        <div class="sector-desc">Gestern Nacht explodiert. ASTS hat Vertrag für 45 Satelliten-Starts mit Blue Origin. Kein Starttermin bekannt. Direktes Risiko für den Zeitplan.</div>
+      </div>
+      <div class="sector-card">
+        <div class="sector-emoji">📶</div>
+        <div class="sector-name">Starlink (SpaceX)</div>
+        <div class="sector-val dn">Konkurrenz</div>
+        <div class="sector-desc">Hat bereits 9'600 Satelliten, $3.25 Mrd. Quartalsumsatz und expandiert in Handy-Direktverbindung. Riesiger Vorsprung gegenüber ASTS.</div>
+      </div>
+      <div class="sector-card">
+        <div class="sector-emoji">📱</div>
+        <div class="sector-name">AT&T & Verizon</div>
+        <div class="sector-val" style="color:var(--green);">Partner</div>
+        <div class="sector-desc">Die grossen US-Telekonanbieter unterstützen ASTS aktiv — sie wollen kein Starlink-Monopol. Gibt ASTS strukturellen Rückhalt.</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="two">
+    <div class="card">
+      <div class="ch">📈 Kursverlauf der letzten 12 Monate + Zukunftsszenarien</div>
+      <div class="cw"><canvas id="asts-chart" role="img" aria-label="ASTS Chart">ASTS Kursverlauf</canvas></div>
+      <div class="lgbox">
+        <div class="lgr"><div class="lgl"><div class="lgs" style="background:var(--asts);"></div><div class="lgdot" style="background:var(--asts);"></div></div><div><div class="lgt">Was wirklich passiert ist</div><div class="lgx">Echter Kursverlauf — stark gestiegen, aber auch sehr schwankend</div></div></div>
+        <div class="lgr"><div class="lgl"><div class="lgd" style="border-color:var(--green);"></div><div class="lgdot" style="background:var(--green);"></div></div><div><div class="lgt" style="color:var(--green);">Optimistisches Szenario → $200+</div><div class="lgx">Wenn die Satelliten funktionieren und Umsatz kommt</div></div></div>
+        <div class="lgr"><div class="lgl"><div class="lgd" style="border-color:#bbb;"></div><div class="lgdot" style="background:#bbb;"></div></div><div><div class="lgt" style="color:#888;">Was Bankexperten erwarten → $83</div><div class="lgx">Nüchterne Mitte — der aktuelle Kurs liegt 44% darüber</div></div></div>
+        <div class="lgr"><div class="lgl"><div class="lgd" style="border-color:var(--red);"></div><div class="lgdot" style="background:var(--red);"></div></div><div><div class="lgt" style="color:var(--red);">Pessimistisches Szenario → $50</div><div class="lgx">Wenn Blue Origin dauerhaft ausfällt + Starlink gewinnt</div></div></div>
+      </div>
+    </div>
+    <div class="card">
+      <div class="ch">🎯 Wo könnte der Kurs in 12 Monaten stehen?</div>
+      <div style="font-size:12px;color:var(--text2);margin-bottom:12px;line-height:1.5;">Die Bandbreite ist riesig — das zeigt das grosse Risiko und das grosse Potenzial:</div>
+      <div class="scr"><div class="scl">Bestmöglicher Fall</div><div class="scb"><div class="scf" style="width:100%;background:var(--green);"></div></div><div class="scv up">$200+</div></div>
+      <div class="scr"><div class="scl">Roth Capital Bank</div><div class="scb"><div class="scf" style="width:54%;background:var(--rklb);"></div></div><div class="scv" style="color:var(--rklb);">$108</div></div>
+      <div class="scr"><div class="scl">Alle Banken<br>(Durchschnitt)</div><div class="scb"><div class="scf" style="width:42%;background:#bbb;"></div></div><div class="scv mu">$83</div></div>
+      <div class="scr"><div class="scl">Fairer Wert<br>(Berechnung)</div><div class="scb"><div class="scf" style="width:36%;background:var(--amber);"></div></div><div class="scv wn">$71</div></div>
+      <div class="scr"><div class="scl">Schlechtester Fall</div><div class="scb"><div class="scf" style="width:25%;background:var(--red);"></div></div><div class="scv dn">$50</div></div>
+      <div style="background:rgba(220,38,38,.05);border:1px solid rgba(220,38,38,.15);border-radius:8px;padding:12px;margin-top:14px;">
+        <div style="font-size:12px;font-weight:500;margin-bottom:6px;color:#991b1b;">⚠️ Wichtige Warnung</div>
+        <div style="font-size:12px;color:var(--text2);line-height:1.6;">Der aktuelle Kurs ($120) liegt deutlich über dem, was die meisten Experten für fair halten ($83). Das bedeutet: Viele Anleger spekulieren auf die Zukunft. Wenn diese Zukunft nicht so schnell kommt wie erhofft, kann der Kurs stark fallen. Nur mit Geld investieren, dessen Verlust du verkraften könntest.</div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ════════════════ GLOSSAR ════════════════ -->
+<div class="glossar">
+  <div class="glossar-title">📚 Börsenbegriffe — einfach erklärt</div>
+  <div class="glossar-sub">Alle Fachbegriffe aus diesem Dashboard, so erklärt dass auch Börsenneueinsteiger sie sofort verstehen.</div>
+  <div class="glossar-grid">
+    <div class="gitem"><div class="gterm"><span class="gemoji">📄</span>Aktie<span class="gbadge">Grundlage</span></div><div class="gdef">Ein kleines Stück eines Unternehmens. Wenn Rocket Lab 1 Milliarde Aktien hat und du 100 kaufst, gehört dir 0.00001% des Unternehmens. Du profitierst wenn das Unternehmen wächst — aber verlierst wenn es schlecht läuft.</div></div>
+    <div class="gitem"><div class="gterm"><span class="gemoji">💰</span>Kurs<span class="gbadge">Grundlage</span></div><div class="gdef">Der aktuelle Marktpreis für eine Aktie. Wird durch Angebot und Nachfrage bestimmt — wenn viele kaufen wollen, steigt er. Wenn viele verkaufen, fällt er. Kein fixer Wert!</div></div>
+    <div class="gitem"><div class="gterm"><span class="gemoji">🏢</span>Marktkapitalisierung<span class="gbadge">Firmengrösse</span></div><div class="gdef">Kurs × Anzahl aller Aktien = wie viel das Unternehmen "laut Börse" wert ist. ASTS mit $41 Milliarden ist riesig — obwohl kaum Umsatz. Das zeigt wie viel Zukunftsfantasie eingepreist ist.</div><div class="gex">Beispiel: 100 Aktien × $150 = $15'000 "Marktkapitalisierung" im Kleinen</div></div>
+    <div class="gitem"><div class="gterm"><span class="gemoji">🏦</span>Analyst &amp; Kursziel<span class="gbadge">Prognose</span></div><div class="gdef">Bankexperten die Unternehmen monatelang analysieren und dann sagen wo sie den Kurs in 12 Monaten erwarten. "12× Kaufen" = 12 Experten empfehlen zu kaufen. Aber: Auch Experten liegen oft falsch!</div></div>
+    <div class="gitem"><div class="gterm"><span class="gemoji">🐂</span>Bull-Szenario (optimistisch)<span class="gbadge">Szenario</span></div><div class="gdef">Ein Bulle stösst mit den Hörnern nach oben — deshalb bedeutet "bullish" = Kurs steigt. Das Bull-Szenario zeigt was passiert wenn alles super läuft und alle Ziele erreicht werden.</div></div>
+    <div class="gitem"><div class="gterm"><span class="gemoji">🐻</span>Bear-Szenario (pessimistisch)<span class="gbadge">Szenario</span></div><div class="gdef">Ein Bär schlägt mit der Pfote nach unten — deshalb "bearish" = Kurs fällt. Das Bear-Szenario zeigt den schlimmsten realistischen Fall. Vor dem Investieren immer fragen: Kann ich diesen Verlust verkraften?</div></div>
+    <div class="gitem"><div class="gterm"><span class="gemoji">📦</span>Backlog (Auftragsbestand)<span class="gbadge">Geschäft</span></div><div class="gdef">Bereits gebuchte, aber noch nicht erledigte Aufträge. RKLB hat $2.2 Milliarden Backlog — Kunden haben schon für diesen Betrag Raketen und Satelliten bestellt, aber noch nicht bekommen. Zeigt wie sicher der zukünftige Umsatz ist.</div></div>
+    <div class="gitem"><div class="gterm"><span class="gemoji">🛡️</span>Stop-Loss<span class="gbadge">Risikoschutz</span></div><div class="gdef">Eine Grenze die du selbst festlegst: "Wenn der Kurs auf X fällt, verkaufe ich automatisch." Schützt dich vor Totalverlust. Beim Sporttippen: Stell dir vor du setzt ein Maximum pro Tag — der Stop-Loss macht dasselbe beim Investieren.</div><div class="gex">Beispiel: Kaufpreis $100, Stop-Loss bei $80 = maximal 20% Verlust</div></div>
+    <div class="gitem"><div class="gterm"><span class="gemoji">📐</span>ATR (Tagesschwankung)<span class="gbadge">Technisch</span></div><div class="gdef">Average True Range = durchschnittliche Kursschwankung pro Tag. Wenn ASTS die letzten 5 Tage täglich um 10% schwankte, schätzen wir auch heute ~10% Bewegung. Basis für die Tages-Prognose.</div></div>
+    <div class="gitem"><div class="gterm"><span class="gemoji">⚡</span>RSI (Kaufdruck-Messer)<span class="gbadge">Technisch</span></div><div class="gdef">Relative Stärke Index: Zahl zwischen 0–100. Über 70 = zu viele Käufer, Kursrückgang möglich ("überkauft"). Unter 30 = zu viele Verkäufer, Erholung möglich ("überverkauft"). Dazwischen = normal.</div></div>
+    <div class="gitem"><div class="gterm"><span class="gemoji">💡</span>Nicht realisierter Gewinn<span class="gbadge">Portfolio</span></div><div class="gdef">Was du gewonnen oder verloren hast — aber nur auf dem Papier, solange du nicht verkaufst. Erst wenn du verkaufst, ist der Gewinn/Verlust "realisiert" = wirklich vorhanden.</div><div class="gex">Aktie von $80 auf $150: +$70 Gewinn auf dem Papier, aber erst "echt" wenn verkauft</div></div>
+    <div class="gitem"><div class="gterm"><span class="gemoji">🌊</span>Volatilität<span class="gbadge">Risiko</span></div><div class="gdef">Wie stark der Kurs schwankt. Hohe Volatilität = grosse Auf-und-Abs täglich = mehr Chance auf schnellen Gewinn, aber auch mehr Risiko. ASTS hat sehr hohe Volatilität — nichts für schwache Nerven!</div></div>
+  </div>
+</div>
+
+<div class="disc">⚠ Kein Anlageberatung. Empfehlungen sind KI-generiert und dienen nur zur Information — keine Garantien, keine Haftung. Investieren beinhaltet das Risiko des Totalverlustes. Kursdaten: Yahoo Finance via Vercel-Proxy (auto-refresh 60s). KI-News: Anthropic Claude mit Web-Search (dein API-Key, deine Kosten). Statische Basisdaten Stand 29. Mai 2026.</div>
+</div>
+
+<script>
+const $=id=>document.getElementById(id);
+const quotes={rklb:null,asts:null};
+const CONS={rklb:120,asts:83};
+let autoTimer=null,progressTimer=null;
+const AUTO_INTERVAL=4*60*60*1000;
+
+function fmt(n,d=2){if(n==null||isNaN(n))return'—';return n.toLocaleString('de-CH',{minimumFractionDigits:d,maximumFractionDigits:d});}
+function fmtK(n){if(!n)return'—';if(n>=1e9)return(n/1e9).toFixed(1)+' Mrd.';if(n>=1e6)return(n/1e6).toFixed(1)+' Mio.';return(n/1e3).toFixed(0)+'K';}
+function fmtMC(n){if(!n)return'—';if(n>=1e12)return'$'+(n/1e12).toFixed(2)+' Bio.';if(n>=1e9)return'$'+(n/1e9).toFixed(1)+' Mrd.';return'$'+(n/1e6).toFixed(0)+' Mio.';}
+function fmtUSD(n){if(n==null||isNaN(n))return'—';const a=Math.abs(n),s=n<0?'−$':'$';if(a>=1e6)return s+(a/1e6).toFixed(2)+' Mio.';if(a>=1e3)return s+(a/1e3).toFixed(1)+'K';return s+a.toFixed(2);}
+
+function switchTab(id){
+  ['rklb','asts'].forEach(t=>{$('p-'+t).classList.remove('on');$('btn-'+t).className='sw';});
+  $('p-'+id).classList.add('on');
+  $('btn-'+id).className='sw '+(id==='rklb'?'ra':'ga');
+}
+
+function onKeyInput(){
+  const k=$('api-key').value.trim(),ok=k.startsWith('sk-ant-')&&k.length>20;
+  $('api-ok').style.display=ok?'inline':'none';
+  if(ok){startAutoRefresh();}
+  else{stopAutoRefresh();$('auto-dot').className='auto-dot off';$('auto-status-txt').textContent='KI-Schlüssel eingeben um automatische News-Aktualisierung zu starten';}
+}
+function getKey(){return $('api-key').value.trim();}
+
+function startAutoRefresh(){
+  stopAutoRefresh();
+  refreshAllNews();
+  autoTimer=setInterval(refreshAllNews,AUTO_INTERVAL);
+  startProgress();
+}
+function stopAutoRefresh(){
+  if(autoTimer){clearInterval(autoTimer);autoTimer=null;}
+  if(progressTimer){clearInterval(progressTimer);progressTimer=null;}
+}
+function startProgress(){
+  if(progressTimer)clearInterval(progressTimer);
+  const t0=Date.now();
+  progressTimer=setInterval(()=>{
+    const p=Math.min(100,(Date.now()-t0)/AUTO_INTERVAL*100);
+    $('auto-progress').style.width=p+'%';
+    if(p>=100)clearInterval(progressTimer);
+  },10000);
+}
+function manualRefreshAll(){refreshAllNews(true);}
+
+async function refreshAllNews(manual=false){
+  const key=getKey();if(!key||!key.startsWith('sk-ant-'))return;
+  const btn=$('auto-btn'),spin=$('auto-spin'),btntxt=$('auto-btn-txt');
+  btn.classList.add('busy');spin.style.display='block';btntxt.textContent='Suche...';
+  $('auto-dot').className='auto-dot loading';
+  $('auto-status-txt').textContent='KI sucht gerade alle aktuellen Nachrichten — bitte warten...';
+  await Promise.all([fetchLiveNews('rklb'),fetchLiveNews('asts')]);
+  btn.classList.remove('busy');spin.style.display='none';btntxt.textContent='↺ Jetzt aktualisieren';
+  $('auto-dot').className='auto-dot';
+  $('auto-progress').style.width='0%';
+  const next=new Date(Date.now()+AUTO_INTERVAL);
+  $('auto-status-txt').textContent=`Zuletzt: ${new Date().toLocaleTimeString('de-CH')} · Nächste automatische Aktualisierung: ${next.toLocaleTimeString('de-CH')} Uhr`;
+  if(!manual)startProgress();
+}
+
+const STEPS=['Suche aktuelle Nachrichten...','Lese Reddit & Internet-Foren...','Prüfe Analystenberichte...','Checke Konkurrenzsituation...','Sammle alle Informationen...','Schreibe verständliche Zusammenfassung...'];
+
+const NEWS_PROMPTS={
+  rklb:`Du bist Finanzanalyst der für Börseneinsteiger schreibt. Analysiere Rocket Lab (RKLB) mit aktuellen Web-Suchen.
+
+Suche nach: aktuellen RKLB-News (letzte 48h), Neutron-Rakete Status, Golden Dome / Space-Based Interceptor Updates, SpaceX IPO Auswirkungen, Analysten-Updates, Reddit/WSB-Stimmung, Gerüchte, Insider-Käufe/-Verkäufe, Konkurrenz-News, Sektor-News.
+
+Schreibe auf Deutsch, SEHR einfach verständlich für jemanden der noch nie Aktien hatte. Erkläre Fachbegriffe sofort wenn du sie verwendest. Benutze Alltagssprache.
+
+Format (NUR diese Abschnitte, kein Markdown, keine Sternchen):
+
+NEUESTE NACHRICHTEN
+[Was ist in den letzten 48 Stunden wichtiges passiert? Erkläre kurz warum das für den Kurs wichtig ist.]
+
+RAKETEN & VERTEIDIGUNG
+[Neutron-Status, Golden Dome, Defense-Verträge — einfach erklärt]
+
+WAS EXPERTEN SAGEN
+[Neue Analysten-Empfehlungen, Kursziel-Änderungen]
+
+WAS DAS INTERNET SAGT
+[Reddit, WallStreetBets, Stocktwits — wie ist die Stimmung? Gibt es Gerüchte?]
+
+GESAMTLAGE
+[2-3 Sätze: Wie ist die Lage aktuell? Was sind die wichtigsten Chancen und Risiken gerade?]
+
+Max. 450 Wörter. Keine Sternchen, kein Markdown.`,
+
+  asts:`Du bist Finanzanalyst der für Börseneinsteiger schreibt. Analysiere AST SpaceMobile (ASTS) mit aktuellen Web-Suchen.
+
+Suche nach: ASTS-News (letzte 48h), Blue Origin New Glenn Status nach der Explosion vom 28. Mai, BlueBird 8-9-10 Launch-Datum (Falcon 9 Mitte Juni), SpaceX IPO Impact auf ASTS, Starlink Direct-to-Cell Stand, FCC-Updates, AT&T/Verizon Strategie, Analysten-Updates, Reddit/WSB-Stimmung nach Blue Origin Explosion, Amazon/Bezos-Gerüchte.
+
+Schreibe auf Deutsch, SEHR einfach verständlich für jemanden der noch nie Aktien hatte. Erkläre Fachbegriffe sofort.
+
+Format (NUR diese Abschnitte, kein Markdown, keine Sternchen):
+
+NEUESTE NACHRICHTEN
+[Was ist in den letzten 48h wichtiges passiert?]
+
+BLUE ORIGIN SITUATION
+[Aktueller Status nach der Explosion. Was bedeutet das konkret für ASTS? Einfach erklärt.]
+
+NÄCHSTER GROSSER TEST
+[BlueBird 8-10 Launch — gibt es ein konkretes Datum? Was passiert wenn er klappt oder scheitert?]
+
+WAS EXPERTEN SAGEN
+[Analysten-Updates, neue Kursziele]
+
+WAS DAS INTERNET SAGT
+[Reddit/WSB-Stimmung, Gerüchte (Amazon, etc.)]
+
+GESAMTLAGE
+[2-3 Sätze: Wie ist die Lage? Was sind die wichtigsten Chancen und Risiken gerade?]
+
+Max. 500 Wörter. Keine Sternchen, kein Markdown.`
+};
+
+async function fetchLiveNews(t){
+  const key=getKey();if(!key||!key.startsWith('sk-ant-'))return;
+  const ld=$(t+'-news-loading'),ldtxt=$(t+'-news-loading-txt');
+  const content=$(t+'-news-content'),ts=$(t+'-news-ts');
+  content.style.display='none';ld.style.display='flex';ldtxt.textContent=STEPS[0];
+  let step=0;const st=setInterval(()=>{step=(step+1)%STEPS.length;ldtxt.textContent=STEPS[step];},3000);
+  try{
+    const resp=await fetch('https://api.anthropic.com/v1/messages',{
+      method:'POST',
+      headers:{'Content-Type':'application/json','x-api-key':key,'anthropic-version':'2023-06-01','anthropic-dangerous-direct-browser-access':'true'},
+      body:JSON.stringify({model:'claude-sonnet-4-20250514',max_tokens:2000,tools:[{type:'web_search_20250305',name:'web_search'}],messages:[{role:'user',content:NEWS_PROMPTS[t]}]})
+    });
+    if(!resp.ok){const e=await resp.json().catch(()=>({}));throw new Error(e.error?.message||'Fehler '+resp.status);}
+    const data=await resp.json();
+    const text=data.content.filter(b=>b.type==='text').map(b=>b.text).join('\n').trim();
+    ts.textContent='Aktualisiert: '+new Date().toLocaleTimeString('de-CH')+' Uhr';
+    content.innerHTML=newsToHtml(text);
+    content.className='ln-content';
+  }catch(e){
+    content.innerHTML='<span style="color:var(--red);">Fehler beim Laden: '+e.message+'</span>';
+    content.className='ln-content';ts.textContent='Fehler';
+  }finally{clearInterval(st);ld.style.display='none';content.style.display='block';}
+}
+
+function newsToHtml(txt){
+  const lines=txt.split('\n');let html='';let inSection=false;
+  for(const line of lines){
+    const trimmed=line.trim();
+    if(!trimmed){if(inSection)html+='<br>';continue;}
+    // Section headers (all caps lines)
+    if(/^[A-ZÄÖÜ\s&\/\-]{4,}$/.test(trimmed)&&trimmed.length<60){
+      if(inSection)html+='</div>';
+      html+=`<div class="ln-section"><div class="ln-section-title">${trimmed}</div><div class="ln-section-body">`;
+      inSection=true;
+    } else {
+      html+=(inSection?'':'')+trimmed+'<br>';
+    }
+  }
+  if(inSection)html+='</div></div>';
+  return html||'<span style="color:var(--text3);">Keine Inhalte geladen.</span>';
+}
+
+// Recommendation
+const REC_PROMPTS={
+  rklb:`Analysiere Rocket Lab (RKLB) mit Web-Suchen. Berücksichtige aktuellen Kurs, Neutron-Rakete Status, Golden Dome Defense, SpaceX IPO, Analysten-Ratings. Gib KAUFEN/HALTEN/VERKAUFEN. Antworte NUR mit JSON (kein Text drumherum):
+{"empfehlung":"KAUFEN","titel":"Kurzer Titel max 80 Zeichen","begruendung":"2-4 Sätze einfach erklärt für Einsteiger — warum diese Empfehlung?","fundamentals":8,"momentum":7,"risiko":6,"bewertung":5,"einstieg":"$120-130","kursziel":"$180","stopp":"$105"}`,
+  asts:`Analysiere AST SpaceMobile (ASTS) mit Web-Suchen. Berücksichtige Blue Origin Explosion, BlueBird Launch Status, SpaceX IPO, Starlink Konkurrenz. Gib KAUFEN/HALTEN/VERKAUFEN. Antworte NUR mit JSON:
+{"empfehlung":"HALTEN","titel":"Kurzer Titel max 80 Zeichen","begruendung":"2-4 Sätze einfach erklärt für Einsteiger — warum diese Empfehlung?","fundamentals":5,"momentum":8,"risiko":4,"bewertung":3,"einstieg":"$80-90","kursziel":"$140","stopp":"$70"}`
+};
+
+async function fetchRec(t){
+  const key=getKey();if(!key||!key.startsWith('sk-ant-')){alert('Bitte KI-Schlüssel oben eingeben.');return;}
+  const btn=$(t+'-rec-btn'),spin=$(t+'-rec-spin'),txt=$(t+'-rec-btn-txt');
+  btn.classList.add('busy');spin.style.display='block';txt.textContent='KI analysiert mit Web-Search...';
+  try{
+    const resp=await fetch('https://api.anthropic.com/v1/messages',{method:'POST',headers:{'Content-Type':'application/json','x-api-key':key,'anthropic-version':'2023-06-01','anthropic-dangerous-direct-browser-access':'true'},body:JSON.stringify({model:'claude-sonnet-4-20250514',max_tokens:800,tools:[{type:'web_search_20250305',name:'web_search'}],messages:[{role:'user',content:REC_PROMPTS[t]}]})});
+    if(!resp.ok){const e=await resp.json().catch(()=>({}));throw new Error(e.error?.message||'Fehler '+resp.status);}
+    const data=await resp.json();
+    const raw=data.content.filter(b=>b.type==='text').map(b=>b.text).join('\n').trim();
+    const match=raw.match(/\{[\s\S]*\}/);
+    if(!match)throw new Error('Kein JSON erhalten');
+    applyRec(t,JSON.parse(match[0]));
+  }catch(e){txt.textContent='✗ Fehler: '+e.message;}
+  finally{btn.classList.remove('busy');spin.style.display='none';if(!txt.textContent.includes('✗'))txt.textContent='✦ Aktualisiert '+new Date().toLocaleTimeString('de-CH')+' Uhr';}
+}
+
+function applyRec(t,rec){
+  const banner=$(t+'-rec-banner'),pill=$(t+'-rec-pill');
+  banner.className='rec-banner';pill.className='rec-pill';
+  const emp=(rec.empfehlung||'HALTEN').toUpperCase();
+  if(emp==='KAUFEN'){banner.classList.add('rec-buy');pill.classList.add('rec-pill-buy');}
+  else if(emp==='VERKAUFEN'){banner.classList.add('rec-sell');pill.classList.add('rec-pill-sell');}
+  else{banner.classList.add('rec-hold');pill.classList.add('rec-pill-hold');}
+  pill.textContent=emp;
+  $(t+'-rec-title').textContent=rec.titel||'';
+  $(t+'-rec-ts').textContent='Aktualisiert: '+new Date().toLocaleTimeString('de-CH')+' Uhr (KI mit Web-Search)';
+  let sub='';
+  if(rec.begruendung)sub+=rec.begruendung;
+  if(rec.einstieg||rec.kursziel||rec.stopp){
+    // Update level pills
+    const levelsEl=$(t+'-rec-levels-row')||$(t+'-rec-levels');
+    // just update the sub text with the values
+    sub+=`\n\nGuter Einstieg: ${rec.einstieg||'—'} · Mein Ziel: ${rec.kursziel||'—'} · Stopp: ${rec.stopp||'—'}`;
+  }
+  $(t+'-rec-sub').textContent=sub;
+  // Update why box with the bold intro
+  const el=$(t+'-rec-sub');
+  el.innerHTML='<b>Warum "'+emp+'"?</b> '+sub.replace(/\n/g,'<br>');
+
+  [['fundamentals',t+'-s1',t+'-m1'],['momentum',t+'-s2',t+'-m2'],['risiko',t+'-s3',t+'-m3'],['bewertung',t+'-s4',t+'-m4']].forEach(([k,sid,mid])=>{
+    const v=rec[k]||5;
+    $(sid).textContent=v+'/10';$(sid).className='rec-score-val '+(v>=7?'up':v>=5?'wn':'dn');
+    $(mid).style.width=(v*10)+'%';$(mid).style.background=v>=7?'var(--green)':v>=5?'var(--amber)':'var(--red)';
+  });
+}
+
+// Quotes
+async function fetchQ(ticker){
+  try{
+    const r=await fetch('/api/quote?ticker='+ticker);
+    if(!r.ok)throw new Error(r.status);
+    const d=await r.json();if(d.error)throw new Error(d.error);
+    const res=d.chart.result[0],m=res.meta,q0=res.indicators.quote[0];
+    return{price:m.regularMarketPrice,prev:m.chartPreviousClose||m.previousClose,
+      open:m.regularMarketOpen||m.regularMarketPrice,dayHi:m.regularMarketDayHigh,
+      dayLo:m.regularMarketDayLow,vol:m.regularMarketVolume,cap:m.marketCap,
+      hi52:m.fiftyTwoWeekHigh,lo52:m.fiftyTwoWeekLow,
+      closes:q0.close.filter(x=>x!=null),highs:q0.high.filter(x=>x!=null),
+      lows:q0.low.filter(x=>x!=null),vols:q0.volume.filter(x=>x!=null)};
+  }catch(e){return null;}
+}
+async function fetchSimple(ticker){
+  try{const r=await fetch('/api/quote?ticker='+ticker);const d=await r.json();return d.chart?.result[0]?.meta?.regularMarketPrice||null;}catch(e){return null;}
+}
+
+function applyQ(t,q){
+  if(!q){$(t+'-price').textContent='Fehler';$(t+'-chg').textContent='Vercel-Proxy prüfen';return;}
+  quotes[t]=q;
+  const chg=q.price-q.prev,pct=chg/q.prev*100,up=chg>=0;
+  const pEl=$(t+'-price');
+  pEl.textContent='$'+fmt(q.price);pEl.className='mv '+(up?'up':'dn');
+  $(t+'-chg').textContent=(up?'↑ +':'↓ ')+fmt(chg)+' ('+(up?'+':'')+fmt(pct)+'%) heute';
+  $(t+'-chg').className='mc '+(up?'up':'dn');
+  $(t+'-vol').textContent=fmtK(q.vol);
+  $(t+'-cap').textContent='Firmenwert: '+fmtMC(q.cap);
+  $(t+'-52w').textContent='$'+fmt(q.lo52)+' → $'+fmt(q.hi52);
+  pEl.style.textShadow=up?'0 0 10px rgba(22,163,74,.25)':'0 0 10px rgba(220,38,38,.25)';
+  setTimeout(()=>pEl.style.textShadow='',900);
+  calcDF(t,q);calcPF(t);
+}
+
+function calcDF(t,q){
+  const c=q.closes.slice(-5),h=q.highs.slice(-5),l=q.lows.slice(-5),v=q.vols.slice(-5);
+  const trs=h.map((hi,i)=>{if(i===0)return hi-l[i];const cp=c[i-1];return Math.max(hi-l[i],Math.abs(hi-cp),Math.abs(l[i]-cp));});
+  const atr=trs.reduce((a,b)=>a+b,0)/trs.length,p=q.price;
+  const estHi=q.dayHi||(p+atr*0.55),estLo=q.dayLo||(p-atr*0.55);
+  const avg5=c.reduce((a,b)=>a+b,0)/c.length,mp=(p-avg5)/avg5*100;
+  const ml=mp>2?'↑ Kaufdruck':mp<-2?'↓ Verkaufsdruck':'→ Neutral',mc=mp>2?'up':mp<-2?'dn':'mu';
+  let g=0,lo=0;for(let i=1;i<c.length;i++){const d=c[i]-c[i-1];if(d>0)g+=d;else lo+=Math.abs(d);}
+  const rsi=Math.round(100-100/(1+(lo===0?100:g/lo)));
+  const rl=rsi>70?'RSI '+rsi+' — zu viele Käufer, Vorsicht!':rsi<30?'RSI '+rsi+' — viele Verkäufer, evtl. Erholung':'RSI '+rsi+' — normaler Bereich';
+  const pos=estHi>estLo?Math.min(100,Math.max(0,(p-estLo)/(estHi-estLo)*100)):50;
+  $(t+'-open').textContent='$'+fmt(q.open||p);
+  $(t+'-day-hi').textContent='$'+fmt(estHi);
+  $(t+'-day-lo').textContent='$'+fmt(estLo);
+  $(t+'-lo-lbl').textContent='$'+fmt(estLo,0);$(t+'-hi-lbl').textContent='$'+fmt(estHi,0);
+  $(t+'-rdot').style.left=pos+'%';
+  $(t+'-vol-avg').textContent='Ø '+fmtK(Math.round(v.reduce((a,b)=>a+b,0)/v.length))+' tägl.';
+  $(t+'-mom').textContent=ml;$(t+'-mom').className='df-val '+mc;
+  $(t+'-rsi').textContent=rl;
+  updDayPF(t,estHi,estLo);
+}
+
+function updDayPF(t,hi,lo){
+  const qty=parseFloat($(t+'-qty')?.value)||0;
+  if(!qty){$(t+'-hi-pf').textContent='Stückzahl eingeben';$(t+'-lo-pf').textContent='';return;}
+  const p=quotes[t]?.price||0,hg=(hi-p)*qty,lg=(lo-p)*qty;
+  $(t+'-hi-pf').textContent=(hg>=0?'+':'')+fmtUSD(hg)+' dein Portfolio';
+  $(t+'-hi-pf').className='df-sub '+(hg>=0?'up':'dn');
+  $(t+'-lo-pf').textContent=(lg>=0?'+':'')+fmtUSD(lg)+' dein Portfolio';
+  $(t+'-lo-pf').className='df-sub '+(lg>=0?'up':'dn');
+}
+
+function calcPF(t){
+  const p=quotes[t]?.price||0,qty=parseFloat($(t+'-qty')?.value)||0;
+  const bp=parseFloat($(t+'-buy')?.value)||0,bul=parseFloat($(t+'-bull-in')?.value)||0;
+  const ber=parseFloat($(t+'-bear-in')?.value)||0,con=CONS[t];
+  if(!qty||!p){[t+'-cur-val',t+'-pnl',t+'-bull-val',t+'-bear-val',t+'-cons-val'].forEach(i=>$(i).textContent='—');return;}
+  const cv=p*qty,cost=bp?bp*qty:null,pnl=cost?cv-cost:null,pct=cost&&bp?(p-bp)/bp*100:null;
+  $(t+'-cur-val').textContent=fmtUSD(cv);
+  $(t+'-cur-cost').textContent=cost?'Bezahlt: '+fmtUSD(cost):'Kaufpreis eingeben';
+  if(pnl!=null){$(t+'-pnl').textContent=(pnl>=0?'+':'')+fmtUSD(pnl);$(t+'-pnl').className='pf-val '+(pnl>=0?'up':'dn');$(t+'-pnl-pct').textContent=(pct>=0?'↑ +':'↓ ')+pct.toFixed(1)+'% seit Kauf';$(t+'-pnl-pct').className=pnl>=0?'pf-sub up':'pf-sub dn';}
+  else{$(t+'-pnl').textContent='—';$(t+'-pnl-pct').textContent='Kaufpreis eingeben';}
+  const bv=bul*qty,brv=ber*qty,conv=con*qty,cg=conv-cv;
+  $(t+'-bull-val').textContent=fmtUSD(bv);$(t+'-bull-gain').textContent=(bv-cv>=0?'+':'')+fmtUSD(bv-cv)+' mehr als heute';
+  $(t+'-bear-val').textContent=fmtUSD(brv);$(t+'-bear-gain').textContent=(brv-cv>=0?'+':'')+fmtUSD(brv-cv)+' verglichen mit heute';
+  $(t+'-cons-val').textContent=fmtUSD(conv);$(t+'-cons-val').className='pf-val '+(cg>=0?'up':'dn');
+  $(t+'-cons-gain').textContent=(cg>=0?'+':'')+fmtUSD(cg)+' verglichen mit heute';$(t+'-cons-gain').className='pf-sub '+(cg>=0?'up':'dn');
+  if(quotes[t]){const hi=parseFloat($(t+'-day-hi')?.textContent?.replace('$','').replace(/[',]/g,''))||0;const lo=parseFloat($(t+'-day-lo')?.textContent?.replace('$','').replace(/[',]/g,''))||0;if(hi>0)updDayPF(t,hi,lo);}
+}
+
+async function loadAll(){
+  const now=new Date();
+  $('last-upd').textContent='Kurse aktualisiert: '+now.toLocaleTimeString('de-CH')+' · '+now.toLocaleDateString('de-CH')+' (alle 60 Sek.)';
+  const[r,a,l,pl]=await Promise.all([fetchQ('RKLB'),fetchQ('ASTS'),fetchSimple('LUNR'),fetchSimple('PL')]);
+  applyQ('rklb',r);applyQ('asts',a);
+  if(l){$('lunr-price').textContent='$'+l.toFixed(2);$('lunr-price').className='sector-val '+(l>20?'up':'mu');}
+  if(pl){$('pl-price').textContent='$'+pl.toFixed(2);$('pl-price').className='sector-val '+(pl>5?'up':'mu');}
+}
+loadAll();setInterval(loadAll,60000);
+
+// Charts
+const mo=['Jun','Jul','Aug','Sep','Okt','Nov','Dez','Jan','Feb','Mär','Apr','Mai','Jun→','Jul→','Aug→','Sep→'];
+const co=y=>({responsive:true,maintainAspectRatio:false,plugins:{legend:{display:false},tooltip:{callbacks:{label:c=>'$'+(c.parsed.y!=null?c.parsed.y.toFixed(0):'—')},backgroundColor:'#fff',titleColor:'#666',bodyColor:'#1a1a18',borderColor:'#e5e5e0',borderWidth:1}},scales:{x:{grid:{color:'rgba(0,0,0,.04)'},ticks:{color:'#aaa',font:{size:10},maxRotation:0}},y:{grid:{color:'rgba(0,0,0,.04)'},ticks:{color:'#aaa',font:{size:10},callback:v=>'$'+v},min:y}}});
+new Chart($('rklb-chart'),{type:'line',data:{labels:mo,datasets:[
+  {data:[42,38,45,52,60,58,70,65,80,95,118,150,null,null,null,null],borderColor:'#1d4ed8',backgroundColor:'rgba(29,78,216,.06)',fill:true,tension:.4,pointRadius:2,borderWidth:2},
+  {data:[null,null,null,null,null,null,null,null,null,null,null,150,166,182,200,216],borderColor:'#16a34a',borderDash:[5,3],tension:.4,pointRadius:0,borderWidth:1.5,fill:false},
+  {data:[null,null,null,null,null,null,null,null,null,null,null,150,143,134,126,120],borderColor:'#bbb',borderDash:[5,3],tension:.4,pointRadius:0,borderWidth:1.5,fill:false},
+  {data:[null,null,null,null,null,null,null,null,null,null,null,150,132,110,95,86],borderColor:'#dc2626',borderDash:[5,3],tension:.4,pointRadius:0,borderWidth:1.5,fill:false}
+]},options:co(20)});
+new Chart($('asts-chart'),{type:'line',data:{labels:mo,datasets:[
+  {data:[25,30,38,45,55,48,62,58,72,90,73,129,null,null,null,null],borderColor:'#15803d',backgroundColor:'rgba(21,128,61,.06)',fill:true,tension:.4,pointRadius:2,borderWidth:2},
+  {data:[null,null,null,null,null,null,null,null,null,null,null,129,145,165,185,200],borderColor:'#16a34a',borderDash:[5,3],tension:.4,pointRadius:0,borderWidth:1.5,fill:false},
+  {data:[null,null,null,null,null,null,null,null,null,null,null,129,115,100,90,83],borderColor:'#bbb',borderDash:[5,3],tension:.4,pointRadius:0,borderWidth:1.5,fill:false},
+  {data:[null,null,null,null,null,null,null,null,null,null,null,129,100,75,60,50],borderColor:'#dc2626',borderDash:[5,3],tension:.4,pointRadius:0,borderWidth:1.5,fill:false}
+]},options:co(0)});
+</script>
+</body>
+</html>
