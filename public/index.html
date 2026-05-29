@@ -208,10 +208,11 @@ body{font-family:'DM Sans',sans-serif;background:var(--bg);color:var(--text);min
 .day-stat{text-align:center;}
 .day-stat-label{font-size:11px;color:var(--text3);}
 .day-stat-val{font-size:17px;font-weight:700;font-family:'DM Mono',monospace;margin-top:2px;}
-.range-bar{position:relative;height:8px;background:var(--surface3);border-radius:4px;margin:8px 0;}
-.range-fill{position:absolute;left:0;top:0;height:100%;border-radius:4px;background:linear-gradient(90deg,var(--green),var(--amber));}
-.range-dot{position:absolute;top:50%;transform:translate(-50%,-50%);width:14px;height:14px;border-radius:50%;border:2px solid var(--surface);box-shadow:0 0 0 1px var(--text3);}
-.range-labels{display:flex;justify-content:space-between;font-size:11px;color:var(--text3);}
+.range-bar{position:relative;height:8px;background:var(--surface3);border-radius:4px;margin:12px 0 6px;}
+.range-fill{position:absolute;left:0;top:0;height:100%;border-radius:4px;background:linear-gradient(90deg,var(--red),var(--green));}
+.range-dot{position:absolute;top:50%;transform:translate(-50%,-50%);width:16px;height:16px;border-radius:50%;border:3px solid var(--surface);box-shadow:0 0 0 2px currentColor;}
+.range-dot-label{position:absolute;top:-22px;transform:translateX(-50%);font-size:11px;font-weight:600;font-family:"DM Mono",monospace;white-space:nowrap;background:var(--text);color:var(--surface);padding:2px 6px;border-radius:4px;}
+.range-labels{display:flex;justify-content:space-between;font-size:11px;color:var(--text3);padding:0 4px;}
 .df-note{font-size:12px;color:var(--text2);margin-top:8px;padding-top:8px;border-top:1px solid var(--border);}
 
 /* ── Scenarios ── */
@@ -631,13 +632,14 @@ body{font-family:'DM Sans',sans-serif;background:var(--bg);color:var(--text);min
         <div class="day-stat"><div class="day-stat-label">Tageshoch (gesch.)</div><div class="day-stat-val up mono" id="rklb-day-hi">—</div></div>
         <div class="day-stat"><div class="day-stat-label">Tagestief (gesch.)</div><div class="day-stat-val dn mono" id="rklb-day-lo">—</div></div>
       </div>
-      <div class="range-bar">
+      <div class="range-bar" style="margin:20px 0 4px;">
         <div class="range-fill" id="rklb-range-fill" style="width:0%"></div>
-        <div class="range-dot" id="rklb-rdot" style="left:50%;background:var(--rklb)"></div>
+        <div class="range-dot" id="rklb-rdot" style="left:50%;color:var(--rklb);">
+          <div class="range-dot-label" id="rklb-rdot-lbl">—</div>
+        </div>
       </div>
       <div class="range-labels">
         <span id="rklb-lo-lbl">—</span>
-        <span style="color:var(--text3);font-size:11px;">Aktueller Kurs</span>
         <span id="rklb-hi-lbl">—</span>
       </div>
       <div class="df-note">
@@ -921,13 +923,14 @@ body{font-family:'DM Sans',sans-serif;background:var(--bg);color:var(--text);min
         <div class="day-stat"><div class="day-stat-label">Tageshoch (gesch.)</div><div class="day-stat-val up mono" id="asts-day-hi">—</div></div>
         <div class="day-stat"><div class="day-stat-label">Tagestief (gesch.)</div><div class="day-stat-val dn mono" id="asts-day-lo">—</div></div>
       </div>
-      <div class="range-bar">
+      <div class="range-bar" style="margin:20px 0 4px;">
         <div class="range-fill" id="asts-range-fill" style="width:0%"></div>
-        <div class="range-dot" id="asts-rdot" style="left:50%;background:var(--asts)"></div>
+        <div class="range-dot" id="asts-rdot" style="left:50%;color:var(--asts);">
+          <div class="range-dot-label" id="asts-rdot-lbl">—</div>
+        </div>
       </div>
       <div class="range-labels">
         <span id="asts-lo-lbl">—</span>
-        <span style="color:var(--text3);font-size:11px;">Aktueller Kurs</span>
         <span id="asts-hi-lbl">—</span>
       </div>
       <div class="df-note">
@@ -1464,7 +1467,11 @@ function calcDF(t, q) {
   if ($(t+'-hi-lbl')) $(t+'-hi-lbl').textContent = '$'+fmt(hi);
   const range = hi - lo;
   const pct = range > 0 ? Math.min(100, Math.max(0, (q.price-lo)/range*100)) : 50;
-  if ($(t+'-rdot')) $(t+'-rdot').style.left = pct+'%';
+  if ($(t+'-rdot')) {
+    $(t+'-rdot').style.left = pct+'%';
+    const lbl = $(t+'-rdot-lbl');
+    if (lbl) lbl.textContent = '$'+fmt(q.price);
+  }
   // ATR
   if (closes.length >= 5) {
     const atr = closes.slice(-5).reduce((s,v,i,a) => i===0?s:s+Math.abs(v-a[i-1]),0)/4;
