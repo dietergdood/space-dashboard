@@ -1721,6 +1721,9 @@ function build5yrChart(ticker, canvasId) {
     }
     return;
   }
+  // Remove loading message if present
+  const existingMsgToRemove = el.parentNode.querySelector('.empty-state');
+  if (existingMsgToRemove) existingMsgToRemove.remove();
   chartInstances[canvasId] = new Chart(el, {
     type:'line', data:{labels:yrs, datasets:[
       {label:'🐂 Bull', data:interp(cur,bull5), borderColor:'#16a34a', backgroundColor:'rgba(22,163,74,.06)', fill:false, tension:.4, pointRadius:4, borderWidth:2.5},
