@@ -582,6 +582,14 @@ body{font-family:'DM Sans',sans-serif;background:var(--bg);color:var(--text);min
 /* ── Pill Tooltips ── */
 .df-stat-pill{position:relative;cursor:help;}
 .df-stat-pill .tip-icon{position:absolute;top:6px;right:6px;width:14px;height:14px;font-size:8px;}
+.pill-tip-icon{position:absolute;top:7px;right:7px;width:15px;height:15px;background:var(--border2);border-radius:50%;font-size:9px;color:var(--text3);display:flex;align-items:center;justify-content:center;cursor:help;font-weight:600;}
+.pill-tip-box{display:none;position:absolute;bottom:calc(100% + 8px);left:50%;transform:translateX(-50%);background:var(--text);color:var(--surface);font-size:12px;font-weight:400;padding:8px 11px;border-radius:8px;width:210px;text-align:left;line-height:1.5;z-index:200;white-space:normal;pointer-events:none;}
+.pill-tip-box::after{content:'';position:absolute;top:100%;left:50%;transform:translateX(-50%);border:5px solid transparent;border-top-color:var(--text);}
+.df-stat-pill:hover .pill-tip-box{display:block;}
+.df-stat-pill.tip-right .pill-tip-box{left:auto;right:0;transform:none;}
+.df-stat-pill.tip-right .pill-tip-box::after{left:auto;right:16px;transform:none;}
+.df-stat-pill.tip-left .pill-tip-box{left:0;transform:none;}
+.df-stat-pill.tip-left .pill-tip-box::after{left:16px;transform:none;}
 .df-stat-pill .tip{position:absolute;bottom:calc(100% + 8px);left:50%;transform:translateX(-50%);background:var(--text);color:var(--surface);font-size:12px;font-weight:400;padding:7px 10px;border-radius:8px;width:200px;text-align:left;line-height:1.5;opacity:0;pointer-events:none;transition:opacity .15s;z-index:200;white-space:normal;}
 .df-stat-pill .tip::after{content:'';position:absolute;top:100%;left:50%;transform:translateX(-50%);border:5px solid transparent;border-top-color:var(--text);}
 .df-stat-pill:hover .tip{opacity:1;}
@@ -2006,13 +2014,13 @@ function calcDF(t, q) {
     let gains=0, losses=0;
     for(let i=1;i<Math.min(closes.length,15);i++){const d=closes[i]-closes[i-1];d>0?gains+=d:losses-=d;}
     const rsi = 100-100/(1+(losses===0?100:gains/losses));
-    if (atrEl) atrEl.innerHTML = `<div style="font-size:20px;margin-bottom:3px;">⚡</div><div style="font-size:11px;color:var(--text3);margin-bottom:3px;">Schwankung</div><div style="font-weight:700;">±$${fmt(atr)}</div><div style="font-size:11px;color:var(--text3);">~${atrPct}%</div><span class="tip" style="position:absolute;top:6px;right:6px;"><span class="tip-icon">?</span><span class="tip-box tip-right">ATR (Average True Range): Misst die durchschnittliche Tagesschwankung. ±$${fmt(atr)} = der Kurs bewegt sich typischerweise um diesen Betrag pro Tag. Hilft einzuschätzen wie volatil die Aktie gerade ist.</span></span>`;
-    if (momEl) momEl.innerHTML = `<div style="font-size:20px;margin-bottom:3px;">${mom>=0?'📈':'📉'}</div><div style="font-size:11px;color:var(--text3);margin-bottom:3px;">Momentum</div><div class="${mom>=0?'up':'dn'}" style="font-weight:700;">${mom>=0?'+':''}${fmt(mom)}%</div><span class="tip" style="position:absolute;top:6px;right:6px;"><span class="tip-icon">?</span><span class="tip-box">Momentum zeigt die Kursbewegung der letzten 5 Tage. ${mom>=0?'Positiv: Aufwärtstrend, Kurs steigt.':'Negativ: Abwärtstrend, Kurs fällt.'} Starkes Momentum kann sich fortsetzen — muss aber nicht.</span></span>`;
+    if (atrEl) atrEl.innerHTML = `<div class="pill-tip-icon">?</div><div style="font-size:20px;margin-bottom:3px;">⚡</div><div style="font-size:11px;color:var(--text3);margin-bottom:3px;">Schwankung</div><div style="font-weight:700;">±$${fmt(atr)}</div><div style="font-size:11px;color:var(--text3);">~${atrPct}%</div><div class="pill-tip-box">ATR (Average True Range): Misst die durchschnittliche Tagesschwankung. ±$${fmt(atr)} = der Kurs bewegt sich typischerweise um diesen Betrag pro Tag.</div>`;
+    if (momEl) momEl.innerHTML = `<div class="pill-tip-icon">?</div><div style="font-size:20px;margin-bottom:3px;">${mom>=0?'📈':'📉'}</div><div style="font-size:11px;color:var(--text3);margin-bottom:3px;">Momentum</div><div class="${mom>=0?'up':'dn'}" style="font-weight:700;">${mom>=0?'+':''}${fmt(mom)}%</div><div class="pill-tip-box">Momentum zeigt die Kursbewegung der letzten 5 Tage. ${mom>=0?'Aufwärtstrend — Kurs steigt.':'Abwärtstrend — Kurs fällt.'} Starkes Momentum kann sich fortsetzen.</div>`;
     if (rsiEl) {
       const rsiLabel = rsi>70?'Überkauft ⚠️':rsi<30?'Überverkauft ✅':'Neutral';
       const rsiColor = rsi>70?'var(--red)':rsi<30?'var(--green)':'var(--text2)';
       const rsiTip = rsi>70?'RSI über 70: Viele haben gekauft — könnte bald fallen.':rsi<30?'RSI unter 30: Viele haben verkauft — könnte sich erholen.':'RSI 30–70: Normale Zone.';
-      rsiEl.innerHTML = `<div style="font-size:20px;margin-bottom:3px;">🔬</div><div style="font-size:11px;color:var(--text3);margin-bottom:3px;">RSI ${rsi.toFixed(0)}</div><div style="color:${rsiColor};font-weight:700;">${rsiLabel}</div><span class="tip tip-right" style="position:absolute;top:6px;right:6px;"><span class="tip-icon">?</span><span class="tip-box tip-right">${rsiTip} RSI über 70 = überkauft (Kurs könnte fallen). RSI unter 30 = überverkauft (Kurs könnte steigen). 30–70 = neutrale Zone.</span></span>`;
+      rsiEl.innerHTML = `<div class="pill-tip-icon">?</div><div style="font-size:20px;margin-bottom:3px;">🔬</div><div style="font-size:11px;color:var(--text3);margin-bottom:3px;">RSI ${rsi.toFixed(0)}</div><div style="color:${rsiColor};font-weight:700;">${rsiLabel}</div><div class="pill-tip-box">${rsiTip} RSI über 70 = überkauft. RSI unter 30 = überverkauft. 30–70 = neutrale Zone.</div>`;
     }
   }
 
