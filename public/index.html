@@ -2051,6 +2051,9 @@ async function fetchRec(t) {
 }
 function applyRec(t,p) {
   if(!p) return;
+  // Analyst consensus — zuerst setzen
+  if($(t+'-cons-price')&&p.kursziel) $(t+'-cons-price').textContent=p.kursziel;
+  if($(t+'-cons-rating')&&p.analysten) $(t+'-cons-rating').textContent=p.analysten;
   // Recommendation pill (HTML id: rklb-rec-pill / asts-rec-pill)
   const pill=$(t+'-rec-pill');
   if(pill&&p.empfehlung){
@@ -2087,9 +2090,6 @@ function applyRec(t,p) {
   if($(t+'-pill-einstieg-val')&&p.einstieg) $(t+'-pill-einstieg-val').textContent=p.einstieg;
   if($(t+'-pill-ziel-val')&&p.kursziel) $(t+'-pill-ziel-val').textContent=p.kursziel;
   if($(t+'-pill-stopp-val')&&p.stopp) $(t+'-pill-stopp-val').textContent=p.stopp;
-  // Analyst consensus (Metriken-Karte)
-  if($(t+'-cons-price')&&p.kursziel) $(t+'-cons-price').textContent=p.kursziel;
-  if($(t+'-cons-rating')&&p.analysten) $(t+'-cons-rating').textContent=p.analysten;
 }
 async function fetchLiveNews(t) {
   const NEWS_PROMPTS={
