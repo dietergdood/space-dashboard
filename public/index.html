@@ -1631,7 +1631,6 @@ async function fetchQ(ticker) {
   } catch(e) { return null; }
 }
 
-async 
 function applyQ(t, q) {
   if (!q) { $(t+'-price').textContent='Fehler'; $(t+'-chg').textContent='Vercel-Proxy prüfen'; return; }
   quotes[t] = q;
