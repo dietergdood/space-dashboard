@@ -1127,7 +1127,6 @@ body{font-family:'DM Sans',sans-serif;background:var(--bg);color:var(--text);min
         <div class="gov-item-desc" id="gov-sf-desc">NSSL Launch Programme</div>
       </div>
     </div>
-    <div class="gov-outlook" id="gov-outlook">Wird täglich mit KI aktualisiert...</div>
   </div>
 </div>
 
@@ -1500,7 +1499,6 @@ body{font-family:'DM Sans',sans-serif;background:var(--bg);color:var(--text);min
         <div class="gov-item-desc" id="asts-gov-ntia-desc">US Frequenzverwaltung</div>
       </div>
     </div>
-    <div class="gov-outlook" id="asts-gov-outlook">Wird täglich mit KI aktualisiert...</div>
   </div>
 </div>
 <!-- ═══ GLOSSAR ═══ -->
@@ -1796,6 +1794,9 @@ function switchTab(id) {
     else { ctxEl.style.display = 'none'; }
     const btn = document.querySelector(`.tab.${t}-tab`);
     if (btn) btn.classList.toggle('active', t===id);
+    // Show/hide gov cards per tab
+    const govEl = $('card-'+t+'-gov');
+    if (govEl) govEl.style.display = t===id ? 'block' : 'none';
   });
   if (id === 'asts') setTimeout(initAstsCharts, 50);
 }
@@ -2501,7 +2502,11 @@ function applyGovSpace(t, p) {
       if($('gov-sf-val')) $('gov-sf-val').textContent = p.space_force.wert || '—';
       if($('gov-sf-desc')) $('gov-sf-desc').textContent = stripTags(p.space_force.desc || '');
     }
-    if(p.ausblick && $('gov-outlook')) $('gov-outlook').textContent = stripTags(p.ausblick);
+    if(p.ausblick) {
+      let ol = $('gov-outlook');
+      if (!ol) { ol = document.createElement('div'); ol.id = 'gov-outlook'; ol.className = 'gov-outlook'; $('body-rklb-gov').appendChild(ol); }
+      ol.textContent = stripTags(p.ausblick);
+    }
   } else if(t === 'asts') {
     if(p.fcc) {
       if($('asts-gov-fcc-status')) $('asts-gov-fcc-status').textContent = p.fcc.status || '—';
@@ -2519,7 +2524,11 @@ function applyGovSpace(t, p) {
       if($('asts-gov-ntia-status')) $('asts-gov-ntia-status').textContent = p.ntia.status || '—';
       if($('asts-gov-ntia-desc')) $('asts-gov-ntia-desc').textContent = stripTags(p.ntia.desc || '');
     }
-    if(p.ausblick && $('asts-gov-outlook')) $('asts-gov-outlook').textContent = stripTags(p.ausblick);
+    if(p.ausblick) {
+      let ol = $('asts-gov-outlook');
+      if (!ol) { ol = document.createElement('div'); ol.id = 'asts-gov-outlook'; ol.className = 'gov-outlook'; $('body-asts-gov').appendChild(ol); }
+      ol.textContent = stripTags(p.ausblick);
+    }
   }
 }
 
