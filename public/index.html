@@ -234,7 +234,7 @@ body{font-family:'DM Sans',sans-serif;background:var(--bg);color:var(--text);min
 .day-stat{text-align:center;}
 .day-stat-label{font-size:11px;color:var(--text3);}
 .day-stat-val{font-size:17px;font-weight:700;font-family:'DM Mono',monospace;margin-top:2px;}
-.range-bar{position:relative;height:8px;background:var(--surface3);border-radius:4px;margin:12px 0 6px;}
+.range-bar{position:relative;height:8px;background:var(--surface3);border-radius:4px;margin:12px 0 6px;overflow:visible;}
 .range-fill{position:absolute;left:0;top:0;height:100%;border-radius:4px;background:linear-gradient(90deg,var(--red),var(--green));}
 .range-dot{position:absolute;top:50%;transform:translate(-50%,-50%);width:14px;height:14px;border-radius:50%;border:2.5px solid var(--surface);box-shadow:0 0 0 2px currentColor,0 2px 6px rgba(0,0,0,.15);}
 .range-dot-label{position:absolute;top:-28px;transform:translateX(-50%);font-size:11px;font-weight:700;font-family:"DM Mono",monospace;white-space:nowrap;background:var(--surface);color:currentColor;padding:2px 6px;border-radius:5px;border:1.5px solid currentColor;box-shadow:0 1px 4px rgba(0,0,0,.1);}
@@ -543,10 +543,10 @@ body{font-family:'DM Sans',sans-serif;background:var(--bg);color:var(--text);min
 /* ── Day Forecast Redesign ── */
 .df-range-wrap{padding:4px 0 8px;}
 .df-range-labels{display:grid;grid-template-columns:1fr 1fr 1fr;align-items:end;margin-bottom:8px;gap:4px;}
-.df-edge{} 
+.df-edge{position:relative;} 
 .df-edge:last-child{text-align:right;}
-.df-center{text-align:center;}
-.df-edge-lbl{font-size:11px;color:var(--text3);margin-bottom:4px;font-weight:500;letter-spacing:.02em;text-transform:uppercase;}
+.df-center{text-align:center;position:relative;}
+.df-edge-lbl{font-size:11px;color:var(--text3);margin-bottom:4px;font-weight:500;letter-spacing:.02em;text-transform:uppercase;position:relative;}
 .df-edge-val{font-size:22px;font-weight:700;font-family:"DM Mono",monospace;}
 .df-stats-row{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin-top:16px;}
 .df-stat-pill{padding:10px 8px;background:var(--surface2);border:1px solid var(--border);border-radius:12px;font-size:13px;color:var(--text2);text-align:center;font-weight:500;}
@@ -1655,12 +1655,73 @@ document.addEventListener('click', e => {
 });
 
 // ── Chart Tab Switch ───────────────────────────────────────
+const rangeChartLoaded = { rklb: false, asts: false };
+const rangeChartInstances = {};
+
+async function loadRangeChart(t, range) {
+  const canvas = document.getElementById(t+'-range-chart');
+  const infoEl = document.getElementById(t+'-range-info');
+  if (!canvas) return;
+  // Update active button
+  const view = document.getElementById(t+'-view-range');
+  if (view) view.querySelectorAll('.range-btn').forEach(btn => {
+    const map = {'1d':'1T','5d':'5T','1mo':'1M','6mo':'6M','ytd':'YTD','1y':'1J','5y':'5J'};
+    btn.classList.toggle('active', btn.textContent === map[range]);
+  });
+  if (infoEl) infoEl.textContent = 'Lade...';
+  try {
+    const sym = t === 'rklb' ? 'RKLB' : 'ASTS';
+    const r = await fetch('/api/history?ticker='+sym+'&range='+range);
+    if (!r.ok) throw new Error(r.status);
+    const d = await r.json();
+    if (!d.points || !d.points.length) throw new Error('No data');
+    const labels = d.points.map(p => {
+      const dt = new Date(p.t * 1000);
+      if (range === '1d') return dt.toLocaleTimeString('de-CH',{hour:'2-digit',minute:'2-digit'});
+      if (range === '5d') return dt.toLocaleDateString('de-CH',{weekday:'short'})+' '+dt.toLocaleTimeString('de-CH',{hour:'2-digit',minute:'2-digit'});
+      return dt.toLocaleDateString('de-CH',{day:'2-digit',month:'2-digit',year:range==='5y'?'2-digit':undefined});
+    });
+    const prices = d.points.map(p => p.c);
+    const first = prices[0], last = prices[prices.length-1];
+    const chg = last - first, chgPct = chg/first*100;
+    const up = chg >= 0;
+    const baseColor = t === 'rklb' ? '#1d4ed8' : '#15803d';
+    const lineColor = up ? baseColor : '#ef4444';
+    const bgColor = up ? (t==='rklb' ? 'rgba(29,78,216,0.06)' : 'rgba(21,128,61,0.06)') : 'rgba(239,68,68,0.06)';
+    if (rangeChartInstances[t+'-range']) { rangeChartInstances[t+'-range'].destroy(); }
+    rangeChartInstances[t+'-range'] = new Chart(canvas, {
+      type: 'line',
+      data: { labels, datasets: [{ data: prices, borderColor: lineColor, backgroundColor: bgColor, borderWidth: 2, pointRadius: 0, pointHoverRadius: 4, fill: true, tension: 0.3 }] },
+      options: {
+        responsive: true, maintainAspectRatio: false,
+        interaction: { mode: 'index', intersect: false },
+        plugins: { legend: { display: false }, tooltip: { callbacks: { label: ctx => '$'+ctx.parsed.y.toFixed(2) } } },
+        scales: {
+          x: { grid: { display: false }, ticks: { maxTicksLimit: 7, font: { size: 11 }, color: '#9ca3af', maxRotation: 0 } },
+          y: { position: 'right', grid: { color: 'rgba(0,0,0,0.04)' }, ticks: { font: { size: 11, family: 'DM Mono' }, color: '#9ca3af', callback: v => '$'+v.toFixed(0) } }
+        }
+      }
+    });
+    if (infoEl) {
+      const sign = up ? '+' : '';
+      infoEl.innerHTML = '<span style="color:'+lineColor+'">'+sign+chg.toFixed(2)+' ('+sign+chgPct.toFixed(2)+'%)</span> &nbsp;·&nbsp; $'+first.toFixed(2)+' → $'+last.toFixed(2);
+    }
+  } catch(e) {
+    if (infoEl) infoEl.textContent = 'Fehler beim Laden';
+    console.warn('loadRangeChart:', e);
+  }
+}
+
 function switchChartTab(t, view) {
-  ['1y','5y'].forEach(v => {
+  ['range','1y','5y'].forEach(v => {
     const tab = $(t+'-tab-'+v), pane = $(t+'-view-'+v);
     if (tab) tab.classList.toggle('active', v===view);
     if (pane) pane.classList.toggle('active', v===view);
   });
+  if (view === 'range' && !rangeChartLoaded[t]) {
+    loadRangeChart(t, '1mo');
+    rangeChartLoaded[t] = true;
+  }
 }
 
 // ── Chart Options ──────────────────────────────────────────
@@ -2111,7 +2172,7 @@ async function loadFromCache() {
     {fn:(d,ts)=>applySector('asts',d),section:'sector',ticker:'asts'},
     {fn:(d,ts)=>applyCtx('rklb',d),section:'ctx',ticker:'rklb'},
     {fn:(d,ts)=>applyCtx('asts',d),section:'ctx',ticker:'asts'},
-    {fn:(d,ts)=>applyGlossar(d),section:'glossar',ticker:'global'},
+    {fn:(d,ts)=>applyGlossar(d),section:'glossar',ticker:null},
   ];
   let loaded=0;
   for(const s of sections){
@@ -2254,7 +2315,7 @@ function applyGlossar(p) {
 async function fetchGlossar() {
   // First try Supabase cache (filled by cron)
   try {
-    const cached = await fetchFromCache('glossar', 'global');
+    const cached = await fetchFromCache('glossar', null);
     if(cached && cached.data) { applyGlossar(cached.data); return; }
   } catch(e){}
   // Fallback: client-side KI call if API key available
@@ -2436,7 +2497,7 @@ async function refreshAllNews() {
   loadAll();
   setInterval(loadAll,15000);
   loadFromCache();
-  // Init range charts
+  // Init range chart for active tab
   loadRangeChart('rklb', '1mo');
   rangeChartLoaded.rklb = true;
   // Collapse glossar on mobile by default
