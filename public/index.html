@@ -1487,12 +1487,20 @@ let usdChfRate = 0.9; // fallback, fetched live
 
 async function fetchUsdChfRate() {
   try {
-    const r = await fetch('/api/quote?ticker=USDCHF=X');
+    // Use open.er-api.com - free, no key needed, no CORS issues
+    const r = await fetch('https://open.er-api.com/v6/latest/USD');
     if (!r.ok) throw new Error();
     const d = await r.json();
-    const rate = d?.chart?.result?.[0]?.meta?.regularMarketPrice;
-    if (rate && rate > 0) usdChfRate = rate;
-  } catch(e) {}
+    if (d?.rates?.CHF) usdChfRate = d.rates.CHF;
+  } catch(e) {
+    try {
+      // Fallback: frankfurter.app
+      const r2 = await fetch('https://api.frankfurter.app/latest?from=USD&to=CHF');
+      if (!r2.ok) throw new Error();
+      const d2 = await r2.json();
+      if (d2?.rates?.CHF) usdChfRate = d2.rates.CHF;
+    } catch(e2) { usdChfRate = 0.9; }
+  }
 }
 
 function setCurrency(t, cur) {
