@@ -240,7 +240,20 @@ body{font-family:'DM Sans',sans-serif;background:var(--bg);color:var(--text);min
 .pf-tx-type{font-weight:600;padding:2px 8px;border-radius:4px;font-size:11px;}
 .pf-tx-type.buy{background:var(--green-bg);color:var(--green);}
 .pf-tx-type.sell{background:var(--red-bg);color:var(--red);}
-.pf-tx-remove{margin-left:auto;background:none;border:none;color:var(--text3);cursor:pointer;font-size:14px;padding:2px 4px;}
+.pf-tx-remove{background:none;border:none;color:var(--text3);cursor:pointer;font-size:13px;padding:4px 6px;border-radius:6px;transition:background .15s,color .15s;line-height:1;}
+.pf-tx-remove:hover{background:var(--red-bg);color:var(--red);}
+.pf-tx-edit{background:none;border:none;color:var(--text3);cursor:pointer;font-size:13px;padding:4px 6px;border-radius:6px;transition:background .15s,color .15s;line-height:1;}
+.pf-tx-edit:hover{background:var(--surface3,#e5e5e2);color:var(--text);}
+.pf-tx-actions{display:flex;gap:2px;margin-left:auto;flex-shrink:0;}
+.pf-tx{display:flex;align-items:center;gap:10px;padding:9px 12px;background:var(--surface);border:1px solid var(--border);border-radius:10px;margin-bottom:6px;font-size:13px;transition:border-color .15s;}
+.pf-tx:hover{border-color:var(--border2);}
+.pf-tx.editing{background:var(--surface2);border-color:var(--blue);padding:12px;}
+.pf-edit-row{display:flex;align-items:center;gap:6px;flex-wrap:wrap;width:100%;}
+.pf-edit-select{padding:6px 8px;border:1px solid var(--border2);border-radius:7px;font-family:inherit;font-size:12px;background:var(--surface);outline:none;cursor:pointer;}
+.pf-edit-input{padding:6px 8px;border:1px solid var(--border2);border-radius:7px;font-family:inherit;font-size:12px;background:var(--surface);outline:none;width:80px;}
+.pf-edit-input:focus,.pf-edit-select:focus{border-color:var(--blue);}
+.pf-edit-save{padding:6px 12px;background:var(--green);color:#fff;border:none;border-radius:7px;font-size:12px;font-weight:600;cursor:pointer;}
+.pf-edit-cancel{padding:6px 10px;background:var(--surface2);border:1px solid var(--border2);border-radius:7px;font-size:12px;cursor:pointer;}
 .pf-summary{background:var(--surface2);border-radius:10px;padding:14px;}
 .pf-sum-grid{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-bottom:12px;}
 .pf-sum-item{background:var(--surface);border-radius:8px;padding:10px 12px;}
@@ -1795,29 +1808,35 @@ function editTx(t, id) {
   if (!tx) return;
   const el = document.getElementById('pf-tx-'+id);
   if (!el) return;
+  el.classList.add('editing');
   el.innerHTML = `
-    <select style="font-size:12px;padding:2px 4px;border:1px solid var(--border);border-radius:4px;background:var(--surface);">
-      <option value="buy" ${tx.type==='buy'?'selected':''}>KAUF</option>
-      <option value="sell" ${tx.type==='sell'?'selected':''}>VERKAUF</option>
-    </select>
-    <input type="number" value="${tx.qty}" min="0" step="any" placeholder="Anzahl" style="width:70px;font-size:12px;padding:2px 4px;border:1px solid var(--border);border-radius:4px;background:var(--surface);">
-    <input type="number" value="${tx.price}" min="0" step="any" placeholder="Preis" style="width:70px;font-size:12px;padding:2px 4px;border:1px solid var(--border);border-radius:4px;background:var(--surface);">
-    <input type="date" value="${tx.date}" style="font-size:12px;padding:2px 4px;border:1px solid var(--border);border-radius:4px;background:var(--surface);">
-    <button onclick="saveEditTx('${t}',${id},this)" style="font-size:12px;padding:2px 8px;background:var(--green);color:#fff;border:none;border-radius:4px;cursor:pointer;">✓</button>
-    <button onclick="cancelEditTx('${t}')" style="font-size:12px;padding:2px 8px;background:var(--surface2);border:1px solid var(--border);border-radius:4px;cursor:pointer;">✕</button>
+    <div class="pf-edit-row">
+      <select class="pf-edit-select" data-field="type">
+        <option value="buy" ${tx.type==='buy'?'selected':''}>Kauf</option>
+        <option value="sell" ${tx.type==='sell'?'selected':''}>Verkauf</option>
+      </select>
+      <input class="pf-edit-input" data-field="qty" type="number" value="${tx.qty}" min="0.01" step="any" placeholder="Anzahl" style="width:80px;">
+      <span style="color:var(--text3);font-size:12px;">×</span>
+      <input class="pf-edit-input" data-field="price" type="number" value="${tx.price}" min="0.01" step="any" placeholder="Preis $" style="width:80px;">
+      <input class="pf-edit-input" data-field="date" type="date" value="${tx.date}" style="width:130px;">
+      <input class="pf-edit-input" data-field="note" type="text" value="${tx.note||''}" placeholder="Notiz" style="width:100px;flex:1;">
+      <button class="pf-edit-save" onclick="saveEditTx('${t}',${id},this)">✓ Speichern</button>
+      <button class="pf-edit-cancel" onclick="cancelEditTx('${t}')">Abbrechen</button>
+    </div>
   `;
+  el.querySelector('[data-field="qty"]').focus();
 }
 function saveEditTx(t, id, btn) {
   id = typeof id === 'string' ? parseInt(id) : id;
   const row = btn.closest('.pf-tx');
-  const inputs = row.querySelectorAll('input, select');
-  const type = inputs[0].value;
-  const qty = parseFloat(inputs[1].value);
-  const price = parseFloat(inputs[2].value);
-  const date = inputs[3].value;
-  if (!qty || !price || qty<=0 || price<=0) { alert('Ungültige Werte'); return; }
+  const type  = row.querySelector('[data-field="type"]').value;
+  const qty   = parseFloat(row.querySelector('[data-field="qty"]').value);
+  const price = parseFloat(row.querySelector('[data-field="price"]').value);
+  const date  = row.querySelector('[data-field="date"]').value;
+  const note  = row.querySelector('[data-field="note"]').value.trim();
+  if (!qty || !price || qty<=0 || price<=0) { alert('Bitte gültige Anzahl und Preis eingeben.'); return; }
   const idx = txData[t].findIndex(x=>x.id===id);
-  if (idx>=0) { txData[t][idx] = {...txData[t][idx], type, qty, price, date}; }
+  if (idx>=0) { txData[t][idx] = {...txData[t][idx], type, qty, price, date, note}; }
   saveTx(t); renderTxList(t); recalcPF(t);
 }
 function cancelEditTx(t) {
@@ -1833,16 +1852,24 @@ function renderTxList(t) {
   const el = $(t+'-tx-list');
   if (!el) return;
   if (!txData[t].length) { el.innerHTML='<div class="pf-empty">Noch keine Transaktionen erfasst.</div>'; return; }
-  el.innerHTML = txData[t].map(tx =>
-    `<div class="pf-tx" id="pf-tx-${tx.id}">
-      <span class="pf-tx-type ${tx.type}">${tx.type==='buy'?'KAUF':'VERKAUF'}</span>
-      <span class="mono">${tx.qty} × $${fmt(tx.price)}</span>
-      <span style="color:var(--text3);font-size:12px;">${tx.date}</span>
-      ${tx.note?`<span style="color:var(--text2);font-size:12px;">${tx.note}</span>`:''}
-      <button class="pf-tx-edit" onclick="editTx('${t}',${tx.id})" title="Bearbeiten" style="margin-left:auto;background:none;border:none;color:var(--text3);cursor:pointer;font-size:13px;padding:2px 5px;">✏️</button>
-      <button class="pf-tx-remove" onclick="removeTx('${t}',${tx.id})" title="Löschen" style="background:none;border:none;color:var(--text3);cursor:pointer;font-size:14px;padding:2px 4px;">✕</button>
-    </div>`
-  ).join('');
+  el.innerHTML = txData[t].map(tx => {
+    const total = (tx.qty * tx.price).toFixed(2);
+    return `<div class="pf-tx" id="pf-tx-${tx.id}">
+      <span class="pf-tx-type ${tx.type}">${tx.type==='buy'?'KAUF':'VERK.'}</span>
+      <span class="mono" style="font-weight:600;">${tx.qty} × $${fmt(tx.price)}</span>
+      <span style="color:var(--text2);font-size:12px;">= $${fmt(parseFloat(total))}</span>
+      <span style="color:var(--text3);font-size:11px;">${tx.date}</span>
+      ${tx.note?`<span style="color:var(--text3);font-size:11px;font-style:italic;">${tx.note}</span>`:''}
+      <div class="pf-tx-actions">
+        <button class="pf-tx-edit" onclick="editTx('${t}',${tx.id})" title="Bearbeiten">
+          <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"/><path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"/></svg>
+        </button>
+        <button class="pf-tx-remove" onclick="removeTx('${t}',${tx.id})" title="Löschen">
+          <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><polyline points="3 6 5 6 21 6"/><path d="M19 6l-1 14a2 2 0 0 1-2 2H8a2 2 0 0 1-2-2L5 6"/><path d="M10 11v6"/><path d="M14 11v6"/><path d="M9 6V4a1 1 0 0 1 1-1h4a1 1 0 0 1 1 1v2"/></svg>
+        </button>
+      </div>
+    </div>`;
+  }).join('');
 }
 function recalcPF(t) {
   const q = quotes[t], txs = txData[t];
