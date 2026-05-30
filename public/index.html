@@ -1468,6 +1468,41 @@ body{font-family:'DM Sans',sans-serif;background:var(--bg);color:var(--text);min
 </div>
 </div>
 
+<div class="card open" id="card-asts-gov">
+  <div class="card-header" onclick="toggleCard('asts-gov')">
+    <div class="card-icon">🏛</div>
+    <div>
+      <div class="card-title">US Regulierung & Defense</div>
+      <div class="card-sub">FCC · ITU · DoD · NTIA</div>
+    </div>
+    <div class="card-arrow">▼</div>
+  </div>
+  <div class="card-body" id="body-asts-gov">
+    <div class="gov-grid">
+      <div class="gov-item">
+        <div class="gov-item-header"><div class="gov-item-emoji">📡</div><div class="gov-item-name">FCC Lizenzen</div></div>
+        <div class="gov-item-val" id="asts-gov-fcc-status">Lädt...</div>
+        <div class="gov-item-desc" id="asts-gov-fcc-desc">Frequenz-Genehmigungen</div>
+      </div>
+      <div class="gov-item">
+        <div class="gov-item-header"><div class="gov-item-emoji">🌐</div><div class="gov-item-name">ITU Koordination</div></div>
+        <div class="gov-item-val" id="asts-gov-itu-status">Lädt...</div>
+        <div class="gov-item-desc" id="asts-gov-itu-desc">Internationale Frequenzen</div>
+      </div>
+      <div class="gov-item">
+        <div class="gov-item-header"><div class="gov-item-emoji">🛡</div><div class="gov-item-name">DoD Potenzial</div></div>
+        <div class="gov-item-val" id="asts-gov-dod-val">Lädt...</div>
+        <div class="gov-item-desc" id="asts-gov-dod-desc">US Military Nutzung</div>
+      </div>
+      <div class="gov-item">
+        <div class="gov-item-header"><div class="gov-item-emoji">📋</div><div class="gov-item-name">NTIA</div></div>
+        <div class="gov-item-val" id="asts-gov-ntia-status">Lädt...</div>
+        <div class="gov-item-desc" id="asts-gov-ntia-desc">US Frequenzverwaltung</div>
+      </div>
+    </div>
+    <div class="gov-outlook" id="asts-gov-outlook">Wird täglich mit KI aktualisiert...</div>
+  </div>
+</div>
 <!-- ═══ GLOSSAR ═══ -->
 <div class="card open" id="card-glossar">
   <div class="card-header" onclick="this.closest('.card').classList.toggle('open')">
@@ -2298,7 +2333,8 @@ async function loadFromCache() {
     {fn:(d,ts)=>applyCtx('rklb',d),section:'ctx',ticker:'rklb'},
     {fn:(d,ts)=>applyCtx('asts',d),section:'ctx',ticker:'asts'},
     {fn:(d,ts)=>applyGlossar(d),section:'glossar',ticker:null},
-    {fn:(d,ts)=>applyGovSpace(d),section:'gov_space',ticker:null},
+    {fn:(d,ts)=>applyGovSpace('rklb',d),section:'gov_space',ticker:'rklb'},
+    {fn:(d,ts)=>applyGovSpace('asts',d),section:'gov_space',ticker:'asts'},
   ];
   let loaded=0;
   for(const s of sections){
@@ -2446,25 +2482,45 @@ async function fetchCtxBar(t) {
 }
 
 const GLOSSAR_PROMPT=`Du bist Finanz-Erklärer. Suche das aktuelle Budget des US "Golden Dome" Programms. Welche 2-4 neue Fachbegriffe tauchen in RKLB/ASTS News auf? Antworte NUR mit JSON: {"golden_dome_def":"US-Raketenabwehr (BETRAG). Rocket Lab Lieferant.","terms":[{"term":"Begriff","def":"Erklärung"}]}`;
-function applyGovSpace(p) {
+function applyGovSpace(t, p) {
   if(!p) return;
-  if(p.golden_dome) {
-    if($('gov-dome-budget')) $('gov-dome-budget').textContent = p.golden_dome.budget || '—';
-    if($('gov-dome-desc')) $('gov-dome-desc').textContent = stripTags(p.golden_dome.desc || '');
+  if(t === 'rklb') {
+    if(p.golden_dome) {
+      if($('gov-dome-budget')) $('gov-dome-budget').textContent = p.golden_dome.rklb_anteil || p.golden_dome.budget || '—';
+      if($('gov-dome-desc')) $('gov-dome-desc').textContent = stripTags(p.golden_dome.desc || '');
+    }
+    if(p.sda) {
+      if($('gov-sda-budget')) $('gov-sda-budget').textContent = p.sda.rklb_auftraege || p.sda.budget || '—';
+      if($('gov-sda-desc')) $('gov-sda-desc').textContent = stripTags(p.sda.desc || '');
+    }
+    if(p.nasa) {
+      if($('gov-nasa-val')) $('gov-nasa-val').textContent = p.nasa.wert || '—';
+      if($('gov-nasa-desc')) $('gov-nasa-desc').textContent = stripTags(p.nasa.desc || '');
+    }
+    if(p.space_force) {
+      if($('gov-sf-val')) $('gov-sf-val').textContent = p.space_force.wert || '—';
+      if($('gov-sf-desc')) $('gov-sf-desc').textContent = stripTags(p.space_force.desc || '');
+    }
+    if(p.ausblick && $('gov-outlook')) $('gov-outlook').textContent = stripTags(p.ausblick);
+  } else if(t === 'asts') {
+    if(p.fcc) {
+      if($('asts-gov-fcc-status')) $('asts-gov-fcc-status').textContent = p.fcc.status || '—';
+      if($('asts-gov-fcc-desc')) $('asts-gov-fcc-desc').textContent = stripTags(p.fcc.desc || '');
+    }
+    if(p.itu) {
+      if($('asts-gov-itu-status')) $('asts-gov-itu-status').textContent = p.itu.status || '—';
+      if($('asts-gov-itu-desc')) $('asts-gov-itu-desc').textContent = stripTags(p.itu.desc || '');
+    }
+    if(p.dod) {
+      if($('asts-gov-dod-val')) $('asts-gov-dod-val').textContent = p.dod.potenzial || '—';
+      if($('asts-gov-dod-desc')) $('asts-gov-dod-desc').textContent = stripTags(p.dod.desc || '');
+    }
+    if(p.ntia) {
+      if($('asts-gov-ntia-status')) $('asts-gov-ntia-status').textContent = p.ntia.status || '—';
+      if($('asts-gov-ntia-desc')) $('asts-gov-ntia-desc').textContent = stripTags(p.ntia.desc || '');
+    }
+    if(p.ausblick && $('asts-gov-outlook')) $('asts-gov-outlook').textContent = stripTags(p.ausblick);
   }
-  if(p.sda) {
-    if($('gov-sda-budget')) $('gov-sda-budget').textContent = p.sda.budget || '—';
-    if($('gov-sda-desc')) $('gov-sda-desc').textContent = stripTags(p.sda.desc || '');
-  }
-  if(p.nasa) {
-    if($('gov-nasa-val')) $('gov-nasa-val').textContent = p.nasa.wert || '—';
-    if($('gov-nasa-desc')) $('gov-nasa-desc').textContent = stripTags(p.nasa.desc || '');
-  }
-  if(p.space_force) {
-    if($('gov-sf-val')) $('gov-sf-val').textContent = p.space_force.wert || '—';
-    if($('gov-sf-desc')) $('gov-sf-desc').textContent = stripTags(p.space_force.desc || '');
-  }
-  if(p.ausblick && $('gov-outlook')) $('gov-outlook').textContent = stripTags(p.ausblick);
 }
 
 function applyGlossar(p) {
