@@ -542,11 +542,13 @@ body{font-family:'DM Sans',sans-serif;background:var(--bg);color:var(--text);min
 
 /* ── Day Forecast Redesign ── */
 .df-range-wrap{padding:4px 0 8px;}
-.df-range-labels{display:grid;grid-template-columns:1fr 1fr 1fr;align-items:end;margin-bottom:8px;gap:4px;}
+.df-range-labels{display:grid;grid-template-columns:1fr 1fr 1fr;align-items:end;margin-bottom:8px;gap:4px;position:relative;z-index:10;}
 .df-edge{position:relative;} 
 .df-edge:last-child{text-align:right;}
 .df-center{text-align:center;position:relative;}
 .df-edge-lbl{font-size:11px;color:var(--text3);margin-bottom:4px;font-weight:500;letter-spacing:.02em;text-transform:uppercase;position:relative;}
+/* Tooltips in df-range-labels float above everything */
+.df-range-labels .tip-box{z-index:300;}
 .df-edge-val{font-size:22px;font-weight:700;font-family:"DM Mono",monospace;}
 .df-stats-row{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin-top:16px;}
 .df-stat-pill{padding:10px 8px;background:var(--surface2);border:1px solid var(--border);border-radius:12px;font-size:13px;color:var(--text2);text-align:center;font-weight:500;}
