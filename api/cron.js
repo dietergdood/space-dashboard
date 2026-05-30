@@ -28,27 +28,39 @@ async function supa(path, method='GET', body=null) {
   return text ? JSON.parse(text) : {};
 }
 
-async function kiCall(prompt) {
-  const resp = await fetch('https://api.anthropic.com/v1/messages', {
-    method: 'POST',
-    headers: {
-      'Content-Type': 'application/json',
-      'x-api-key': ANTHROPIC_KEY,
-      'anthropic-version': '2023-06-01'
-    },
-    body: JSON.stringify({
-      model: 'claude-sonnet-4-5',
-      max_tokens: 1000,
-      tools: [{type: 'web_search_20250305', name: 'web_search'}],
-      messages: [{role: 'user', content: prompt}]
-    })
-  });
-  if (!resp.ok) throw new Error(`Anthropic ${resp.status}`);
-  const data = await resp.json();
-  const raw = data.content.filter(b=>b.type==='text').map(b=>b.text).join('').trim();
-  const match = raw.match(/\{[\s\S]*\}/);
-  if (!match) throw new Error('No JSON');
-  return JSON.parse(match[0]);
+async function kiCall(prompt, retries=3) {
+  for (let attempt = 0; attempt < retries; attempt++) {
+    if (attempt > 0) {
+      const wait = attempt * 20000; // 20s, 40s
+      console.log(`Rate limit retry ${attempt}, waiting ${wait/1000}s`);
+      await delay(wait);
+    }
+    const resp = await fetch('https://api.anthropic.com/v1/messages', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        'x-api-key': ANTHROPIC_KEY,
+        'anthropic-version': '2023-06-01'
+      },
+      body: JSON.stringify({
+        model: 'claude-sonnet-4-5',
+        max_tokens: 1000,
+        tools: [{type: 'web_search_20250305', name: 'web_search'}],
+        messages: [{role: 'user', content: prompt}]
+      })
+    });
+    if (resp.status === 429) {
+      console.log('429 rate limit on attempt', attempt);
+      continue;
+    }
+    if (!resp.ok) throw new Error(`Anthropic ${resp.status}`);
+    const data = await resp.json();
+    const raw = data.content.filter(b=>b.type==='text').map(b=>b.text).join('').trim();
+    const match = raw.match(/\{[\s\S]*\}/);
+    if (!match) throw new Error('No JSON in response');
+    return JSON.parse(match[0]);
+  }
+  throw new Error('Max retries exceeded');
 }
 
 async function saveToCache(ticker, section, data) {
@@ -145,7 +157,7 @@ export default async function handler(req, res) {
         const data = await kiCall(call.prompt);
         await saveToCache(call.ticker, call.section, data);
         results.success.push(`${call.ticker}/${call.section}`);
-        await delay(3000); // 3s between calls
+        await delay(8000); // 8s between calls
       } catch(e) {
         results.failed.push(`${call.ticker}/${call.section}: ${e.message}`);
         await delay(2000);

@@ -1,10 +1,12 @@
-// Read KI data from Supabase cache
 const SUPABASE_URL = process.env.SUPABASE_URL;
 const SUPABASE_ANON = process.env.SUPABASE_ANON_KEY;
 
 export default async function handler(req, res) {
   res.setHeader('Access-Control-Allow-Origin', '*');
-  
+  res.setHeader('Access-Control-Allow-Methods', 'GET, OPTIONS');
+  res.setHeader('Access-Control-Allow-Headers', 'Content-Type');
+  if (req.method === 'OPTIONS') return res.status(200).end();
+
   const { section, ticker } = req.query;
   if (!section) return res.status(400).json({ error: 'section required' });
 
@@ -21,10 +23,10 @@ export default async function handler(req, res) {
     if (!r.ok) throw new Error(`Supabase ${r.status}`);
     const rows = await r.json();
     if (!rows.length) return res.status(404).json({ error: 'No data yet' });
-    
-    return res.status(200).json({ 
-      data: rows[0].data, 
-      updated_at: rows[0].updated_at 
+
+    return res.status(200).json({
+      data: rows[0].data,
+      updated_at: rows[0].updated_at
     });
   } catch(e) {
     return res.status(500).json({ error: e.message });
