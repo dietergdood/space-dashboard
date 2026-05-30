@@ -82,17 +82,48 @@ async function kiCall(prompt, retries=3) {
       return JSON.parse(match[0]);
     } catch(parseErr) {
       console.error('JSON parse error:', parseErr.message, '| JSON:', match[0].substring(0,200));
-      // Try to fix common JSON issues: unescaped quotes, newlines in strings
       try {
-        // Remove control characters inside strings
-        const fixed = match[0]
-          .replace(/([^\\])\n/g, '$1 ')   // unescaped newlines
-          .replace(/([^\\])\t/g, '$1 ')   // unescaped tabs
-          .replace(/([^\\])\r/g, '$1 ');  // unescaped carriage returns
+        // Strategy 1: fix control characters
+        let fixed = match[0]
+          .replace(/\r?\n/g, ' ')
+          .replace(/\t/g, ' ');
         return JSON.parse(fixed);
       } catch(e2) {
-        console.error('JSON fix also failed:', e2.message);
-        throw new Error('JSON parse failed: ' + parseErr.message);
+        try {
+          // Strategy 2: use a lenient JSON parser approach
+          // Extract each field manually for known structures
+          const raw2 = match[0];
+          // Try to salvage articles array
+          if (raw2.includes('"articles"')) {
+            const articles = [];
+            const artMatches = raw2.matchAll(/"title":\s*"([^"]+)"[^}]*?"sentiment":\s*"([^"]+)"[^}]*?"body":\s*"([^"]+)"[^}]*?"source":\s*"([^"]+)"/g);
+            for (const m of artMatches) {
+              articles.push({title:m[1], sentiment:m[2], body:m[3], source:m[4]});
+            }
+            if (articles.length > 0) {
+              console.log('Salvaged', articles.length, 'articles');
+              return {articles};
+            }
+          }
+          // Try to salvage cards array
+          if (raw2.includes('"cards"')) {
+            const introMatch = raw2.match(/"intro":\s*"([^"]+)"/);
+            const cards = [];
+            const cardMatches = raw2.matchAll(/"emoji":\s*"([^"]+)"[^}]*?"name":\s*"([^"]+)"[^}]*?"val":\s*"([^"]+)"[^}]*?"val_color":\s*"([^"]+)"[^}]*?"desc":\s*"([^"]+)"/g);
+            for (const m of cardMatches) {
+              cards.push({emoji:m[1], name:m[2], val:m[3], val_color:m[4], desc:m[5]});
+            }
+            if (cards.length > 0) {
+              console.log('Salvaged', cards.length, 'cards');
+              return {intro: introMatch?.[1]||'', cards};
+            }
+          }
+          console.error('JSON salvage failed');
+          throw new Error('JSON parse failed: ' + parseErr.message);
+        } catch(e3) {
+          console.error('All JSON strategies failed:', e3.message);
+          throw new Error('JSON parse failed: ' + parseErr.message);
+        }
       }
     }
   }
