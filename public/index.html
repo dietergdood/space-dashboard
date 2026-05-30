@@ -524,8 +524,8 @@ body{font-family:'DM Sans',sans-serif;background:var(--bg);color:var(--text);min
     </div>
     <div class="hdr-mid">
       <div class="tabs" id="main-tabs">
-        <button class="tab rklb-tab active" onclick="switchTab('rklb')"><img src="/rklb-logo.png" class="tab-logo">Rocket Lab (RKLB)</button>
-        <button class="tab asts-tab" onclick="switchTab('asts')"><img src="/asts-logo.png" class="tab-logo">AST SpaceMobile (ASTS)</button>
+        <button class="tab rklb-tab active" id="tab-rklb-btn"><img src="/rklb-logo.png" class="tab-logo">Rocket Lab (RKLB)</button>
+        <button class="tab asts-tab" id="tab-asts-btn"><img src="/asts-logo.png" class="tab-logo">AST SpaceMobile (ASTS)</button>
       </div>
     </div>
     <div class="hdr-r">
@@ -535,7 +535,7 @@ body{font-family:'DM Sans',sans-serif;background:var(--bg);color:var(--text);min
         <button class="settings-btn" id="settings-btn" onclick="toggleSettings()">⚙️</button>
         <div class="settings-dd" id="settings-dd" onclick="event.stopPropagation()">
           <div class="settings-label">🔑 KI-Analyse Schlüssel</div>
-          <input class="api-input" id="api-key" type="password" placeholder="sk-ant-api03-..." oninput="saveKey(this.value)">
+          <form onsubmit="return false;" autocomplete="off"><input class="api-input" id="api-key" type="password" placeholder="sk-ant-api03-..." oninput="saveKey(this.value)" autocomplete="current-password"></form>
           <div class="api-desc">
             Ohne Schlüssel: Live-Kurse (immer kostenlos). Mit Schlüssel: KI sucht alle 2 Stunden automatisch News, Reddit-Diskussionen und Analysten-Berichte.
             <a href="https://console.anthropic.com" target="_blank">Key holen →</a>
@@ -2078,6 +2078,11 @@ async function refreshAllNews() {
 (function init() {
   loadKey();
   loadTx();
+  // Tab event listeners (defined here so script is loaded)
+  const rklbBtn = document.getElementById('tab-rklb-btn');
+  const astsBtn = document.getElementById('tab-asts-btn');
+  if (rklbBtn) rklbBtn.addEventListener('click', () => switchTab('rklb'));
+  if (astsBtn) astsBtn.addEventListener('click', () => switchTab('asts'));
   switchTab('rklb');
   document.querySelectorAll('.card').forEach(c=>c.classList.add('open'));
   if(window.innerWidth<=640){
