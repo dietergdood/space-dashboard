@@ -16,7 +16,7 @@
   <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
   <meta http-equiv="Pragma" content="no-cache">
   <meta http-equiv="Expires" content="0">
-<meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover,minimum-scale=1">
 <title>Space Stocks Dashboard</title>
 <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🚀</text></svg>">
 <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet">
@@ -40,6 +40,9 @@
   --shadow-md:0 4px 12px rgba(0,0,0,.1),0 2px 4px rgba(0,0,0,.06);
 }
 body{font-family:'DM Sans',sans-serif;background:var(--bg);color:var(--text);min-height:100vh;font-size:15px;line-height:1.6;}
+/* Safe area for notch devices */
+.hdr-inner{padding-left:max(24px,env(safe-area-inset-left));padding-right:max(24px,env(safe-area-inset-right));}
+.container{padding-bottom:max(80px,calc(80px + env(safe-area-inset-bottom)));}
 
 /* ── Layout ── */
 .hdr{background:var(--surface);border-bottom:1px solid var(--border);position:sticky;top:0;z-index:100;box-shadow:var(--shadow);}
@@ -361,6 +364,19 @@ body{font-family:'DM Sans',sans-serif;background:var(--bg);color:var(--text);min
 /* ══════════════════════════════════
    TABLET (max 900px)
 ══════════════════════════════════ */
+/* ══════════════════════════════════
+   TABLET (max 768px)
+══════════════════════════════════ */
+@media(max-width:768px){
+  .container{padding:16px 16px 80px;}
+  .mets{grid-template-columns:repeat(2,1fr);}
+  .rec-scores{grid-template-columns:repeat(2,1fr);}
+  .sector-grid{grid-template-columns:repeat(2,1fr);}
+  .day-row{grid-template-columns:1fr 1fr 1fr;}
+  .pf-sum-grid{grid-template-columns:1fr 1fr;}
+  .chart-wrap{height:210px;}
+}
+
 @media(max-width:900px){
   .mets{grid-template-columns:repeat(2,1fr);}
   .rec-scores{grid-template-columns:repeat(2,1fr);}
@@ -606,9 +622,12 @@ body{font-family:'DM Sans',sans-serif;background:var(--bg);color:var(--text);min
   <meta name="theme-color" content="#1d4ed8">
   <meta name="mobile-web-app-capable" content="yes">
   <meta name="apple-mobile-web-app-capable" content="yes">
-  <meta name="apple-mobile-web-app-status-bar-style" content="default">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
   <meta name="apple-mobile-web-app-title" content="Space Stocks">
-  <link rel="apple-touch-icon" href="/icon-192.png">
+  <link rel="apple-touch-icon" href="/apple-touch-icon.png">
+  <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png">
+  <link rel="icon" type="image/png" sizes="192x192" href="/icon-192.png">
+  <link rel="icon" type="image/png" sizes="512x512" href="/icon-512.png">
 </head>
 <body>
 
