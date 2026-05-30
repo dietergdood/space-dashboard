@@ -898,7 +898,7 @@ body{font-family:'DM Sans',sans-serif;background:var(--bg);color:var(--text);min
   <div class="card-body" id="body-rklb-news">
     <div class="news-header">
       <div class="news-live"><div class="live-dot"></div>Live-Nachrichten · RKLB</div>
-      <div class="news-ts" id="rklb-news-ts">Noch nicht geladen</div>
+      <div class="news-ts" id="rklb-news-ts"></div>
     </div>
     <div class="news-loading" id="rklb-news-loading">
       <div class="news-spin"></div>
@@ -1201,7 +1201,7 @@ body{font-family:'DM Sans',sans-serif;background:var(--bg);color:var(--text);min
   <div class="card-body" id="body-asts-news">
     <div class="news-header">
       <div class="news-live"><div class="live-dot"></div>Live-Nachrichten · ASTS</div>
-      <div class="news-ts" id="asts-news-ts">Noch nicht geladen</div>
+      <div class="news-ts" id="asts-news-ts"></div>
     </div>
     <div class="news-loading" id="asts-news-loading">
       <div class="news-spin"></div>
@@ -2095,7 +2095,7 @@ async function fetchLiveNews(t) {
     rklb:`Suche aktuelle RKLB Nachrichten der letzten 24h. NUR JSON: {"articles":[{"title":"Titel","sentiment":"pos|neg|neu","body":"2-3 Sätze","source":"Quelle"}]}`,
     asts:`Suche aktuelle ASTS Nachrichten der letzten 24h. NUR JSON: {"articles":[{"title":"Titel","sentiment":"pos|neg|neu","body":"2-3 Sätze","source":"Quelle"}]}`
   };
-  try { const p=await kiCall(NEWS_PROMPTS[t]); if(p) applyLiveNewsData(t,p); }
+  try { const p=await kiCall(NEWS_PROMPTS[t]); if(p) applyLiveNewsData(t,p,new Date().toISOString()); }
   catch(e){ console.warn('fetchLiveNews:',e.message); }
 }
 async function fetchScenarios(t) {
