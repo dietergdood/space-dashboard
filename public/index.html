@@ -1742,3 +1742,358 @@ function calcDF(t, q) {
       rsiEl.innerHTML = `<span class="tip">${rsiTip}</span><div style="font-size:20px;margin-bottom:3px;">🔬</div><div style="font-size:11px;color:var(--text3);margin-bottom:3px;">RSI ${rsi.toFixed(0)}</div><div style="color:${rsiColor};font-weight:700;">${rsiLabel}</div>`;
     }
   }
+
+}
+
+// ── Portfolio Functions ────────────────────────────────────
+function addTx(t) {
+  const type = $(t+'-tx-type').value;
+  const qty = parseFloat($(t+'-tx-qty').value);
+  const price = parseFloat($(t+'-tx-price').value);
+  const date = $(t+'-tx-date') ? $(t+'-tx-date').value : '';
+  const note = $(t+'-tx-note') ? $(t+'-tx-note').value.trim() : '';
+  if (!qty || !price || qty<=0 || price<=0) { alert('Bitte Anzahl und Preis eingeben.'); return; }
+  txData[t].push({type,qty,price,date:date||new Date().toISOString().split('T')[0],note,id:Date.now()});
+  saveTx(t);
+  if ($(t+'-tx-qty')) $(t+'-tx-qty').value='';
+  if ($(t+'-tx-price')) $(t+'-tx-price').value='';
+  if ($(t+'-tx-note')) $(t+'-tx-note').value='';
+  renderTxList(t); recalcPF(t);
+}
+function removeTx(t, id) {
+  txData[t] = txData[t].filter(x=>x.id!==id);
+  saveTx(t); renderTxList(t); recalcPF(t);
+}
+function renderTxList(t) {
+  const el = $(t+'-tx-list');
+  if (!el) return;
+  if (!txData[t].length) { el.innerHTML='<div class="pf-empty">Noch keine Transaktionen erfasst.</div>'; return; }
+  el.innerHTML = txData[t].map(tx =>
+    `<div class="pf-tx">
+      <span class="pf-tx-type ${tx.type}">${tx.type==='buy'?'KAUF':'VERKAUF'}</span>
+      <span class="mono">${tx.qty} × $${fmt(tx.price)}</span>
+      <span style="color:var(--text3);font-size:12px;">${tx.date}</span>
+      ${tx.note?`<span style="color:var(--text2);font-size:12px;">${tx.note}</span>`:''}
+      <button class="pf-tx-remove" onclick="removeTx('${t}',${tx.id})">✕</button>
+    </div>`
+  ).join('');
+}
+function recalcPF(t) {
+  const q = quotes[t], txs = txData[t];
+  const sumEl = $(t+'-pf-summary');
+  if (!txs.length) { if(sumEl) sumEl.style.display='none'; return; }
+  if(sumEl) sumEl.style.display='block';
+  let qty=0, invested=0, avgCost=0;
+  txs.forEach(tx => {
+    if (tx.type==='buy') { avgCost=(avgCost*qty+tx.price*tx.qty)/(qty+tx.qty); qty+=tx.qty; invested+=tx.price*tx.qty; }
+    else { qty-=tx.qty; }
+  });
+  qty=Math.max(0,qty);
+  const cur=q?.price||0, val=qty*cur, unreal=qty*(cur-avgCost);
+  if($(t+'-sum-qty')) $(t+'-sum-qty').textContent=qty.toFixed(2);
+  if($(t+'-sum-avg')) $(t+'-sum-avg').textContent='$'+fmt(avgCost);
+  if($(t+'-sum-val')) $(t+'-sum-val').textContent='$'+fmt(val);
+  if($(t+'-sum-invested')) $(t+'-sum-invested').textContent='$'+fmt(invested);
+  if($(t+'-sum-unreal')) {
+    $(t+'-sum-unreal').textContent=(unreal>=0?'+ ':' ')+'$'+fmt(Math.abs(unreal))+' ('+fmt(Math.abs(unreal/invested*100||0))+'%)';
+    $(t+'-sum-unreal').className='pf-sum-val '+(unreal>=0?'up':'dn');
+  }
+  const ft=forecastTargets[t];
+  if(ft&&ft.bull&&$(t+'-pf-bull')) $(t+'-pf-bull').textContent='$'+fmt(qty*ft.bull);
+  if(ft&&ft.bear&&$(t+'-pf-bear')) $(t+'-pf-bear').textContent='$'+fmt(qty*ft.bear);
+}
+
+// ── Cache Reader ───────────────────────────────────────────
+async function fetchFromCache(section, ticker) {
+  try {
+    let url='/api/ki-data?section='+section;
+    if(ticker) url+='&ticker='+ticker;
+    const r=await fetch(url);
+    if(!r.ok) return null;
+    const d=await r.json();
+    return d.data||null;
+  } catch(e){ return null; }
+}
+async function loadFromCache() {
+  const statusEl=document.getElementById('ki-status');
+  if(statusEl){statusEl.style.display='inline-flex';statusEl.textContent='📦 Lade Daten...';statusEl.className='ki-status-pill';}
+  const sections=[
+    {fn:(d)=>applyRec('rklb',d),section:'rec',ticker:'rklb'},
+    {fn:(d)=>applyRec('asts',d),section:'rec',ticker:'asts'},
+    {fn:(d)=>applyLiveNewsData('rklb',d),section:'news',ticker:'rklb'},
+    {fn:(d)=>applyLiveNewsData('asts',d),section:'news',ticker:'asts'},
+    {fn:(d)=>applyScenarios('rklb',d),section:'scenarios',ticker:'rklb'},
+    {fn:(d)=>applyScenarios('asts',d),section:'scenarios',ticker:'asts'},
+    {fn:(d)=>applySector('rklb',d),section:'sector',ticker:'rklb'},
+    {fn:(d)=>applySector('asts',d),section:'sector',ticker:'asts'},
+    {fn:(d)=>applyCtx('rklb',d),section:'ctx',ticker:'rklb'},
+    {fn:(d)=>applyCtx('asts',d),section:'ctx',ticker:'asts'},
+  ];
+  let loaded=0;
+  for(const s of sections){
+    const data=await fetchFromCache(s.section,s.ticker);
+    if(data){try{s.fn(data);loaded++;}catch(e){}}
+  }
+  if(statusEl){
+    statusEl.textContent=loaded>0?'✓ Daten geladen':'—';
+    statusEl.className='ki-status-pill'+(loaded>0?' success':'');
+    setTimeout(()=>{statusEl.style.display='none';},3000);
+  }
+}
+async function loadSyncStatus() {
+  try {
+    const r=await fetch('/api/sync-status');
+    if(r.ok){
+      const d=await r.json();
+      const toggle=document.getElementById('sync-toggle');
+      const lbl=document.getElementById('sync-status-label');
+      const lastLbl=document.getElementById('last-sync-label');
+      if(toggle) toggle.checked=d.sync_enabled!==false;
+      if(lbl) lbl.textContent=d.sync_enabled!==false?'✅ Auto-Sync aktiv':'⏸ Auto-Sync pausiert';
+      if(lastLbl&&d.last_sync){
+        const dt=new Date(d.last_sync);
+        lastLbl.textContent=dt.toLocaleString('de-CH',{day:'2-digit',month:'2-digit',hour:'2-digit',minute:'2-digit'});
+      }
+    }
+  } catch(e){}
+}
+async function toggleSync(enabled) {
+  const lbl=document.getElementById('sync-status-label');
+  if(lbl) lbl.textContent=enabled?'Wird aktiviert...':'Wird deaktiviert...';
+  try {
+    await fetch('/api/sync-toggle',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({enabled})});
+    if(lbl) lbl.textContent=enabled?'✅ Auto-Sync aktiv':'⏸ Auto-Sync pausiert';
+  } catch(e){ if(lbl) lbl.textContent='Fehler'; }
+}
+async function manualRefreshFromSettings() {
+  const key=getKey();
+  const btn=document.getElementById('manual-refresh-btn');
+  if(!key||!key.startsWith('sk-ant-')){
+    if(btn){btn.textContent='⚠️ API-Key eingeben';setTimeout(()=>btn.textContent='↺ Jetzt manuell aktualisieren',2000);}
+    return;
+  }
+  if(btn){btn.disabled=true;btn.textContent='⏳ Lädt...';}
+  await refreshAllNews();
+  if(btn){btn.disabled=false;btn.textContent='✓ Fertig';setTimeout(()=>btn.textContent='↺ Jetzt manuell aktualisieren',3000);}
+}
+function applyLiveNewsData(t,p) {
+  if(!p||!p.articles) return;
+  const el=document.getElementById(t+'-news-content');
+  if(!el) return;
+  el.innerHTML=p.articles.map(a=>'<div class="news-art"><div class="news-art-head"><span class="news-art-badge '+(a.sentiment==='pos'?'pos':a.sentiment==='neg'?'neg':'neu')+'">'+(a.sentiment==='pos'?'Positiv':a.sentiment==='neg'?'Negativ':'Neutral')+'</span><div class="news-art-title">'+(a.title||'')+'</div></div><div class="news-art-body">'+(a.body||'')+'</div><div class="news-art-src">'+(a.source||'')+'</div></div>').join('');
+}
+function applyScenarios(t,p) {
+  if(!p) return;
+  if(p.intro&&$(t+'-scenarios-intro')) $(t+'-scenarios-intro').textContent=p.intro;
+  const barsEl=document.getElementById(t+'-scenarios-bars');
+  if(barsEl&&p.bull_label){
+    const tc=t==='rklb'?'--rklb':'--asts';
+    barsEl.innerHTML='<div class="scr"><div class="scl">Bestmöglicher Fall</div><div class="scb"><div class="scf" style="width:100%;background:var(--green)"></div></div><div class="scv up">'+p.bull_label+'</div></div>'+'<div class="scr"><div class="scl">Optimistischste Bank</div><div class="scb"><div class="scf" style="width:'+(p.opt_pct||50)+'%;background:var('+tc+')"></div></div><div class="scv mono">'+p.opt_label+'</div></div>'+'<div class="scr"><div class="scl">Alle Banken (Ø)</div><div class="scb"><div class="scf" style="width:'+(p.base_pct||40)+'%;background:#bbb"></div></div><div class="scv nu">'+p.base_label+'</div></div>'+'<div class="scr"><div class="scl">Vorsichtige Schätzung</div><div class="scb"><div class="scf" style="width:'+(p.bear_pct||30)+'%;background:var(--amber)"></div></div><div class="scv wn">'+p.bear_label+'</div></div>';
+  }
+  if(p.bull_target&&p.base_target&&p.bear_target){
+    forecastTargets[t]={bull:p.bull_target,base:p.base_target,bear:p.bear_target,bull5:p.bull5yr||null,base5:p.base5yr||null,bear5:p.bear5yr||null};
+    if(t==='rklb'){buildHistoryChart('rklb','rklb-chart','#1d4ed8','rgba(29,78,216,.06)',p.bull_target,p.base_target,p.bear_target);build5yrChart('rklb','rklb-chart5');}
+    else if(_astsChartsInited){buildHistoryChart('asts','asts-chart','#15803d','rgba(21,128,61,.06)',p.bull_target,p.base_target,p.bear_target);build5yrChart('asts','asts-chart5');}
+  }
+  if($(t+'-lg-bull')&&p.bull_desc) $(t+'-lg-bull').textContent=p.bull_desc;
+  if($(t+'-lg-base')&&p.base_desc) $(t+'-lg-base').textContent=p.base_desc;
+  if($(t+'-lg-bear')&&p.bear_desc) $(t+'-lg-bear').textContent=p.bear_desc;
+  if($(t+'-sentiment-text')&&p.sentiment) $(t+'-sentiment-text').innerHTML=p.sentiment;
+}
+function applySector(t,p) {
+  if(!p||!p.cards) return;
+  const grid=document.getElementById(t+'-sector-grid');
+  const intro=document.getElementById(t+'-sector-intro');
+  if(intro&&p.intro) intro.textContent=p.intro;
+  if(grid){
+    const cmap={green:'var(--green)',red:'var(--red)',purple:'var(--purple)',blue:'var(--blue)',amber:'var(--amber)'};
+    grid.innerHTML=p.cards.map(c=>'<div class="sector-card"><div class="sector-emoji">'+(c.emoji||'')+'</div><div class="sector-name">'+(c.name||'')+'</div><div class="sector-val" style="color:'+(cmap[c.val_color]||'var(--text)')+'">'+c.val+'</div><div class="sector-desc">'+c.desc+'</div></div>').join('');
+  }
+}
+function applyCtx(t,p) {
+  if(!p) return;
+  const typeMap={green:'ctx-tag green',red:'ctx-tag red',amber:'ctx-tag amber',neutral:'ctx-tag'};
+  const descEl=document.getElementById(t+'-ctx-desc');
+  const tagsEl=document.getElementById(t+'-ctx-tags');
+  const statsEl=document.getElementById(t+'-ctx-stats');
+  if(descEl&&p.desc) descEl.textContent=typeof p.desc==='string'?p.desc.replace(/
+/g,' ').trim():JSON.stringify(p.desc);
+  if(tagsEl&&p.tags&&Array.isArray(p.tags)) tagsEl.innerHTML=p.tags.map(tag=>'<span class="'+(typeMap[tag.type]||'ctx-tag')+'">'+tag.text+'</span>').join('');
+  if(statsEl&&p.stats&&Array.isArray(p.stats)) statsEl.innerHTML=p.stats.filter(s=>s&&s.label&&s.val).map(s=>'<div class="ctx-stat">'+s.label+' <b>'+s.val+'</b></div>').join('');
+}
+async function fetchCtxBar(t) {
+  try { const p=await kiCall(CTX_PROMPTS[t]); if(p) applyCtx(t,p); }
+  catch(e){ console.warn('fetchCtxBar:',e.message); }
+}
+
+const GLOSSAR_PROMPT=`Du bist Finanz-Erklärer. Suche das aktuelle Budget des US "Golden Dome" Programms. Welche 2-4 neue Fachbegriffe tauchen in RKLB/ASTS News auf? Antworte NUR mit JSON: {"golden_dome_def":"US-Raketenabwehr (BETRAG). Rocket Lab Lieferant.","terms":[{"term":"Begriff","def":"Erklärung"}]}`;
+async function fetchGlossar() {
+  const grid=document.getElementById('glossar-grid');
+  if(!grid) return;
+  try {
+    const p=await kiCall(GLOSSAR_PROMPT);
+    if(!p) return;
+    const gdDef=document.getElementById('gitem-golden-dome-def');
+    if(gdDef&&p.golden_dome_def) gdDef.textContent=p.golden_dome_def;
+    if(p.terms&&p.terms.length){
+      const existing=Array.from(grid.querySelectorAll('.gitem-term')).map(el=>el.textContent.toLowerCase().replace('✨ ',''));
+      p.terms.forEach(item=>{
+        if(!item.term||!item.def) return;
+        if(existing.includes(item.term.toLowerCase())) return;
+        const div=document.createElement('div');
+        div.className='gitem';div.style.borderColor='var(--blue)';
+        div.innerHTML='<div class="gitem-term">✨ '+item.term+'</div><div class="gitem-def">'+item.def+'</div>';
+        grid.appendChild(div);
+      });
+    }
+  } catch(e){ console.warn('fetchGlossar:',e.message); }
+}
+
+// ── Load All (15s refresh) ─────────────────────────────────
+async function loadAll() {
+  await Promise.all(['rklb','asts'].map(t => fetchQ(t)));
+}
+
+// ── KI Call ───────────────────────────────────────────────
+async function kiCall(prompt) {
+  const key=getKey();
+  if(!key||!key.startsWith('sk-ant-')) return null;
+  const maxRetries=4, baseDelay=20000;
+  for(let attempt=0;attempt<maxRetries;attempt++){
+    if(attempt>0){
+      const wait=baseDelay*attempt;
+      const statusEl=document.getElementById('ki-status');
+      if(statusEl) statusEl.textContent='⏳ Rate limit — warte '+(wait/1000)+'s...';
+      await new Promise(r=>setTimeout(r,wait));
+    }
+    try {
+      const resp=await fetch('https://api.anthropic.com/v1/messages',{
+        method:'POST',
+        headers:{'Content-Type':'application/json','x-api-key':key,'anthropic-version':'2023-06-01','anthropic-dangerous-direct-browser-access':'true'},
+        body:JSON.stringify({model:'claude-sonnet-4-5',max_tokens:1000,tools:[{type:'web_search_20250305',name:'web_search'}],messages:[{role:'user',content:prompt}]})
+      });
+      if(resp.status===429){continue;}
+      if(!resp.ok) throw new Error('API '+resp.status);
+      const data=await resp.json();
+      const raw=data.content.filter(b=>b.type==='text').map(b=>b.text).join('').trim();
+      const match=raw.match(/\{[\s\S]*\}/);
+      if(!match) throw new Error('No JSON');
+      return JSON.parse(match[0]);
+    } catch(e){ if(attempt===maxRetries-1) throw e; }
+  }
+  return null;
+}
+
+const CTX_PROMPTS={
+  rklb:`Suche aktuelle Firmendaten für Rocket Lab (RKLB). Antworte NUR mit JSON: {"desc":"1-2 Sätze","tags":[{"text":"Tag","type":"green"}],"stats":[{"label":"Backlog","val":"$X Mrd"}]}`,
+  asts:`Suche aktuelle Firmendaten für AST SpaceMobile (ASTS). Antworte NUR mit JSON: {"desc":"1-2 Sätze","tags":[{"text":"Tag","type":"green"}],"stats":[{"label":"Cash","val":"$X Mrd"}]}`
+};
+
+async function fetchRec(t) {
+  const REC_PROMPTS={
+    rklb:`Analysiere Rocket Lab (RKLB). Antworte NUR mit JSON: {"empfehlung":"KAUFEN","titel":"Titel","begruendung":"2-3 Sätze","fundamentals":7,"momentum":7,"risiko":6,"bewertung":5,"explain_fundamentals":"<b>Fundamentals</b> — 1 Satz","explain_momentum":"<b>Momentum</b> — 1 Satz","explain_risiko":"<b>Risiko</b> — <b>Höherer Score = niedrigeres Risiko.</b> 1 Satz","explain_bewertung":"<b>Bewertung</b> — 1 Satz","einstieg":"$120","kursziel":"$180","stopp":"$100","lage":"<b>Aktuelle Lage:</b> 1 Satz","lage_typ":"positive","analysten":"10x Kaufen"}`,
+    asts:`Analysiere AST SpaceMobile (ASTS). Antworte NUR mit JSON: {"empfehlung":"HALTEN","titel":"Titel","begruendung":"2-3 Sätze","fundamentals":5,"momentum":7,"risiko":4,"bewertung":3,"explain_fundamentals":"<b>Fundamentals</b> — 1 Satz","explain_momentum":"<b>Momentum</b> — 1 Satz","explain_risiko":"<b>Risiko</b> — <b>Höherer Score = niedrigeres Risiko.</b> 1 Satz","explain_bewertung":"<b>Bewertung</b> — 1 Satz","einstieg":"$80","kursziel":"$140","stopp":"$65","lage":"<b>Aktuelle Lage:</b> 1 Satz","lage_typ":"warning","analysten":"8x Kaufen"}`
+  };
+  try { const p=await kiCall(REC_PROMPTS[t]); if(p) applyRec(t,p); }
+  catch(e){ console.warn('fetchRec:',e.message); }
+}
+function applyRec(t,p) {
+  if(!p) return;
+  const empBadge=$(t+'-rec-badge');
+  if(empBadge&&p.empfehlung){
+    empBadge.textContent=p.empfehlung;
+    empBadge.className='rec-pill '+(p.empfehlung==='KAUFEN'?'buy':p.empfehlung==='VERKAUFEN'?'sell':'hold');
+  }
+  if($(t+'-rec-title')&&p.titel) $(t+'-rec-title').textContent=p.titel;
+  if($(t+'-rec-explain')&&p.begruendung) $(t+'-rec-explain').textContent=p.begruendung;
+  if($(t+'-alert-text')&&p.lage) $(t+'-alert-text').innerHTML=p.lage;
+  if($(t+'-alert-box')&&p.lage_typ) $(t+'-alert-box').className='alert '+(p.lage_typ||'neutral');
+  ['fundamentals','momentum','risiko','bewertung'].forEach(k=>{
+    const scoreEl=$(t+'-score-'+k);
+    if(scoreEl&&p[k]!=null){
+      scoreEl.textContent=p[k]+'/10';
+      scoreEl.style.color=p[k]>=7?'var(--green)':p[k]>=5?'var(--amber)':'var(--red)';
+    }
+    const explainEl=$(t+'-explain-'+k);
+    if(explainEl&&p['explain_'+k]) explainEl.innerHTML=p['explain_'+k];
+  });
+  if($(t+'-rec-einstieg')&&p.einstieg) $(t+'-rec-einstieg').textContent=p.einstieg;
+  if($(t+'-rec-kursziel')&&p.kursziel) $(t+'-rec-kursziel').textContent=p.kursziel;
+  if($(t+'-rec-stopp')&&p.stopp) $(t+'-rec-stopp').textContent=p.stopp;
+  if($(t+'-analysten')&&p.analysten) $(t+'-analysten').textContent=p.analysten;
+}
+async function fetchLiveNews(t) {
+  const NEWS_PROMPTS={
+    rklb:`Suche aktuelle RKLB Nachrichten der letzten 24h. NUR JSON: {"articles":[{"title":"Titel","sentiment":"pos|neg|neu","body":"2-3 Sätze","source":"Quelle"}]}`,
+    asts:`Suche aktuelle ASTS Nachrichten der letzten 24h. NUR JSON: {"articles":[{"title":"Titel","sentiment":"pos|neg|neu","body":"2-3 Sätze","source":"Quelle"}]}`
+  };
+  try { const p=await kiCall(NEWS_PROMPTS[t]); if(p) applyLiveNewsData(t,p); }
+  catch(e){ console.warn('fetchLiveNews:',e.message); }
+}
+async function fetchScenarios(t) {
+  const SCENARIOS_PROMPTS={
+    rklb:`Analysiere RKLB Kursziele. NUR JSON: {"intro":"1 Satz","bull_label":"$XXX","bull_pct":100,"opt_label":"$XXX","opt_pct":60,"base_label":"$XXX","base_pct":45,"bear_label":"$XX","bear_pct":35,"bull_target":220,"base_target":130,"bear_target":80,"bull5yr":500,"base5yr":230,"bear5yr":65,"bull_desc":"Bull","base_desc":"Base","bear_desc":"Bear","sentiment":"Reddit/WSB","sentiment_warning":false}`,
+    asts:`Analysiere ASTS Kursziele. NUR JSON: {"intro":"1 Satz","bull_label":"$XXX","bull_pct":100,"opt_label":"$XXX","opt_pct":55,"base_label":"$XX","base_pct":40,"bear_label":"$XX","bear_pct":30,"bull_target":200,"base_target":85,"bear_target":45,"bull5yr":400,"base5yr":120,"bear5yr":20,"bull_desc":"Bull","base_desc":"Base","bear_desc":"Bear","sentiment":"Reddit/WSB","sentiment_warning":true}`
+  };
+  try { const p=await kiCall(SCENARIOS_PROMPTS[t]); if(p) applyScenarios(t,p); }
+  catch(e){ console.warn('fetchScenarios:',e.message); }
+}
+async function fetchSectorContext(t) {
+  const SECTOR_PROMPTS={
+    rklb:`Analysiere Sektor-Kontext für RKLB. NUR JSON: {"intro":"1 Satz","cards":[{"emoji":"🌌","name":"SpaceX IPO","val":"Status","val_color":"purple","desc":"2 Sätze"},{"emoji":"🛡","name":"Golden Dome","val":"Status","val_color":"green","desc":"2 Sätze"},{"emoji":"🌍","name":"Sektor-Peers","val":"Neutral","val_color":"blue","desc":"kurz"},{"emoji":"📈","name":"Defense","val":"wächst","val_color":"green","desc":"kurz"}]}`,
+    asts:`Analysiere Sektor-Kontext für ASTS. NUR JSON: {"intro":"1 Satz","cards":[{"emoji":"🌌","name":"SpaceX IPO","val":"Status","val_color":"purple","desc":"2 Sätze"},{"emoji":"💥","name":"Blue Origin","val":"Status","val_color":"red","desc":"kurz"},{"emoji":"📶","name":"Starlink D2D","val":"Konkurrenz","val_color":"red","desc":"kurz"},{"emoji":"📱","name":"AT&T/Verizon","val":"Partner","val_color":"green","desc":"kurz"}]}`
+  };
+  try { const p=await kiCall(SECTOR_PROMPTS[t]); if(p) applySector(t,p); }
+  catch(e){ console.warn('fetchSectorContext:',e.message); }
+}
+async function refreshAllNews() {
+  const statusEl=document.getElementById('ki-status');
+  const delay=ms=>new Promise(r=>setTimeout(r,ms));
+  const setStatus=(txt,type='')=>{if(statusEl){statusEl.style.display='inline-flex';statusEl.textContent=txt;statusEl.className='ki-status-pill'+(type?' '+type:'');}};
+  const clearStatus=()=>{if(statusEl) statusEl.style.display='none';};
+  const calls=[
+    [()=>fetchRec('rklb'),'🎯 RKLB Empfehlung...',(1)],
+    [()=>fetchRec('asts'),'🎯 ASTS Empfehlung...',(2)],
+    [()=>fetchLiveNews('rklb'),'📰 RKLB News...',(3)],
+    [()=>fetchLiveNews('asts'),'📰 ASTS News...',(4)],
+    [()=>fetchScenarios('rklb'),'📊 RKLB Szenarien...',(5)],
+    [()=>fetchScenarios('asts'),'📊 ASTS Szenarien...',(6)],
+    [()=>fetchSectorContext('rklb'),'🌌 RKLB Sektor...',(7)],
+    [()=>fetchSectorContext('asts'),'🌌 ASTS Sektor...',(8)],
+    [()=>fetchCtxBar('rklb'),'🏢 RKLB Firma...',(9)],
+    [()=>fetchCtxBar('asts'),'🏢 ASTS Firma...',(10)],
+    [()=>fetchGlossar(),'📚 Lexikon...',(11)],
+  ];
+  for(let i=0;i<calls.length;i++){
+    const [fn,label,num]=calls[i];
+    setStatus(label+' ('+num+'/11)');
+    try{await fn();}catch(e){console.warn('refresh:',e.message);}
+    if(i<calls.length-1) await delay(8000);
+  }
+  setStatus('✓ Aktualisiert','success');
+  setTimeout(clearStatus,4000);
+}
+
+// ── Init ──────────────────────────────────────────────────
+(function init() {
+  loadKey();
+  loadTx();
+  switchTab('rklb');
+  document.querySelectorAll('.card').forEach(c=>c.classList.add('open'));
+  if(window.innerWidth<=640){
+    ['charts','df','pf','news','sector'].forEach(s=>{
+      ['rklb','asts'].forEach(t=>{
+        const c=$('card-'+t+'-'+s);
+        if(c) c.classList.remove('open');
+      });
+    });
+  }
+  buildHistoryChart('rklb','rklb-chart','#1d4ed8','rgba(29,78,216,.06)',null,null,null);
+  build5yrChart('rklb','rklb-chart5');
+  loadAll();
+  setInterval(loadAll,15000);
+  loadFromCache();
+  loadSyncStatus();
+})();
+
+</script>
