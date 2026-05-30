@@ -1442,6 +1442,7 @@ const $ = id => document.getElementById(id);
 const fmt = n => n >= 1000 ? n.toLocaleString('en-US', {minimumFractionDigits:2,maximumFractionDigits:2}) : parseFloat(n).toFixed(2);
 const fmtB = n => n >= 1e12 ? (n/1e12).toFixed(2)+'T' : n >= 1e9 ? (n/1e9).toFixed(1)+'B' : n >= 1e6 ? (n/1e6).toFixed(0)+'M' : n;
 const fmtK = n => n >= 1e6 ? (n/1e6).toFixed(1)+'M' : n >= 1e3 ? (n/1e3).toFixed(0)+'K' : n;
+const stripTags = s => (typeof s === 'string' ? s.replace(/<[^>]*>/g, '') : String(s||''));
 
 // ── State ──────────────────────────────────────────────────
 const chartInstances = {};
@@ -1919,7 +1920,7 @@ function applyLiveNewsData(t,p,updated_at) {
 }
 function applyScenarios(t,p) {
   if(!p) return;
-  if(p.intro&&$(t+'-scenarios-intro')) $(t+'-scenarios-intro').textContent=p.intro;
+  if(p.intro&&$(t+'-scenarios-intro')) $(t+'-scenarios-intro').textContent=stripTags(p.intro);
   const barsEl=document.getElementById(t+'-scenarios-bars');
   if(barsEl&&p.bull_label){
     const tc=t==='rklb'?'--rklb':'--asts';
@@ -1930,16 +1931,16 @@ function applyScenarios(t,p) {
     if(t==='rklb'){buildHistoryChart('rklb','rklb-chart','#1d4ed8','rgba(29,78,216,.06)',p.bull_target,p.base_target,p.bear_target);build5yrChart('rklb','rklb-chart5');}
     else if(_astsChartsInited){buildHistoryChart('asts','asts-chart','#15803d','rgba(21,128,61,.06)',p.bull_target,p.base_target,p.bear_target);build5yrChart('asts','asts-chart5');}
   }
-  if($(t+'-lg-bull')&&p.bull_desc) $(t+'-lg-bull').textContent=p.bull_desc;
-  if($(t+'-lg-base')&&p.base_desc) $(t+'-lg-base').textContent=p.base_desc;
-  if($(t+'-lg-bear')&&p.bear_desc) $(t+'-lg-bear').textContent=p.bear_desc;
+  if($(t+'-lg-bull')&&p.bull_desc) $(t+'-lg-bull').textContent=stripTags(p.bull_desc);
+  if($(t+'-lg-base')&&p.base_desc) $(t+'-lg-base').textContent=stripTags(p.base_desc);
+  if($(t+'-lg-bear')&&p.bear_desc) $(t+'-lg-bear').textContent=stripTags(p.bear_desc);
   if($(t+'-sentiment-text')&&p.sentiment) $(t+'-sentiment-text').innerHTML=p.sentiment;
 }
 function applySector(t,p) {
   if(!p||!p.cards) return;
   const grid=document.getElementById(t+'-sector-grid');
   const intro=document.getElementById(t+'-sector-intro');
-  if(intro&&p.intro) intro.textContent=p.intro;
+  if(intro&&p.intro) intro.textContent=p.intro.replace(/<[^>]*>/g,'');
   if(grid){
     const cmap={green:'var(--green)',red:'var(--red)',purple:'var(--purple)',blue:'var(--blue)',amber:'var(--amber)'};
     grid.innerHTML=p.cards.map(c=>'<div class="sector-card"><div class="sector-emoji">'+(c.emoji||'')+'</div><div class="sector-name">'+(c.name||'')+'</div><div class="sector-val" style="color:'+(cmap[c.val_color]||'var(--text)')+'">'+c.val+'</div><div class="sector-desc">'+c.desc+'</div></div>').join('');
@@ -1951,7 +1952,7 @@ function applyCtx(t,p) {
   const descEl=document.getElementById(t+'-ctx-desc');
   const tagsEl=document.getElementById(t+'-ctx-tags');
   // Update desc and tags
-  if(descEl&&p.desc) descEl.textContent=typeof p.desc==='string'?p.desc.replace(/\n/g,' ').trim():JSON.stringify(p.desc);
+  if(descEl&&p.desc) descEl.textContent=stripTags(typeof p.desc==='string'?p.desc.replace(/\n/g,' ').trim():JSON.stringify(p.desc));
   if(tagsEl&&p.tags&&Array.isArray(p.tags)&&p.tags.length) tagsEl.innerHTML=p.tags.map(tag=>'<span class="'+(typeMap[tag.type]||'ctx-tag')+'">'+tag.text+'</span>').join('');
   // Update individual stats by label match - don't replace all static stats
   if(p.stats&&Array.isArray(p.stats)) {
@@ -2060,8 +2061,8 @@ function applyRec(t,p) {
   const banner=$(t+'-rec-banner');
   if(banner&&p.empfehlung) banner.className='rec-banner '+(p.empfehlung==='KAUFEN'?'buy':p.empfehlung==='VERKAUFEN'?'sell':'hold');
   // Title and explanation (HTML ids: rklb-rec-title, rklb-rec-sub)
-  if($(t+'-rec-title')&&p.titel) $(t+'-rec-title').textContent=p.titel;
-  if($(t+'-rec-sub')&&p.begruendung) $(t+'-rec-sub').textContent=p.begruendung;
+  if($(t+'-rec-title')&&p.titel) $(t+'-rec-title').textContent=stripTags(p.titel);
+  if($(t+'-rec-sub')&&p.begruendung) $(t+'-rec-sub').textContent=stripTags(p.begruendung);
   // Alert box (HTML ids: rklb-alert-text, rklb-alert-box)
   if($(t+'-alert-text')&&p.lage) $(t+'-alert-text').innerHTML=p.lage;
   if($(t+'-alert-box')&&p.lage_typ) $(t+'-alert-box').className='alert '+(p.lage_typ||'neutral');
