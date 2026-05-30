@@ -1,38 +1,23 @@
-const CACHE = 'space-stocks-v5';
+const CACHE = 'space-stocks-v6';
 const STATIC = ['/'];
 
-// Install: cache static assets
 self.addEventListener('install', e => {
-  e.waitUntil(
-    caches.open(CACHE).then(c => c.addAll(STATIC))
-  );
+  e.waitUntil(caches.open(CACHE).then(c => c.addAll(STATIC)));
   self.skipWaiting();
 });
 
-// Activate: clean ALL old caches
 self.addEventListener('activate', e => {
   e.waitUntil(
     caches.keys().then(keys =>
-      Promise.all(keys.filter(k => k !== CACHE).map(k => caches.delete(k)))
-    )
+      Promise.all(keys.map(k => caches.delete(k))) // delete ALL caches including current
+    ).then(() => self.clients.claim())
   );
-  self.clients.claim();
 });
 
-// Fetch: network first, fallback to cache
 self.addEventListener('fetch', e => {
-  // Don't cache API calls
   if (e.request.url.includes('/api/')) return;
-
   e.respondWith(
-    fetch(e.request)
-      .then(resp => {
-        if (resp.ok && e.request.method === 'GET') {
-          const clone = resp.clone();
-          caches.open(CACHE).then(c => c.put(e.request, clone));
-        }
-        return resp;
-      })
+    fetch(e.request, {cache: 'no-cache'}) // always network first, no cache
       .catch(() => caches.match(e.request))
   );
 });
