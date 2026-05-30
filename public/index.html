@@ -2078,6 +2078,7 @@ async function loadFromCache() {
     {fn:(d,ts)=>applySector('asts',d),section:'sector',ticker:'asts'},
     {fn:(d,ts)=>applyCtx('rklb',d),section:'ctx',ticker:'rklb'},
     {fn:(d,ts)=>applyCtx('asts',d),section:'ctx',ticker:'asts'},
+    {fn:(d,ts)=>applyGlossar(d),section:'glossar',ticker:'global'},
   ];
   let loaded=0;
   for(const s of sections){
@@ -2200,25 +2201,33 @@ async function fetchCtxBar(t) {
 }
 
 const GLOSSAR_PROMPT=`Du bist Finanz-Erklärer. Suche das aktuelle Budget des US "Golden Dome" Programms. Welche 2-4 neue Fachbegriffe tauchen in RKLB/ASTS News auf? Antworte NUR mit JSON: {"golden_dome_def":"US-Raketenabwehr (BETRAG). Rocket Lab Lieferant.","terms":[{"term":"Begriff","def":"Erklärung"}]}`;
-async function fetchGlossar() {
+function applyGlossar(p) {
   const grid=document.getElementById('glossar-grid');
-  if(!grid) return;
+  if(!grid||!p) return;
+  const gdDef=document.getElementById('gitem-golden-dome-def');
+  if(gdDef&&p.golden_dome_def) gdDef.textContent=stripTags(p.golden_dome_def);
+  if(p.terms&&p.terms.length){
+    const existing=Array.from(grid.querySelectorAll('.gitem-term')).map(el=>el.textContent.toLowerCase().replace('✨ ',''));
+    p.terms.forEach(item=>{
+      if(!item.term||!item.def) return;
+      if(existing.includes(item.term.toLowerCase())) return;
+      const div=document.createElement('div');
+      div.className='gitem';div.style.borderColor='var(--blue)';
+      div.innerHTML='<div class="gitem-term">✨ '+stripTags(item.term)+'</div><div class="gitem-def">'+stripTags(item.def)+'</div>';
+      grid.appendChild(div);
+    });
+  }
+}
+async function fetchGlossar() {
+  // First try Supabase cache (filled by cron)
+  try {
+    const cached = await fetchFromCache('glossar', 'global');
+    if(cached && cached.data) { applyGlossar(cached.data); return; }
+  } catch(e){}
+  // Fallback: client-side KI call if API key available
   try {
     const p=await kiCall(GLOSSAR_PROMPT);
-    if(!p) return;
-    const gdDef=document.getElementById('gitem-golden-dome-def');
-    if(gdDef&&p.golden_dome_def) gdDef.textContent=p.golden_dome_def;
-    if(p.terms&&p.terms.length){
-      const existing=Array.from(grid.querySelectorAll('.gitem-term')).map(el=>el.textContent.toLowerCase().replace('✨ ',''));
-      p.terms.forEach(item=>{
-        if(!item.term||!item.def) return;
-        if(existing.includes(item.term.toLowerCase())) return;
-        const div=document.createElement('div');
-        div.className='gitem';div.style.borderColor='var(--blue)';
-        div.innerHTML='<div class="gitem-term">✨ '+item.term+'</div><div class="gitem-def">'+item.def+'</div>';
-        grid.appendChild(div);
-      });
-    }
+    if(p) applyGlossar(p);
   } catch(e){ console.warn('fetchGlossar:',e.message); }
 }
 
