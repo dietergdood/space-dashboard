@@ -152,6 +152,9 @@ body{font-family:'DM Sans',sans-serif;background:var(--bg);color:var(--text);min
 .met-chg.dn{color:var(--red);}
 .met-chg.nu{color:var(--text3);}
 .met-sub{font-size:11px;color:var(--text3);margin-top:2px;}
+.premarket-badge{display:inline-flex;align-items:center;gap:4px;margin-top:4px;font-size:11px;font-family:"DM Mono",monospace;padding:2px 7px;border-radius:6px;background:var(--surface2);border:1px solid var(--border2);}
+.premarket-badge.up{color:var(--green);border-color:var(--green-bd);background:var(--green-bg);}
+.premarket-badge.dn{color:var(--red);border-color:var(--red-bd);background:var(--red-bg);}
 
 /* ── Tooltip ── */
 .tip{position:relative;display:inline-block;}
@@ -734,6 +737,8 @@ body{font-family:'DM Sans',sans-serif;background:var(--bg);color:var(--text);min
         <div class="met-val" id="rklb-price">lädt...</div>
         <div class="met-chg" id="rklb-chg">—</div>
         <div class="met-sub">pro Aktie</div>
+        <div class="premarket-badge" id="asts-premarket" style="display:none;"></div>
+        <div class="premarket-badge" id="rklb-premarket" style="display:none;"></div>
       </div>
       <div class="met">
         <div class="met-icon">📊</div>
@@ -1768,6 +1773,13 @@ async function fetchQ(ticker) {
       lows: (q0.low||[]).filter(x=>x!=null),
       vols: (q0.volume||[]).filter(x=>x!=null),
       history: res.history || null,
+      marketState: m.marketState || 'REGULAR',
+      preMarketPrice: m.preMarketPrice || null,
+      preMarketChange: m.preMarketChange || null,
+      preMarketChangePct: m.preMarketChangePercent || null,
+      postMarketPrice: m.postMarketPrice || null,
+      postMarketChange: m.postMarketChange || null,
+      postMarketChangePct: m.postMarketChangePercent || null,
     };
   } catch(e) { return null; }
 }
@@ -1778,6 +1790,24 @@ function applyQ(t, q) {
   const chg = q.price - q.prev, pct = chg / q.prev * 100, up = chg >= 0;
   const pEl = $(t+'-price');
   pEl.textContent = '$' + fmt(q.price);
+  // Pre/Post market badge
+  const pmEl = $(t+'-premarket');
+  if (pmEl) {
+    const isPreMarket  = q.marketState === 'PRE'  && q.preMarketPrice;
+    const isPostMarket = q.marketState === 'POST' && q.postMarketPrice;
+    if (isPreMarket || isPostMarket) {
+      const pmPrice  = isPreMarket ? q.preMarketPrice  : q.postMarketPrice;
+      const pmChg    = isPreMarket ? q.preMarketChange : q.postMarketChange;
+      const pmPct    = isPreMarket ? q.preMarketChangePct : q.postMarketChangePct;
+      const pmUp     = pmChg >= 0;
+      const label    = isPreMarket ? 'Pre' : 'Post';
+      pmEl.className = 'premarket-badge ' + (pmUp ? 'up' : 'dn');
+      pmEl.innerHTML = label + '-Market: $' + fmt(pmPrice) + ' <span>' + (pmUp?'+':'') + fmt(pmChg) + ' (' + (pmUp?'+':'') + (pmPct*100).toFixed(2) + '%)</span>';
+      pmEl.style.display = 'inline-flex';
+    } else {
+      pmEl.style.display = 'none';
+    }
+  }
   pEl.className = 'met-val mono ' + (up?'up':'dn');
   const cEl = $(t+'-chg');
   cEl.textContent = (up?'↑ +':'↓ ') + fmt(Math.abs(chg)) + ' (' + (up?'+':'') + fmt(pct) + '%) heute';
