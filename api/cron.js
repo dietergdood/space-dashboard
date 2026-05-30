@@ -31,33 +31,50 @@ async function supa(path, method='GET', body=null) {
 async function kiCall(prompt, retries=3) {
   for (let attempt = 0; attempt < retries; attempt++) {
     if (attempt > 0) {
-      const wait = attempt * 20000; // 20s, 40s
-      console.log(`Rate limit retry ${attempt}, waiting ${wait/1000}s`);
+      const wait = attempt * 15000;
+      console.log(`Retry ${attempt}, waiting ${wait/1000}s`);
       await delay(wait);
     }
-    const resp = await fetch('https://api.anthropic.com/v1/messages', {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-        'x-api-key': ANTHROPIC_KEY,
-        'anthropic-version': '2023-06-01'
-      },
-      body: JSON.stringify({
-        model: 'claude-sonnet-4-5',
-        max_tokens: 1000,
-        tools: [{type: 'web_search_20250305', name: 'web_search'}],
-        messages: [{role: 'user', content: prompt}]
-      })
-    });
-    if (resp.status === 429) {
-      console.log('429 rate limit on attempt', attempt);
+    console.log(`API call attempt ${attempt+1}, prompt length: ${prompt.length}`);
+    let resp;
+    try {
+      resp = await fetch('https://api.anthropic.com/v1/messages', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          'x-api-key': ANTHROPIC_KEY,
+          'anthropic-version': '2023-06-01'
+        },
+        body: JSON.stringify({
+          model: 'claude-sonnet-4-5',
+          max_tokens: 1024,
+          tools: [{type: 'web_search_20250305', name: 'web_search'}],
+          messages: [{role: 'user', content: prompt}]
+        })
+      });
+    } catch(fetchErr) {
+      console.error('Fetch error:', fetchErr.message);
       continue;
     }
-    if (!resp.ok) throw new Error(`Anthropic ${resp.status}`);
+    console.log(`API response status: ${resp.status}`);
+    if (resp.status === 429) {
+      console.log('Rate limited, retrying...');
+      continue;
+    }
+    if (!resp.ok) {
+      const errText = await resp.text();
+      console.error(`API error ${resp.status}:`, errText.substring(0, 200));
+      throw new Error(`Anthropic ${resp.status}: ${errText.substring(0,100)}`);
+    }
     const data = await resp.json();
+    console.log('Response content blocks:', data.content?.length, data.content?.map(b=>b.type).join(','));
     const raw = data.content.filter(b=>b.type==='text').map(b=>b.text).join('').trim();
+    console.log('Raw text length:', raw.length, '| First 100:', raw.substring(0,100));
     const match = raw.match(/\{[\s\S]*\}/);
-    if (!match) throw new Error('No JSON in response');
+    if (!match) {
+      console.error('No JSON found in response');
+      throw new Error('No JSON in response');
+    }
     return JSON.parse(match[0]);
   }
   throw new Error('Max retries exceeded');
