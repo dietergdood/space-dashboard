@@ -793,15 +793,15 @@ body{font-family:'DM Sans',sans-serif;background:var(--bg);color:var(--text);min
       <div class="df-range-wrap">
         <div class="df-range-labels">
           <div class="df-edge">
-            <div class="df-edge-lbl">📉 Tagestief</div>
+            <div class="df-edge-lbl">📉 Tagestief <span class="tip"><span class="tip-icon">?</span><span class="tip-box">Der niedrigste Kurs den die Aktie heute bisher erreicht hat.</span></span></div>
             <div class="df-edge-val dn mono" id="rklb-day-lo">—</div>
           </div>
           <div class="df-center">
-            <div class="df-edge-lbl">Eröffnung</div>
+            <div class="df-edge-lbl">Eröffnung <span class="tip"><span class="tip-icon">?</span><span class="tip-box">Der Kurs beim Börsenöffnung heute Morgen um 09:30 Uhr New York Zeit.</span></span></div>
             <div class="df-edge-val mono" id="rklb-open">—</div>
           </div>
           <div class="df-edge" style="text-align:right;">
-            <div class="df-edge-lbl">📈 Tageshoch</div>
+            <div class="df-edge-lbl">📈 Tageshoch <span class="tip"><span class="tip-icon">?</span><span class="tip-box">Der höchste Kurs den die Aktie heute bisher erreicht hat.</span></span></div>
             <div class="df-edge-val up mono" id="rklb-day-hi">—</div>
           </div>
         </div>
@@ -818,9 +818,15 @@ body{font-family:'DM Sans',sans-serif;background:var(--bg);color:var(--text);min
         </div>
       </div>
       <div class="df-stats-row" id="rklb-df-stats">
-        <div class="df-stat-pill" id="rklb-df-atr">⚡ ATR lädt...</div>
-        <div class="df-stat-pill" id="rklb-df-mom">📊 Momentum lädt...</div>
-        <div class="df-stat-pill" id="rklb-df-rsi">🔬 RSI lädt...</div>
+        <div class="df-stat-pill" id="rklb-df-atr">⚡ ATR lädt...
+          <span class="tip"><span class="tip-icon">?</span><span class="tip-box">ATR (Average True Range) misst die durchschnittliche Tagesschwankung der letzten 5 Tage. Zeigt wie stark der Kurs typischerweise pro Tag schwankt — hilfreich um realistische Erwartungen für den heutigen Tag zu setzen.</span></span>
+        </div>
+        <div class="df-stat-pill" id="rklb-df-mom">📈 Momentum lädt...
+          <span class="tip"><span class="tip-icon">?</span><span class="tip-box">Momentum zeigt die Kursbewegung über die letzten 5 Tage in Prozent. Positiv = Aufwärtstrend, Negativ = Abwärtstrend. Starkes Momentum kann sich fortsetzen — muss aber nicht.</span></span>
+        </div>
+        <div class="df-stat-pill" id="rklb-df-rsi">🔬 RSI lädt...
+          <span class="tip"><span class="tip-icon">?</span><span class="tip-box">RSI (Relative Strength Index) misst ob die Aktie überkauft oder überverkauft ist. Über 70 = viele haben gekauft, Kurs könnte fallen. Unter 30 = viele haben verkauft, Kurs könnte steigen. 30–70 = neutrale Zone.</span></span>
+        </div>
       </div>
     </div>
   </div>
@@ -1090,15 +1096,15 @@ body{font-family:'DM Sans',sans-serif;background:var(--bg);color:var(--text);min
       <div class="df-range-wrap">
         <div class="df-range-labels">
           <div class="df-edge">
-            <div class="df-edge-lbl">📉 Tagestief</div>
+            <div class="df-edge-lbl">📉 Tagestief <span class="tip"><span class="tip-icon">?</span><span class="tip-box">Der niedrigste Kurs den die Aktie heute bisher erreicht hat.</span></span></div>
             <div class="df-edge-val dn mono" id="asts-day-lo">—</div>
           </div>
           <div class="df-center">
-            <div class="df-edge-lbl">Eröffnung</div>
+            <div class="df-edge-lbl">Eröffnung <span class="tip"><span class="tip-icon">?</span><span class="tip-box">Der Kurs beim Börsenöffnung heute Morgen um 09:30 Uhr New York Zeit.</span></span></div>
             <div class="df-edge-val mono" id="asts-open">—</div>
           </div>
           <div class="df-edge" style="text-align:right;">
-            <div class="df-edge-lbl">📈 Tageshoch</div>
+            <div class="df-edge-lbl">📈 Tageshoch <span class="tip"><span class="tip-icon">?</span><span class="tip-box">Der höchste Kurs den die Aktie heute bisher erreicht hat.</span></span></div>
             <div class="df-edge-val up mono" id="asts-day-hi">—</div>
           </div>
         </div>
@@ -1115,9 +1121,15 @@ body{font-family:'DM Sans',sans-serif;background:var(--bg);color:var(--text);min
         </div>
       </div>
       <div class="df-stats-row" id="asts-df-stats">
-        <div class="df-stat-pill" id="asts-df-atr">⚡ ATR lädt...</div>
-        <div class="df-stat-pill" id="asts-df-mom">📊 Momentum lädt...</div>
-        <div class="df-stat-pill" id="asts-df-rsi">🔬 RSI lädt...</div>
+        <div class="df-stat-pill" id="asts-df-atr">⚡ ATR lädt...
+          <span class="tip"><span class="tip-icon">?</span><span class="tip-box">ATR (Average True Range) misst die durchschnittliche Tagesschwankung der letzten 5 Tage. Zeigt wie stark der Kurs typischerweise pro Tag schwankt — hilfreich um realistische Erwartungen für den heutigen Tag zu setzen.</span></span>
+        </div>
+        <div class="df-stat-pill" id="asts-df-mom">📈 Momentum lädt...
+          <span class="tip"><span class="tip-icon">?</span><span class="tip-box">Momentum zeigt die Kursbewegung über die letzten 5 Tage in Prozent. Positiv = Aufwärtstrend, Negativ = Abwärtstrend. Starkes Momentum kann sich fortsetzen — muss aber nicht.</span></span>
+        </div>
+        <div class="df-stat-pill" id="asts-df-rsi">🔬 RSI lädt...
+          <span class="tip"><span class="tip-icon">?</span><span class="tip-box">RSI (Relative Strength Index) misst ob die Aktie überkauft oder überverkauft ist. Über 70 = viele haben gekauft, Kurs könnte fallen. Unter 30 = viele haben verkauft, Kurs könnte steigen. 30–70 = neutrale Zone.</span></span>
+        </div>
       </div>
     </div>
   </div>
