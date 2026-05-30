@@ -1917,11 +1917,21 @@ function applyCtx(t,p) {
   const typeMap={green:'ctx-tag green',red:'ctx-tag red',amber:'ctx-tag amber',neutral:'ctx-tag'};
   const descEl=document.getElementById(t+'-ctx-desc');
   const tagsEl=document.getElementById(t+'-ctx-tags');
-  const statsEl=document.getElementById(t+'-ctx-stats');
-  if(descEl&&p.desc) descEl.textContent=typeof p.desc==='string'?p.desc.replace(/
-/g,' ').trim():JSON.stringify(p.desc);
-  if(tagsEl&&p.tags&&Array.isArray(p.tags)) tagsEl.innerHTML=p.tags.map(tag=>'<span class="'+(typeMap[tag.type]||'ctx-tag')+'">'+tag.text+'</span>').join('');
-  if(statsEl&&p.stats&&Array.isArray(p.stats)) statsEl.innerHTML=p.stats.filter(s=>s&&s.label&&s.val).map(s=>'<div class="ctx-stat">'+s.label+' <b>'+s.val+'</b></div>').join('');
+  // Update desc and tags
+  if(descEl&&p.desc) descEl.textContent=typeof p.desc==='string'?p.desc.replace(/\n/g,' ').trim():JSON.stringify(p.desc);
+  if(tagsEl&&p.tags&&Array.isArray(p.tags)&&p.tags.length) tagsEl.innerHTML=p.tags.map(tag=>'<span class="'+(typeMap[tag.type]||'ctx-tag')+'">'+tag.text+'</span>').join('');
+  // Update individual stats by label match - don't replace all static stats
+  if(p.stats&&Array.isArray(p.stats)) {
+    p.stats.forEach(s => {
+      if(!s||!s.label||!s.val) return;
+      // Try to find a matching stat element by label text
+      const statsEl=document.getElementById(t+'-ctx-stats');
+      if(!statsEl) return;
+      // For RKLB: update rklb-stat-extra; For ASTS: update asts-stat-cash
+      const extraEl=document.getElementById(t+'-stat-extra')||document.getElementById(t+'-stat-cash');
+      if(extraEl) extraEl.innerHTML=s.label+' <b>'+s.val+'</b>';
+    });
+  }
 }
 async function fetchCtxBar(t) {
   try { const p=await kiCall(CTX_PROMPTS[t]); if(p) applyCtx(t,p); }
