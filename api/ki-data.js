@@ -22,7 +22,7 @@ export default async function handler(req, res) {
     });
     if (!r.ok) throw new Error(`Supabase ${r.status}`);
     const rows = await r.json();
-    if (!rows.length) return res.status(404).json({ error: 'No data yet' });
+    if (!rows.length) return res.status(200).json({ data: null });
 
     return res.status(200).json({
       data: rows[0].data,
