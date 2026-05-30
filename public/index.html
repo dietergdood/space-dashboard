@@ -848,7 +848,7 @@ body{font-family:'DM Sans',sans-serif;background:var(--bg);color:var(--text);min
         <button class="range-btn" onclick="loadRangeChart('rklb','5y')">5J</button>
       </div>
       <div class="range-chart-wrap"><canvas id="rklb-range-chart"></canvas></div>
-      <div id="rklb-range-info" style="font-size:12px;color:var(--text3);margin-top:6px;text-align:right;"></div>
+      <div id="rklb-range-info" style="font-size:12px;margin-top:6px;text-align:right;"></div>
     </div>
     <div class="chart-view" id="rklb-view-1y">
       <div class="chart-grid">
@@ -1165,7 +1165,7 @@ body{font-family:'DM Sans',sans-serif;background:var(--bg);color:var(--text);min
         <button class="range-btn" onclick="loadRangeChart('asts','5y')">5J</button>
       </div>
       <div class="range-chart-wrap"><canvas id="asts-range-chart"></canvas></div>
-      <div id="asts-range-info" style="font-size:12px;color:var(--text3);margin-top:6px;text-align:right;"></div>
+      <div id="asts-range-info" style="font-size:12px;margin-top:6px;text-align:right;"></div>
     </div>
     <div class="chart-view" id="asts-view-1y">
       <div class="chart-grid">
@@ -1704,7 +1704,7 @@ async function loadRangeChart(t, range) {
     });
     if (infoEl) {
       const sign = up ? '+' : '';
-      infoEl.innerHTML = '<span style="color:'+lineColor+'">'+sign+chg.toFixed(2)+' ('+sign+chgPct.toFixed(2)+'%)</span> &nbsp;·&nbsp; $'+first.toFixed(2)+' → $'+last.toFixed(2);
+      infoEl.innerHTML = '<span style="color:'+lineColor+';font-weight:700;">'+sign+chg.toFixed(2)+' ('+sign+chgPct.toFixed(2)+'%)</span><span style="color:var(--text3)"> &nbsp;·&nbsp; $'+first.toFixed(2)+' → $'+last.toFixed(2)+'</span>';
     }
   } catch(e) {
     if (infoEl) infoEl.textContent = 'Fehler beim Laden';
