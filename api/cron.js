@@ -153,9 +153,13 @@ PARTNER/KONKURRENZ: Starlink News, T-Mobile News, AT&T Newsroom, Verizon News, A
 
     const GLOSSAR_PROMPT = `Analysiere aktuelle RKLB und ASTS News aus folgenden Quellen: Suche auf: X/Twitter, Reddit (r/investing, r/wallstreetbets), Yahoo Finance, Bloomberg, Reuters, SEC Filings. rocketlabusa.com/updates, ast-science.com/news. Welche 2-4 neue Fachbegriffe tauchen auf? Suche auch das aktuelle Budget des US "Golden Dome" Programms auf defense.gov und Reuters. Antworte NUR mit JSON, KEIN HTML, keine <cite> Tags: {"golden_dome_def":"US-Raketenabwehr (BETRAG). Rocket Lab Lieferant.","terms":[{"term":"Begriff","def":"Kurze Erklärung ohne HTML"}]}`;
 
-    const GOV_SPACE_PROMPT = `Recherchiere aktuelle US Government Space & Defense Aufträge und Programme die RKLB und ASTS betreffen. Suche auf: defense.gov, spaceforce.mil, nasa.gov, sda.mil, breakingdefense.com, defensenews.com, spacenews.com, reuters.com, bloomberg.com, SEC Filings RKLB und ASTS.
-    Analysiere: Golden Dome Raketenabwehr-Budget und Auftragnehmer, SDA (Space Development Agency) Tracking/Transport Layer Aufträge, NASA Commercial Launch Services, Space Force NSSL Programm, DARPA Space Programme, Commercial LEO Destinations, Artemis-Programm Launch-Aufträge.
-    Antworte NUR mit JSON, KEIN HTML, keine <cite> Tags: {"golden_dome":{"budget":"$X Mrd","status":"Status","rklb_anteil":"$X Mio","desc":"2 Sätze"},"sda":{"budget":"$X Mrd","status":"Status","rklb_auftraege":"Anzahl/Wert","desc":"2 Sätze"},"nasa":{"program":"Programmname","wert":"$X Mio","desc":"1 Satz"},"space_force":{"program":"NSSL etc","wert":"$X Mio","desc":"1 Satz"},"ausblick":"1 Satz Gesamtausblick US Space Budget"}}`;
+    const GOV_RKLB_PROMPT = `Recherchiere US Government Space & Defense Aufträge speziell für Rocket Lab (RKLB). Suche auf: defense.gov, spaceforce.mil, nasa.gov, sda.mil, breakingdefense.com, defensenews.com, spacenews.com, reuters.com, rocketlabusa.com/investors, SEC Filings RKLB.
+    Analysiere NUR RKLB-relevante Programme: 1) Golden Dome — Budget und RKLB Vertragsanteil. 2) SDA Tracking Layer — RKLB Tranche Aufträge und Wert. 3) NASA VCLS/CLPS — aktuelle RKLB Launch-Aufträge. 4) Space Force NSSL/EELV — RKLB Qualifikationsstatus.
+    Antworte NUR mit JSON, KEIN HTML, keine <cite> Tags: {"golden_dome":{"budget":"$X Mrd","rklb_anteil":"$X Mio","status":"Status","desc":"1-2 Sätze RKLB-Relevanz"},"sda":{"budget":"$X Mrd","rklb_auftraege":"X Aufträge / $X Mio","status":"Status","desc":"1-2 Sätze RKLB Tranche Status"},"nasa":{"program":"VCLS/CLPS","wert":"$X Mio","status":"Status","desc":"1 Satz"},"space_force":{"program":"NSSL","wert":"$X Mio","status":"Status","desc":"1 Satz"},"ausblick":"1 Satz RKLB Government Revenue Ausblick"}`;
+
+    const GOV_ASTS_PROMPT = `Recherchiere US Government & Regulierungs-Themen speziell für AST SpaceMobile (ASTS). Suche auf: fcc.gov, itu.int, ntia.gov, defense.gov, nasa.gov, reuters.com, bloomberg.com, ast-science.com/investors, SEC Filings ASTS, lightreading.com, fiercewireless.com.
+    Analysiere NUR ASTS-relevante Themen: 1) FCC Frequenz-Lizenzen — Status und Genehmigungen für Satelliten-Spektrum. 2) ITU Koordination — internationale Frequenzkoordination. 3) DoD/US Military — potenzielle ASTS Nutzung für Truppenkommunikation. 4) NTIA — US Frequenzverwaltung und Konflikte. 5) FirstNet/AT&T Bundesaufträge die ASTS betreffen.
+    Antworte NUR mit JSON, KEIN HTML, keine <cite> Tags: {"fcc":{"status":"Status Lizenz","frequenz":"Frequenzband","desc":"1-2 Sätze FCC Genehmigungsstatus"},"itu":{"status":"Status","desc":"1 Satz internationale Koordination"},"dod":{"potenzial":"Hoch/Mittel/Niedrig","desc":"1-2 Sätze DoD Nutzungspotenzial"},"ntia":{"status":"Status","desc":"1 Satz"},"ausblick":"1 Satz ASTS Regulierungs-Ausblick"}`;
 
     const calls = [
       { ticker:'rklb', section:'rec',      prompt: REC_PROMPTS.rklb },
@@ -169,7 +173,8 @@ PARTNER/KONKURRENZ: Starlink News, T-Mobile News, AT&T Newsroom, Verizon News, A
       { ticker:'rklb', section:'ctx',      prompt: CTX_PROMPTS.rklb },
       { ticker:'asts', section:'ctx',      prompt: CTX_PROMPTS.asts },
       { ticker:null,   section:'glossar',  prompt: GLOSSAR_PROMPT },
-      { ticker:null,   section:'gov_space',prompt: GOV_SPACE_PROMPT },
+      { ticker:'rklb', section:'gov_space', prompt: GOV_RKLB_PROMPT },
+      { ticker:'asts', section:'gov_space', prompt: GOV_ASTS_PROMPT },
     ];
 
     for (const call of calls) {
