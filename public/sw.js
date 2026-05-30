@@ -1,4 +1,4 @@
-const CACHE = 'space-stocks-v1';
+const CACHE = 'space-stocks-v5';
 const STATIC = ['/'];
 
 // Install: cache static assets
@@ -9,7 +9,7 @@ self.addEventListener('install', e => {
   self.skipWaiting();
 });
 
-// Activate: clean old caches
+// Activate: clean ALL old caches
 self.addEventListener('activate', e => {
   e.waitUntil(
     caches.keys().then(keys =>
@@ -23,11 +23,10 @@ self.addEventListener('activate', e => {
 self.addEventListener('fetch', e => {
   // Don't cache API calls
   if (e.request.url.includes('/api/')) return;
-  
+
   e.respondWith(
     fetch(e.request)
       .then(resp => {
-        // Cache successful responses
         if (resp.ok && e.request.method === 'GET') {
           const clone = resp.clone();
           caches.open(CACHE).then(c => c.put(e.request, clone));
