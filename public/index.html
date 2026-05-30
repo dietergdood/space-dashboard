@@ -1809,26 +1809,26 @@ function editTx(t, id) {
   const el = document.getElementById('pf-tx-'+id);
   if (!el) return;
   el.classList.add('editing');
-  el.innerHTML = `
-    <div class="pf-edit-row">
-      <select class="pf-edit-select" data-field="type">
-        <option value="buy" ${tx.type==='buy'?'selected':''}>Kauf</option>
-        <option value="sell" ${tx.type==='sell'?'selected':''}>Verkauf</option>
-      </select>
-      <input class="pf-edit-input" data-field="qty" type="number" value="${tx.qty}" min="0.01" step="any" placeholder="Anzahl" style="width:80px;">
-      <span style="color:var(--text3);font-size:12px;">×</span>
-      <input class="pf-edit-input" data-field="price" type="number" value="${tx.price}" min="0.01" step="any" placeholder="Preis $" style="width:80px;">
-      <input class="pf-edit-input" data-field="date" type="date" value="${tx.date}" style="width:130px;">
-      <input class="pf-edit-input" data-field="note" type="text" value="${tx.note||''}" placeholder="Notiz" style="width:100px;flex:1;">
-      <button class="pf-edit-save" onclick="saveEditTx('${t}','${id}',this)">✓ Speichern</button>
-      <button class="pf-edit-cancel" onclick="cancelEditTx('${t}')">Abbrechen</button>
-    </div>
-  `;
+  el.innerHTML = '<div class="pf-edit-row">'
+    + '<select class="pf-edit-select" data-field="type">'
+    + '<option value="buy"' + (tx.type==='buy'?' selected':'') + '>Kauf</option>'
+    + '<option value="sell"' + (tx.type==='sell'?' selected':'') + '>Verkauf</option>'
+    + '</select>'
+    + '<input class="pf-edit-input" data-field="qty" type="number" value="' + tx.qty + '" min="0.01" step="any" placeholder="Anzahl" style="width:80px;">'
+    + '<span style="color:var(--text3);font-size:12px;">&times;</span>'
+    + '<input class="pf-edit-input" data-field="price" type="number" value="' + tx.price + '" min="0.01" step="any" placeholder="Preis $" style="width:80px;">'
+    + '<input class="pf-edit-input" data-field="date" type="date" value="' + tx.date + '" style="width:130px;">'
+    + '<input class="pf-edit-input" data-field="note" type="text" value="' + (tx.note||'') + '" placeholder="Notiz" style="width:100px;flex:1;">'
+    + '<button class="pf-edit-save">&#10003; Speichern</button>'
+    + '<button class="pf-edit-cancel">Abbrechen</button>'
+    + '</div>';
   el.querySelector('[data-field="qty"]').focus();
+  el.querySelector('.pf-edit-save').addEventListener('click', () => saveEditTx(t, id, el));
+  el.querySelector('.pf-edit-cancel').addEventListener('click', () => cancelEditTx(t));
 }
-function saveEditTx(t, id, btn) {
+function saveEditTx(t, id, el) {
   id = String(id);
-  const row = btn.closest('.pf-tx');
+  const row = el.classList.contains('pf-tx') ? el : el.closest('.pf-tx');
   const type  = row.querySelector('[data-field="type"]').value;
   const qty   = parseFloat(row.querySelector('[data-field="qty"]').value);
   const price = parseFloat(row.querySelector('[data-field="price"]').value);
@@ -1851,26 +1851,38 @@ function removeTx(t, id) {
 function renderTxList(t) {
   const el = $(t+'-tx-list');
   if (!el) return;
-  if (!txData[t].length) { el.innerHTML='<div class="pf-empty">Noch keine Transaktionen erfasst.</div>'; return; }
+  if (!txData[t].length) {
+    el.innerHTML = '<div class="pf-empty">Noch keine Transaktionen erfasst.</div>';
+    return;
+  }
   el.innerHTML = txData[t].map(tx => {
-    const total = (tx.qty * tx.price).toFixed(2);
-    return `<div class="pf-tx" id="pf-tx-${String(tx.id)}">
-      <span class="pf-tx-type ${tx.type}">${tx.type==='buy'?'KAUF':'VERK.'}</span>
-      <span class="mono" style="font-weight:600;">${tx.qty} × $${fmt(tx.price)}</span>
-      <span style="color:var(--text2);font-size:12px;">= $${fmt(parseFloat(total))}</span>
-      <span style="color:var(--text3);font-size:11px;">${tx.date}</span>
-      ${tx.note?'<span style="color:var(--text3);font-size:11px;font-style:italic;">'+tx.note+'</span>':''}
-      <div class="pf-tx-actions">
-        <button class="pf-tx-edit" onclick="editTx('${t}','${tx.id}')" title="Bearbeiten">
-          <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"/><path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"/></svg>
-        </button>
-        <button class="pf-tx-remove" onclick="removeTx('${t}','${tx.id}')" title="Löschen">
-          <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><polyline points="3 6 5 6 21 6"/><path d="M19 6l-1 14a2 2 0 0 1-2 2H8a2 2 0 0 1-2-2L5 6"/><path d="M10 11v6"/><path d="M14 11v6"/><path d="M9 6V4a1 1 0 0 1 1-1h4a1 1 0 0 1 1 1v2"/></svg>
-        </button>
-      </div>
-    </div>`;
+    const total = fmt(tx.qty * tx.price);
+    const sid = String(tx.id).replace(/[^a-zA-Z0-9_-]/g,'_');
+    return '<div class="pf-tx" id="pf-tx-' + sid + '">'
+      + '<span class="pf-tx-type ' + tx.type + '">' + (tx.type==='buy'?'KAUF':'VERK.') + '</span>'
+      + '<span class="mono" style="font-weight:600;">' + tx.qty + ' &times; $' + fmt(tx.price) + '</span>'
+      + '<span style="color:var(--text2);font-size:12px;">= $' + total + '</span>'
+      + '<span style="color:var(--text3);font-size:11px;">' + tx.date + '</span>'
+      + (tx.note ? '<span style="color:var(--text3);font-size:11px;font-style:italic;">' + tx.note + '</span>' : '')
+      + '<div class="pf-tx-actions">'
+      + '<button class="pf-tx-edit" data-ticker="' + t + '" data-id="' + tx.id + '" title="Bearbeiten">'
+      + '<svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"/><path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"/></svg>'
+      + '</button>'
+      + '<button class="pf-tx-remove" data-ticker="' + t + '" data-id="' + tx.id + '" title="Löschen">'
+      + '<svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><polyline points="3 6 5 6 21 6"/><path d="M19 6l-1 14a2 2 0 0 1-2 2H8a2 2 0 0 1-2-2L5 6"/><path d="M10 11v6"/><path d="M14 11v6"/><path d="M9 6V4a1 1 0 0 1 1-1h4a1 1 0 0 1 1 1v2"/></svg>'
+      + '</button>'
+      + '</div>'
+      + '</div>';
   }).join('');
+  // Attach event listeners (no inline onclick!)
+  el.querySelectorAll('.pf-tx-edit').forEach(btn => {
+    btn.addEventListener('click', () => editTx(btn.dataset.ticker, btn.dataset.id));
+  });
+  el.querySelectorAll('.pf-tx-remove').forEach(btn => {
+    btn.addEventListener('click', () => removeTx(btn.dataset.ticker, btn.dataset.id));
+  });
 }
+
 function recalcPF(t) {
   const q = quotes[t], txs = txData[t];
   const sumEl = $(t+'-pf-summary');
