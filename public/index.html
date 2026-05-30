@@ -548,7 +548,9 @@ body{font-family:'DM Sans',sans-serif;background:var(--bg);color:var(--text);min
 .df-center{text-align:center;position:relative;}
 .df-edge-lbl{font-size:11px;color:var(--text3);margin-bottom:4px;font-weight:500;letter-spacing:.02em;text-transform:uppercase;position:relative;}
 /* Tooltips in df-range-labels float above everything */
-.df-range-labels .tip-box{z-index:300;}
+.df-range-labels .tip{position:relative;display:inline-flex;align-items:center;}
+.df-range-labels .tip-box{z-index:300;bottom:calc(100% + 10px);width:200px;white-space:normal;}
+.df-range-labels .tip-icon{display:inline-flex;align-items:center;justify-content:center;width:14px;height:14px;background:var(--border2);border-radius:50%;font-size:9px;color:var(--text3);cursor:help;vertical-align:middle;margin-left:2px;}
 .df-edge-val{font-size:22px;font-weight:700;font-family:"DM Mono",monospace;}
 .df-stats-row{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin-top:16px;}
 .df-stat-pill{padding:10px 8px;background:var(--surface2);border:1px solid var(--border);border-radius:12px;font-size:13px;color:var(--text2);text-align:center;font-weight:500;}
@@ -905,15 +907,15 @@ body{font-family:'DM Sans',sans-serif;background:var(--bg);color:var(--text);min
       <div class="df-range-wrap">
         <div class="df-range-labels">
           <div class="df-edge">
-            <div class="df-edge-lbl">📉 Tagestief <span class="tip"><span class="tip-icon">?</span><span class="tip-box">Der niedrigste Kurs den die Aktie heute bisher erreicht hat.</span></span></div>
+            <div class="df-edge-lbl">📉 Tagestief <span class="tip tip-left"><span class="tip-icon">?</span><span class="tip-box">Tagestief: Der niedrigste Kurs den die Aktie heute bisher erreicht hat. Ein tiefes Tagestief bei hohem Volumen kann auf Verkaufsdruck hindeuten.</span></span></div>
             <div class="df-edge-val dn mono" id="rklb-day-lo">—</div>
           </div>
           <div class="df-center">
-            <div class="df-edge-lbl">Eröffnung <span class="tip"><span class="tip-icon">?</span><span class="tip-box">Der Kurs beim Börsenöffnung heute Morgen um 09:30 Uhr New York Zeit.</span></span></div>
+            <div class="df-edge-lbl">Eröffnung <span class="tip"><span class="tip-icon">?</span><span class="tip-box">Eröffnungskurs: Der erste Handelskurs heute um 09:30 Uhr New York Zeit. Vergleiche mit dem Vortagesschluss um die Marktlage zu verstehen.</span></span></div>
             <div class="df-edge-val mono" id="rklb-open">—</div>
           </div>
           <div class="df-edge" style="text-align:right;">
-            <div class="df-edge-lbl">📈 Tageshoch <span class="tip"><span class="tip-icon">?</span><span class="tip-box">Der höchste Kurs den die Aktie heute bisher erreicht hat.</span></span></div>
+            <div class="df-edge-lbl">📈 Tageshoch <span class="tip tip-right"><span class="tip-icon">?</span><span class="tip-box">Tageshoch: Der höchste Kurs den die Aktie heute bisher erreicht hat. Ein hohes Tageshoch bei positivem Momentum deutet auf Kaufinteresse hin.</span></span></div>
             <div class="df-edge-val up mono" id="rklb-day-hi">—</div>
           </div>
         </div>
@@ -1222,15 +1224,15 @@ body{font-family:'DM Sans',sans-serif;background:var(--bg);color:var(--text);min
       <div class="df-range-wrap">
         <div class="df-range-labels">
           <div class="df-edge">
-            <div class="df-edge-lbl">📉 Tagestief <span class="tip"><span class="tip-icon">?</span><span class="tip-box">Der niedrigste Kurs den die Aktie heute bisher erreicht hat.</span></span></div>
+            <div class="df-edge-lbl">📉 Tagestief <span class="tip tip-left"><span class="tip-icon">?</span><span class="tip-box">Tagestief: Der niedrigste Kurs den die Aktie heute bisher erreicht hat. Ein tiefes Tagestief bei hohem Volumen kann auf Verkaufsdruck hindeuten.</span></span></div>
             <div class="df-edge-val dn mono" id="asts-day-lo">—</div>
           </div>
           <div class="df-center">
-            <div class="df-edge-lbl">Eröffnung <span class="tip"><span class="tip-icon">?</span><span class="tip-box">Der Kurs beim Börsenöffnung heute Morgen um 09:30 Uhr New York Zeit.</span></span></div>
+            <div class="df-edge-lbl">Eröffnung <span class="tip"><span class="tip-icon">?</span><span class="tip-box">Eröffnungskurs: Der erste Handelskurs heute um 09:30 Uhr New York Zeit. Vergleiche mit dem Vortagesschluss um die Marktlage zu verstehen.</span></span></div>
             <div class="df-edge-val mono" id="asts-open">—</div>
           </div>
           <div class="df-edge" style="text-align:right;">
-            <div class="df-edge-lbl">📈 Tageshoch <span class="tip"><span class="tip-icon">?</span><span class="tip-box">Der höchste Kurs den die Aktie heute bisher erreicht hat.</span></span></div>
+            <div class="df-edge-lbl">📈 Tageshoch <span class="tip tip-right"><span class="tip-icon">?</span><span class="tip-box">Tageshoch: Der höchste Kurs den die Aktie heute bisher erreicht hat. Ein hohes Tageshoch bei positivem Momentum deutet auf Kaufinteresse hin.</span></span></div>
             <div class="df-edge-val up mono" id="asts-day-hi">—</div>
           </div>
         </div>
@@ -2004,13 +2006,13 @@ function calcDF(t, q) {
     let gains=0, losses=0;
     for(let i=1;i<Math.min(closes.length,15);i++){const d=closes[i]-closes[i-1];d>0?gains+=d:losses-=d;}
     const rsi = 100-100/(1+(losses===0?100:gains/losses));
-    if (atrEl) atrEl.innerHTML = `<span class="tip"><span class="tip-icon">?</span><span class="tip-box">ATR misst die typische Tagesschwankung. ±$${fmt(atr)} = der Kurs bewegt sich im Schnitt um diesen Betrag pro Tag.</span></span><div style="font-size:20px;margin-bottom:3px;">⚡</div><div style="font-size:11px;color:var(--text3);margin-bottom:3px;">Schwankung</div><div style="font-weight:700;">±$${fmt(atr)}</div><div style="font-size:11px;color:var(--text3);">~${atrPct}%</div>`;
-    if (momEl) momEl.innerHTML = `<span class="tip"><span class="tip-icon">?</span><span class="tip-box">Momentum: ${mom>=0?'Positiv — Trend nach oben.':'Negativ — Trend nach unten.'}</span></span><div style="font-size:20px;margin-bottom:3px;">${mom>=0?'📈':'📉'}</div><div style="font-size:11px;color:var(--text3);margin-bottom:3px;">Momentum</div><div class="${mom>=0?'up':'dn'}" style="font-weight:700;">${mom>=0?'+':''}${fmt(mom)}%</div>`;
+    if (atrEl) atrEl.innerHTML = `<div style="font-size:20px;margin-bottom:3px;">⚡</div><div style="font-size:11px;color:var(--text3);margin-bottom:3px;">Schwankung</div><div style="font-weight:700;">±$${fmt(atr)}</div><div style="font-size:11px;color:var(--text3);">~${atrPct}%</div><span class="tip" style="position:absolute;top:6px;right:6px;"><span class="tip-icon">?</span><span class="tip-box tip-right">ATR (Average True Range): Misst die durchschnittliche Tagesschwankung. ±$${fmt(atr)} = der Kurs bewegt sich typischerweise um diesen Betrag pro Tag. Hilft einzuschätzen wie volatil die Aktie gerade ist.</span></span>`;
+    if (momEl) momEl.innerHTML = `<div style="font-size:20px;margin-bottom:3px;">${mom>=0?'📈':'📉'}</div><div style="font-size:11px;color:var(--text3);margin-bottom:3px;">Momentum</div><div class="${mom>=0?'up':'dn'}" style="font-weight:700;">${mom>=0?'+':''}${fmt(mom)}%</div><span class="tip" style="position:absolute;top:6px;right:6px;"><span class="tip-icon">?</span><span class="tip-box">Momentum zeigt die Kursbewegung der letzten 5 Tage. ${mom>=0?'Positiv: Aufwärtstrend, Kurs steigt.':'Negativ: Abwärtstrend, Kurs fällt.'} Starkes Momentum kann sich fortsetzen — muss aber nicht.</span></span>`;
     if (rsiEl) {
       const rsiLabel = rsi>70?'Überkauft ⚠️':rsi<30?'Überverkauft ✅':'Neutral';
       const rsiColor = rsi>70?'var(--red)':rsi<30?'var(--green)':'var(--text2)';
       const rsiTip = rsi>70?'RSI über 70: Viele haben gekauft — könnte bald fallen.':rsi<30?'RSI unter 30: Viele haben verkauft — könnte sich erholen.':'RSI 30–70: Normale Zone.';
-      rsiEl.innerHTML = `<span class="tip"><span class="tip-icon">?</span><span class="tip-box">${rsiTip}</span></span><div style="font-size:20px;margin-bottom:3px;">🔬</div><div style="font-size:11px;color:var(--text3);margin-bottom:3px;">RSI ${rsi.toFixed(0)}</div><div style="color:${rsiColor};font-weight:700;">${rsiLabel}</div>`;
+      rsiEl.innerHTML = `<div style="font-size:20px;margin-bottom:3px;">🔬</div><div style="font-size:11px;color:var(--text3);margin-bottom:3px;">RSI ${rsi.toFixed(0)}</div><div style="color:${rsiColor};font-weight:700;">${rsiLabel}</div><span class="tip tip-right" style="position:absolute;top:6px;right:6px;"><span class="tip-icon">?</span><span class="tip-box tip-right">${rsiTip} RSI über 70 = überkauft (Kurs könnte fallen). RSI unter 30 = überverkauft (Kurs könnte steigen). 30–70 = neutrale Zone.</span></span>`;
     }
   }
 
