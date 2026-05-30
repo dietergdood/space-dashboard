@@ -53,7 +53,7 @@ body{font-family:'DM Sans',sans-serif;background:var(--bg);color:var(--text);min
 .logo-sub{font-size:11px;color:var(--text3);font-weight:400;}
 .hdr-mid{flex:1;display:flex;justify-content:center;}
 .hdr-r{display:flex;align-items:center;gap:8px;flex-shrink:0;}
-.container{max-width:1200px;margin:0 auto;padding:24px 24px 80px;}
+.container{max-width:1200px;margin:0 auto;padding:16px 24px 80px;}
 
 /* ── Tabs ── */
 .tabs{display:flex;background:var(--surface2);border-radius:10px;padding:3px;gap:2px;}
@@ -67,7 +67,7 @@ body{font-family:'DM Sans',sans-serif;background:var(--bg);color:var(--text);min
 .panel.active{display:flex;}
 
 /* ── Collapsible Cards ── */
-.card{background:var(--surface);border:1px solid var(--border);border-radius:var(--rl);overflow:hidden;transition:border-color .2s;box-shadow:var(--shadow);}
+.card{background:var(--surface);border:1px solid var(--border);border-radius:var(--rl);overflow:hidden;transition:border-color .2s;box-shadow:var(--shadow);margin-bottom:10px;}
 .card-header{display:flex;align-items:center;gap:12px;padding:13px 16px;cursor:pointer;user-select:none;}
 .card-header:hover{background:var(--surface2);}
 .card-icon{font-size:18px;flex-shrink:0;}
@@ -1469,7 +1469,7 @@ body{font-family:'DM Sans',sans-serif;background:var(--bg);color:var(--text);min
 </div>
 
 <!-- ═══ GLOSSAR ═══ -->
-<div class="card open" id="card-glossar" style="margin-top:10px;">
+<div class="card open" id="card-glossar">
   <div class="card-header" onclick="this.closest('.card').classList.toggle('open')">
     <div class="card-icon">📚</div>
     <div>
