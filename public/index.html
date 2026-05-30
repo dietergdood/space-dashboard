@@ -1722,30 +1722,32 @@ function applyQ(t, q) {
     const volCtx = $(t+'-vol-ctx');
     const recentVols = (q.vols||[]).slice(-20).filter(v=>v>0);
     const avgVol = recentVols.length >= 3 ? recentVols.reduce((a,b)=>a+b,0)/recentVols.length : null;
-    if (!avgVol) { if(volCtx) volCtx.textContent = fmtK(q.vol) + ' Aktien gehandelt'; }
-    else {
-    const ratio = q.vol / avgVol;
     const chgPct = (q.price - q.prev) / q.prev * 100;
-    if (volCtx && q.vol) {
+    if (volCtx) {
       let volTxt = '', signal = '';
-      // Volume level
-      if (ratio >= 2) volTxt = '⚡ ' + ratio.toFixed(1) + '× mehr als üblich';
-      else if (ratio >= 1.2) volTxt = '↑ Überdurchschnittlich';
-      else if (ratio <= 0.6) volTxt = '↓ Ruhiger Tag';
-      else volTxt = 'Normal';
-      // Buy/sell pressure — show always based on price move
-      if (ratio >= 1.2 && chgPct >= 0.5) signal = ' · 🟢 Kaufdruck';
-      else if (ratio >= 1.2 && chgPct <= -0.5) signal = ' · 🔴 Verkaufsdruck';
-      else if (ratio >= 1.2 && Math.abs(chgPct) < 0.5) signal = ' · ⚖️ Unentschieden';
-      else if (chgPct >= 1.5) signal = ' · 🟢 Kaufdruck';
-      else if (chgPct <= -1.5) signal = ' · 🔴 Verkaufsdruck';
-      else if (chgPct >= 0.5) signal = ' · ↗ Leicht positiv';
-      else if (chgPct <= -0.5) signal = ' · ↘ Leicht negativ';
-      else signal = ' · ↔ Seitwärts';
+      if (avgVol) {
+        const ratio = q.vol / avgVol;
+        if (ratio >= 2) volTxt = '⚡ ' + ratio.toFixed(1) + '× mehr als üblich';
+        else if (ratio >= 1.2) volTxt = '↑ Überdurchschnittlich';
+        else if (ratio <= 0.6) volTxt = '↓ Ruhiger Tag';
+        else volTxt = 'Normal';
+        if (ratio >= 1.2 && chgPct >= 0.5) signal = ' · 🟢 Kaufdruck';
+        else if (ratio >= 1.2 && chgPct <= -0.5) signal = ' · 🔴 Verkaufsdruck';
+        else if (ratio >= 1.2) signal = ' · ⚖️ Unentschieden';
+      } else {
+        volTxt = fmtK(q.vol) + ' Aktien';
+      }
+      // Always show price signal
+      if (!signal) {
+        if (chgPct >= 1.5) signal = ' · 🟢 Kaufdruck';
+        else if (chgPct <= -1.5) signal = ' · 🔴 Verkaufsdruck';
+        else if (chgPct >= 0.5) signal = ' · ↗ Leicht positiv';
+        else if (chgPct <= -0.5) signal = ' · ↘ Leicht negativ';
+        else signal = ' · ↔ Seitwärts';
+      }
       volCtx.textContent = volTxt + signal;
       volCtx.style.color = signal.includes('🟢') ? 'var(--green)' : signal.includes('🔴') ? 'var(--red)' : 'var(--text3)';
     }
-    } // close else
   }
   if ($(t+'-cap')) {
     if (q.cap) {
