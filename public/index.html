@@ -296,7 +296,7 @@ body{font-family:'DM Sans',sans-serif;background:var(--bg);color:var(--text);min
 
 /* ── News ── */
 .news-header{display:flex;align-items:center;justify-content:space-between;margin-bottom:12px;}
-.news-live{display:flex;align-items:center;gap:6px;font-size:12px;font-weight:500;color:var(--green);}
+.news-live{display:flex;align-items:center;gap:6px;font-size:12px;font-weight:500;color:var(--text3);}
 .news-ts{font-size:11px;color:var(--text3);}
 .news-loading{display:none;align-items:center;gap:10px;padding:12px;background:var(--surface2);border-radius:8px;font-size:13px;color:var(--text2);}
 .news-loading.show{display:flex;}
@@ -346,8 +346,7 @@ body{font-family:'DM Sans',sans-serif;background:var(--bg);color:var(--text);min
 @keyframes fadeIn{from{opacity:0;transform:translateY(-4px);}to{opacity:1;transform:translateY(0);}}
 
 .tab-logo{width:18px;height:18px;border-radius:3px;object-fit:cover;vertical-align:middle;margin-right:6px;flex-shrink:0;}
-.tab-rklb-label::after{content:'Rocket Lab (RKLB)';}
-.tab-asts-label::after{content:'AST SpaceMobile (ASTS)';}
+.tab-short{display:none;}
 
 
 
@@ -387,6 +386,8 @@ body{font-family:'DM Sans',sans-serif;background:var(--bg);color:var(--text);min
   .tabs{gap:2px;padding:3px;width:100%;}
   .tab{padding:8px 10px;font-size:13px;flex:1;text-align:center;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
   .tab-logo{width:15px;height:15px;margin-right:3px;}
+  .tab-full{display:none;}
+  .tab-short{display:inline;}
 
   /* ── Container ── */
   .container{padding:8px 8px 80px;}
@@ -603,12 +604,12 @@ body{font-family:'DM Sans',sans-serif;background:var(--bg);color:var(--text);min
     </div>
     <div class="hdr-mid">
       <div class="tabs" id="main-tabs">
-        <button class="tab rklb-tab active" id="tab-rklb-btn"><img src="/rklb-logo.png" class="tab-logo">Rocket Lab (RKLB)</button>
-        <button class="tab asts-tab" id="tab-asts-btn"><img src="/asts-logo.png" class="tab-logo">AST SpaceMobile (ASTS)</button>
+        <button class="tab rklb-tab active" id="tab-rklb-btn"><img src="/rklb-logo.png" class="tab-logo"><span class="tab-full">Rocket Lab (RKLB)</span><span class="tab-short">RKLB</span></button>
+        <button class="tab asts-tab" id="tab-asts-btn"><img src="/asts-logo.png" class="tab-logo"><span class="tab-full">AST SpaceMobile (ASTS)</span><span class="tab-short">ASTS</span></button>
       </div>
     </div>
     <div class="hdr-r">
-      <div class="live-badge"><div class="live-dot"></div><span>Echtzeitkurse</span></div>
+      
       <div id="ki-status" class="ki-status-pill" style="display:none;"></div>
       <div class="settings-wrap">
         <button class="settings-btn" id="settings-btn" onclick="toggleSettings()">⚙️</button>
@@ -963,14 +964,14 @@ body{font-family:'DM Sans',sans-serif;background:var(--bg);color:var(--text);min
   <div class="card-header" onclick="toggleCard('rklb-news')">
     <div class="card-icon">📰</div>
     <div>
-      <div class="card-title">Live-Nachrichten & Marktanalyse</div>
+      <div class="card-title">Nachrichten & Marktanalyse</div>
       <div class="card-sub">Täglich um 09:00 Uhr aktualisiert</div>
     </div>
     <div class="card-arrow">▼</div>
   </div>
   <div class="card-body" id="body-rklb-news">
     <div class="news-header">
-      <div class="news-live"><div class="live-dot"></div>Live-Nachrichten · RKLB</div>
+      <div class="news-live"><div class="live-dot"></div>Nachrichten · RKLB</div>
       <div class="news-ts" id="rklb-news-ts"></div>
     </div>
     <div class="news-loading" id="rklb-news-loading">
@@ -1266,14 +1267,14 @@ body{font-family:'DM Sans',sans-serif;background:var(--bg);color:var(--text);min
   <div class="card-header" onclick="toggleCard('asts-news')">
     <div class="card-icon">📰</div>
     <div>
-      <div class="card-title">Live-Nachrichten & Marktanalyse</div>
+      <div class="card-title">Nachrichten & Marktanalyse</div>
       <div class="card-sub">Täglich um 09:00 Uhr aktualisiert</div>
     </div>
     <div class="card-arrow">▼</div>
   </div>
   <div class="card-body" id="body-asts-news">
     <div class="news-header">
-      <div class="news-live"><div class="live-dot"></div>Live-Nachrichten · ASTS</div>
+      <div class="news-live"><div class="live-dot"></div>Nachrichten · ASTS</div>
       <div class="news-ts" id="asts-news-ts"></div>
     </div>
     <div class="news-loading" id="asts-news-loading">
@@ -2360,6 +2361,11 @@ async function refreshAllNews() {
   loadAll();
   setInterval(loadAll,15000);
   loadFromCache();
+  // Collapse glossar on mobile by default
+  if (window.innerWidth <= 640) {
+    const glossar = document.getElementById('card-glossar');
+    if (glossar) glossar.classList.remove('open');
+  }
   fetchUsdChfRate();
   setInterval(fetchUsdChfRate, 5*60*1000); // refresh rate every 5min
   loadSyncStatus();
