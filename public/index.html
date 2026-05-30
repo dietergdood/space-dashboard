@@ -1935,6 +1935,9 @@ function applyScenarios(t,p) {
   if($(t+'-lg-base')&&p.base_desc) $(t+'-lg-base').textContent=stripTags(p.base_desc);
   if($(t+'-lg-bear')&&p.bear_desc) $(t+'-lg-bear').textContent=stripTags(p.bear_desc);
   if($(t+'-sentiment-text')&&p.sentiment) $(t+'-sentiment-text').innerHTML=p.sentiment;
+  // Fallback: cons-price aus base_label wenn noch leer
+  const cp=$(t+'-cons-price');
+  if(cp&&(cp.textContent==='—'||!cp.textContent.trim())&&p.base_label) cp.textContent=p.base_label+' (Ø Bank)';
 }
 function applySector(t,p) {
   if(!p||!p.cards) return;
