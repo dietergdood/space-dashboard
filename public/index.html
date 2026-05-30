@@ -561,8 +561,9 @@ body{font-family:'DM Sans',sans-serif;background:var(--bg);color:var(--text);min
 .auth-msg.err{color:var(--red);}
 .auth-footer{font-size:12px;color:var(--text3);margin-top:20px;line-height:1.5;}
 /* ── User Menu ── */
-.user-btn{display:flex;align-items:center;gap:6px;padding:6px 12px;border-radius:8px;border:1px solid var(--border);background:var(--surface);cursor:pointer;font-family:inherit;font-size:13px;font-weight:500;color:var(--text2);}
+.user-btn{display:flex;align-items:center;gap:6px;padding:5px 10px;border-radius:8px;border:1px solid var(--border);background:var(--surface);cursor:pointer;font-family:inherit;font-size:13px;font-weight:500;color:var(--text2);}
 .user-btn:hover{background:var(--surface2);}
+.user-avatar{width:24px;height:24px;border-radius:50%;background:var(--blue);color:#fff;display:flex;align-items:center;justify-content:center;font-size:11px;font-weight:700;flex-shrink:0;}
 .user-avatar{width:22px;height:22px;border-radius:50%;background:var(--blue);color:#fff;display:flex;align-items:center;justify-content:center;font-size:11px;font-weight:700;}
 
 /* ── Pill Tooltips ── */
@@ -1447,7 +1448,8 @@ function showUserMenu(email) {
     userBtn = document.createElement('div');
     userBtn.id = 'user-menu-btn';
     userBtn.className = 'user-btn';
-    userBtn.innerHTML = `<div class="user-avatar">${email.charAt(0).toUpperCase()}</div><span>${email.split('@')[0]}</span>`;
+    userBtn.innerHTML = `<div class="user-avatar"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="8" r="4"/><path d="M4 20c0-4 3.6-7 8-7s8 3 8 7"/></svg></div>`;
+    userBtn.title = email;
     userBtn.onclick = () => {
       if (confirm('Ausloggen?')) {
         _supaClient.auth.signOut();
