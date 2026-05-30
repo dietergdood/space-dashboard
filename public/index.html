@@ -1730,15 +1730,18 @@ function applyQ(t, q) {
       let volTxt = '', signal = '';
       // Volume level
       if (ratio >= 2) volTxt = '⚡ ' + ratio.toFixed(1) + '× mehr als üblich';
-      else if (ratio >= 1.3) volTxt = '↑ Überdurchschnittlich';
-      else if (ratio <= 0.5) volTxt = '↓ Ruhiger Tag';
+      else if (ratio >= 1.2) volTxt = '↑ Überdurchschnittlich';
+      else if (ratio <= 0.6) volTxt = '↓ Ruhiger Tag';
       else volTxt = 'Normal';
-      // Buy/sell pressure estimate
-      if (ratio >= 1.3 && chgPct >= 1) signal = ' · 🟢 Kaufdruck';
-      else if (ratio >= 1.3 && chgPct <= -1) signal = ' · 🔴 Verkaufsdruck';
-      else if (ratio >= 1.3 && Math.abs(chgPct) < 1) signal = ' · ⚖️ Unentschieden';
-      else if (ratio < 0.7 && chgPct >= 0.5) signal = ' · Schwaches Kaufinteresse';
-      else if (ratio < 0.7 && chgPct <= -0.5) signal = ' · Schwaches Verkaufsinteresse';
+      // Buy/sell pressure — show always based on price move
+      if (ratio >= 1.2 && chgPct >= 0.5) signal = ' · 🟢 Kaufdruck';
+      else if (ratio >= 1.2 && chgPct <= -0.5) signal = ' · 🔴 Verkaufsdruck';
+      else if (ratio >= 1.2 && Math.abs(chgPct) < 0.5) signal = ' · ⚖️ Unentschieden';
+      else if (chgPct >= 1.5) signal = ' · 🟢 Kaufdruck';
+      else if (chgPct <= -1.5) signal = ' · 🔴 Verkaufsdruck';
+      else if (chgPct >= 0.5) signal = ' · ↗ Leicht positiv';
+      else if (chgPct <= -0.5) signal = ' · ↘ Leicht negativ';
+      else signal = ' · ↔ Seitwärts';
       volCtx.textContent = volTxt + signal;
       volCtx.style.color = signal.includes('🟢') ? 'var(--green)' : signal.includes('🔴') ? 'var(--red)' : 'var(--text3)';
     }
