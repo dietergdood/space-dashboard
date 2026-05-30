@@ -135,8 +135,8 @@ export default async function handler(req, res) {
     };
 
     const CTX_PROMPTS = {
-      rklb: `Suche aktuelle Firmendaten für Rocket Lab (RKLB). Antworte NUR mit JSON: {"desc":"1-2 Sätze","tags":[{"text":"Tag","type":"green"}],"stats":[{"label":"Backlog","val":"$X Mrd"}]}`,
-      asts: `Suche aktuelle Firmendaten für AST SpaceMobile (ASTS). Antworte NUR mit JSON: {"desc":"1-2 Sätze","tags":[{"text":"Tag","type":"green"}],"stats":[{"label":"Cash","val":"$X Mrd"}]}`
+      rklb: `Suche aktuelle Firmendaten für Rocket Lab (RKLB). Antworte NUR mit JSON: {"desc":"1-2 Sätze aktuell","tags":[{"text":"Space","type":"green"},{"text":"Defense","type":"green"},{"text":"Launch Services","type":"neutral"}],"stats":[{"label":"Backlog","val":"$X Mrd"},{"label":"Q1 2026 Umsatz","val":"$XXX Mio"},{"label":"Bruttomarge","val":"XX%"}]}`,
+      asts: `Suche aktuelle Firmendaten für AST SpaceMobile (ASTS). Antworte NUR mit JSON: {"desc":"1-2 Sätze aktuell","tags":[{"text":"D2D Satellite","type":"green"},{"text":"Space","type":"green"},{"text":"Spekulativ","type":"amber"}],"stats":[{"label":"Cash","val":"$X Mrd"},{"label":"Marktkapitalisierung","val":"$XX Mrd"},{"label":"BlueBird Satelliten","val":"XX im Orbit"}]}`
     };
 
     const calls = [
