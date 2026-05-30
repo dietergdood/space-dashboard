@@ -139,6 +139,8 @@ export default async function handler(req, res) {
       asts: `Suche aktuelle Firmendaten für AST SpaceMobile (ASTS). Antworte NUR mit JSON, KEIN HTML in Texten, keine <cite> oder andere Tags: {"desc":"1-2 Sätze ohne HTML","tags":[{"text":"Tag","type":"green"}],"stats":[{"label":"Cash","val":"$X Mrd"}]}`
     };
 
+    const GLOSSAR_PROMPT = `Analysiere aktuelle RKLB und ASTS News. Welche 2-4 neue Fachbegriffe tauchen auf? Suche auch das aktuelle Budget des US "Golden Dome" Programms. Antworte NUR mit JSON, KEIN HTML, keine <cite> Tags: {"golden_dome_def":"US-Raketenabwehr (BETRAG). Rocket Lab Lieferant.","terms":[{"term":"Begriff","def":"Kurze Erklärung ohne HTML"}]}`;
+
     const calls = [
       { ticker:'rklb', section:'rec',      prompt: REC_PROMPTS.rklb },
       { ticker:'asts', section:'rec',      prompt: REC_PROMPTS.asts },
@@ -150,6 +152,7 @@ export default async function handler(req, res) {
       { ticker:'asts', section:'sector',   prompt: SECTOR_PROMPTS.asts },
       { ticker:'rklb', section:'ctx',      prompt: CTX_PROMPTS.rklb },
       { ticker:'asts', section:'ctx',      prompt: CTX_PROMPTS.asts },
+      { ticker:'global', section:'glossar', prompt: GLOSSAR_PROMPT },
     ];
 
     for (const call of calls) {
