@@ -316,7 +316,7 @@ body{font-family:'DM Sans',sans-serif;background:var(--bg);color:var(--text);min
   .chart-grid{grid-template-columns:1fr;}
   .sector-grid{grid-template-columns:repeat(2,1fr);}
   .glossar-grid{grid-template-columns:repeat(2,1fr);}
-  /* removed bad ctx-stats:none */
+  
   .pf-form{grid-template-columns:1fr 1fr;}
   .day-row{grid-template-columns:1fr 1fr;}
 }
@@ -348,7 +348,7 @@ body{font-family:'DM Sans',sans-serif;background:var(--bg);color:var(--text);min
   .container{padding:10px 10px 80px;}
 
   /* ── Context bar ── */
-  /* ctx-bar mobile handled by media query */
+  
   .ctx-logo,.ctx-logo-emoji{width:36px;height:36px;}
   .ctx-name{font-size:15px;}
   .ctx-desc{font-size:13px;}
@@ -1647,13 +1647,13 @@ function applyQ(t, q) {
   cEl.className = 'met-chg ' + (up?'up':'dn');
   if ($(t+'-vol')) {
     $(t+'-vol').textContent = fmtK(q.vol)||'—';
-    // Use recent volume history to calculate average (no hardcoded fallback)
+    const volCtx = $(t+'-vol-ctx');
     const recentVols = (q.vols||[]).slice(-20).filter(v=>v>0);
     const avgVol = recentVols.length >= 3 ? recentVols.reduce((a,b)=>a+b,0)/recentVols.length : null;
-    if (!avgVol) { volCtx.textContent = fmtK(q.vol) + ' Aktien gehandelt'; return; }
+    if (!avgVol) { if(volCtx) volCtx.textContent = fmtK(q.vol) + ' Aktien gehandelt'; }
+    else {
     const ratio = q.vol / avgVol;
     const chgPct = (q.price - q.prev) / q.prev * 100;
-    const volCtx = $(t+'-vol-ctx');
     if (volCtx && q.vol) {
       let volTxt = '', signal = '';
       // Volume level
@@ -1670,6 +1670,7 @@ function applyQ(t, q) {
       volCtx.textContent = volTxt + signal;
       volCtx.style.color = signal.includes('🟢') ? 'var(--green)' : signal.includes('🔴') ? 'var(--red)' : 'var(--text3)';
     }
+    } // close else
   }
   if ($(t+'-cap')) {
     if (q.cap) {
@@ -1963,7 +1964,13 @@ async function fetchGlossar() {
 
 // ── Load All (15s refresh) ─────────────────────────────────
 async function loadAll() {
-  await Promise.all(['rklb','asts'].map(t => fetchQ(t)));
+  const results = await Promise.all(['rklb','asts'].map(t => fetchQ(t)));
+  // Apply quotes to UI
+  ['rklb','asts'].forEach((t, i) => { if (results[i]) applyQ(t, results[i]); });
+  // Update header timestamp
+  const now = new Date();
+  const upd = document.getElementById('last-upd');
+  if (upd) upd.textContent = 'Kurse: ' + now.toLocaleTimeString('de-CH',{hour:'2-digit',minute:'2-digit',second:'2-digit'}) + ' · ' + now.toLocaleDateString('de-CH') + ' (15s)';
 }
 
 // ── KI Call ───────────────────────────────────────────────
@@ -2011,28 +2018,44 @@ async function fetchRec(t) {
 }
 function applyRec(t,p) {
   if(!p) return;
-  const empBadge=$(t+'-rec-badge');
-  if(empBadge&&p.empfehlung){
-    empBadge.textContent=p.empfehlung;
-    empBadge.className='rec-pill '+(p.empfehlung==='KAUFEN'?'buy':p.empfehlung==='VERKAUFEN'?'sell':'hold');
+  // Recommendation pill (HTML id: rklb-rec-pill / asts-rec-pill)
+  const pill=$(t+'-rec-pill');
+  if(pill&&p.empfehlung){
+    pill.textContent=p.empfehlung;
+    pill.className='rec-pill '+(p.empfehlung==='KAUFEN'?'buy':p.empfehlung==='VERKAUFEN'?'sell':'hold');
   }
+  // Banner class
+  const banner=$(t+'-rec-banner');
+  if(banner&&p.empfehlung) banner.className='rec-banner '+(p.empfehlung==='KAUFEN'?'buy':p.empfehlung==='VERKAUFEN'?'sell':'hold');
+  // Title and explanation (HTML ids: rklb-rec-title, rklb-rec-sub)
   if($(t+'-rec-title')&&p.titel) $(t+'-rec-title').textContent=p.titel;
-  if($(t+'-rec-explain')&&p.begruendung) $(t+'-rec-explain').textContent=p.begruendung;
+  if($(t+'-rec-sub')&&p.begruendung) $(t+'-rec-sub').textContent=p.begruendung;
+  // Alert box (HTML ids: rklb-alert-text, rklb-alert-box)
   if($(t+'-alert-text')&&p.lage) $(t+'-alert-text').innerHTML=p.lage;
   if($(t+'-alert-box')&&p.lage_typ) $(t+'-alert-box').className='alert '+(p.lage_typ||'neutral');
-  ['fundamentals','momentum','risiko','bewertung'].forEach(k=>{
-    const scoreEl=$(t+'-score-'+k);
+  // Scores (HTML ids: rklb-s1/s2/s3/s4, rklb-m1/m2/m3/m4, rklb-explain-*)
+  const scoreKeys=['fundamentals','momentum','risiko','bewertung'];
+  scoreKeys.forEach((k,i)=>{
+    const n=i+1;
+    const scoreEl=$(t+'-s'+n);
+    const meterEl=$(t+'-m'+n);
+    const explainEl=$(t+'-explain-'+k);
     if(scoreEl&&p[k]!=null){
       scoreEl.textContent=p[k]+'/10';
-      scoreEl.style.color=p[k]>=7?'var(--green)':p[k]>=5?'var(--amber)':'var(--red)';
+      scoreEl.className='score-val '+(p[k]>=7?'up':p[k]>=5?'wn':'dn');
     }
-    const explainEl=$(t+'-explain-'+k);
+    if(meterEl&&p[k]!=null){
+      meterEl.style.width=(p[k]*10)+'%';
+      meterEl.style.background=p[k]>=7?'var(--green)':p[k]>=5?'var(--amber)':'var(--red)';
+    }
     if(explainEl&&p['explain_'+k]) explainEl.innerHTML=p['explain_'+k];
   });
-  if($(t+'-rec-einstieg')&&p.einstieg) $(t+'-rec-einstieg').textContent=p.einstieg;
-  if($(t+'-rec-kursziel')&&p.kursziel) $(t+'-rec-kursziel').textContent=p.kursziel;
-  if($(t+'-rec-stopp')&&p.stopp) $(t+'-rec-stopp').textContent=p.stopp;
-  if($(t+'-analysten')&&p.analysten) $(t+'-analysten').textContent=p.analysten;
+  // Levels (HTML ids: rklb-pill-einstieg-val, rklb-pill-ziel-val, rklb-pill-stopp-val)
+  if($(t+'-pill-einstieg-val')&&p.einstieg) $(t+'-pill-einstieg-val').textContent=p.einstieg;
+  if($(t+'-pill-ziel-val')&&p.kursziel) $(t+'-pill-ziel-val').textContent=p.kursziel;
+  if($(t+'-pill-stopp-val')&&p.stopp) $(t+'-pill-stopp-val').textContent=p.stopp;
+  // Analyst consensus
+  if($(t+'-cons-rating')&&p.analysten) $(t+'-cons-rating').textContent=p.analysten;
 }
 async function fetchLiveNews(t) {
   const NEWS_PROMPTS={
