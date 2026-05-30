@@ -337,6 +337,14 @@ body{font-family:'DM Sans',sans-serif;background:var(--bg);color:var(--text);min
 
 /* ── Sector Grid ── */
 .sector-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:10px;}
+.gov-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:10px;margin-top:10px;}
+.gov-item{background:var(--surface2);border-radius:10px;padding:12px;border:1px solid var(--border);}
+.gov-item-header{display:flex;align-items:center;gap:8px;margin-bottom:6px;}
+.gov-item-emoji{font-size:18px;}
+.gov-item-name{font-size:11px;font-weight:600;color:var(--text3);text-transform:uppercase;letter-spacing:.05em;}
+.gov-item-val{font-size:16px;font-weight:700;font-family:"DM Mono",monospace;color:var(--green);margin-bottom:4px;}
+.gov-item-desc{font-size:12px;color:var(--text2);line-height:1.5;}
+.gov-outlook{margin-top:10px;padding:10px 12px;background:var(--surface2);border-radius:8px;font-size:12px;color:var(--text2);line-height:1.5;border-left:3px solid var(--blue);}
 .sector-card{background:var(--surface2);border-radius:10px;padding:12px;}
 .sector-emoji{font-size:24px;margin-bottom:8px;}
 .sector-name{font-size:12px;font-weight:600;color:var(--text2);margin-bottom:4px;}
@@ -1085,6 +1093,42 @@ body{font-family:'DM Sans',sans-serif;background:var(--bg);color:var(--text);min
     </div>
   </div>
 </div>
+</div>
+
+<div class="card open" id="card-rklb-gov">
+  <div class="card-header" onclick="toggleCard('rklb-gov')">
+    <div class="card-icon">🏛</div>
+    <div>
+      <div class="card-title">US Space & Defense Aufträge</div>
+      <div class="card-sub">Golden Dome · SDA · NASA · Space Force</div>
+    </div>
+    <div class="card-arrow">▼</div>
+  </div>
+  <div class="card-body" id="body-rklb-gov">
+    <div class="gov-grid" id="gov-grid">
+      <div class="gov-item" id="gov-golden-dome">
+        <div class="gov-item-header"><div class="gov-item-emoji">🛡</div><div class="gov-item-name">Golden Dome</div></div>
+        <div class="gov-item-val" id="gov-dome-budget">Lädt...</div>
+        <div class="gov-item-desc" id="gov-dome-desc">US Raketenabwehr-Programm</div>
+      </div>
+      <div class="gov-item" id="gov-sda">
+        <div class="gov-item-header"><div class="gov-item-emoji">🛸</div><div class="gov-item-name">SDA Tracking Layer</div></div>
+        <div class="gov-item-val" id="gov-sda-budget">Lädt...</div>
+        <div class="gov-item-desc" id="gov-sda-desc">Space Development Agency</div>
+      </div>
+      <div class="gov-item" id="gov-nasa">
+        <div class="gov-item-header"><div class="gov-item-emoji">🚀</div><div class="gov-item-name">NASA Aufträge</div></div>
+        <div class="gov-item-val" id="gov-nasa-val">Lädt...</div>
+        <div class="gov-item-desc" id="gov-nasa-desc">Commercial Launch Services</div>
+      </div>
+      <div class="gov-item" id="gov-spaceforce">
+        <div class="gov-item-header"><div class="gov-item-emoji">⚔️</div><div class="gov-item-name">Space Force</div></div>
+        <div class="gov-item-val" id="gov-sf-val">Lädt...</div>
+        <div class="gov-item-desc" id="gov-sf-desc">NSSL Launch Programme</div>
+      </div>
+    </div>
+    <div class="gov-outlook" id="gov-outlook">Wird täglich mit KI aktualisiert...</div>
+  </div>
 </div>
 
 <!-- ═══ ASTS PANEL ═══ -->
@@ -2254,6 +2298,7 @@ async function loadFromCache() {
     {fn:(d,ts)=>applyCtx('rklb',d),section:'ctx',ticker:'rklb'},
     {fn:(d,ts)=>applyCtx('asts',d),section:'ctx',ticker:'asts'},
     {fn:(d,ts)=>applyGlossar(d),section:'glossar',ticker:null},
+    {fn:(d,ts)=>applyGovSpace(d),section:'gov_space',ticker:null},
   ];
   let loaded=0;
   for(const s of sections){
@@ -2401,6 +2446,27 @@ async function fetchCtxBar(t) {
 }
 
 const GLOSSAR_PROMPT=`Du bist Finanz-Erklärer. Suche das aktuelle Budget des US "Golden Dome" Programms. Welche 2-4 neue Fachbegriffe tauchen in RKLB/ASTS News auf? Antworte NUR mit JSON: {"golden_dome_def":"US-Raketenabwehr (BETRAG). Rocket Lab Lieferant.","terms":[{"term":"Begriff","def":"Erklärung"}]}`;
+function applyGovSpace(p) {
+  if(!p) return;
+  if(p.golden_dome) {
+    if($('gov-dome-budget')) $('gov-dome-budget').textContent = p.golden_dome.budget || '—';
+    if($('gov-dome-desc')) $('gov-dome-desc').textContent = stripTags(p.golden_dome.desc || '');
+  }
+  if(p.sda) {
+    if($('gov-sda-budget')) $('gov-sda-budget').textContent = p.sda.budget || '—';
+    if($('gov-sda-desc')) $('gov-sda-desc').textContent = stripTags(p.sda.desc || '');
+  }
+  if(p.nasa) {
+    if($('gov-nasa-val')) $('gov-nasa-val').textContent = p.nasa.wert || '—';
+    if($('gov-nasa-desc')) $('gov-nasa-desc').textContent = stripTags(p.nasa.desc || '');
+  }
+  if(p.space_force) {
+    if($('gov-sf-val')) $('gov-sf-val').textContent = p.space_force.wert || '—';
+    if($('gov-sf-desc')) $('gov-sf-desc').textContent = stripTags(p.space_force.desc || '');
+  }
+  if(p.ausblick && $('gov-outlook')) $('gov-outlook').textContent = stripTags(p.ausblick);
+}
+
 function applyGlossar(p) {
   const grid=document.getElementById('glossar-grid');
   if(!grid||!p) return;
