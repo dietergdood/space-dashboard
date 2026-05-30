@@ -2256,7 +2256,16 @@ function applyLiveNewsData(t,p,updated_at) {
   if(!p||!p.articles) return;
   const el=document.getElementById(t+'-news-content');
   if(!el) return;
-  el.innerHTML=p.articles.map(a=>'<div class="news-art"><div class="news-art-head"><span class="news-art-badge '+(a.sentiment==='pos'?'pos':a.sentiment==='neg'?'neg':'neu')+'">'+(a.sentiment==='pos'?'Positiv':a.sentiment==='neg'?'Negativ':'Neutral')+'</span><div class="news-art-title">'+(a.title||'')+'</div></div><div class="news-art-body">'+(a.body||'')+'</div><div class="news-art-src">'+(a.source||'')+'</div></div>').join('');
+  el.innerHTML=p.articles.map(a=>{
+    const src = a.source||'';
+    const srcIcon = src.toLowerCase().includes('reddit') ? '🟠' :
+                    src.toLowerCase().includes('twitter') || src.toLowerCase().includes('x.com') || src.toLowerCase().includes('stocktwits') ? '🐦' :
+                    src.toLowerCase().includes('rocketlab') || src.toLowerCase().includes('ast-science') ? '🏢' :
+                    src.toLowerCase().includes('sec') ? '📋' :
+                    src.toLowerCase().includes('reuters') || src.toLowerCase().includes('bloomberg') ? '📰' :
+                    src.toLowerCase().includes('seeking') || src.toLowerCase().includes('motley') ? '📊' : '📄';
+    return '<div class="news-art"><div class="news-art-head"><span class="news-art-badge '+(a.sentiment==='pos'?'pos':a.sentiment==='neg'?'neg':'neu')+'">'+(a.sentiment==='pos'?'Positiv':a.sentiment==='neg'?'Negativ':'Neutral')+'</span><div class="news-art-title">'+(a.title||'')+'</div></div><div class="news-art-body">'+(a.body||'')+'</div><div class="news-art-src">'+srcIcon+' '+(src)+'</div></div>';
+  }).join('');
   const tsEl=document.getElementById(t+'-news-ts');
   if(tsEl){
     const d=updated_at?new Date(updated_at):new Date();
