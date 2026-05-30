@@ -254,7 +254,17 @@ body{font-family:'DM Sans',sans-serif;background:var(--bg);color:var(--text);min
 .scv{font-size:14px;font-weight:700;font-family:'DM Mono',monospace;width:80px;text-align:right;flex-shrink:0;}
 .scv.up{color:var(--green);}
 .scv.wn{color:var(--amber);}
-.sentiment-box{margin-top:14px;background:var(--surface2);border-radius:8px;padding:12px;}
+.sentiment-box{margin-top:14px;background:var(--surface2);border-radius:10px;padding:14px;}
+.sentiment-platforms{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin-top:10px;}
+.sentiment-platform{background:var(--surface);border:1px solid var(--border);border-radius:8px;padding:10px;text-align:center;}
+.sentiment-platform-icon{font-size:18px;margin-bottom:4px;}
+.sentiment-platform-name{font-size:10px;color:var(--text3);font-weight:600;text-transform:uppercase;letter-spacing:.05em;}
+.sentiment-platform-val{font-size:13px;font-weight:700;margin-top:2px;}
+.sentiment-platform-val.bullish{color:var(--green);}
+.sentiment-platform-val.bearish{color:var(--red);}
+.sentiment-platform-val.neutral{color:var(--text3);}
+.sentiment-platform-sub{font-size:10px;color:var(--text3);margin-top:1px;}
+.sentiment-summary{font-size:12px;color:var(--text2);line-height:1.5;margin-top:10px;padding-top:10px;border-top:1px solid var(--border);}
 .sentiment-title{font-size:13px;font-weight:600;margin-bottom:6px;}
 .sentiment-text{font-size:13px;color:var(--text2);line-height:1.5;}
 
@@ -903,8 +913,28 @@ body{font-family:'DM Sans',sans-serif;background:var(--bg);color:var(--text);min
             <div class="scr"><div class="scl">Vorsichtige Schätzung</div><div class="scb"><div class="scf" style="width:0%;background:var(--amber);"></div></div><div class="scv wn" id="rklb-sc-bear">—</div></div>
           </div>
           <div class="sentiment-box" id="rklb-sentiment-box" style="margin-top:14px;">
-            <div class="sentiment-title" id="rklb-sentiment-title">💡 Was sagt die Internet-Community?</div>
-            <div class="sentiment-text" id="rklb-sentiment-text" style="color:var(--text3);font-style:italic;">Wird mit KI geladen...</div>
+            <div class="sentiment-title">💬 Social Media Sentiment</div>
+            <div class="sentiment-platforms">
+              <div class="sentiment-platform">
+                <div class="sentiment-platform-icon">🟠</div>
+                <div class="sentiment-platform-name">Reddit</div>
+                <div class="sentiment-platform-val neutral" id="rklb-sent-reddit">—</div>
+                <div class="sentiment-platform-sub" id="rklb-sent-reddit-sub">lädt...</div>
+              </div>
+              <div class="sentiment-platform">
+                <div class="sentiment-platform-icon">𝕏</div>
+                <div class="sentiment-platform-name">X / Twitter</div>
+                <div class="sentiment-platform-val neutral" id="rklb-sent-x">—</div>
+                <div class="sentiment-platform-sub" id="rklb-sent-x-sub">lädt...</div>
+              </div>
+              <div class="sentiment-platform">
+                <div class="sentiment-platform-icon">📊</div>
+                <div class="sentiment-platform-name">StockTwits</div>
+                <div class="sentiment-platform-val neutral" id="rklb-sent-st">—</div>
+                <div class="sentiment-platform-sub" id="rklb-sent-st-sub">lädt...</div>
+              </div>
+            </div>
+            <div class="sentiment-summary" id="rklb-sentiment-text" style="color:var(--text3);font-style:italic;">Wird mit KI geladen...</div>
           </div>
         </div>
       </div>
@@ -1220,8 +1250,28 @@ body{font-family:'DM Sans',sans-serif;background:var(--bg);color:var(--text);min
             <div class="scr"><div class="scl">Vorsichtige Schätzung</div><div class="scb"><div class="scf" style="width:0%;background:var(--amber);"></div></div><div class="scv wn" id="asts-sc-bear">—</div></div>
           </div>
           <div class="sentiment-box" id="asts-sentiment-box" style="margin-top:14px;">
-            <div class="sentiment-title" id="asts-sentiment-title">💡 Was sagt die Internet-Community?</div>
-            <div class="sentiment-text" id="asts-sentiment-text" style="color:var(--text3);font-style:italic;">Wird mit KI geladen...</div>
+            <div class="sentiment-title">💬 Social Media Sentiment</div>
+            <div class="sentiment-platforms">
+              <div class="sentiment-platform">
+                <div class="sentiment-platform-icon">🟠</div>
+                <div class="sentiment-platform-name">Reddit</div>
+                <div class="sentiment-platform-val neutral" id="asts-sent-reddit">—</div>
+                <div class="sentiment-platform-sub" id="asts-sent-reddit-sub">lädt...</div>
+              </div>
+              <div class="sentiment-platform">
+                <div class="sentiment-platform-icon">𝕏</div>
+                <div class="sentiment-platform-name">X / Twitter</div>
+                <div class="sentiment-platform-val neutral" id="asts-sent-x">—</div>
+                <div class="sentiment-platform-sub" id="asts-sent-x-sub">lädt...</div>
+              </div>
+              <div class="sentiment-platform">
+                <div class="sentiment-platform-icon">📊</div>
+                <div class="sentiment-platform-name">StockTwits</div>
+                <div class="sentiment-platform-val neutral" id="asts-sent-st">—</div>
+                <div class="sentiment-platform-sub" id="asts-sent-st-sub">lädt...</div>
+              </div>
+            </div>
+            <div class="sentiment-summary" id="asts-sentiment-text" style="color:var(--text3);font-style:italic;">Wird mit KI geladen...</div>
           </div>
         </div>
       </div>
@@ -2294,6 +2344,22 @@ function applyScenarios(t,p) {
   if($(t+'-f5-base-note')&&p.base_desc) $(t+'-f5-base-note').textContent=stripTags(p.base_desc);
   if($(t+'-f5-bear-note')&&p.bear_desc) $(t+'-f5-bear-note').textContent=stripTags(p.bear_desc);
   if($(t+'-sentiment-text')&&p.sentiment) $(t+'-sentiment-text').innerHTML=p.sentiment;
+  // Platform sentiment
+  const platforms = [
+    {id:'reddit', field:'sentiment_reddit', sub:'sentiment_reddit_sub'},
+    {id:'x',      field:'sentiment_x',      sub:'sentiment_x_sub'},
+    {id:'st',     field:'sentiment_st',     sub:'sentiment_st_sub'},
+  ];
+  platforms.forEach(pl => {
+    const el = $(t+'-sent-'+pl.id);
+    const subEl = $(t+'-sent-'+pl.id+'-sub');
+    if (el && p[pl.field]) {
+      const val = p[pl.field]; // e.g. "Bullish", "Bearish", "Neutral"
+      el.textContent = val;
+      el.className = 'sentiment-platform-val ' + (val.toLowerCase().includes('bull') ? 'bullish' : val.toLowerCase().includes('bear') ? 'bearish' : 'neutral');
+    }
+    if (subEl && p[pl.sub]) subEl.textContent = p[pl.sub];
+  });
   // Fallback: cons-price aus base_label wenn noch leer
   const cp=$(t+'-cons-price');
   if(cp&&(cp.textContent==='—'||!cp.textContent.trim())&&p.base_label) cp.textContent=p.base_label+' (Ø Bank)';
