@@ -560,7 +560,7 @@ body{font-family:'DM Sans',sans-serif;background:var(--bg);color:var(--text);min
         <button class="settings-btn" id="settings-btn" onclick="toggleSettings()">⚙️</button>
         <div class="settings-dd" id="settings-dd" onclick="event.stopPropagation()">
           <div class="settings-label">🔑 KI-Analyse Schlüssel</div>
-          <form onsubmit="return false;" autocomplete="off"><input class="api-input" id="api-key" type="password" placeholder="sk-ant-api03-..." oninput="saveKey(this.value)" autocomplete="current-password"></form>
+          <form onsubmit="return false;" autocomplete="off"><input type="text" name="username" style="display:none;" autocomplete="username"><input class="api-input" id="api-key" type="password" placeholder="sk-ant-api03-..." oninput="saveKey(this.value)" autocomplete="current-password"></form>
           <div class="api-desc">
             Ohne Schlüssel: Live-Kurse (immer kostenlos). Mit Schlüssel: KI sucht alle 2 Stunden automatisch News, Reddit-Diskussionen und Analysten-Berichte.
             <a href="https://console.anthropic.com" target="_blank">Key holen →</a>
@@ -1859,7 +1859,7 @@ function renderTxList(t) {
       <span class="mono" style="font-weight:600;">${tx.qty} × $${fmt(tx.price)}</span>
       <span style="color:var(--text2);font-size:12px;">= $${fmt(parseFloat(total))}</span>
       <span style="color:var(--text3);font-size:11px;">${tx.date}</span>
-      ${tx.note?`<span style="color:var(--text3);font-size:11px;font-style:italic;">${tx.note}</span>`:''}
+      ${tx.note?'<span style="color:var(--text3);font-size:11px;font-style:italic;">'+tx.note+'</span>':''}
       <div class="pf-tx-actions">
         <button class="pf-tx-edit" onclick="editTx('${t}',${tx.id})" title="Bearbeiten">
           <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"/><path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"/></svg>
