@@ -82,7 +82,18 @@ async function kiCall(prompt, retries=3) {
       return JSON.parse(match[0]);
     } catch(parseErr) {
       console.error('JSON parse error:', parseErr.message, '| JSON:', match[0].substring(0,200));
-      throw new Error('JSON parse failed: ' + parseErr.message);
+      // Try to fix common JSON issues: unescaped quotes, newlines in strings
+      try {
+        // Remove control characters inside strings
+        const fixed = match[0]
+          .replace(/([^\\])\n/g, '$1 ')   // unescaped newlines
+          .replace(/([^\\])\t/g, '$1 ')   // unescaped tabs
+          .replace(/([^\\])\r/g, '$1 ');  // unescaped carriage returns
+        return JSON.parse(fixed);
+      } catch(e2) {
+        console.error('JSON fix also failed:', e2.message);
+        throw new Error('JSON parse failed: ' + parseErr.message);
+      }
     }
   }
   throw new Error('Max retries exceeded');
@@ -146,8 +157,8 @@ export default async function handler(req, res) {
     };
 
     const NEWS_PROMPTS = {
-      rklb: `Suche aktuelle RKLB Rocket Lab Nachrichten der letzten 48h. Quellen: rocketlabusa.com, Reuters, Bloomberg, SpaceNews, NASASpaceFlight, Breaking Defense, Reddit r/RocketLab, X @RocketLab, StockTwits RKLB, SEC Filings. Antworte NUR mit JSON, KEIN HTML, keine <cite> Tags: {"articles":[{"title":"Titel","sentiment":"pos|neg|neu","body":"2-3 Sätze auf Deutsch ohne HTML","source":"Exakte Quelle"}]}`,
-      asts: `Suche aktuelle ASTS AST SpaceMobile Nachrichten der letzten 48h. Quellen: ast-science.com, Reuters, Bloomberg, SpaceNews, FierceWireless, Light Reading, Reddit r/ASTS, X @AST_SpaceMobile, StockTwits ASTS, T-Mobile/AT&T News. Antworte NUR mit JSON, KEIN HTML, keine <cite> Tags: {"articles":[{"title":"Titel","sentiment":"pos|neg|neu","body":"2-3 Sätze auf Deutsch ohne HTML","source":"Exakte Quelle"}]}`
+      rklb: `Suche aktuelle RKLB Rocket Lab Nachrichten der letzten 48h. Quellen: rocketlabusa.com, Reuters, Bloomberg, SpaceNews, NASASpaceFlight, Breaking Defense, Reddit r/RocketLab, X @RocketLab, StockTwits RKLB, SEC Filings. Antworte NUR mit gültigem JSON (keine Zeilenumbrüche in Strings, keine Sonderzeichen), KEIN HTML, keine <cite> Tags: {"articles":[{"title":"Titel max 80 Zeichen","sentiment":"pos|neg|neu","body":"2-3 Sätze auf Deutsch, kein Zeilenumbruch im Text","source":"Exakte Quelle"}]}`,
+      asts: `Suche aktuelle ASTS AST SpaceMobile Nachrichten der letzten 48h. Quellen: ast-science.com, Reuters, Bloomberg, SpaceNews, FierceWireless, Light Reading, Reddit r/ASTS, X @AST_SpaceMobile, StockTwits ASTS, T-Mobile/AT&T News. Antworte NUR mit gültigem JSON (keine Zeilenumbrüche in Strings, keine Sonderzeichen), KEIN HTML, keine <cite> Tags: {"articles":[{"title":"Titel max 80 Zeichen","sentiment":"pos|neg|neu","body":"2-3 Sätze auf Deutsch, kein Zeilenumbruch im Text","source":"Exakte Quelle"}]}`
     };
 
     const SCENARIOS_PROMPTS = {
