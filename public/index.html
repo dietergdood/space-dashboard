@@ -46,7 +46,7 @@ body{font-family:'DM Sans',sans-serif;background:var(--bg);color:var(--text);min
 .tab.active.asts-tab{color:var(--asts);}
 
 /* ── Panel ── */
-.panel{display:none;flex-direction:column;gap:8px;margin-top:12px;}
+.panel{display:none;flex-direction:column;gap:8px;margin-top:12px;min-height:0;}
 .panel.active{display:flex;}
 
 /* ── Collapsible Cards ── */
@@ -2252,9 +2252,10 @@ async function refreshAllNews(manual=false) {
 (function init() {
   loadKey();
   loadTx(); // local fallback (overridden by DB if logged in)
-  // Ensure RKLB panel is active and visible
-  $('p-rklb').classList.add('active');
-  $('ctx-rklb').classList.add('show');
+  // Ensure RKLB tab is active on load
+  switchTab('rklb');
+  // Open all cards explicitly after switchTab
+  document.querySelectorAll('.card').forEach(c => c.classList.add('open'));
   // Open all cards
   document.querySelectorAll('.card').forEach(c => c.classList.add('open'));
   // Mobile: collapse non-essential cards
