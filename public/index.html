@@ -53,7 +53,7 @@ body{font-family:'DM Sans',sans-serif;background:var(--bg);color:var(--text);min
 .logo-sub{font-size:11px;color:var(--text3);font-weight:400;}
 .hdr-mid{flex:1;display:flex;justify-content:center;}
 .hdr-r{display:flex;align-items:center;gap:8px;flex-shrink:0;}
-.container{max-width:1200px;margin:0 auto;padding:16px 24px 80px;}
+.container{max-width:1200px;margin:0 auto;padding:10px 24px 80px;}
 
 /* ── Tabs ── */
 .tabs{display:flex;background:var(--surface2);border-radius:10px;padding:3px;gap:2px;}
@@ -63,7 +63,7 @@ body{font-family:'DM Sans',sans-serif;background:var(--bg);color:var(--text);min
 .tab.active.asts-tab{color:var(--asts);}
 
 /* ── Panel ── */
-.panel{display:none;flex-direction:column;gap:8px;margin-top:12px;min-height:0;}
+.panel{display:none;flex-direction:column;gap:0;margin-top:0;min-height:0;}
 .panel.active{display:flex;}
 
 /* ── Collapsible Cards ── */
@@ -108,7 +108,7 @@ body{font-family:'DM Sans',sans-serif;background:var(--bg);color:var(--text);min
 .next-label{font-size:11px;color:var(--text3);margin-top:4px;}
 
 /* ── Context Bar ── */
-.ctx-bar{position:relative;background:var(--surface);border:1px solid var(--border);border-radius:var(--rl);padding:16px 18px 16px 26px;display:none;flex-direction:column;gap:10px;box-shadow:0 2px 12px rgba(0,0,0,.07);overflow:hidden;}
+.ctx-bar{position:relative;background:var(--surface);border:1px solid var(--border);border-radius:var(--rl);padding:16px 18px 16px 26px;display:none;flex-direction:column;gap:10px;box-shadow:0 2px 12px rgba(0,0,0,.07);overflow:hidden;margin-bottom:10px;}
 .ctx-bar::before{content:'';position:absolute;left:0;top:0;bottom:0;width:5px;border-radius:var(--rl) 0 0 var(--rl);}
 #ctx-rklb::before{background:linear-gradient(180deg,#1d4ed8,#3b82f6);}
 #ctx-asts::before{background:linear-gradient(180deg,#15803d,#22c55e);}
