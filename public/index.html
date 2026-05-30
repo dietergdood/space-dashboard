@@ -91,23 +91,21 @@ body{font-family:'DM Sans',sans-serif;background:var(--bg);color:var(--text);min
 .next-label{font-size:11px;color:var(--text3);margin-top:4px;}
 
 /* ── Context Bar ── */
-.ctx-bar{background:var(--surface);border:1px solid var(--border);border-radius:var(--rl);padding:16px;display:none;flex-direction:column;gap:12px;box-shadow:var(--shadow);}
-.ctx-bar.show{display:flex;}
-.ctx-top{display:flex;align-items:flex-start;gap:14px;}
-.ctx-logo{width:44px;height:44px;border-radius:10px;object-fit:contain;border:1px solid var(--border);background:#fff;flex-shrink:0;}
-.ctx-info{flex:1;min-width:0;}
-.ctx-name{font-weight:700;font-size:16px;line-height:1.2;}
-.ctx-ticker{font-size:12px;color:var(--text3);font-family:"DM Mono",monospace;margin-top:1px;}
-.ctx-desc{font-size:13px;color:var(--text2);margin-top:6px;line-height:1.5;}
-.ctx-bottom{display:flex;flex-wrap:wrap;align-items:center;gap:8px;}
-.ctx-tags{display:flex;flex-wrap:wrap;gap:5px;}
-.ctx-tag{font-size:11px;padding:3px 9px;border-radius:12px;border:1px solid var(--border2);color:var(--text2);background:var(--surface2);font-weight:500;}
+.ctx-bar{background:var(--surface);border:1px solid var(--border);border-radius:var(--rl);padding:14px 16px;display:none;flex-direction:row;align-items:flex-start;gap:14px;box-shadow:var(--shadow);}
+.ctx-bar.show{display:flex;flex-direction:row;align-items:flex-start;}
+.ctx-logo{width:40px;height:40px;border-radius:10px;object-fit:cover;border:1px solid var(--border);}
+.ctx-logo-emoji{width:40px;height:40px;border-radius:10px;background:var(--surface2);display:flex;align-items:center;justify-content:center;font-size:20px;flex-shrink:0;}
+.ctx-info{flex:1;min-width:0;overflow:hidden;}
+.ctx-name{font-weight:700;font-size:16px;}
+.ctx-desc{font-size:13px;color:var(--text2);margin-top:2px;line-height:1.5;word-wrap:break-word;overflow-wrap:break-word;white-space:normal;}
+.ctx-tags{display:flex;flex-wrap:wrap;gap:5px;margin-top:8px;}
+.ctx-tag{font-size:11px;padding:2px 8px;border-radius:12px;border:1px solid var(--border2);color:var(--text2);background:var(--surface2);}
 .ctx-tag.green{border-color:var(--green-bd);background:var(--green-bg);color:var(--green);}
 .ctx-tag.red{border-color:var(--red-bd);background:var(--red-bg);color:var(--red);}
 .ctx-tag.amber{border-color:rgba(217,119,6,.3);background:var(--amber-bg);color:var(--amber);}
-.ctx-stats{display:flex;flex-wrap:wrap;gap:6px;margin-left:auto;}
-.ctx-stat{display:inline-flex;align-items:center;gap:5px;padding:4px 10px;background:var(--surface2);border-radius:8px;border:1px solid var(--border);font-size:12px;color:var(--text2);}
-.ctx-stat b{color:var(--text);font-family:"DM Mono",monospace;font-weight:600;}
+.ctx-stats{display:flex;gap:20px;flex-shrink:0;}
+.ctx-stat{text-align:right;font-size:12px;color:var(--text2);}
+.ctx-stat b{color:var(--text);font-family:'DM Mono',monospace;font-size:13px;}
 
 /* ── Alert Banner ── */
 .alert{display:flex;align-items:flex-start;gap:10px;padding:12px 14px;border-radius:10px;font-size:14px;line-height:1.5;}
@@ -498,7 +496,10 @@ body{font-family:'DM Sans',sans-serif;background:var(--bg);color:var(--text);min
 .user-avatar{width:22px;height:22px;border-radius:50%;background:var(--blue);color:#fff;display:flex;align-items:center;justify-content:center;font-size:11px;font-weight:700;}
 
 /* ── Pill Tooltips ── */
-.df-stat-pill{position:relative;}
+.df-stat-pill{position:relative;cursor:help;}
+.df-stat-pill .tip{position:absolute;bottom:calc(100% + 8px);left:50%;transform:translateX(-50%);background:var(--text);color:var(--surface);font-size:12px;font-weight:400;padding:7px 10px;border-radius:8px;width:200px;text-align:left;line-height:1.5;opacity:0;pointer-events:none;transition:opacity .15s;z-index:100;white-space:normal;}
+.df-stat-pill .tip::after{content:'';position:absolute;top:100%;left:50%;transform:translateX(-50%);border:5px solid transparent;border-top-color:var(--text);}
+.df-stat-pill:hover .tip{opacity:1;}
 </style>
   <!-- PWA -->
   <link rel="manifest" href="/manifest.json">
@@ -581,48 +582,34 @@ body{font-family:'DM Sans',sans-serif;background:var(--bg);color:var(--text);min
 
 <!-- Context bars -->
 <div class="ctx-bar" id="ctx-rklb">
-  <div class="ctx-top">
-    <img src="/rklb-logo.png" class="ctx-logo" alt="Rocket Lab">
-    <div class="ctx-info">
-      <div class="ctx-name">Rocket Lab</div>
-      <div class="ctx-ticker">RKLB · NASDAQ</div>
-      <div class="ctx-desc" id="rklb-ctx-desc">Baut Raketen (Electron) und Raumfahrtkomponenten. Wächst in grössere Raketen (Neutron, geplant 2026) und US-Verteidigung ("Golden Dome").</div>
-    </div>
-  </div>
-  <div class="ctx-bottom">
+  <img src="/rklb-logo.png" class="ctx-logo" alt="Rocket Lab" style="width:44px;height:44px;border-radius:8px;object-fit:contain;background:#fff;border:1px solid var(--border);">
+  <div class="ctx-info">
+    <div class="ctx-name">Rocket Lab · RKLB</div>
+    <div class="ctx-desc" id="rklb-ctx-desc">Baut Raketen (Electron) und Raumfahrtkomponenten. Wächst in grössere Raketen (Neutron, geplant 2026) und US-Verteidigung ("Golden Dome").</div>
     <div class="ctx-tags" id="rklb-ctx-tags">
       <span class="ctx-tag" style="color:var(--text3);font-style:italic;">Wird geladen...</span>
     </div>
-    <div class="ctx-stats" id="rklb-ctx-stats">
-      <div class="ctx-stat">Gegründet <b>2006</b></div>
-      <div class="ctx-stat">HQ <b>Long Beach</b></div>
-      <div class="ctx-stat" id="rklb-stat-s1">—</div>
-      <div class="ctx-stat" id="rklb-stat-s2">—</div>
-      <div class="ctx-stat" id="rklb-stat-s3">—</div>
-    </div>
+  </div>
+  <div class="ctx-stats" id="rklb-ctx-stats">
+    <div class="ctx-stat">Gegründet <b>2006</b></div>
+    <div class="ctx-stat">HQ <b>Long Beach</b></div>
+    <div class="ctx-stat" id="rklb-stat-extra">—</div>
   </div>
 </div>
 
 <div class="ctx-bar" id="ctx-asts" style="display:none;">
-  <div class="ctx-top">
-    <img src="/asts-logo.png" class="ctx-logo" alt="AST SpaceMobile" style="object-fit:cover;">
-    <div class="ctx-info">
-      <div class="ctx-name">AST SpaceMobile</div>
-      <div class="ctx-ticker">ASTS · NASDAQ</div>
-      <div class="ctx-desc" id="asts-ctx-desc">Baut riesige Satelliten die direkt mit normalen Handys kommunizieren — ohne Spezialgerät. Weltweit einziger Anbieter dieses Konzepts. Sehr spekulativ — hohe Chance, hohes Risiko.</div>
-    </div>
-  </div>
-  <div class="ctx-bottom">
+  <img src="/asts-logo.png" class="ctx-logo" alt="AST SpaceMobile" style="width:44px;height:44px;border-radius:8px;object-fit:cover;border:1px solid var(--border);">
+  <div class="ctx-info">
+    <div class="ctx-name">AST SpaceMobile · ASTS</div>
+    <div class="ctx-desc" id="asts-ctx-desc">Baut riesige Satelliten die direkt mit normalen Handys kommunizieren — ohne Spezialgerät. Weltweit einziger Anbieter dieses Konzepts. Sehr spekulativ — hohe Chance, hohes Risiko.</div>
     <div class="ctx-tags" id="asts-ctx-tags">
       <span class="ctx-tag" style="color:var(--text3);font-style:italic;">Wird geladen...</span>
     </div>
-    <div class="ctx-stats" id="asts-ctx-stats">
-      <div class="ctx-stat">Gegründet <b>2017</b></div>
-      <div class="ctx-stat">Sektor <b>D2D</b></div>
-      <div class="ctx-stat" id="asts-stat-s1">—</div>
-      <div class="ctx-stat" id="asts-stat-s2">—</div>
-      <div class="ctx-stat" id="asts-stat-s3">—</div>
-    </div>
+  </div>
+  <div class="ctx-stats" id="asts-ctx-stats">
+    <div class="ctx-stat">Gegründet <b>2017</b></div>
+    <div class="ctx-stat" id="asts-stat-cash">Cash <b>—</b></div>
+    <div class="ctx-stat">Sektor <b>D2D</b></div>
   </div>
 </div>
 
@@ -667,7 +654,7 @@ body{font-family:'DM Sans',sans-serif;background:var(--bg);color:var(--text);min
         <div class="met-label">Handelsvolumen <span class="tip"><span class="tip-icon">?</span><span class="tip-box">Wie viele Aktien heute gehandelt wurden. Hohes Volumen = viele Anleger kaufen oder verkaufen gerade aktiv.</span></span></div>
         <div class="met-val mono" id="rklb-vol">—</div>
         <div class="met-chg nu" id="rklb-vol-ctx" style="font-size:12px;">—</div>
-        <div class="met-chg nu" id="rklb-cap">—</div>
+        <div class="met-chg nu" id="rklb-cap"></div>
       </div>
       <div class="met">
         <div class="met-icon">📏</div>
@@ -831,24 +818,14 @@ body{font-family:'DM Sans',sans-serif;background:var(--bg);color:var(--text);min
         </div>
       </div>
       <div class="df-stats-row" id="rklb-df-stats">
-        <div class="df-stat-pill" id="rklb-df-atr">
-          <span class="tip"><span class="tip-icon">?</span><span class="tip-box">ATR (Average True Range) misst die durchschnittliche Tagesschwankung. Zeigt wie stark der Kurs typischerweise pro Tag schwankt.</span></span>
-          <div style="font-size:20px;margin-bottom:3px;">⚡</div>
-          <div style="font-size:11px;color:var(--text3);margin-bottom:3px;">Schwankung</div>
-          <div id="rklb-df-atr-val" style="font-weight:700;">lädt...</div>
-          <div id="rklb-df-atr-pct" style="font-size:11px;color:var(--text3);">—</div>
+        <div class="df-stat-pill" id="rklb-df-atr">⚡ ATR lädt...
+          <span class="tip"><span class="tip-icon">?</span><span class="tip-box">ATR (Average True Range) misst die durchschnittliche Tagesschwankung der letzten 5 Tage. Zeigt wie stark der Kurs typischerweise pro Tag schwankt — hilfreich um realistische Erwartungen für den heutigen Tag zu setzen.</span></span>
         </div>
-        <div class="df-stat-pill" id="rklb-df-mom">
-          <span class="tip"><span class="tip-icon">?</span><span class="tip-box">Momentum zeigt die Kursbewegung der letzten 5 Tage. Positiv = Aufwärtstrend. Negativ = Abwärtstrend.</span></span>
-          <div id="rklb-df-mom-icon" style="font-size:20px;margin-bottom:3px;">📊</div>
-          <div style="font-size:11px;color:var(--text3);margin-bottom:3px;">Momentum</div>
-          <div id="rklb-df-mom-val" style="font-weight:700;">lädt...</div>
+        <div class="df-stat-pill" id="rklb-df-mom">📈 Momentum lädt...
+          <span class="tip"><span class="tip-icon">?</span><span class="tip-box">Momentum zeigt die Kursbewegung über die letzten 5 Tage in Prozent. Positiv = Aufwärtstrend, Negativ = Abwärtstrend. Starkes Momentum kann sich fortsetzen — muss aber nicht.</span></span>
         </div>
-        <div class="df-stat-pill" id="rklb-df-rsi">
-          <span class="tip"><span class="tip-icon">?</span><span class="tip-box">RSI: Über 70 = überkauft (könnte fallen). Unter 30 = überverkauft (könnte steigen). 30–70 = neutrale Zone.</span></span>
-          <div style="font-size:20px;margin-bottom:3px;">🔬</div>
-          <div id="rklb-df-rsi-label" style="font-size:11px;color:var(--text3);margin-bottom:3px;">RSI</div>
-          <div id="rklb-df-rsi-val" style="font-weight:700;">lädt...</div>
+        <div class="df-stat-pill" id="rklb-df-rsi">🔬 RSI lädt...
+          <span class="tip"><span class="tip-icon">?</span><span class="tip-box">RSI (Relative Strength Index) misst ob die Aktie überkauft oder überverkauft ist. Über 70 = viele haben gekauft, Kurs könnte fallen. Unter 30 = viele haben verkauft, Kurs könnte steigen. 30–70 = neutrale Zone.</span></span>
         </div>
       </div>
     </div>
@@ -980,7 +957,7 @@ body{font-family:'DM Sans',sans-serif;background:var(--bg);color:var(--text);min
         <div class="met-label">Handelsvolumen <span class="tip"><span class="tip-icon">?</span><span class="tip-box">Wie viele Aktien heute gehandelt wurden. Hohes Volumen = viele Anleger kaufen oder verkaufen gerade aktiv.</span></span></div>
         <div class="met-val mono" id="asts-vol">—</div>
         <div class="met-chg nu" id="asts-vol-ctx" style="font-size:12px;">—</div>
-        <div class="met-chg nu" id="asts-cap">—</div>
+        <div class="met-chg nu" id="asts-cap"></div>
       </div>
       <div class="met">
         <div class="met-icon">📏</div>
@@ -1144,24 +1121,14 @@ body{font-family:'DM Sans',sans-serif;background:var(--bg);color:var(--text);min
         </div>
       </div>
       <div class="df-stats-row" id="asts-df-stats">
-        <div class="df-stat-pill" id="asts-df-atr">
-          <span class="tip"><span class="tip-icon">?</span><span class="tip-box">ATR (Average True Range) misst die durchschnittliche Tagesschwankung. Zeigt wie stark der Kurs typischerweise pro Tag schwankt.</span></span>
-          <div style="font-size:20px;margin-bottom:3px;">⚡</div>
-          <div style="font-size:11px;color:var(--text3);margin-bottom:3px;">Schwankung</div>
-          <div id="asts-df-atr-val" style="font-weight:700;">lädt...</div>
-          <div id="asts-df-atr-pct" style="font-size:11px;color:var(--text3);">—</div>
+        <div class="df-stat-pill" id="asts-df-atr">⚡ ATR lädt...
+          <span class="tip"><span class="tip-icon">?</span><span class="tip-box">ATR (Average True Range) misst die durchschnittliche Tagesschwankung der letzten 5 Tage. Zeigt wie stark der Kurs typischerweise pro Tag schwankt — hilfreich um realistische Erwartungen für den heutigen Tag zu setzen.</span></span>
         </div>
-        <div class="df-stat-pill" id="asts-df-mom">
-          <span class="tip"><span class="tip-icon">?</span><span class="tip-box">Momentum zeigt die Kursbewegung der letzten 5 Tage. Positiv = Aufwärtstrend. Negativ = Abwärtstrend.</span></span>
-          <div id="asts-df-mom-icon" style="font-size:20px;margin-bottom:3px;">📊</div>
-          <div style="font-size:11px;color:var(--text3);margin-bottom:3px;">Momentum</div>
-          <div id="asts-df-mom-val" style="font-weight:700;">lädt...</div>
+        <div class="df-stat-pill" id="asts-df-mom">📈 Momentum lädt...
+          <span class="tip"><span class="tip-icon">?</span><span class="tip-box">Momentum zeigt die Kursbewegung über die letzten 5 Tage in Prozent. Positiv = Aufwärtstrend, Negativ = Abwärtstrend. Starkes Momentum kann sich fortsetzen — muss aber nicht.</span></span>
         </div>
-        <div class="df-stat-pill" id="asts-df-rsi">
-          <span class="tip"><span class="tip-icon">?</span><span class="tip-box">RSI: Über 70 = überkauft (könnte fallen). Unter 30 = überverkauft (könnte steigen). 30–70 = neutrale Zone.</span></span>
-          <div style="font-size:20px;margin-bottom:3px;">🔬</div>
-          <div id="asts-df-rsi-label" style="font-size:11px;color:var(--text3);margin-bottom:3px;">RSI</div>
-          <div id="asts-df-rsi-val" style="font-weight:700;">lädt...</div>
+        <div class="df-stat-pill" id="asts-df-rsi">🔬 RSI lädt...
+          <span class="tip"><span class="tip-icon">?</span><span class="tip-box">RSI (Relative Strength Index) misst ob die Aktie überkauft oder überverkauft ist. Über 70 = viele haben gekauft, Kurs könnte fallen. Unter 30 = viele haben verkauft, Kurs könnte steigen. 30–70 = neutrale Zone.</span></span>
         </div>
       </div>
     </div>
@@ -1466,7 +1433,7 @@ const fmtK = n => n >= 1e6 ? (n/1e6).toFixed(1)+'M' : n >= 1e3 ? (n/1e3).toFixed
 
 // ── State ──────────────────────────────────────────────────
 const chartInstances = {};
-const forecastTargets = { rklb:{bull:null,base:null,bear:null,bull5:null,base5:null,bear5:null}, asts:{bull:null,base:null,bear:null,bull5:null,base5:null,bear5:null} };
+const forecastTargets = { rklb:{bull:null,base:null,bear:null}, asts:{bull:null,base:null,bear:null} };
 const mo = ['Jun','Jul','Aug','Sep','Okt','Nov','Dez','Jan','Feb','Mär','Apr','Mai','Jun→','Jul→','Aug→','Sep→'];
 const quotes = { rklb: null, asts: null };
 const txData = { rklb: [], asts: [] };
@@ -1505,7 +1472,8 @@ function switchTab(id) {
   ['rklb','asts'].forEach(t => {
     $('p-'+t).classList.toggle('active', t===id);
     const ctxEl = $('ctx-'+t);
-    ctxEl.style.display = t===id ? 'flex' : 'none';
+    if (t === id) { ctxEl.style.display = 'flex'; ctxEl.style.flexDirection = 'row'; }
+    else { ctxEl.style.display = 'none'; }
     const btn = document.querySelector(`.tab.${t}-tab`);
     if (btn) btn.classList.toggle('active', t===id);
   });
@@ -1690,31 +1658,31 @@ function applyQ(t, q) {
   cEl.textContent = (up?'↑ +':'↓ ') + fmt(Math.abs(chg)) + ' (' + (up?'+':'') + fmt(pct) + '%) heute';
   cEl.className = 'met-chg ' + (up?'up':'dn');
   if ($(t+'-vol')) {
-    const volEl = $(t+'-vol');
+    $(t+'-vol').textContent = fmtK(q.vol)||'—';
     const volCtx = $(t+'-vol-ctx');
-    const capEl = $(t+'-cap');
-    if (volEl) volEl.textContent = q.vol ? fmtK(q.vol) : '—';
+    const recentVols = (q.vols||[]).slice(-20).filter(v=>v>0);
+    const avgVol = recentVols.length >= 3 ? recentVols.reduce((a,b)=>a+b,0)/recentVols.length : null;
+    if (!avgVol) { if(volCtx) volCtx.textContent = fmtK(q.vol) + ' Aktien gehandelt'; }
+    else {
+    const ratio = q.vol / avgVol;
+    const chgPct = (q.price - q.prev) / q.prev * 100;
     if (volCtx && q.vol) {
-      const recentVols = (q.vols||[]).slice(-20).filter(v=>v>0);
-      const avgVol = recentVols.length >= 3 ? recentVols.reduce((a,b)=>a+b,0)/recentVols.length : null;
-      if (!avgVol) {
-        volCtx.textContent = fmtK(q.vol) + ' Aktien gehandelt';
-      } else {
-        const ratio = q.vol / avgVol;
-        const chgPct = (q.price - q.prev) / q.prev * 100;
-        let volTxt = '', signal = '';
-        if (ratio >= 2) volTxt = '⚡ ' + ratio.toFixed(1) + '× mehr als üblich';
-        else if (ratio >= 1.3) volTxt = '↑ Überdurchschnittlich';
-        else if (ratio <= 0.5) volTxt = '↓ Ruhiger Tag';
-        else volTxt = 'Normal';
-        if (ratio >= 1.3 && chgPct >= 1) signal = ' · 🟢 Kaufdruck';
-        else if (ratio >= 1.3 && chgPct <= -1) signal = ' · 🔴 Verkaufsdruck';
-        else if (ratio >= 1.3 && Math.abs(chgPct) < 1) signal = ' · ⚖️ Unentschieden';
-        else if (ratio < 0.7 && chgPct >= 0.5) signal = ' · Schwaches Kaufinteresse';
-        volCtx.textContent = volTxt + signal;
-        volCtx.style.color = signal.includes('🟢') ? 'var(--green)' : signal.includes('🔴') ? 'var(--red)' : 'var(--text3)';
-      }
+      let volTxt = '', signal = '';
+      // Volume level
+      if (ratio >= 2) volTxt = '⚡ ' + ratio.toFixed(1) + '× mehr als üblich';
+      else if (ratio >= 1.3) volTxt = '↑ Überdurchschnittlich';
+      else if (ratio <= 0.5) volTxt = '↓ Ruhiger Tag';
+      else volTxt = 'Normal';
+      // Buy/sell pressure estimate
+      if (ratio >= 1.3 && chgPct >= 1) signal = ' · 🟢 Kaufdruck';
+      else if (ratio >= 1.3 && chgPct <= -1) signal = ' · 🔴 Verkaufsdruck';
+      else if (ratio >= 1.3 && Math.abs(chgPct) < 1) signal = ' · ⚖️ Unentschieden';
+      else if (ratio < 0.7 && chgPct >= 0.5) signal = ' · Schwaches Kaufinteresse';
+      else if (ratio < 0.7 && chgPct <= -0.5) signal = ' · Schwaches Verkaufsinteresse';
+      volCtx.textContent = volTxt + signal;
+      volCtx.style.color = signal.includes('🟢') ? 'var(--green)' : signal.includes('🔴') ? 'var(--red)' : 'var(--text3)';
     }
+    } // close else
   }
   if ($(t+'-cap')) {
     if (q.cap) {
@@ -1727,7 +1695,7 @@ function applyQ(t, q) {
       else context = '(Grosskonzern)';
       $(t+'-cap').textContent = 'Firmenwert $'+fmtB(q.cap)+' '+context;
     } else {
-      $(t+'-cap').textContent = '—';
+      $(t+'-cap').textContent = '';
     }
   }
   if ($(t+'-52w') && q.lo52 && q.hi52) $(t+'-52w').textContent = '$'+fmt(q.lo52)+' → $'+fmt(q.hi52);
@@ -1780,20 +1748,13 @@ function calcDF(t, q) {
     let gains=0, losses=0;
     for(let i=1;i<Math.min(closes.length,15);i++){const d=closes[i]-closes[i-1];d>0?gains+=d:losses-=d;}
     const rsi = 100-100/(1+(losses===0?100:gains/losses));
-    // Update data slots (keep tooltip HTML intact)
-    if ($(t+'-df-atr-val')) $(t+'-df-atr-val').textContent = '±$'+fmt(atr);
-    if ($(t+'-df-atr-pct')) $(t+'-df-atr-pct').textContent = '~'+atrPct+'%';
-    if ($(t+'-df-mom-icon')) $(t+'-df-mom-icon').textContent = mom>=0?'📈':'📉';
-    if ($(t+'-df-mom-val')) {
-      $(t+'-df-mom-val').textContent = (mom>=0?'+':'')+fmt(mom)+'%';
-      $(t+'-df-mom-val').className = mom>=0?'up':'dn';
-    }
-    if ($(t+'-df-rsi-val')) {
+    if (atrEl) atrEl.innerHTML = `<span class="tip">ATR misst die typische Tagesschwankung. ±$${fmt(atr)} = der Kurs bewegt sich im Schnitt um diesen Betrag pro Tag.</span><div style="font-size:20px;margin-bottom:3px;">⚡</div><div style="font-size:11px;color:var(--text3);margin-bottom:3px;">Schwankung</div><div style="font-weight:700;">±$${fmt(atr)}</div><div style="font-size:11px;color:var(--text3);">~${atrPct}%</div>`;
+    if (momEl) momEl.innerHTML = `<span class="tip">Momentum: ${mom>=0?'Positiv — Trend nach oben.':'Negativ — Trend nach unten.'}</span><div style="font-size:20px;margin-bottom:3px;">${mom>=0?'📈':'📉'}</div><div style="font-size:11px;color:var(--text3);margin-bottom:3px;">Momentum</div><div class="${mom>=0?'up':'dn'}" style="font-weight:700;">${mom>=0?'+':''}${fmt(mom)}%</div>`;
+    if (rsiEl) {
       const rsiLabel = rsi>70?'Überkauft ⚠️':rsi<30?'Überverkauft ✅':'Neutral';
       const rsiColor = rsi>70?'var(--red)':rsi<30?'var(--green)':'var(--text2)';
-      $(t+'-df-rsi-label').textContent = 'RSI '+rsi.toFixed(0);
-      $(t+'-df-rsi-val').textContent = rsiLabel;
-      $(t+'-df-rsi-val').style.color = rsiColor;
+      const rsiTip = rsi>70?'RSI über 70: Viele haben gekauft — könnte bald fallen.':rsi<30?'RSI unter 30: Viele haben verkauft — könnte sich erholen.':'RSI 30–70: Normale Zone.';
+      rsiEl.innerHTML = `<span class="tip">${rsiTip}</span><div style="font-size:20px;margin-bottom:3px;">🔬</div><div style="font-size:11px;color:var(--text3);margin-bottom:3px;">RSI ${rsi.toFixed(0)}</div><div style="color:${rsiColor};font-weight:700;">${rsiLabel}</div>`;
     }
   }
 
@@ -1967,21 +1928,21 @@ function applySector(t,p) {
 function applyCtx(t,p) {
   if(!p) return;
   const typeMap={green:'ctx-tag green',red:'ctx-tag red',amber:'ctx-tag amber',neutral:'ctx-tag'};
-  // Update description
   const descEl=document.getElementById(t+'-ctx-desc');
-  if(descEl&&p.desc) descEl.textContent=typeof p.desc==='string'?p.desc.replace(/\n/g,' ').trim():JSON.stringify(p.desc);
-  // Update tags
   const tagsEl=document.getElementById(t+'-ctx-tags');
-  if(tagsEl&&p.tags&&Array.isArray(p.tags)&&p.tags.length)
-    tagsEl.innerHTML=p.tags.map(tag=>'<span class="'+(typeMap[tag.type]||'ctx-tag')+'">'+tag.text+'</span>').join('');
-  // Update stat slots (up to 3 dynamic slots: t-stat-s1, t-stat-s2, t-stat-s3)
+  // Update desc and tags
+  if(descEl&&p.desc) descEl.textContent=typeof p.desc==='string'?p.desc.replace(/\n/g,' ').trim():JSON.stringify(p.desc);
+  if(tagsEl&&p.tags&&Array.isArray(p.tags)&&p.tags.length) tagsEl.innerHTML=p.tags.map(tag=>'<span class="'+(typeMap[tag.type]||'ctx-tag')+'">'+tag.text+'</span>').join('');
+  // Update individual stats by label match - don't replace all static stats
   if(p.stats&&Array.isArray(p.stats)) {
-    const slots=['s1','s2','s3'];
-    const validStats=p.stats.filter(s=>s&&s.label&&s.val);
-    validStats.forEach((s,i)=>{
-      if(i>=slots.length) return;
-      const el=document.getElementById(t+'-stat-'+slots[i]);
-      if(el) el.innerHTML=s.label+' <b>'+s.val+'</b>';
+    p.stats.forEach(s => {
+      if(!s||!s.label||!s.val) return;
+      // Try to find a matching stat element by label text
+      const statsEl=document.getElementById(t+'-ctx-stats');
+      if(!statsEl) return;
+      // For RKLB: update rklb-stat-extra; For ASTS: update asts-stat-cash
+      const extraEl=document.getElementById(t+'-stat-extra')||document.getElementById(t+'-stat-cash');
+      if(extraEl) extraEl.innerHTML=s.label+' <b>'+s.val+'</b>';
     });
   }
 }
@@ -2105,8 +2066,7 @@ function applyRec(t,p) {
   if($(t+'-pill-einstieg-val')&&p.einstieg) $(t+'-pill-einstieg-val').textContent=p.einstieg;
   if($(t+'-pill-ziel-val')&&p.kursziel) $(t+'-pill-ziel-val').textContent=p.kursziel;
   if($(t+'-pill-stopp-val')&&p.stopp) $(t+'-pill-stopp-val').textContent=p.stopp;
-  // Experten-Konsens: price target from KI + analyst count
-  if($(t+'-cons-price')&&p.kursziel) $(t+'-cons-price').textContent=p.kursziel;
+  // Analyst consensus
   if($(t+'-cons-rating')&&p.analysten) $(t+'-cons-rating').textContent=p.analysten;
 }
 async function fetchLiveNews(t) {
