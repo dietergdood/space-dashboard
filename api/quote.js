@@ -68,6 +68,13 @@ export default async function handler(req, res) {
           if (qMeta.fiftyTwoWeekHigh)           meta.fiftyTwoWeekHigh           = qMeta.fiftyTwoWeekHigh;
           if (qMeta.fiftyTwoWeekLow)            meta.fiftyTwoWeekLow            = qMeta.fiftyTwoWeekLow;
           if (qMeta.sharesOutstanding)          meta.sharesOutstanding          = qMeta.sharesOutstanding;
+          if (qMeta.preMarketPrice)             meta.preMarketPrice             = qMeta.preMarketPrice;
+          if (qMeta.preMarketChange)            meta.preMarketChange            = qMeta.preMarketChange;
+          if (qMeta.preMarketChangePercent)     meta.preMarketChangePercent     = qMeta.preMarketChangePercent;
+          if (qMeta.postMarketPrice)            meta.postMarketPrice            = qMeta.postMarketPrice;
+          if (qMeta.postMarketChange)           meta.postMarketChange           = qMeta.postMarketChange;
+          if (qMeta.postMarketChangePercent)    meta.postMarketChangePercent    = qMeta.postMarketChangePercent;
+          if (qMeta.marketState)                meta.marketState                = qMeta.marketState;
         }
       } catch (_) {}
     }
