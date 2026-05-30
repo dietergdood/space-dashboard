@@ -99,11 +99,12 @@ async function supaDelete(path) {
 const delay = ms => new Promise(r => setTimeout(r, ms));
 
 export default async function handler(req, res) {
-  // Vercel automatically secures cron endpoints
   if (!ANTHROPIC_KEY) return res.status(500).json({ error: 'No ANTHROPIC_API_KEY configured' });
   if (!SUPABASE_URL) return res.status(500).json({ error: 'No SUPABASE_URL configured' });
   if (!SUPABASE_SERVICE_KEY) return res.status(500).json({ error: 'No SUPABASE_SERVICE_KEY configured' });
-  console.log('Env check OK, starting cron...');
+  // Optional: ?scope=rklb or ?scope=asts or ?scope=global to run subset
+  const scope = req.query?.scope || 'all';
+  console.log('Cron starting, scope:', scope);
 
   try {
     // Check if sync is enabled
@@ -116,24 +117,12 @@ export default async function handler(req, res) {
 
     const REC_PROMPTS = {
       rklb: `Analysiere Rocket Lab (RKLB). Suche auf: rocketlabusa.com/investors, SEC Filings, Reuters, Bloomberg, CNBC, Seeking Alpha, SpaceNews, NASASpaceFlight, Breaking Defense, SpaceForce.mil, Reddit r/RocketLab r/space, X/@RocketLab, StockTwits RKLB, TipRanks, Zacks. Berücksichtige Abhängigkeiten: SpaceX (Konkurrenz Electron vs Falcon9, Neutron vs Falcon9), Blue Origin New Glenn, Amazon Kuiper Aufträge, NASA/SpaceForce Aufträge, SDA Tracking Layer. Antworte NUR mit JSON, KEIN HTML in Texten ausser bei explain_* Feldern, keine <cite> Tags: {"empfehlung":"KAUFEN","titel":"Max 80 Zeichen","begruendung":"2-4 Sätze","fundamentals":8,"momentum":7,"risiko":6,"bewertung":5,"explain_fundamentals":"<b>Fundamentals</b> — 1 Satz","explain_momentum":"<b>Momentum</b> — 1 Satz","explain_risiko":"<b>Risiko</b> — <b>Höherer Score = niedrigeres Risiko.</b> 1 Satz","explain_bewertung":"<b>Bewertung</b> — 1 Satz","einstieg":"$120-130","kursziel":"$180","stopp":"$105","lage":"<b>Aktuelle Lage:</b> 1-2 Sätze","lage_typ":"positive","analysten":"12x Kaufen"}`,
-      asts: `Analysiere AST SpaceMobile (ASTS). Suche auf: ast-science.com/investors, SEC Filings, Reuters, Bloomberg, CNBC, Seeking Alpha, SpaceNews, FierceWireless, Light Reading, Reddit r/ASTS r/SpaceMobile, X/@AST_SpaceMobile, StockTwits ASTS, TipRanks, Zacks. Berücksichtige Abhängigkeiten: Starlink D2D (SpaceX/T-Mobile) als Hauptkonkurrent, AT&T Partnership, Verizon Partnership, Amazon Kuiper D2D, Blue Origin D2D Pläne, globale Carrier-Verträge. Antworte NUR mit JSON, KEIN HTML in Texten ausser bei explain_* Feldern, keine <cite> Tags: {"empfehlung":"HALTEN","titel":"Max 80 Zeichen","begruendung":"2-4 Sätze","fundamentals":5,"momentum":8,"risiko":4,"bewertung":3,"explain_fundamentals":"<b>Fundamentals</b> — 1 Satz","explain_momentum":"<b>Momentum</b> — 1 Satz","explain_risiko":"<b>Risiko</b> — <b>Höherer Score = niedrigeres Risiko.</b> 1 Satz","explain_bewertung":"<b>Bewertung</b> — 1 Satz","einstieg":"$80-90","kursziel":"$140","stopp":"$70","lage":"<b>Aktuelle Lage:</b> 1-2 Sätze","lage_typ":"warning","analysten":"8x Kaufen"}`
+      asts: `Analysiere AST SpaceMobile (ASTS) aktuell. Berücksichtige: Starlink D2D Konkurrenz, AT&T/Verizon Partnerships, FCC Lizenzen, Satelliten-Netz Status. Antworte NUR mit JSON, KEIN HTML in Texten ausser bei explain_* Feldern, keine <cite> Tags: {"empfehlung":"HALTEN","titel":"Max 80 Zeichen","begruendung":"2-4 Sätze","fundamentals":5,"momentum":8,"risiko":4,"bewertung":3,"explain_fundamentals":"<b>Fundamentals</b> — 1 Satz","explain_momentum":"<b>Momentum</b> — 1 Satz","explain_risiko":"<b>Risiko</b> — <b>Höherer Score = niedrigeres Risiko.</b> 1 Satz","explain_bewertung":"<b>Bewertung</b> — 1 Satz","einstieg":"$80-90","kursziel":"$140","stopp":"$70","lage":"<b>Aktuelle Lage:</b> 1-2 Sätze","lage_typ":"warning","analysten":"8x Kaufen"}`
     };
 
     const NEWS_PROMPTS = {
-      rklb: `Suche aktuelle Nachrichten über Rocket Lab (RKLB) der letzten 48h. Suche auf ALLEN diesen Quellen:
-OFFIZIELLE QUELLEN: rocketlabusa.com/updates, rocketlabusa.com/investors, SEC Filings (sec.gov Ticker RKLB), Earnings Call Transcripts, IR Pressemitteilungen.
-FINANZMEDIEN: Reuters, Bloomberg, CNBC, MarketWatch, Barron's, Wall Street Journal, Financial Times, Yahoo Finance, Investopedia.
-ANALYSTEN: Seeking Alpha, The Motley Fool, Zacks Investment Research, TipRanks, Simply Wall St, Stockanalysis.com.
-SPACE-SPEZIFISCH: SpaceNews (spacenews.com), NASASpaceFlight (nasaspaceflight.com), SpaceflightNow (spaceflightnow.com), Ars Technica Space, Space.com, Aviation Week, Parabolic Arc (parabolicarc.com).
-SOCIAL MEDIA: Reddit r/RocketLab, r/space, r/investing, r/wallstreetbets, r/stocks, X/Twitter @RocketLab #RKLB, StockTwits RKLB.
-DEFENSE/GOVERNMENT: Defense News (defensenews.com), Breaking Defense (breakingdefense.com), SpaceForce.mil, defense.gov, NASA.gov. Priorisiere: 1. Offizielle Pressemitteilungen 2. Seriöse Finanzmedien 3. Space-Fachmedien 4. Social Media Highlights. Antworte NUR mit JSON, KEIN HTML, keine <cite> Tags: {"articles":[{"title":"Titel","sentiment":"pos|neg|neu","body":"2-3 Sätze auf Deutsch ohne HTML","source":"Exakte Quelle"}]}`,
-      asts: `Suche aktuelle Nachrichten über AST SpaceMobile (ASTS) der letzten 48h. Suche auf ALLEN diesen Quellen:
-OFFIZIELLE QUELLEN: ast-science.com/news, ast-science.com/investors, SEC Filings (sec.gov Ticker ASTS), Earnings Call Transcripts, IR Pressemitteilungen.
-FINANZMEDIEN: Reuters, Bloomberg, CNBC, MarketWatch, Barron's, Wall Street Journal, Financial Times, Yahoo Finance.
-ANALYSTEN: Seeking Alpha, The Motley Fool, Zacks, TipRanks, Stockanalysis.com, Simply Wall St.
-SPACE/TELECOM-SPEZIFISCH: SpaceNews, NASASpaceFlight, Ars Technica, Space.com, TechCrunch, Light Reading (lightreading.com), FierceWireless (fiercewireless.com), PCMag.
-SOCIAL MEDIA: Reddit r/ASTS, r/SpaceMobile, r/investing, r/wallstreetbets, X/Twitter @AST_SpaceMobile #ASTS, StockTwits ASTS.
-PARTNER/KONKURRENZ: Starlink News, T-Mobile News, AT&T Newsroom, Verizon News, AST Partnerankündigungen. Priorisiere: 1. Offizielle Pressemitteilungen 2. Seriöse Finanzmedien 3. Telecom/Space-Fachmedien 4. Social Media Highlights. Antworte NUR mit JSON, KEIN HTML, keine <cite> Tags: {"articles":[{"title":"Titel","sentiment":"pos|neg|neu","body":"2-3 Sätze auf Deutsch ohne HTML","source":"Exakte Quelle"}]}`
+      rklb: `Suche aktuelle RKLB Rocket Lab Nachrichten der letzten 48h. Quellen: rocketlabusa.com, Reuters, Bloomberg, SpaceNews, NASASpaceFlight, Breaking Defense, Reddit r/RocketLab, X @RocketLab, StockTwits RKLB, SEC Filings. Antworte NUR mit JSON, KEIN HTML, keine <cite> Tags: {"articles":[{"title":"Titel","sentiment":"pos|neg|neu","body":"2-3 Sätze auf Deutsch ohne HTML","source":"Exakte Quelle"}]}`,
+      asts: `Suche aktuelle ASTS AST SpaceMobile Nachrichten der letzten 48h. Quellen: ast-science.com, Reuters, Bloomberg, SpaceNews, FierceWireless, Light Reading, Reddit r/ASTS, X @AST_SpaceMobile, StockTwits ASTS, T-Mobile/AT&T News. Antworte NUR mit JSON, KEIN HTML, keine <cite> Tags: {"articles":[{"title":"Titel","sentiment":"pos|neg|neu","body":"2-3 Sätze auf Deutsch ohne HTML","source":"Exakte Quelle"}]}`
     };
 
     const SCENARIOS_PROMPTS = {
@@ -142,26 +131,24 @@ PARTNER/KONKURRENZ: Starlink News, T-Mobile News, AT&T Newsroom, Verizon News, A
     };
 
     const SECTOR_PROMPTS = {
-      rklb: `Analysiere Sektor-Kontext und Abhängigkeiten für RKLB. Suche auf: spacenews.com, nasaspaceflight.com, breakingdefense.com, defense.gov, spaceforce.mil, reuters.com, bloomberg.com, spacex.com/news, blueorigin.com/news, nasa.gov, arsTechnica.com/space. Analysiere: 1) SpaceX als Konkurrent UND potenzieller Kunde (Rideshare). 2) Blue Origin/New Glenn als direkter Konkurrent. 3) Amazon Project Kuiper als potenzielle RKLB Launch-Aufträge. 4) US Government (NASA, Space Force, SDA) als Hauptkunde. 5) Golden Dome Raketenabwehr-Budget. Antworte NUR mit JSON, KEIN HTML, keine <cite> Tags: {"intro":"1 Satz ohne HTML","cards":[{"emoji":"🚀","name":"SpaceX","val":"Konkurrent","val_color":"purple","desc":"Falcon 9 vs Electron, Neutron vs Falcon 9 — aktuelle Marktanteile"},{"emoji":"🛡","name":"Golden Dome","val":"Budget $X Mrd","val_color":"green","desc":"Aktuelles Programm-Budget und RKLB Vertragsanteil"},{"emoji":"🛸","name":"SDA Tracking Layer","val":"Status","val_color":"blue","desc":"Space Development Agency Aufträge — RKLB Tranche Status"},{"emoji":"🌕","name":"NASA Aufträge","val":"Status","val_color":"blue","desc":"Aktuelle NASA VCLS, CLPS und sonstige Launch-Aufträge"},{"emoji":"⚔️","name":"Space Force","val":"Budget","val_color":"green","desc":"US Space Force Launch-Aufträge und NSSL Programm"},{"emoji":"📦","name":"Amazon Kuiper","val":"Potenzial","val_color":"amber","desc":"Kuiper Konstellation Launch-Aufträge — Status"}]}`,
-      asts: `Analysiere Sektor-Kontext und Abhängigkeiten für ASTS. Suche auf: spacenews.com, reuters.com, bloomberg.com, lightreading.com, fiercewireless.com, techcrunch.com, spacex.com/news, t-mobile.com/news, att.com/newsroom, verizon.com/news, amazon.com/news, bluejeans.com/news, pcmag.com. Analysiere: 1) Starlink Direct-to-Cell als direkter Hauptkonkurrent (SpaceX/T-Mobile). 2) AT&T Partnership Status und Umsatzpotenzial. 3) Verizon Partnership Status. 4) Amazon Project Kuiper D2D Pläne. 5) Blue Origin D2D Pläne. 6) T-Mobile Starlink vs ASTS Exklusivität. Antworte NUR mit JSON, KEIN HTML, keine <cite> Tags: {"intro":"1 Satz ohne HTML","cards":[{"emoji":"⚡","name":"Starlink D2D","val":"Konkurrent","val_color":"red","desc":"SpaceX/T-Mobile D2D — aktuelle Abdeckung und Nutzerzahlen vs ASTS"},{"emoji":"📱","name":"AT&T & Verizon","val":"Partner","val_color":"green","desc":"Kommerzieller Rollout-Status, Nutzerzahlen, Revenue-Sharing"},{"emoji":"🌍","name":"Globale Carrier","val":"Anzahl Partner","val_color":"blue","desc":"Aktuelle Anzahl Carrier-Partner weltweit und neue Verträge"},{"emoji":"🛰","name":"Satelliten-Netz","val":"X Satelliten","val_color":"blue","desc":"Aktuelle Anzahl BlueBird Satelliten im Orbit und Abdeckung"},{"emoji":"📡","name":"FCC Lizenzen","val":"Status","val_color":"green","desc":"FCC Frequenz-Lizenzen und regulatorische Genehmigungen"},{"emoji":"📦","name":"Amazon Kuiper D2D","val":"Zeitplan","val_color":"amber","desc":"Kuiper Direct-to-Device Pläne und Bedrohung für ASTS"}]}`
+      rklb: `Analysiere Sektor-Kontext und Abhängigkeiten für RKLB. Analysiere aktuell: 1) SpaceX als Konkurrent UND potenzieller Kunde (Rideshare). 2) Blue Origin/New Glenn als direkter Konkurrent. 3) Amazon Project Kuiper als potenzielle RKLB Launch-Aufträge. 4) US Government (NASA, Space Force, SDA) als Hauptkunde. 5) Golden Dome Raketenabwehr-Budget. Antworte NUR mit JSON, KEIN HTML, keine <cite> Tags: {"intro":"1 Satz ohne HTML","cards":[{"emoji":"🚀","name":"SpaceX","val":"Konkurrent","val_color":"purple","desc":"Falcon 9 vs Electron, Neutron vs Falcon 9 — aktuelle Marktanteile"},{"emoji":"🛡","name":"Golden Dome","val":"Budget $X Mrd","val_color":"green","desc":"Aktuelles Programm-Budget und RKLB Vertragsanteil"},{"emoji":"🛸","name":"SDA Tracking Layer","val":"Status","val_color":"blue","desc":"Space Development Agency Aufträge — RKLB Tranche Status"},{"emoji":"🌕","name":"NASA Aufträge","val":"Status","val_color":"blue","desc":"Aktuelle NASA VCLS, CLPS und sonstige Launch-Aufträge"},{"emoji":"⚔️","name":"Space Force","val":"Budget","val_color":"green","desc":"US Space Force Launch-Aufträge und NSSL Programm"},{"emoji":"📦","name":"Amazon Kuiper","val":"Potenzial","val_color":"amber","desc":"Kuiper Konstellation Launch-Aufträge — Status"}]}`,
+      asts: `Analysiere Sektor-Kontext und Abhängigkeiten für ASTS. Analysiere aktuell: 1) Starlink Direct-to-Cell als direkter Hauptkonkurrent (SpaceX/T-Mobile). 2) AT&T Partnership Status und Umsatzpotenzial. 3) Verizon Partnership Status. 4) Amazon Project Kuiper D2D Pläne. 5) Blue Origin D2D Pläne. 6) T-Mobile Starlink vs ASTS Exklusivität. Antworte NUR mit JSON, KEIN HTML, keine <cite> Tags: {"intro":"1 Satz ohne HTML","cards":[{"emoji":"⚡","name":"Starlink D2D","val":"Konkurrent","val_color":"red","desc":"SpaceX/T-Mobile D2D — aktuelle Abdeckung und Nutzerzahlen vs ASTS"},{"emoji":"📱","name":"AT&T & Verizon","val":"Partner","val_color":"green","desc":"Kommerzieller Rollout-Status, Nutzerzahlen, Revenue-Sharing"},{"emoji":"🌍","name":"Globale Carrier","val":"Anzahl Partner","val_color":"blue","desc":"Aktuelle Anzahl Carrier-Partner weltweit und neue Verträge"},{"emoji":"🛰","name":"Satelliten-Netz","val":"X Satelliten","val_color":"blue","desc":"Aktuelle Anzahl BlueBird Satelliten im Orbit und Abdeckung"},{"emoji":"📡","name":"FCC Lizenzen","val":"Status","val_color":"green","desc":"FCC Frequenz-Lizenzen und regulatorische Genehmigungen"},{"emoji":"📦","name":"Amazon Kuiper D2D","val":"Zeitplan","val_color":"amber","desc":"Kuiper Direct-to-Device Pläne und Bedrohung für ASTS"}]}`
     };
 
     const CTX_PROMPTS = {
-      rklb: `Suche aktuelle Firmendaten für Rocket Lab (RKLB). Quellen: rocketlabusa.com/updates, rocketlabusa.com/investors, SEC Filings (sec.gov RKLB), letzter Earnings Call Transcript, Reuters, Bloomberg, SpaceNews, NASASpaceFlight, Breaking Defense. Antworte NUR mit JSON, KEIN HTML, keine <cite> Tags: {"desc":"1-2 Sätze ohne HTML","tags":[{"text":"Tag","type":"green"}],"stats":[{"label":"Backlog","val":"$X Mrd"}]}`,
-      asts: `Suche aktuelle Firmendaten für AST SpaceMobile (ASTS). Quellen: ast-science.com/news, ast-science.com/investors, SEC Filings (sec.gov ASTS), letzter Earnings Call Transcript, Reuters, Bloomberg, SpaceNews, FierceWireless, Light Reading, T-Mobile/AT&T/Verizon Newsroom. Antworte NUR mit JSON, KEIN HTML, keine <cite> Tags: {"desc":"1-2 Sätze ohne HTML","tags":[{"text":"Tag","type":"green"}],"stats":[{"label":"Cash","val":"$X Mrd"}]}`
+      rklb: `Aktuelle Rocket Lab (RKLB) Firmendaten: Backlog, Revenue, Mitarbeiter, HQ, Gründungsjahr. Quellen: rocketlabusa.com, SEC Filings, letzter Earnings Call. Antworte NUR mit JSON, KEIN HTML, keine <cite> Tags: {"desc":"1-2 Sätze ohne HTML","tags":[{"text":"Tag","type":"green"}],"stats":[{"label":"Backlog","val":"$X Mrd"}]}`,
+      asts: `Aktuelle AST SpaceMobile (ASTS) Firmendaten: Cash, Satelliten im Orbit, Partner-Carrier, Gründungsjahr. Quellen: ast-science.com, SEC Filings, letzter Earnings Call. Antworte NUR mit JSON, KEIN HTML, keine <cite> Tags: {"desc":"1-2 Sätze ohne HTML","tags":[{"text":"Tag","type":"green"}],"stats":[{"label":"Cash","val":"$X Mrd"}]}`
     };
 
     const GLOSSAR_PROMPT = `Analysiere aktuelle RKLB und ASTS News aus folgenden Quellen: Suche auf: X/Twitter, Reddit (r/investing, r/wallstreetbets), Yahoo Finance, Bloomberg, Reuters, SEC Filings. rocketlabusa.com/updates, ast-science.com/news. Welche 2-4 neue Fachbegriffe tauchen auf? Suche auch das aktuelle Budget des US "Golden Dome" Programms auf defense.gov und Reuters. Antworte NUR mit JSON, KEIN HTML, keine <cite> Tags: {"golden_dome_def":"US-Raketenabwehr (BETRAG). Rocket Lab Lieferant.","terms":[{"term":"Begriff","def":"Kurze Erklärung ohne HTML"}]}`;
 
-    const GOV_RKLB_PROMPT = `Recherchiere US Government Space & Defense Aufträge speziell für Rocket Lab (RKLB). Suche auf: defense.gov, spaceforce.mil, nasa.gov, sda.mil, breakingdefense.com, defensenews.com, spacenews.com, reuters.com, rocketlabusa.com/investors, SEC Filings RKLB.
-    Analysiere NUR RKLB-relevante Programme: 1) Golden Dome — Budget und RKLB Vertragsanteil. 2) SDA Tracking Layer — RKLB Tranche Aufträge und Wert. 3) NASA VCLS/CLPS — aktuelle RKLB Launch-Aufträge. 4) Space Force NSSL/EELV — RKLB Qualifikationsstatus.
+    const GOV_RKLB_PROMPT = `Aktuelle US Gov Aufträge für RKLB: 1) Golden Dome Budget + RKLB Anteil. 2) SDA Tracking Layer RKLB Aufträge. 3) NASA Launch-Aufträge. 4) Space Force NSSL Status.
     Antworte NUR mit JSON, KEIN HTML, keine <cite> Tags: {"golden_dome":{"budget":"$X Mrd","rklb_anteil":"$X Mio","status":"Status","desc":"1-2 Sätze RKLB-Relevanz"},"sda":{"budget":"$X Mrd","rklb_auftraege":"X Aufträge / $X Mio","status":"Status","desc":"1-2 Sätze RKLB Tranche Status"},"nasa":{"program":"VCLS/CLPS","wert":"$X Mio","status":"Status","desc":"1 Satz"},"space_force":{"program":"NSSL","wert":"$X Mio","status":"Status","desc":"1 Satz"},"ausblick":"1 Satz RKLB Government Revenue Ausblick"}`;
 
-    const GOV_ASTS_PROMPT = `Recherchiere US Government & Regulierungs-Themen speziell für AST SpaceMobile (ASTS). Suche auf: fcc.gov, itu.int, ntia.gov, defense.gov, nasa.gov, reuters.com, bloomberg.com, ast-science.com/investors, SEC Filings ASTS, lightreading.com, fiercewireless.com.
-    Analysiere NUR ASTS-relevante Themen: 1) FCC Frequenz-Lizenzen — Status und Genehmigungen für Satelliten-Spektrum. 2) ITU Koordination — internationale Frequenzkoordination. 3) DoD/US Military — potenzielle ASTS Nutzung für Truppenkommunikation. 4) NTIA — US Frequenzverwaltung und Konflikte. 5) FirstNet/AT&T Bundesaufträge die ASTS betreffen.
+    const GOV_ASTS_PROMPT = `Aktuelle US Regulierung für ASTS: 1) FCC Frequenzlizenz-Status. 2) ITU internationale Koordination. 3) DoD/Military Nutzungspotenzial. 4) NTIA Frequenzverwaltung.
     Antworte NUR mit JSON, KEIN HTML, keine <cite> Tags: {"fcc":{"status":"Status Lizenz","frequenz":"Frequenzband","desc":"1-2 Sätze FCC Genehmigungsstatus"},"itu":{"status":"Status","desc":"1 Satz internationale Koordination"},"dod":{"potenzial":"Hoch/Mittel/Niedrig","desc":"1-2 Sätze DoD Nutzungspotenzial"},"ntia":{"status":"Status","desc":"1 Satz"},"ausblick":"1 Satz ASTS Regulierungs-Ausblick"}`;
 
-    const calls = [
+    const allCalls = [
       { ticker:'rklb', section:'rec',      prompt: REC_PROMPTS.rklb },
       { ticker:'asts', section:'rec',      prompt: REC_PROMPTS.asts },
       { ticker:'rklb', section:'news',     prompt: NEWS_PROMPTS.rklb },
@@ -176,17 +163,39 @@ PARTNER/KONKURRENZ: Starlink News, T-Mobile News, AT&T Newsroom, Verizon News, A
       { ticker:'rklb', section:'gov_space', prompt: GOV_RKLB_PROMPT },
       { ticker:'asts', section:'gov_space', prompt: GOV_ASTS_PROMPT },
     ];
+    // Filter by scope for faster execution
+    const calls = scope === 'rklb' ? allCalls.filter(c => c.ticker === 'rklb') :
+                  scope === 'asts' ? allCalls.filter(c => c.ticker === 'asts') :
+                  scope === 'global' ? allCalls.filter(c => !c.ticker) :
+                  allCalls;
+    console.log(`Running ${calls.length} calls for scope: ${scope}`);
 
-    for (const call of calls) {
+    // Run in parallel batches to stay within timeout
+    const batch1 = calls.slice(0, 7);  // first 7
+    const batch2 = calls.slice(7);     // remaining 6
+
+    async function runCall(call) {
       try {
         const data = await kiCall(call.prompt);
         await saveToCache(call.ticker, call.section, data);
         results.success.push(`${call.ticker}/${call.section}`);
-        await delay(8000); // 8s between calls
       } catch(e) {
         results.failed.push(`${call.ticker}/${call.section}: ${e.message}`);
-        await delay(2000);
       }
+    }
+
+    // Batch 1: run with small stagger
+    for (const call of batch1) {
+      await runCall(call);
+      await delay(2000);
+    }
+    // Batch 2: parallel (2 at a time)
+    for (let i = 0; i < batch2.length; i += 2) {
+      await Promise.all([
+        runCall(batch2[i]),
+        batch2[i+1] ? runCall(batch2[i+1]) : Promise.resolve()
+      ]);
+      await delay(2000);
     }
 
     // Update last_sync timestamp
