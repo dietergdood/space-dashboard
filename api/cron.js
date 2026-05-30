@@ -70,12 +70,20 @@ async function kiCall(prompt, retries=3) {
     console.log('Response content blocks:', data.content?.length, data.content?.map(b=>b.type).join(','));
     const raw = data.content.filter(b=>b.type==='text').map(b=>b.text).join('').trim();
     console.log('Raw text length:', raw.length, '| First 100:', raw.substring(0,100));
-    const match = raw.match(/\{[\s\S]*\}/);
+    // Strip markdown code blocks if present
+    let jsonStr = raw.replace(/^```json\s*/,'').replace(/^```\s*/,'').replace(/\s*```$/,'').trim();
+    // Find JSON object or array
+    const match = jsonStr.match(/\{[\s\S]*\}/);
     if (!match) {
-      console.error('No JSON found in response');
+      console.error('No JSON found. Raw:', raw.substring(0,300));
       throw new Error('No JSON in response');
     }
-    return JSON.parse(match[0]);
+    try {
+      return JSON.parse(match[0]);
+    } catch(parseErr) {
+      console.error('JSON parse error:', parseErr.message, '| JSON:', match[0].substring(0,200));
+      throw new Error('JSON parse failed: ' + parseErr.message);
+    }
   }
   throw new Error('Max retries exceeded');
 }
