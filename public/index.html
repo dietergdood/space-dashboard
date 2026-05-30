@@ -535,6 +535,7 @@ body{font-family:'DM Sans',sans-serif;background:var(--bg);color:var(--text);min
 
 /* ── Pill Tooltips ── */
 .df-stat-pill{position:relative;cursor:help;}
+.df-stat-pill .tip-icon{position:absolute;top:6px;right:6px;width:14px;height:14px;font-size:8px;}
 .df-stat-pill .tip{position:absolute;bottom:calc(100% + 8px);left:50%;transform:translateX(-50%);background:var(--text);color:var(--surface);font-size:12px;font-weight:400;padding:7px 10px;border-radius:8px;width:200px;text-align:left;line-height:1.5;opacity:0;pointer-events:none;transition:opacity .15s;z-index:200;white-space:normal;}
 .df-stat-pill .tip::after{content:'';position:absolute;top:100%;left:50%;transform:translateX(-50%);border:5px solid transparent;border-top-color:var(--text);}
 .df-stat-pill:hover .tip{opacity:1;}
@@ -544,6 +545,7 @@ body{font-family:'DM Sans',sans-serif;background:var(--bg);color:var(--text);min
 /* Left-aligned: pill near left edge */
 .df-stat-pill.tip-left .tip{left:0;transform:none;}
 .df-stat-pill.tip-left .tip::after{left:16px;transform:none;}
+.df-stat-pill .tip-icon{position:absolute;top:7px;right:7px;display:inline-flex;align-items:center;justify-content:center;width:14px;height:14px;background:var(--border2);border-radius:50%;font-size:9px;color:var(--text3);cursor:help;}
 </style>
   <!-- PWA -->
   <link rel="manifest" href="/manifest.json">
@@ -731,7 +733,7 @@ body{font-family:'DM Sans',sans-serif;background:var(--bg);color:var(--text);min
         <span class="rec-pill empty" id="rklb-rec-pill">—</span>
         <div>
           <div class="rec-title" id="rklb-rec-title" style="color:var(--text2);font-weight:400;">KI-Analyse ausstehend</div>
-          <div class="rec-ts" id="rklb-rec-ts">Täglich um 09:00 Uhr aktualisiert</div>
+          <div class="rec-ts" id="rklb-rec-ts"></div>
         </div>
       </div>
       <div class="rec-explain" id="rklb-rec-sub" style="color:var(--text3);font-style:italic;">Noch keine Analyse geladen. Mit KI-Schlüssel im ⚙️-Menü wird die Empfehlung automatisch generiert.</div>
@@ -1034,7 +1036,7 @@ body{font-family:'DM Sans',sans-serif;background:var(--bg);color:var(--text);min
         <span class="rec-pill empty" id="asts-rec-pill">—</span>
         <div>
           <div class="rec-title" id="asts-rec-title" style="color:var(--text2);font-weight:400;">KI-Analyse ausstehend</div>
-          <div class="rec-ts" id="asts-rec-ts">Täglich um 09:00 Uhr aktualisiert</div>
+          <div class="rec-ts" id="asts-rec-ts"></div>
         </div>
       </div>
       <div class="rec-explain" id="asts-rec-sub" style="color:var(--text3);font-style:italic;">Noch keine Analyse geladen. Mit KI-Schlüssel im ⚙️-Menü wird die Empfehlung automatisch generiert.</div>
