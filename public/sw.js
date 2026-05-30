@@ -1,4 +1,4 @@
-const CACHE = 'space-stocks-v6';
+const CACHE = 'space-stocks-v7';
 const STATIC = ['/'];
 
 self.addEventListener('install', e => {
