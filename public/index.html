@@ -1788,7 +1788,44 @@ function addTx(t) {
   if ($(t+'-tx-note')) $(t+'-tx-note').value='';
   renderTxList(t); recalcPF(t);
 }
+
+function editTx(t, id) {
+  id = typeof id === 'string' ? parseInt(id) : id;
+  const tx = txData[t].find(x=>x.id===id);
+  if (!tx) return;
+  const el = document.getElementById('pf-tx-'+id);
+  if (!el) return;
+  el.innerHTML = `
+    <select style="font-size:12px;padding:2px 4px;border:1px solid var(--border);border-radius:4px;background:var(--surface);">
+      <option value="buy" ${tx.type==='buy'?'selected':''}>KAUF</option>
+      <option value="sell" ${tx.type==='sell'?'selected':''}>VERKAUF</option>
+    </select>
+    <input type="number" value="${tx.qty}" min="0" step="any" placeholder="Anzahl" style="width:70px;font-size:12px;padding:2px 4px;border:1px solid var(--border);border-radius:4px;background:var(--surface);">
+    <input type="number" value="${tx.price}" min="0" step="any" placeholder="Preis" style="width:70px;font-size:12px;padding:2px 4px;border:1px solid var(--border);border-radius:4px;background:var(--surface);">
+    <input type="date" value="${tx.date}" style="font-size:12px;padding:2px 4px;border:1px solid var(--border);border-radius:4px;background:var(--surface);">
+    <button onclick="saveEditTx('${t}',${id},this)" style="font-size:12px;padding:2px 8px;background:var(--green);color:#fff;border:none;border-radius:4px;cursor:pointer;">✓</button>
+    <button onclick="cancelEditTx('${t}')" style="font-size:12px;padding:2px 8px;background:var(--surface2);border:1px solid var(--border);border-radius:4px;cursor:pointer;">✕</button>
+  `;
+}
+function saveEditTx(t, id, btn) {
+  id = typeof id === 'string' ? parseInt(id) : id;
+  const row = btn.closest('.pf-tx');
+  const inputs = row.querySelectorAll('input, select');
+  const type = inputs[0].value;
+  const qty = parseFloat(inputs[1].value);
+  const price = parseFloat(inputs[2].value);
+  const date = inputs[3].value;
+  if (!qty || !price || qty<=0 || price<=0) { alert('Ungültige Werte'); return; }
+  const idx = txData[t].findIndex(x=>x.id===id);
+  if (idx>=0) { txData[t][idx] = {...txData[t][idx], type, qty, price, date}; }
+  saveTx(t); renderTxList(t); recalcPF(t);
+}
+function cancelEditTx(t) {
+  renderTxList(t);
+}
+
 function removeTx(t, id) {
+  id = typeof id === 'string' ? parseInt(id) : id;
   txData[t] = txData[t].filter(x=>x.id!==id);
   saveTx(t); renderTxList(t); recalcPF(t);
 }
@@ -1797,12 +1834,13 @@ function renderTxList(t) {
   if (!el) return;
   if (!txData[t].length) { el.innerHTML='<div class="pf-empty">Noch keine Transaktionen erfasst.</div>'; return; }
   el.innerHTML = txData[t].map(tx =>
-    `<div class="pf-tx">
+    `<div class="pf-tx" id="pf-tx-${tx.id}">
       <span class="pf-tx-type ${tx.type}">${tx.type==='buy'?'KAUF':'VERKAUF'}</span>
       <span class="mono">${tx.qty} × $${fmt(tx.price)}</span>
       <span style="color:var(--text3);font-size:12px;">${tx.date}</span>
       ${tx.note?`<span style="color:var(--text2);font-size:12px;">${tx.note}</span>`:''}
-      <button class="pf-tx-remove" onclick="removeTx('${t}',${tx.id})">✕</button>
+      <button class="pf-tx-edit" onclick="editTx('${t}',${tx.id})" title="Bearbeiten" style="margin-left:auto;background:none;border:none;color:var(--text3);cursor:pointer;font-size:13px;padding:2px 5px;">✏️</button>
+      <button class="pf-tx-remove" onclick="removeTx('${t}',${tx.id})" title="Löschen" style="background:none;border:none;color:var(--text3);cursor:pointer;font-size:14px;padding:2px 4px;">✕</button>
     </div>`
   ).join('');
 }
@@ -1822,13 +1860,23 @@ function recalcPF(t) {
   if($(t+'-sum-avg')) $(t+'-sum-avg').textContent='$'+fmt(avgCost);
   if($(t+'-sum-val')) $(t+'-sum-val').textContent='$'+fmt(val);
   if($(t+'-sum-invested')) $(t+'-sum-invested').textContent='$'+fmt(invested);
-  if($(t+'-sum-unreal')) {
-    $(t+'-sum-unreal').textContent=(unreal>=0?'+ ':' ')+'$'+fmt(Math.abs(unreal))+' ('+fmt(Math.abs(unreal/invested*100||0))+'%)';
-    $(t+'-sum-unreal').className='pf-sum-val '+(unreal>=0?'up':'dn');
+  if($(t+'-sum-unrealized')) {
+    $(t+'-sum-unrealized').textContent=(unreal>=0?'+ ':' ')+'$'+fmt(Math.abs(unreal))+' ('+fmt(Math.abs(unreal/invested*100||0))+'%)';
+    $(t+'-sum-unrealized').className='pf-sum-val '+(unreal>=0?'up':'dn');
   }
   const ft=forecastTargets[t];
-  if(ft&&ft.bull&&$(t+'-pf-bull')) $(t+'-pf-bull').textContent='$'+fmt(qty*ft.bull);
-  if(ft&&ft.bear&&$(t+'-pf-bear')) $(t+'-pf-bear').textContent='$'+fmt(qty*ft.bear);
+  if(ft&&ft.bull&&$(t+'-sum-bull')) {
+    const bullVal=qty*ft.bull;
+    $(t+'-sum-bull').textContent='$'+fmt(bullVal);
+    const bullGain=bullVal-invested;
+    if($(t+'-sum-bull-gain')) $(t+'-sum-bull-gain').textContent=(bullGain>=0?'+':'')+' $'+fmt(Math.abs(bullGain));
+  }
+  if(ft&&ft.bear&&$(t+'-sum-bear')) {
+    const bearVal=qty*ft.bear;
+    $(t+'-sum-bear').textContent='$'+fmt(bearVal);
+    const bearLoss=bearVal-invested;
+    if($(t+'-sum-bear-loss')) $(t+'-sum-bear-loss').textContent=(bearLoss>=0?'+':'')+' $'+fmt(Math.abs(bearLoss));
+  }
 }
 
 // ── Cache Reader ───────────────────────────────────────────
