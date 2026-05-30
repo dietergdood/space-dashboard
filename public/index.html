@@ -255,6 +255,11 @@ body{font-family:'DM Sans',sans-serif;background:var(--bg);color:var(--text);min
 .pf-edit-save{padding:6px 12px;background:var(--green);color:#fff;border:none;border-radius:7px;font-size:12px;font-weight:600;cursor:pointer;}
 .pf-edit-cancel{padding:6px 10px;background:var(--surface2);border:1px solid var(--border2);border-radius:7px;font-size:12px;cursor:pointer;}
 .pf-summary{background:var(--surface2);border-radius:10px;padding:14px;}
+.pf-currency-toggle{display:flex;align-items:center;gap:6px;margin-left:auto;}
+.pf-currency-toggle button{padding:3px 10px;border-radius:20px;border:1px solid var(--border2);font-size:11px;font-weight:600;cursor:pointer;background:var(--surface);color:var(--text3);transition:all .15s;}
+.pf-currency-toggle button.active{background:var(--text);color:var(--surface);border-color:var(--text);}
+.pf-sum-header{display:flex;align-items:center;margin-bottom:10px;}
+.pf-sum-header .section-head{margin-bottom:0;}
 .pf-sum-grid{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-bottom:12px;}
 .pf-sum-item{background:var(--surface);border-radius:8px;padding:10px 12px;}
 .pf-sum-label{font-size:11px;color:var(--text3);}
@@ -884,7 +889,7 @@ body{font-family:'DM Sans',sans-serif;background:var(--bg);color:var(--text);min
       <div class="pf-empty" id="rklb-tx-empty">Noch keine Transaktionen erfasst.</div>
     </div>
     <div class="pf-summary" id="rklb-pf-summary" style="display:none;">
-      <div class="section-head">Portfolio-Übersicht</div>
+      <div class="pf-sum-header"><div class="section-head">Portfolio-Übersicht</div><div class="pf-currency-toggle"><button id="rklb-cur-usd" class="active" onclick="setCurrency('rklb','USD')">USD</button><button id="rklb-cur-chf" onclick="setCurrency('rklb','CHF')">CHF</button></div></div>
       <div class="pf-sum-grid">
         <div class="pf-sum-item"><div class="pf-sum-label">Aktien im Besitz</div><div class="pf-sum-val mono" id="rklb-sum-qty">0</div></div>
         <div class="pf-sum-item"><div class="pf-sum-label">Ø Kaufpreis</div><div class="pf-sum-val mono" id="rklb-sum-avg">—</div></div>
@@ -1187,7 +1192,7 @@ body{font-family:'DM Sans',sans-serif;background:var(--bg);color:var(--text);min
       <div class="pf-empty" id="asts-tx-empty">Noch keine Transaktionen erfasst.</div>
     </div>
     <div class="pf-summary" id="asts-pf-summary" style="display:none;">
-      <div class="section-head">Portfolio-Übersicht</div>
+      <div class="pf-sum-header"><div class="section-head">Portfolio-Übersicht</div><div class="pf-currency-toggle"><button id="asts-cur-usd" class="active" onclick="setCurrency('asts','USD')">USD</button><button id="asts-cur-chf" onclick="setCurrency('asts','CHF')">CHF</button></div></div>
       <div class="pf-sum-grid">
         <div class="pf-sum-item"><div class="pf-sum-label">Aktien im Besitz</div><div class="pf-sum-val mono" id="asts-sum-qty">0</div></div>
         <div class="pf-sum-item"><div class="pf-sum-label">Ø Kaufpreis</div><div class="pf-sum-val mono" id="asts-sum-avg">—</div></div>
@@ -1463,6 +1468,32 @@ const forecastTargets = { rklb:{bull:null,base:null,bear:null}, asts:{bull:null,
 const mo = ['Jun','Jul','Aug','Sep','Okt','Nov','Dez','Jan','Feb','Mär','Apr','Mai','Jun→','Jul→','Aug→','Sep→'];
 const quotes = { rklb: null, asts: null };
 const txData = { rklb: [], asts: [] };
+const pfCurrency = { rklb: 'USD', asts: 'USD' };
+let usdChfRate = 0.9; // fallback, fetched live
+
+async function fetchUsdChfRate() {
+  try {
+    const r = await fetch('/api/quote?ticker=USDCHF=X');
+    if (!r.ok) throw new Error();
+    const d = await r.json();
+    const rate = d?.chart?.result?.[0]?.meta?.regularMarketPrice;
+    if (rate && rate > 0) usdChfRate = rate;
+  } catch(e) {}
+}
+
+function setCurrency(t, cur) {
+  pfCurrency[t] = cur;
+  $(t+'-cur-usd').classList.toggle('active', cur==='USD');
+  $(t+'-cur-chf').classList.toggle('active', cur==='CHF');
+  recalcPF(t);
+}
+
+function fmtCur(t, usdVal) {
+  if (pfCurrency[t] === 'CHF') {
+    return 'CHF ' + fmt(usdVal * usdChfRate);
+  }
+  return '$' + fmt(usdVal);
+}
 let autoTimer = null, autoCountdown = null, _astsChartsInited = false;
 
 // ── localStorage helpers ───────────────────────────────────
@@ -1896,25 +1927,25 @@ function recalcPF(t) {
   qty=Math.max(0,qty);
   const cur=q?.price||0, val=qty*cur, unreal=qty*(cur-avgCost);
   if($(t+'-sum-qty')) $(t+'-sum-qty').textContent=qty.toFixed(2);
-  if($(t+'-sum-avg')) $(t+'-sum-avg').textContent='$'+fmt(avgCost);
-  if($(t+'-sum-val')) $(t+'-sum-val').textContent='$'+fmt(val);
-  if($(t+'-sum-invested')) $(t+'-sum-invested').textContent='$'+fmt(invested);
+  if($(t+'-sum-avg')) $(t+'-sum-avg').textContent=fmtCur(t,avgCost);
+  if($(t+'-sum-val')) $(t+'-sum-val').textContent=fmtCur(t,val);
+  if($(t+'-sum-invested')) $(t+'-sum-invested').textContent=fmtCur(t,invested);
   if($(t+'-sum-unrealized')) {
-    $(t+'-sum-unrealized').textContent=(unreal>=0?'+ ':' ')+'$'+fmt(Math.abs(unreal))+' ('+fmt(Math.abs(unreal/invested*100||0))+'%)';
+    $(t+'-sum-unrealized').textContent=(unreal>=0?'+ ':' ')+fmtCur(t,Math.abs(unreal))+' ('+fmt(Math.abs(unreal/invested*100||0))+'%)';
     $(t+'-sum-unrealized').className='pf-sum-val '+(unreal>=0?'up':'dn');
   }
   const ft=forecastTargets[t];
   if(ft&&ft.bull&&$(t+'-sum-bull')) {
     const bullVal=qty*ft.bull;
-    $(t+'-sum-bull').textContent='$'+fmt(bullVal);
+    $(t+'-sum-bull').textContent=fmtCur(t,bullVal);
     const bullGain=bullVal-invested;
-    if($(t+'-sum-bull-gain')) $(t+'-sum-bull-gain').textContent=(bullGain>=0?'+':'')+' $'+fmt(Math.abs(bullGain));
+    if($(t+'-sum-bull-gain')) $(t+'-sum-bull-gain').textContent=(bullGain>=0?'+':'')+' '+fmtCur(t,Math.abs(bullGain));
   }
   if(ft&&ft.bear&&$(t+'-sum-bear')) {
     const bearVal=qty*ft.bear;
-    $(t+'-sum-bear').textContent='$'+fmt(bearVal);
+    $(t+'-sum-bear').textContent=fmtCur(t,bearVal);
     const bearLoss=bearVal-invested;
-    if($(t+'-sum-bear-loss')) $(t+'-sum-bear-loss').textContent=(bearLoss>=0?'+':'')+' $'+fmt(Math.abs(bearLoss));
+    if($(t+'-sum-bear-loss')) $(t+'-sum-bear-loss').textContent=(bearLoss>=0?'+':'')+' '+fmtCur(t,Math.abs(bearLoss));
   }
 }
 
@@ -2257,6 +2288,8 @@ async function refreshAllNews() {
   loadAll();
   setInterval(loadAll,15000);
   loadFromCache();
+  fetchUsdChfRate();
+  setInterval(fetchUsdChfRate, 5*60*1000); // refresh rate every 5min
   loadSyncStatus();
 })();
 
