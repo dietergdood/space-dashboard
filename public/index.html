@@ -139,6 +139,12 @@ body{font-family:'DM Sans',sans-serif;background:var(--bg);color:var(--text);min
 .tip-box{display:none;position:absolute;bottom:calc(100% + 6px);left:50%;transform:translateX(-50%);width:220px;background:var(--text);color:var(--surface);font-size:12px;line-height:1.5;padding:10px 12px;border-radius:8px;z-index:50;pointer-events:none;font-weight:400;}
 .tip-box::after{content:'';position:absolute;top:100%;left:50%;transform:translateX(-50%);border:5px solid transparent;border-top-color:var(--text);}
 .tip:hover .tip-box{display:block;}
+/* Right-aligned tooltip — for elements near the right edge */
+.tip-right .tip-box{left:auto;right:0;transform:none;}
+.tip-right .tip-box::after{left:auto;right:16px;transform:none;}
+/* Left-aligned tooltip — for elements near the left edge */
+.tip-left .tip-box{left:0;transform:none;}
+.tip-left .tip-box::after{left:16px;transform:none;}
 
 /* ── Recommendation Card ── */
 .rec-banner{border-radius:10px;padding:16px;margin-bottom:14px;}
@@ -500,6 +506,12 @@ body{font-family:'DM Sans',sans-serif;background:var(--bg);color:var(--text);min
 .df-stat-pill .tip{position:absolute;bottom:calc(100% + 8px);left:50%;transform:translateX(-50%);background:var(--text);color:var(--surface);font-size:12px;font-weight:400;padding:7px 10px;border-radius:8px;width:200px;text-align:left;line-height:1.5;opacity:0;pointer-events:none;transition:opacity .15s;z-index:100;white-space:normal;}
 .df-stat-pill .tip::after{content:'';position:absolute;top:100%;left:50%;transform:translateX(-50%);border:5px solid transparent;border-top-color:var(--text);}
 .df-stat-pill:hover .tip{opacity:1;}
+/* Right-aligned: pill near right edge */
+.df-stat-pill.tip-right .tip{left:auto;right:0;transform:none;}
+.df-stat-pill.tip-right .tip::after{left:auto;right:16px;transform:none;}
+/* Left-aligned: pill near left edge */
+.df-stat-pill.tip-left .tip{left:0;transform:none;}
+.df-stat-pill.tip-left .tip::after{left:16px;transform:none;}
 </style>
   <!-- PWA -->
   <link rel="manifest" href="/manifest.json">
@@ -818,13 +830,13 @@ body{font-family:'DM Sans',sans-serif;background:var(--bg);color:var(--text);min
         </div>
       </div>
       <div class="df-stats-row" id="rklb-df-stats">
-        <div class="df-stat-pill" id="rklb-df-atr">⚡ ATR lädt...
+        <div class="df-stat-pill tip-left" id="rklb-df-atr">⚡ ATR lädt...
           <span class="tip"><span class="tip-icon">?</span><span class="tip-box">ATR (Average True Range) misst die durchschnittliche Tagesschwankung der letzten 5 Tage. Zeigt wie stark der Kurs typischerweise pro Tag schwankt — hilfreich um realistische Erwartungen für den heutigen Tag zu setzen.</span></span>
         </div>
         <div class="df-stat-pill" id="rklb-df-mom">📈 Momentum lädt...
           <span class="tip"><span class="tip-icon">?</span><span class="tip-box">Momentum zeigt die Kursbewegung über die letzten 5 Tage in Prozent. Positiv = Aufwärtstrend, Negativ = Abwärtstrend. Starkes Momentum kann sich fortsetzen — muss aber nicht.</span></span>
         </div>
-        <div class="df-stat-pill" id="rklb-df-rsi">🔬 RSI lädt...
+        <div class="df-stat-pill tip-right" id="rklb-df-rsi">🔬 RSI lädt...
           <span class="tip"><span class="tip-icon">?</span><span class="tip-box">RSI (Relative Strength Index) misst ob die Aktie überkauft oder überverkauft ist. Über 70 = viele haben gekauft, Kurs könnte fallen. Unter 30 = viele haben verkauft, Kurs könnte steigen. 30–70 = neutrale Zone.</span></span>
         </div>
       </div>
@@ -1121,13 +1133,13 @@ body{font-family:'DM Sans',sans-serif;background:var(--bg);color:var(--text);min
         </div>
       </div>
       <div class="df-stats-row" id="asts-df-stats">
-        <div class="df-stat-pill" id="asts-df-atr">⚡ ATR lädt...
+        <div class="df-stat-pill tip-left" id="asts-df-atr">⚡ ATR lädt...
           <span class="tip"><span class="tip-icon">?</span><span class="tip-box">ATR (Average True Range) misst die durchschnittliche Tagesschwankung der letzten 5 Tage. Zeigt wie stark der Kurs typischerweise pro Tag schwankt — hilfreich um realistische Erwartungen für den heutigen Tag zu setzen.</span></span>
         </div>
         <div class="df-stat-pill" id="asts-df-mom">📈 Momentum lädt...
           <span class="tip"><span class="tip-icon">?</span><span class="tip-box">Momentum zeigt die Kursbewegung über die letzten 5 Tage in Prozent. Positiv = Aufwärtstrend, Negativ = Abwärtstrend. Starkes Momentum kann sich fortsetzen — muss aber nicht.</span></span>
         </div>
-        <div class="df-stat-pill" id="asts-df-rsi">🔬 RSI lädt...
+        <div class="df-stat-pill tip-right" id="asts-df-rsi">🔬 RSI lädt...
           <span class="tip"><span class="tip-icon">?</span><span class="tip-box">RSI (Relative Strength Index) misst ob die Aktie überkauft oder überverkauft ist. Über 70 = viele haben gekauft, Kurs könnte fallen. Unter 30 = viele haben verkauft, Kurs könnte steigen. 30–70 = neutrale Zone.</span></span>
         </div>
       </div>
@@ -1430,6 +1442,7 @@ const $ = id => document.getElementById(id);
 const fmt = n => n >= 1000 ? n.toLocaleString('en-US', {minimumFractionDigits:2,maximumFractionDigits:2}) : parseFloat(n).toFixed(2);
 const fmtB = n => n >= 1e12 ? (n/1e12).toFixed(2)+'T' : n >= 1e9 ? (n/1e9).toFixed(1)+'B' : n >= 1e6 ? (n/1e6).toFixed(0)+'M' : n;
 const fmtK = n => n >= 1e6 ? (n/1e6).toFixed(1)+'M' : n >= 1e3 ? (n/1e3).toFixed(0)+'K' : n;
+const stripTags = s => (typeof s === 'string' ? s.replace(/<[^>]*>/g, '') : String(s||''));
 
 // ── State ──────────────────────────────────────────────────
 const chartInstances = {};
@@ -1748,13 +1761,13 @@ function calcDF(t, q) {
     let gains=0, losses=0;
     for(let i=1;i<Math.min(closes.length,15);i++){const d=closes[i]-closes[i-1];d>0?gains+=d:losses-=d;}
     const rsi = 100-100/(1+(losses===0?100:gains/losses));
-    if (atrEl) atrEl.innerHTML = `<span class="tip">ATR misst die typische Tagesschwankung. ±$${fmt(atr)} = der Kurs bewegt sich im Schnitt um diesen Betrag pro Tag.</span><div style="font-size:20px;margin-bottom:3px;">⚡</div><div style="font-size:11px;color:var(--text3);margin-bottom:3px;">Schwankung</div><div style="font-weight:700;">±$${fmt(atr)}</div><div style="font-size:11px;color:var(--text3);">~${atrPct}%</div>`;
-    if (momEl) momEl.innerHTML = `<span class="tip">Momentum: ${mom>=0?'Positiv — Trend nach oben.':'Negativ — Trend nach unten.'}</span><div style="font-size:20px;margin-bottom:3px;">${mom>=0?'📈':'📉'}</div><div style="font-size:11px;color:var(--text3);margin-bottom:3px;">Momentum</div><div class="${mom>=0?'up':'dn'}" style="font-weight:700;">${mom>=0?'+':''}${fmt(mom)}%</div>`;
+    if (atrEl) atrEl.innerHTML = `<span class="tip"><span class="tip-icon">?</span><span class="tip-box">ATR misst die typische Tagesschwankung. ±$${fmt(atr)} = der Kurs bewegt sich im Schnitt um diesen Betrag pro Tag.</span></span><div style="font-size:20px;margin-bottom:3px;">⚡</div><div style="font-size:11px;color:var(--text3);margin-bottom:3px;">Schwankung</div><div style="font-weight:700;">±$${fmt(atr)}</div><div style="font-size:11px;color:var(--text3);">~${atrPct}%</div>`;
+    if (momEl) momEl.innerHTML = `<span class="tip"><span class="tip-icon">?</span><span class="tip-box">Momentum: ${mom>=0?'Positiv — Trend nach oben.':'Negativ — Trend nach unten.'}</span></span><div style="font-size:20px;margin-bottom:3px;">${mom>=0?'📈':'📉'}</div><div style="font-size:11px;color:var(--text3);margin-bottom:3px;">Momentum</div><div class="${mom>=0?'up':'dn'}" style="font-weight:700;">${mom>=0?'+':''}${fmt(mom)}%</div>`;
     if (rsiEl) {
       const rsiLabel = rsi>70?'Überkauft ⚠️':rsi<30?'Überverkauft ✅':'Neutral';
       const rsiColor = rsi>70?'var(--red)':rsi<30?'var(--green)':'var(--text2)';
       const rsiTip = rsi>70?'RSI über 70: Viele haben gekauft — könnte bald fallen.':rsi<30?'RSI unter 30: Viele haben verkauft — könnte sich erholen.':'RSI 30–70: Normale Zone.';
-      rsiEl.innerHTML = `<span class="tip">${rsiTip}</span><div style="font-size:20px;margin-bottom:3px;">🔬</div><div style="font-size:11px;color:var(--text3);margin-bottom:3px;">RSI ${rsi.toFixed(0)}</div><div style="color:${rsiColor};font-weight:700;">${rsiLabel}</div>`;
+      rsiEl.innerHTML = `<span class="tip"><span class="tip-icon">?</span><span class="tip-box">${rsiTip}</span></span><div style="font-size:20px;margin-bottom:3px;">🔬</div><div style="font-size:11px;color:var(--text3);margin-bottom:3px;">RSI ${rsi.toFixed(0)}</div><div style="color:${rsiColor};font-weight:700;">${rsiLabel}</div>`;
     }
   }
 
@@ -1826,28 +1839,29 @@ async function fetchFromCache(section, ticker) {
     const r=await fetch(url);
     if(!r.ok) return null;
     const d=await r.json();
-    return d.data||null;
+    if(!d.data) return null;
+    return {data: d.data, updated_at: d.updated_at||null};
   } catch(e){ return null; }
 }
 async function loadFromCache() {
   const statusEl=document.getElementById('ki-status');
   if(statusEl){statusEl.style.display='inline-flex';statusEl.textContent='📦 Lade Daten...';statusEl.className='ki-status-pill';}
   const sections=[
-    {fn:(d)=>applyRec('rklb',d),section:'rec',ticker:'rklb'},
-    {fn:(d)=>applyRec('asts',d),section:'rec',ticker:'asts'},
-    {fn:(d)=>applyLiveNewsData('rklb',d),section:'news',ticker:'rklb'},
-    {fn:(d)=>applyLiveNewsData('asts',d),section:'news',ticker:'asts'},
-    {fn:(d)=>applyScenarios('rklb',d),section:'scenarios',ticker:'rklb'},
-    {fn:(d)=>applyScenarios('asts',d),section:'scenarios',ticker:'asts'},
-    {fn:(d)=>applySector('rklb',d),section:'sector',ticker:'rklb'},
-    {fn:(d)=>applySector('asts',d),section:'sector',ticker:'asts'},
-    {fn:(d)=>applyCtx('rklb',d),section:'ctx',ticker:'rklb'},
-    {fn:(d)=>applyCtx('asts',d),section:'ctx',ticker:'asts'},
+    {fn:(d,ts)=>applyRec('rklb',d),section:'rec',ticker:'rklb'},
+    {fn:(d,ts)=>applyRec('asts',d),section:'rec',ticker:'asts'},
+    {fn:(d,ts)=>applyLiveNewsData('rklb',d,ts),section:'news',ticker:'rklb'},
+    {fn:(d,ts)=>applyLiveNewsData('asts',d,ts),section:'news',ticker:'asts'},
+    {fn:(d,ts)=>applyScenarios('rklb',d),section:'scenarios',ticker:'rklb'},
+    {fn:(d,ts)=>applyScenarios('asts',d),section:'scenarios',ticker:'asts'},
+    {fn:(d,ts)=>applySector('rklb',d),section:'sector',ticker:'rklb'},
+    {fn:(d,ts)=>applySector('asts',d),section:'sector',ticker:'asts'},
+    {fn:(d,ts)=>applyCtx('rklb',d),section:'ctx',ticker:'rklb'},
+    {fn:(d,ts)=>applyCtx('asts',d),section:'ctx',ticker:'asts'},
   ];
   let loaded=0;
   for(const s of sections){
-    const data=await fetchFromCache(s.section,s.ticker);
-    if(data){try{s.fn(data);loaded++;}catch(e){}}
+    const result=await fetchFromCache(s.section,s.ticker);
+    if(result){try{s.fn(result.data,result.updated_at);loaded++;}catch(e){}}
   }
   if(statusEl){
     statusEl.textContent=loaded>0?'✓ Daten geladen':'—';
@@ -1891,15 +1905,22 @@ async function manualRefreshFromSettings() {
   await refreshAllNews();
   if(btn){btn.disabled=false;btn.textContent='✓ Fertig';setTimeout(()=>btn.textContent='↺ Jetzt manuell aktualisieren',3000);}
 }
-function applyLiveNewsData(t,p) {
+function applyLiveNewsData(t,p,updated_at) {
   if(!p||!p.articles) return;
   const el=document.getElementById(t+'-news-content');
   if(!el) return;
   el.innerHTML=p.articles.map(a=>'<div class="news-art"><div class="news-art-head"><span class="news-art-badge '+(a.sentiment==='pos'?'pos':a.sentiment==='neg'?'neg':'neu')+'">'+(a.sentiment==='pos'?'Positiv':a.sentiment==='neg'?'Negativ':'Neutral')+'</span><div class="news-art-title">'+(a.title||'')+'</div></div><div class="news-art-body">'+(a.body||'')+'</div><div class="news-art-src">'+(a.source||'')+'</div></div>').join('');
+  const tsEl=document.getElementById(t+'-news-ts');
+  if(tsEl){
+    const d=updated_at?new Date(updated_at):new Date();
+    const dateStr=d.toLocaleDateString('de-CH',{day:'2-digit',month:'2-digit',year:'2-digit'});
+    const timeStr=d.toLocaleTimeString('de-CH',{hour:'2-digit',minute:'2-digit'});
+    tsEl.textContent='Aktualisiert '+dateStr+' · '+timeStr+' Uhr';
+  }
 }
 function applyScenarios(t,p) {
   if(!p) return;
-  if(p.intro&&$(t+'-scenarios-intro')) $(t+'-scenarios-intro').textContent=p.intro;
+  if(p.intro&&$(t+'-scenarios-intro')) $(t+'-scenarios-intro').textContent=stripTags(p.intro);
   const barsEl=document.getElementById(t+'-scenarios-bars');
   if(barsEl&&p.bull_label){
     const tc=t==='rklb'?'--rklb':'--asts';
@@ -1910,16 +1931,16 @@ function applyScenarios(t,p) {
     if(t==='rklb'){buildHistoryChart('rklb','rklb-chart','#1d4ed8','rgba(29,78,216,.06)',p.bull_target,p.base_target,p.bear_target);build5yrChart('rklb','rklb-chart5');}
     else if(_astsChartsInited){buildHistoryChart('asts','asts-chart','#15803d','rgba(21,128,61,.06)',p.bull_target,p.base_target,p.bear_target);build5yrChart('asts','asts-chart5');}
   }
-  if($(t+'-lg-bull')&&p.bull_desc) $(t+'-lg-bull').textContent=p.bull_desc;
-  if($(t+'-lg-base')&&p.base_desc) $(t+'-lg-base').textContent=p.base_desc;
-  if($(t+'-lg-bear')&&p.bear_desc) $(t+'-lg-bear').textContent=p.bear_desc;
+  if($(t+'-lg-bull')&&p.bull_desc) $(t+'-lg-bull').textContent=stripTags(p.bull_desc);
+  if($(t+'-lg-base')&&p.base_desc) $(t+'-lg-base').textContent=stripTags(p.base_desc);
+  if($(t+'-lg-bear')&&p.bear_desc) $(t+'-lg-bear').textContent=stripTags(p.bear_desc);
   if($(t+'-sentiment-text')&&p.sentiment) $(t+'-sentiment-text').innerHTML=p.sentiment;
 }
 function applySector(t,p) {
   if(!p||!p.cards) return;
   const grid=document.getElementById(t+'-sector-grid');
   const intro=document.getElementById(t+'-sector-intro');
-  if(intro&&p.intro) intro.textContent=p.intro;
+  if(intro&&p.intro) intro.textContent=p.intro.replace(/<[^>]*>/g,'');
   if(grid){
     const cmap={green:'var(--green)',red:'var(--red)',purple:'var(--purple)',blue:'var(--blue)',amber:'var(--amber)'};
     grid.innerHTML=p.cards.map(c=>'<div class="sector-card"><div class="sector-emoji">'+(c.emoji||'')+'</div><div class="sector-name">'+(c.name||'')+'</div><div class="sector-val" style="color:'+(cmap[c.val_color]||'var(--text)')+'">'+c.val+'</div><div class="sector-desc">'+c.desc+'</div></div>').join('');
@@ -1931,7 +1952,7 @@ function applyCtx(t,p) {
   const descEl=document.getElementById(t+'-ctx-desc');
   const tagsEl=document.getElementById(t+'-ctx-tags');
   // Update desc and tags
-  if(descEl&&p.desc) descEl.textContent=typeof p.desc==='string'?p.desc.replace(/\n/g,' ').trim():JSON.stringify(p.desc);
+  if(descEl&&p.desc) descEl.textContent=stripTags(typeof p.desc==='string'?p.desc.replace(/\n/g,' ').trim():JSON.stringify(p.desc));
   if(tagsEl&&p.tags&&Array.isArray(p.tags)&&p.tags.length) tagsEl.innerHTML=p.tags.map(tag=>'<span class="'+(typeMap[tag.type]||'ctx-tag')+'">'+tag.text+'</span>').join('');
   // Update individual stats by label match - don't replace all static stats
   if(p.stats&&Array.isArray(p.stats)) {
@@ -2040,8 +2061,8 @@ function applyRec(t,p) {
   const banner=$(t+'-rec-banner');
   if(banner&&p.empfehlung) banner.className='rec-banner '+(p.empfehlung==='KAUFEN'?'buy':p.empfehlung==='VERKAUFEN'?'sell':'hold');
   // Title and explanation (HTML ids: rklb-rec-title, rklb-rec-sub)
-  if($(t+'-rec-title')&&p.titel) $(t+'-rec-title').textContent=p.titel;
-  if($(t+'-rec-sub')&&p.begruendung) $(t+'-rec-sub').textContent=p.begruendung;
+  if($(t+'-rec-title')&&p.titel) $(t+'-rec-title').textContent=stripTags(p.titel);
+  if($(t+'-rec-sub')&&p.begruendung) $(t+'-rec-sub').textContent=stripTags(p.begruendung);
   // Alert box (HTML ids: rklb-alert-text, rklb-alert-box)
   if($(t+'-alert-text')&&p.lage) $(t+'-alert-text').innerHTML=p.lage;
   if($(t+'-alert-box')&&p.lage_typ) $(t+'-alert-box').className='alert '+(p.lage_typ||'neutral');
