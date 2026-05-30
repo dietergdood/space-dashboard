@@ -152,7 +152,7 @@ export default async function handler(req, res) {
       { ticker:'asts', section:'sector',   prompt: SECTOR_PROMPTS.asts },
       { ticker:'rklb', section:'ctx',      prompt: CTX_PROMPTS.rklb },
       { ticker:'asts', section:'ctx',      prompt: CTX_PROMPTS.asts },
-      { ticker:'global', section:'glossar', prompt: GLOSSAR_PROMPT },
+      { ticker:null, section:'glossar', prompt: GLOSSAR_PROMPT },
     ];
 
     for (const call of calls) {
