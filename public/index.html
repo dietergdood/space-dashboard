@@ -255,7 +255,7 @@ body{font-family:'DM Sans',sans-serif;background:var(--bg);color:var(--text);min
 .scv.up{color:var(--green);}
 .scv.wn{color:var(--amber);}
 .sentiment-box{margin-top:14px;background:var(--surface2);border-radius:10px;padding:14px;}
-.sentiment-platforms{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin-top:10px;}
+.sentiment-platforms{display:grid;grid-template-columns:repeat(5,1fr);gap:8px;margin-top:10px;}
 .sentiment-platform{background:var(--surface);border:1px solid var(--border);border-radius:8px;padding:10px;text-align:center;}
 .sentiment-platform-icon{font-size:18px;margin-bottom:4px;}
 .sentiment-platform-name{font-size:10px;color:var(--text3);font-weight:600;text-transform:uppercase;letter-spacing:.05em;}
@@ -533,6 +533,7 @@ body{font-family:'DM Sans',sans-serif;background:var(--bg);color:var(--text);min
   /* ── Sector ── */
   .sector-intro{font-size:12px;}
   .sector-grid{grid-template-columns:repeat(2,1fr);gap:8px;}
+  .sentiment-platforms{grid-template-columns:repeat(2,1fr);}
   .sector-card{padding:10px;}
   .sector-emoji{font-size:20px;margin-bottom:4px;}
   .sector-name{font-size:11px;}
@@ -941,6 +942,18 @@ body{font-family:'DM Sans',sans-serif;background:var(--bg);color:var(--text);min
                 <div class="sentiment-platform-val neutral" id="rklb-sent-st">—</div>
                 <div class="sentiment-platform-sub" id="rklb-sent-st-sub">lädt...</div>
               </div>
+              <div class="sentiment-platform">
+                <div class="sentiment-platform-icon">✈️</div>
+                <div class="sentiment-platform-name">Telegram</div>
+                <div class="sentiment-platform-val neutral" id="rklb-sent-tg">—</div>
+                <div class="sentiment-platform-sub" id="rklb-sent-tg-sub">lädt...</div>
+              </div>
+              <div class="sentiment-platform">
+                <div class="sentiment-platform-icon">👥</div>
+                <div class="sentiment-platform-name">FB / IG</div>
+                <div class="sentiment-platform-val neutral" id="rklb-sent-fb">—</div>
+                <div class="sentiment-platform-sub" id="rklb-sent-fb-sub">lädt...</div>
+              </div>
             </div>
             <div class="sentiment-summary" id="rklb-sentiment-text" style="color:var(--text3);font-style:italic;">Wird mit KI geladen...</div>
           </div>
@@ -1312,6 +1325,18 @@ body{font-family:'DM Sans',sans-serif;background:var(--bg);color:var(--text);min
                 <div class="sentiment-platform-name">StockTwits</div>
                 <div class="sentiment-platform-val neutral" id="asts-sent-st">—</div>
                 <div class="sentiment-platform-sub" id="asts-sent-st-sub">lädt...</div>
+              </div>
+              <div class="sentiment-platform">
+                <div class="sentiment-platform-icon">✈️</div>
+                <div class="sentiment-platform-name">Telegram</div>
+                <div class="sentiment-platform-val neutral" id="asts-sent-tg">—</div>
+                <div class="sentiment-platform-sub" id="asts-sent-tg-sub">lädt...</div>
+              </div>
+              <div class="sentiment-platform">
+                <div class="sentiment-platform-icon">👥</div>
+                <div class="sentiment-platform-name">FB / IG</div>
+                <div class="sentiment-platform-val neutral" id="asts-sent-fb">—</div>
+                <div class="sentiment-platform-sub" id="asts-sent-fb-sub">lädt...</div>
               </div>
             </div>
             <div class="sentiment-summary" id="asts-sentiment-text" style="color:var(--text3);font-style:italic;">Wird mit KI geladen...</div>
@@ -2432,6 +2457,8 @@ function applyScenarios(t,p) {
     {id:'reddit', field:'sentiment_reddit', sub:'sentiment_reddit_sub'},
     {id:'x',      field:'sentiment_x',      sub:'sentiment_x_sub'},
     {id:'st',     field:'sentiment_st',     sub:'sentiment_st_sub'},
+    {id:'tg',     field:'sentiment_tg',     sub:'sentiment_tg_sub'},
+    {id:'fb',     field:'sentiment_fb',     sub:'sentiment_fb_sub'},
   ];
   platforms.forEach(pl => {
     const el = $(t+'-sent-'+pl.id);
