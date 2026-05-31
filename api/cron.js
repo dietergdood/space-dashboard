@@ -28,7 +28,7 @@ async function supa(path, method='GET', body=null) {
   return text ? JSON.parse(text) : {};
 }
 
-async function kiCall(prompt, retries=3, maxSearches=8) {
+async function kiCall(prompt, retries=3, maxSearches=8, model='claude-sonnet-4-5') {
   for (let attempt = 0; attempt < retries; attempt++) {
     if (attempt > 0) {
       const wait = attempt * 15000;
@@ -49,7 +49,7 @@ async function kiCall(prompt, retries=3, maxSearches=8) {
           'anthropic-version': '2023-06-01'
         },
         body: JSON.stringify({
-          model: 'claude-sonnet-4-5',
+          model: model,
           max_tokens: 1024,
           tools: [{type: 'web_search_20250305', name: 'web_search', max_uses: maxSearches}],
           messages: [{role: 'user', content: prompt}]
@@ -271,6 +271,7 @@ KONKURRENZ: rocketlabusa.com, blueorigin.com, virgingalactic.com, unitedlaunchal
     const dayOfWeek = new Date().getDay(); // 0=Sun, 6=Sat
     const isWeekend = dayOfWeek === 0 || dayOfWeek === 6;
     const isSlowDay = dayOfWeek === 1 || dayOfWeek === 3 || dayOfWeek === 5; // Mon/Wed/Fri
+    const isScenariosDay = dayOfWeek === 1 || dayOfWeek === 4; // Mon+Thu only for scenarios
 
     let calls;
     const ticker = ['rklb','asts','spcx'].includes(scope) ? scope : null;
@@ -279,14 +280,22 @@ KONKURRENZ: rocketlabusa.com, blueorigin.com, virgingalactic.com, unitedlaunchal
         // Weekend: news only
         calls = allCalls.filter(c => c.ticker === ticker && c.section === 'news');
       } else if (isSlowDay) {
-        // Mon/Wed/Fri: fast + slow
-        calls = allCalls.filter(c => c.ticker === ticker && [...FAST_SECTIONS, ...SLOW_SECTIONS].includes(c.section));
+        // Mon/Wed/Fri: rec + news + slow sections (+ scenarios on Mon)
+        const sections = ['rec','news','sector','gov_space','ctx'];
+        if (isScenariosDay) sections.push('scenarios');
+        calls = allCalls.filter(c => c.ticker === ticker && sections.includes(c.section));
       } else {
-        // Tue/Thu: fast only
-        calls = allCalls.filter(c => c.ticker === ticker && FAST_SECTIONS.includes(c.section));
+        // Tue/Thu: rec + news (+ scenarios on Thu)
+        const sections = ['rec','news'];
+        if (isScenariosDay) sections.push('scenarios');
+        calls = allCalls.filter(c => c.ticker === ticker && sections.includes(c.section));
       }
     } else if (scope === 'global') {
       calls = allCalls.filter(c => !c.ticker);
+    } else if (scope === 'rklb_news') {
+      calls = allCalls.filter(c => c.ticker === 'rklb' && c.section === 'news');
+    } else if (scope === 'asts_news') {
+      calls = allCalls.filter(c => c.ticker === 'asts' && c.section === 'news');
     } else {
       calls = allCalls;
     }
@@ -298,8 +307,8 @@ KONKURRENZ: rocketlabusa.com, blueorigin.com, virgingalactic.com, unitedlaunchal
 
     async function runCall(call) {
       try {
-        const isLight = ['ctx','gov_space'].includes(call.section);
-        const data = await kiCall(call.prompt, 3, isLight ? 5 : 8);
+        const isLight = ['ctx','gov_space','glossar'].includes(call.section);
+        const data = await kiCall(call.prompt, 3, isLight ? 5 : 8, isLight ? 'claude-haiku-4-5' : 'claude-sonnet-4-5');
         await saveToCache(call.ticker, call.section, data);
         results.success.push(`${call.ticker}/${call.section}`);
       } catch(e) {
