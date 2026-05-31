@@ -572,10 +572,13 @@ body{font-family:'DM Sans',sans-serif;background:var(--bg);color:var(--text);min
   .container{padding:8px 8px 80px;max-width:100%;}
 
   /* ── Context bar ── */
-  .ctx-bar{padding:12px;gap:8px;}
-  .ctx-top-row .ctx-logo,.ctx-top-row .ctx-logo-emoji{width:36px !important;height:36px !important;}
-  .ctx-top-row .ctx-name{font-size:14px;}
-  .ctx-desc{font-size:12px;line-height:1.6;}
+  .ctx-bar{padding:12px;gap:6px;flex-direction:column;}
+  .ctx-top-row{flex-direction:row;align-items:center;gap:10px;width:100%;}
+  .ctx-top-row .ctx-logo,.ctx-top-row .ctx-logo-emoji{width:36px !important;height:36px !important;flex-shrink:0;}
+  .ctx-top-row .ctx-name{font-size:14px;font-weight:700;}
+  .ctx-info .ctx-name{display:none;}
+  .ctx-info{width:100%;}
+  .ctx-desc{font-size:12px;line-height:1.6;margin-top:0;}
   .ctx-stats{gap:5px;margin-top:6px;}
   .ctx-stat{font-size:11px;background:var(--surface2);border-radius:6px;padding:3px 8px;white-space:nowrap;}
   .ctx-stat b{font-size:12px;}
