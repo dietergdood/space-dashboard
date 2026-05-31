@@ -333,6 +333,36 @@ body{font-family:'DM Sans',sans-serif;background:var(--bg);color:var(--text);min
 .news-live{display:flex;align-items:center;gap:6px;font-size:12px;font-weight:500;color:var(--text3);}
 .earnings-bar{display:flex;align-items:center;gap:8px;padding:8px 12px;background:var(--amber-bg, #fefce8);border:1px solid var(--amber-bd, #fde68a);border-radius:8px;margin-bottom:10px;font-size:12px;}
 .rec-history{margin-top:12px;padding-top:12px;border-top:1px solid var(--border);}
+.kpi-score-badge{display:inline-flex;align-items:center;justify-content:center;width:52px;height:52px;border-radius:50%;font-size:18px;font-weight:700;font-family:"DM Mono",monospace;flex-shrink:0;}
+.kpi-score-badge.excellent{background:rgba(22,163,74,.12);color:var(--green);}
+.kpi-score-badge.good{background:rgba(37,99,235,.1);color:var(--blue);}
+.kpi-score-badge.warn{background:rgba(217,119,6,.1);color:#d97706;}
+.kpi-score-badge.poor{background:var(--red-bg);color:var(--red);}
+.kpi-cat-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:6px;margin:10px 0;}
+.kpi-cat{background:var(--surface2);border-radius:8px;padding:8px 10px;cursor:pointer;border:1px solid transparent;transition:border-color .2s;}
+.kpi-cat:hover{border-color:var(--border2);}
+.kpi-cat-name{font-size:10px;color:var(--text3);font-weight:600;text-transform:uppercase;letter-spacing:.04em;}
+.kpi-cat-score{font-size:20px;font-weight:700;font-family:"DM Mono",monospace;margin-top:2px;}
+.kpi-cat-score.excellent{color:var(--green);}
+.kpi-cat-score.good{color:var(--blue);}
+.kpi-cat-score.warn{color:#d97706;}
+.kpi-cat-score.poor{color:var(--red);}
+.kpi-drill{background:var(--surface2);border-radius:8px;padding:10px 12px;margin-top:8px;display:none;}
+.kpi-drill.open{display:block;}
+.kpi-drill-row{display:flex;justify-content:space-between;align-items:center;padding:5px 0;border-bottom:1px solid var(--border);font-size:12px;}
+.kpi-drill-row:last-child{border-bottom:none;}
+.kpi-drill-label{color:var(--text2);font-weight:500;}
+.kpi-drill-val{font-family:"DM Mono",monospace;font-weight:600;display:flex;align-items:center;gap:4px;}
+.kpi-drill-source{font-size:10px;color:var(--text3);margin-top:2px;}
+.kpi-trend-up{color:var(--green);}
+.kpi-trend-down{color:var(--red);}
+.kpi-trend-neutral{color:var(--text3);}
+.kpi-tag-sec{background:rgba(37,99,235,.1);color:var(--blue);font-size:9px;font-weight:600;padding:1px 5px;border-radius:4px;text-transform:uppercase;}
+.kpi-tag-ki{background:rgba(124,58,237,.1);color:#7c3aed;font-size:9px;font-weight:600;padding:1px 5px;border-radius:4px;text-transform:uppercase;}
+.kpi-interp{font-size:12px;color:var(--text2);line-height:1.5;margin:10px 0;padding:10px;background:var(--surface2);border-radius:8px;border-left:3px solid var(--blue);}
+.kpi-drivers{display:flex;flex-wrap:wrap;gap:4px;margin-top:6px;}
+.kpi-driver{font-size:11px;padding:2px 8px;border-radius:10px;background:var(--green-bg);color:var(--green);}
+.kpi-risk-tag{font-size:11px;padding:2px 8px;border-radius:10px;background:var(--red-bg);color:var(--red);}
 .kpi-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(140px,1fr));gap:8px;margin-bottom:12px;}
 .kpi-box{background:var(--surface2);border-radius:8px;padding:10px 12px;border:1px solid var(--border);}
 .kpi-label{font-size:10px;color:var(--text3);font-weight:600;text-transform:uppercase;letter-spacing:.05em;margin-bottom:3px;}
@@ -909,51 +939,59 @@ body{font-family:'DM Sans',sans-serif;background:var(--bg);color:var(--text);min
   </div>
   <div class="card-body" id="body-rklb-kpi">
     <div id="rklb-kpi-content">
-      <div class="kpi-section-title">Finanzen <span id="rklb-fin-source" style="font-weight:400;text-transform:none;letter-spacing:0;color:var(--text3);">lädt...</span></div>
-      <div class="kpi-grid">
-        <div class="kpi-box">
-          <div class="kpi-label">Revenue (letztes Quartal)</div>
-          <div class="kpi-val" id="rklb-kpi-rev">—</div>
-          <div class="kpi-sub" id="rklb-kpi-rev-sub">—</div>
-        </div>
-        <div class="kpi-box">
-          <div class="kpi-label">Bruttomarge</div>
-          <div class="kpi-val" id="rklb-kpi-margin">—</div>
-          <div class="kpi-sub" id="rklb-kpi-margin-sub">—</div>
-        </div>
-        <div class="kpi-box">
-          <div class="kpi-label">Cash</div>
-          <div class="kpi-val" id="rklb-kpi-cash">—</div>
-          <div class="kpi-sub" id="rklb-kpi-cash-sub">—</div>
-        </div>
-        <div class="kpi-box">
-          <div class="kpi-label">Nettoverlust</div>
-          <div class="kpi-val" id="rklb-kpi-netloss">—</div>
-          <div class="kpi-sub">Letztes Quartal</div>
+      <div style="display:flex;align-items:center;gap:14px;margin-bottom:12px;">
+        <div class="kpi-score-badge good" id="rklb-score-badge">—</div>
+        <div style="flex:1;">
+          <div style="font-size:13px;font-weight:600;">KI-KPI-Score</div>
+          <div style="font-size:11px;color:var(--text3);" id="rklb-score-sub">Wird berechnet...</div>
         </div>
       </div>
-      <div class="kpi-section-title">Backlog & Aufträge <span style="font-weight:400;text-transform:none;font-size:10px;color:var(--text3);">KI-Analyse</span></div>
-      <div class="kpi-grid">
-        <div class="kpi-box">
-          <div class="kpi-label">Backlog</div>
-          <div class="kpi-val" id="rklb-kpi-backlog">—</div>
-          <div class="kpi-sub" id="rklb-kpi-backlog-sub">—</div>
-        </div>
-        <div class="kpi-box">
-          <div class="kpi-label">Defense</div>
-          <div class="kpi-val" id="rklb-kpi-defense">—</div>
-          <div class="kpi-sub" id="rklb-kpi-defense-sub">—</div>
-        </div>
-        <div class="kpi-box">
-          <div class="kpi-label">Neutron Status</div>
-          <div class="kpi-val" id="rklb-kpi-neutron" style="font-size:13px;">—</div>
-          <div class="kpi-sub" id="rklb-kpi-neutron-sub">—</div>
-        </div>
-        <div class="kpi-box">
-          <div class="kpi-label">Kurs vs. Konsens</div>
-          <div class="kpi-val" id="rklb-kpi-vs-konsens" style="font-size:13px;">—</div>
-          <div class="kpi-sub" id="rklb-kpi-analyst-range">—</div>
-        </div>
+      <div class="kpi-cat-grid" id="rklb-cat-grid">
+        <div class="kpi-cat" onclick="toggleDrill('rklb','wachstum')"><div class="kpi-cat-name">Wachstum</div><div class="kpi-cat-score" id="rklb-score-wachstum">—</div></div>
+        <div class="kpi-cat" onclick="toggleDrill('rklb','backlog')"><div class="kpi-cat-name">Backlog</div><div class="kpi-cat-score" id="rklb-score-backlog">—</div></div>
+        <div class="kpi-cat" onclick="toggleDrill('rklb','marge')"><div class="kpi-cat-name">Marge</div><div class="kpi-cat-score" id="rklb-score-marge">—</div></div>
+        <div class="kpi-cat" onclick="toggleDrill('rklb','liquiditaet')"><div class="kpi-cat-name">Liquidität</div><div class="kpi-cat-score" id="rklb-score-liquiditaet">—</div></div>
+        <div class="kpi-cat" onclick="toggleDrill('rklb','risiko')"><div class="kpi-cat-name">Risiko</div><div class="kpi-cat-score" id="rklb-score-risiko">—</div></div>
+        <div class="kpi-cat" onclick="toggleDrill('rklb','bewertung')"><div class="kpi-cat-name">Bewertung</div><div class="kpi-cat-score" id="rklb-score-bewertung">—</div></div>
+      </div>
+      <div class="kpi-drill" id="rklb-drill-wachstum">
+        <div class="kpi-drill-row"><span class="kpi-drill-label">Revenue</span><span class="kpi-drill-val"><span id="rklb-d-umsatz">—</span><span class="kpi-tag-sec">SEC</span></span></div>
+        <div class="kpi-drill-source" id="rklb-d-umsatz-src"></div>
+        <div class="kpi-drill-row"><span class="kpi-drill-label">YoY Wachstum</span><span class="kpi-drill-val" id="rklb-d-yoy">—</span></div>
+        <div class="kpi-drill-row"><span class="kpi-drill-label">Launch Cadence</span><span class="kpi-drill-val"><span id="rklb-d-launches">—</span><span class="kpi-tag-ki">KI</span></span></div>
+      </div>
+      <div class="kpi-drill" id="rklb-drill-backlog">
+        <div class="kpi-drill-row"><span class="kpi-drill-label">Backlog</span><span class="kpi-drill-val"><span id="rklb-d-backlog">—</span><span class="kpi-tag-ki">KI</span></span></div>
+        <div class="kpi-drill-row"><span class="kpi-drill-label">QoQ Veränderung</span><span class="kpi-drill-val" id="rklb-d-backlog-qoq">—</span></div>
+        <div class="kpi-drill-row"><span class="kpi-drill-label">Coverage</span><span class="kpi-drill-val"><span id="rklb-d-coverage">—</span><span class="kpi-tag-ki">KI</span></span></div>
+        <div class="kpi-drill-row"><span class="kpi-drill-label">Mix</span><span class="kpi-drill-val" id="rklb-d-backlog-mix">—</span></div>
+      </div>
+      <div class="kpi-drill" id="rklb-drill-marge">
+        <div class="kpi-drill-row"><span class="kpi-drill-label">Gross Margin</span><span class="kpi-drill-val"><span id="rklb-d-margin">—</span><span class="kpi-tag-sec">SEC</span></span></div>
+        <div class="kpi-drill-row"><span class="kpi-drill-label">QoQ</span><span class="kpi-drill-val" id="rklb-d-margin-qoq">—</span></div>
+        <div class="kpi-drill-row"><span class="kpi-drill-label">EBITDA</span><span class="kpi-drill-val"><span id="rklb-d-ebitda">—</span><span class="kpi-tag-ki">KI</span></span></div>
+      </div>
+      <div class="kpi-drill" id="rklb-drill-liquiditaet">
+        <div class="kpi-drill-row"><span class="kpi-drill-label">Cash & Liquidität</span><span class="kpi-drill-val"><span id="rklb-d-cash">—</span><span class="kpi-tag-sec">SEC</span></span></div>
+        <div class="kpi-drill-row"><span class="kpi-drill-label">Nettoverlust</span><span class="kpi-drill-val"><span id="rklb-d-netloss">—</span><span class="kpi-tag-sec">SEC</span></span></div>
+      </div>
+      <div class="kpi-drill" id="rklb-drill-risiko">
+        <div class="kpi-drill-row"><span class="kpi-drill-label">Neutron Status</span><span class="kpi-drill-val"><span id="rklb-d-neutron">—</span><span class="kpi-tag-ki">KI</span></span></div>
+        <div class="kpi-drill-row"><span class="kpi-drill-label">Neutron Erstflug</span><span class="kpi-drill-val" id="rklb-d-neutron-erstflug">—</span></div>
+        <div class="kpi-drill-row"><span class="kpi-drill-label">Neutron Risiko</span><span class="kpi-drill-val" id="rklb-d-neutron-risiko">—</span></div>
+        <div class="kpi-drill-row"><span class="kpi-drill-label">Defense Exposure</span><span class="kpi-drill-val"><span id="rklb-d-defense">—</span><span class="kpi-tag-ki">KI</span></span></div>
+      </div>
+      <div class="kpi-drill" id="rklb-drill-bewertung">
+        <div class="kpi-drill-row"><span class="kpi-drill-label">EV/Sales</span><span class="kpi-drill-val"><span id="rklb-d-evsales">—</span><span class="kpi-tag-ki">KI</span></span></div>
+        <div class="kpi-drill-row"><span class="kpi-drill-label">Kurs vs. Konsens</span><span class="kpi-drill-val" id="rklb-d-vs-konsens">—</span></div>
+        <div class="kpi-drill-row"><span class="kpi-drill-label">Analysten-Range</span><span class="kpi-drill-val" id="rklb-d-analyst-range">—</span></div>
+      </div>
+      <div class="kpi-interp" id="rklb-kpi-interp" style="display:none;"></div>
+      <div id="rklb-kpi-drivers" style="display:none;">
+        <div style="font-size:11px;color:var(--text3);margin-top:8px;margin-bottom:4px;">Haupttreiber</div>
+        <div class="kpi-drivers" id="rklb-drivers-list"></div>
+        <div style="font-size:11px;color:var(--text3);margin-top:6px;margin-bottom:4px;">Hauptrisiken</div>
+        <div class="kpi-drivers" id="rklb-risks-list"></div>
       </div>
       <div class="kpi-source" id="rklb-kpi-ts">Wird täglich mit KI aktualisiert</div>
     </div>
@@ -1399,57 +1437,59 @@ body{font-family:'DM Sans',sans-serif;background:var(--bg);color:var(--text);min
   </div>
   <div class="card-body" id="body-asts-milestone">
     <div id="asts-milestone-content">
-      <div class="kpi-section-title">Finanzen <span id="asts-fin-source" style="font-weight:400;text-transform:none;letter-spacing:0;color:var(--text3);">lädt...</span></div>
-      <div class="kpi-grid">
-        <div class="kpi-box">
-          <div class="kpi-label">Revenue (letztes Quartal)</div>
-          <div class="kpi-val" id="asts-kpi-rev">—</div>
-          <div class="kpi-sub" id="asts-kpi-rev-sub">—</div>
-        </div>
-        <div class="kpi-box">
-          <div class="kpi-label">Cash</div>
-          <div class="kpi-val" id="asts-kpi-cash">—</div>
-          <div class="kpi-sub" id="asts-kpi-cash-sub">—</div>
-        </div>
-        <div class="kpi-box">
-          <div class="kpi-label">Long-term Debt</div>
-          <div class="kpi-val" id="asts-kpi-debt">—</div>
-          <div class="kpi-sub" id="asts-kpi-debt-sub">—</div>
-        </div>
-        <div class="kpi-box">
-          <div class="kpi-label">Nettoverlust</div>
-          <div class="kpi-val" id="asts-kpi-netloss">—</div>
-          <div class="kpi-sub">Letztes Quartal</div>
+      <div style="display:flex;align-items:center;gap:14px;margin-bottom:12px;">
+        <div class="kpi-score-badge good" id="asts-score-badge">—</div>
+        <div style="flex:1;">
+          <div style="font-size:13px;font-weight:600;">KI-KPI-Score</div>
+          <div style="font-size:11px;color:var(--text3);" id="asts-score-sub">Wird berechnet...</div>
         </div>
       </div>
-      <div class="kpi-section-title">BlueBird Satelliten-Status <span style="font-weight:400;text-transform:none;font-size:10px;color:var(--text3);">KI-Analyse</span></div>
-      <div id="asts-bluebird-status"><div style="color:var(--text3);font-size:13px;font-style:italic;">Wird aktualisiert...</div></div>
-      <div class="kpi-section-title" style="margin-top:12px;">Regulierung & Partner</div>
-      <div class="kpi-grid">
-        <div class="kpi-box">
-          <div class="kpi-label">FCC Status</div>
-          <div class="kpi-val" id="asts-fcc-status" style="font-size:12px;">—</div>
-        </div>
-        <div class="kpi-box">
-          <div class="kpi-label">ITU Status</div>
-          <div class="kpi-val" id="asts-itu-status" style="font-size:12px;">—</div>
-        </div>
-        <div class="kpi-box">
-          <div class="kpi-label">Runway</div>
-          <div class="kpi-val" id="asts-runway">—</div>
-          <div class="kpi-sub">Monate</div>
-        </div>
-        <div class="kpi-box">
-          <div class="kpi-label">Nächster Meilenstein</div>
-          <div class="kpi-val" id="asts-next-milestone" style="font-size:12px;">—</div>
-        </div>
+      <div class="kpi-cat-grid">
+        <div class="kpi-cat" onclick="toggleDrill('asts','cash')"><div class="kpi-cat-name">Cash</div><div class="kpi-cat-score" id="asts-score-cash">—</div></div>
+        <div class="kpi-cat" onclick="toggleDrill('asts','umsatz')"><div class="kpi-cat-name">Umsatz-Ramp</div><div class="kpi-cat-score" id="asts-score-umsatz">—</div></div>
+        <div class="kpi-cat" onclick="toggleDrill('asts','launch')"><div class="kpi-cat-name">Launch</div><div class="kpi-cat-score" id="asts-score-launch">—</div></div>
+        <div class="kpi-cat" onclick="toggleDrill('asts','technologie')"><div class="kpi-cat-name">Technologie</div><div class="kpi-cat-score" id="asts-score-technologie">—</div></div>
+        <div class="kpi-cat" onclick="toggleDrill('asts','partner')"><div class="kpi-cat-name">Partner</div><div class="kpi-cat-score" id="asts-score-partner">—</div></div>
+        <div class="kpi-cat" onclick="toggleDrill('asts','risiko')"><div class="kpi-cat-name">Risiko</div><div class="kpi-cat-score" id="asts-score-risiko">—</div></div>
       </div>
-      <div class="kpi-section-title" style="margin-top:12px;">Risikoampel</div>
-      <div class="risk-grid" id="asts-risk-grid">
-        <div class="risk-item"><div class="risk-label">Launch</div><div class="risk-val" id="asts-risk-launch">—</div></div>
-        <div class="risk-item"><div class="risk-label">Dilution</div><div class="risk-val" id="asts-risk-dilution">—</div></div>
-        <div class="risk-item"><div class="risk-label">Konkurrenz</div><div class="risk-val" id="asts-risk-konkurrenz">—</div></div>
-        <div class="risk-item"><div class="risk-label">Zeitplan</div><div class="risk-val" id="asts-risk-zeitplan">—</div></div>
+      <div class="kpi-drill" id="asts-drill-cash">
+        <div class="kpi-drill-row"><span class="kpi-drill-label">Cash Total</span><span class="kpi-drill-val"><span id="asts-d-cash">—</span><span class="kpi-tag-sec">SEC</span></span></div>
+        <div class="kpi-drill-source" id="asts-d-cash-src"></div>
+        <div class="kpi-drill-row"><span class="kpi-drill-label">Long-term Debt</span><span class="kpi-drill-val"><span id="asts-d-debt">—</span><span class="kpi-tag-sec">SEC</span></span></div>
+        <div class="kpi-drill-row"><span class="kpi-drill-label">Cash Runway</span><span class="kpi-drill-val"><span id="asts-d-runway">—</span><span class="kpi-tag-ki">KI</span></span></div>
+        <div class="kpi-drill-row"><span class="kpi-drill-label">Nettoverlust</span><span class="kpi-drill-val"><span id="asts-d-netloss">—</span><span class="kpi-tag-sec">SEC</span></span></div>
+      </div>
+      <div class="kpi-drill" id="asts-drill-umsatz">
+        <div class="kpi-drill-row"><span class="kpi-drill-label">Revenue Q1 2026</span><span class="kpi-drill-val"><span id="asts-d-rev">—</span><span class="kpi-tag-sec">SEC</span></span></div>
+        <div class="kpi-drill-row"><span class="kpi-drill-label">YoY Wachstum</span><span class="kpi-drill-val" id="asts-d-yoy">—</span></div>
+        <div class="kpi-drill-row"><span class="kpi-drill-label">2026 Guidance</span><span class="kpi-drill-val"><span id="asts-d-guidance">—</span><span class="kpi-tag-ki">KI</span></span></div>
+        <div class="kpi-drill-row"><span class="kpi-drill-label">Guidance Progress</span><span class="kpi-drill-val"><span id="asts-d-guidance-prog">—</span><span class="kpi-tag-ki">KI</span></span></div>
+      </div>
+      <div class="kpi-drill" id="asts-drill-launch">
+        <div id="asts-bluebird-status"><div style="color:var(--text3);font-size:12px;font-style:italic;">Wird aktualisiert...</div></div>
+      </div>
+      <div class="kpi-drill" id="asts-drill-technologie">
+        <div class="kpi-drill-row"><span class="kpi-drill-label">Peak Speed</span><span class="kpi-drill-val"><span id="asts-d-speed">—</span><span class="kpi-tag-ki">KI</span></span></div>
+        <div class="kpi-drill-row"><span class="kpi-drill-label">FCC Status</span><span class="kpi-drill-val"><span id="asts-fcc-status">—</span><span class="kpi-tag-ki">KI</span></span></div>
+        <div class="kpi-drill-row"><span class="kpi-drill-label">ITU Status</span><span class="kpi-drill-val"><span id="asts-itu-status">—</span><span class="kpi-tag-ki">KI</span></span></div>
+      </div>
+      <div class="kpi-drill" id="asts-drill-partner">
+        <div class="kpi-drill-row"><span class="kpi-drill-label">MNO Partner</span><span class="kpi-drill-val"><span id="asts-d-mnos">—</span><span class="kpi-tag-ki">KI</span></span></div>
+        <div class="kpi-drill-row"><span class="kpi-drill-label">Aktive Partner</span><span class="kpi-drill-val" id="asts-d-mno-list">—</span></div>
+      </div>
+      <div class="kpi-drill" id="asts-drill-risiko">
+        <div class="kpi-drill-row"><span class="kpi-drill-label">Launch-Risiko</span><span class="kpi-drill-val risk-val" id="asts-risk-launch">—</span></div>
+        <div class="kpi-drill-row"><span class="kpi-drill-label">Dilution</span><span class="kpi-drill-val risk-val" id="asts-risk-dilution">—</span></div>
+        <div class="kpi-drill-row"><span class="kpi-drill-label">Konkurrenz</span><span class="kpi-drill-val risk-val" id="asts-risk-konkurrenz">—</span></div>
+        <div class="kpi-drill-row"><span class="kpi-drill-label">Zeitplan</span><span class="kpi-drill-val risk-val" id="asts-risk-zeitplan">—</span></div>
+        <div class="kpi-drill-row"><span class="kpi-drill-label">Nächster Meilenstein</span><span class="kpi-drill-val" id="asts-next-milestone">—</span></div>
+      </div>
+      <div class="kpi-interp" id="asts-kpi-interp" style="display:none;"></div>
+      <div id="asts-kpi-drivers" style="display:none;">
+        <div style="font-size:11px;color:var(--text3);margin-top:8px;margin-bottom:4px;">Haupttreiber</div>
+        <div class="kpi-drivers" id="asts-drivers-list"></div>
+        <div style="font-size:11px;color:var(--text3);margin-top:6px;margin-bottom:4px;">Hauptrisiken</div>
+        <div class="kpi-drivers" id="asts-risks-list"></div>
       </div>
       <div class="kpi-source" id="asts-milestone-ts">Wird täglich mit KI aktualisiert</div>
     </div>
@@ -3088,22 +3128,21 @@ async function loadFinancials(t) {
     }
 
     if (t === 'asts') {
-      if ($('asts-kpi-rev') && d.revenue?.latest_m != null) {
+      if (d.revenue?.latest_m != null) {
         const yoy = d.revenue.yoy_pct;
-        const badge = yoy != null ? `<span class="kpi-badge ${yoy >= 0 ? 'up' : 'down'}">${fmtPct(yoy)} YoY</span>` : '';
-        $('asts-kpi-rev').innerHTML = fmt(d.revenue.latest_m) + badge;
-        if ($('asts-kpi-rev-sub')) $('asts-kpi-rev-sub').textContent = d.revenue.date?.substring(0,7) || '';
+        const arrow = yoy > 0 ? ' <span class="kpi-trend-up">↑</span>' : yoy < 0 ? ' <span class="kpi-trend-down">↓</span>' : '';
+        if ($('asts-d-rev')) $('asts-d-rev').innerHTML = fmt(d.revenue.latest_m) + arrow;
+        if ($('asts-d-yoy') && yoy != null) $('asts-d-yoy').innerHTML = `<span class="${yoy>=0?'kpi-trend-up':'kpi-trend-down'}">${fmtPct(yoy)} YoY</span>`;
       }
-      if ($('asts-kpi-cash') && d.cash_m != null) {
-        $('asts-kpi-cash').textContent = fmt(d.cash_m);
-        if ($('asts-kpi-cash-sub')) $('asts-kpi-cash-sub').textContent = d.cash_date?.substring(0,7) || '';
+      if (d.cash_m != null && $('asts-d-cash')) {
+        $('asts-d-cash').textContent = fmt(d.cash_m);
+        if ($('asts-d-cash-src')) $('asts-d-cash-src').textContent = 'SEC EDGAR · ' + (d.cash_date?.substring(0,7)||'');
       }
-      if ($('asts-kpi-debt') && d.debt_m != null) {
-        $('asts-kpi-debt').textContent = fmt(d.debt_m);
-        if ($('asts-kpi-debt-sub')) $('asts-kpi-debt-sub').textContent = d.debt_date?.substring(0,7) || '';
+      if (d.debt_m != null && $('asts-d-debt')) {
+        $('asts-d-debt').textContent = fmt(d.debt_m);
       }
-      if ($('asts-kpi-netloss') && d.net_income_m != null) {
-        const el = $('asts-kpi-netloss');
+      if (d.net_income_m != null && $('asts-d-netloss')) {
+        const el = $('asts-d-netloss');
         el.textContent = fmt(d.net_income_m);
         el.style.color = d.net_income_m < 0 ? 'var(--red)' : 'var(--green)';
       }
@@ -3112,24 +3151,97 @@ async function loadFinancials(t) {
   } catch(e) { console.warn('loadFinancials:', e.message); }
 }
 
+// ── KPI Score helpers ───────────────────────────────────────
+function scoreClass(s) {
+  if (!s && s !== 0) return 'good';
+  return s >= 80 ? 'excellent' : s >= 60 ? 'good' : s >= 40 ? 'warn' : 'poor';
+}
+
+function setScore(badgeId, subId, score, label) {
+  const badge = $(badgeId);
+  const sub = $(subId);
+  if (!badge) return;
+  badge.textContent = score || '—';
+  badge.className = 'kpi-score-badge ' + scoreClass(score);
+  if (sub) sub.textContent = label || '';
+}
+
+function setCatScore(id, score) {
+  const el = $(id);
+  if (!el) return;
+  el.textContent = score || '—';
+  el.className = 'kpi-cat-score ' + scoreClass(score);
+}
+
+function setDrillRow(id, val, trend) {
+  const el = $(id);
+  if (!el || !val) return;
+  const arrow = trend === 'up' ? ' <span class="kpi-trend-up">↑</span>' :
+                trend === 'down' ? ' <span class="kpi-trend-down">↓</span>' : '';
+  el.innerHTML = stripTags(String(val)) + arrow;
+}
+
+function toggleDrill(t, cat) {
+  const id = `${t}-drill-${cat}`;
+  const el = $(id);
+  if (!el) return;
+  const isOpen = el.classList.contains('open');
+  // Close all drills for this ticker
+  document.querySelectorAll(`[id^="${t}-drill-"]`).forEach(d => d.classList.remove('open'));
+  if (!isOpen) el.classList.add('open');
+}
+
+function setDrivers(listId, items, cls) {
+  const el = $(listId);
+  if (!el || !items?.length) return;
+  el.innerHTML = items.map(i => `<span class="${cls}">${stripTags(i)}</span>`).join('');
+}
+
 // ── RKLB KPI (from KI cache) ─────────────────────────────────
 function applyRklbKpi(p) {
   if (!p) return;
-  if ($('rklb-kpi-backlog') && p.backlog_usd) {
-    $('rklb-kpi-backlog').textContent = p.backlog_usd;
-    if ($('rklb-kpi-backlog-sub')) $('rklb-kpi-backlog-sub').textContent = (p.backlog_qoq || '') + ' ' + (p.backlog_mix || '');
+  const k = p.kpis || {};
+  // Scores
+  setScore('rklb-score-badge', 'rklb-score-sub', p.score_gesamt, 'Wachstum · Backlog · Marge · Liquidität');
+  setCatScore('rklb-score-wachstum',  p.score_wachstum);
+  setCatScore('rklb-score-backlog',   p.score_backlog);
+  setCatScore('rklb-score-marge',     p.score_marge);
+  setCatScore('rklb-score-liquiditaet', p.score_liquiditaet);
+  setCatScore('rklb-score-risiko',    p.score_risiko);
+  setCatScore('rklb-score-bewertung', p.score_bewertung);
+  // Drill: Wachstum
+  setDrillRow('rklb-d-umsatz',   k.umsatz?.wert,   k.umsatz?.trend);
+  setDrillRow('rklb-d-yoy',      k.umsatz?.yoy);
+  setDrillRow('rklb-d-launches', k.launch_cadence?.starts_2026);
+  if ($('rklb-d-umsatz-src') && k.umsatz?.quelle) $('rklb-d-umsatz-src').textContent = k.umsatz.quelle + ' · ' + (k.umsatz.datum||'');
+  // Drill: Backlog
+  setDrillRow('rklb-d-backlog',     k.backlog?.wert,     k.backlog?.trend);
+  setDrillRow('rklb-d-backlog-qoq', k.backlog?.qoq);
+  setDrillRow('rklb-d-coverage',    k.backlog_coverage?.wert, k.backlog_coverage?.trend);
+  setDrillRow('rklb-d-backlog-mix', k.backlog?.mix);
+  // Drill: Marge
+  setDrillRow('rklb-d-margin',     k.gross_margin?.wert, k.gross_margin?.trend);
+  setDrillRow('rklb-d-margin-qoq', k.gross_margin?.qoq);
+  setDrillRow('rklb-d-ebitda',     k.ebitda?.wert);
+  // Drill: Risiko
+  setDrillRow('rklb-d-neutron',          k.neutron?.status);
+  setDrillRow('rklb-d-neutron-erstflug', k.neutron?.erstflug);
+  setDrillRow('rklb-d-neutron-risiko',   k.neutron?.risiko);
+  setDrillRow('rklb-d-defense',          k.defense?.sda);
+  // Drill: Bewertung
+  setDrillRow('rklb-d-evsales',      k.ev_sales?.wert);
+  setDrillRow('rklb-d-vs-konsens',   p.kurs_vs_konsens || k.ev_sales?.warnung);
+  setDrillRow('rklb-d-analyst-range', p.analyst_range);
+  // Interpretation
+  if (p.interpretation && $('rklb-kpi-interp')) {
+    $('rklb-kpi-interp').textContent = stripTags(p.interpretation);
+    $('rklb-kpi-interp').style.display = 'block';
   }
-  if ($('rklb-kpi-defense') && p.defense_sda) {
-    $('rklb-kpi-defense').textContent = p.defense_sda;
-    if ($('rklb-kpi-defense-sub')) $('rklb-kpi-defense-sub').textContent = p.defense_golden_dome || '';
-  }
-  if ($('rklb-kpi-neutron') && p.neutron_status) {
-    $('rklb-kpi-neutron').textContent = p.neutron_status;
-    if ($('rklb-kpi-neutron-sub')) $('rklb-kpi-neutron-sub').textContent = 'Erstflug: ' + (p.neutron_erstflug || '—');
-  }
-  if ($('rklb-kpi-vs-konsens') && p.kurs_vs_konsens) {
-    $('rklb-kpi-vs-konsens').textContent = p.kurs_vs_konsens;
-    if ($('rklb-kpi-analyst-range')) $('rklb-kpi-analyst-range').textContent = p.analyst_range || '';
+  // Treiber & Risiken
+  if ($('rklb-kpi-drivers')) {
+    setDrivers('rklb-drivers-list', p.haupttreiber, 'kpi-driver');
+    setDrivers('rklb-risks-list',   p.hauptrisiken,  'kpi-risk-tag');
+    $('rklb-kpi-drivers').style.display = 'block';
   }
   if ($('rklb-kpi-ts')) $('rklb-kpi-ts').textContent = 'KI-Analyse · Täglich aktualisiert';
 }
@@ -3137,37 +3249,67 @@ function applyRklbKpi(p) {
 // ── ASTS Milestone (from KI cache) ─────────────────────────────
 function applyAstsMilestone(p) {
   if (!p) return;
-  // BlueBird status
+  const k = p.kpis || {};
+  // Scores
+  setScore('asts-score-badge', 'asts-score-sub', p.score_gesamt, 'Cash · Satelliten · Partner · Risiko');
+  setCatScore('asts-score-cash',       p.score_cash);
+  setCatScore('asts-score-umsatz',     p.score_umsatz_ramp);
+  setCatScore('asts-score-launch',     p.score_launch);
+  setCatScore('asts-score-technologie',p.score_technologie);
+  setCatScore('asts-score-partner',    p.score_partner);
+  setCatScore('asts-score-risiko',     p.score_risiko);
+  // Drill: Cash
+  setDrillRow('asts-d-cash',    k.cash?.wert,    k.cash?.trend);
+  setDrillRow('asts-d-debt',    k.debt?.wert,    k.debt?.trend);
+  setDrillRow('asts-d-runway',  k.cash_runway?.wert);
+  setDrillRow('asts-d-netloss', k.nettoverlust?.wert);
+  if ($('asts-d-cash-src') && k.cash?.quelle) $('asts-d-cash-src').textContent = k.cash.quelle + ' · ' + (k.cash.datum||'');
+  // Drill: Umsatz
+  setDrillRow('asts-d-rev',          k.umsatz?.wert,            k.umsatz?.trend);
+  setDrillRow('asts-d-yoy',          k.umsatz?.yoy);
+  setDrillRow('asts-d-guidance',     k.guidance?.ziel_2026);
+  setDrillRow('asts-d-guidance-prog',k.guidance_progress?.wert, k.guidance_progress?.trend);
+  // Drill: Launch (BlueBird)
   const bbEl = $('asts-bluebird-status');
   if (bbEl && p.bluebird_status?.length) {
     bbEl.innerHTML = p.bluebird_status.map(s => {
       const dotCls = s.ampel === 'gruen' ? 'dot-green' : s.ampel === 'rot' ? 'dot-red' : s.ampel === 'gelb' ? 'dot-yellow' : 'dot-gray';
-      return `<div class="milestone-row">
-        <div class="milestone-dot ${dotCls}"></div>
-        <div class="milestone-name">${stripTags(s.sat)}</div>
-        <div class="milestone-status">${stripTags(s.status)}</div>
-      </div>`;
+      return `<div class="milestone-row"><div class="milestone-dot ${dotCls}"></div><div class="milestone-name">${stripTags(s.sat)}</div><div class="milestone-status">${stripTags(s.status)}</div></div>`;
     }).join('');
+  } else if (bbEl && k.satelliten_orbit) {
+    bbEl.innerHTML = `<div class="kpi-drill-row"><span class="kpi-drill-label">Satelliten im Orbit</span><span class="kpi-drill-val">${stripTags(k.satelliten_orbit.wert)}</span></div>`;
   }
-  if ($('asts-fcc-status') && p.fcc_status) $('asts-fcc-status').textContent = stripTags(p.fcc_status);
-  if ($('asts-itu-status') && p.itu_status) $('asts-itu-status').textContent = stripTags(p.itu_status);
-  if ($('asts-runway') && p.runway_monate) $('asts-runway').textContent = p.runway_monate;
-  if ($('asts-next-milestone') && p.naechster_meilenstein) $('asts-next-milestone').textContent = stripTags(p.naechster_meilenstein);
-  // Risk
-  const riskMap = { hoch: 'risk-hoch', mittel: 'risk-mittel', niedrig: 'risk-niedrig' };
+  // Drill: Technologie
+  setDrillRow('asts-d-speed',  k.peak_speed?.wert,  k.peak_speed?.trend);
+  if ($('asts-fcc-status') && k.fcc_status?.status) $('asts-fcc-status').textContent = stripTags(k.fcc_status.status);
+  if ($('asts-itu-status') && k.itu_status) $('asts-itu-status').textContent = stripTags(k.itu_status);
+  // Drill: Partner
+  if ($('asts-d-mnos') && k.mno_partner?.anzahl) $('asts-d-mnos').textContent = k.mno_partner.anzahl + ' Partner';
+  if ($('asts-d-mno-list') && k.mno_partner?.aktive) $('asts-d-mno-list').textContent = k.mno_partner.aktive.join(', ');
+  // Drill: Risiko
+  const riskMap = {hoch:'risk-hoch', mittel:'risk-mittel', niedrig:'risk-niedrig'};
   const setRisk = (id, val) => {
-    const el = $(id);
-    if (!el || !val) return;
-    const v = val.toLowerCase();
+    const el = $(id); if (!el||!val) return;
     el.textContent = stripTags(val);
-    for (const [k,cls] of Object.entries(riskMap)) {
-      if (v.includes(k)) { el.className = 'risk-val ' + cls; break; }
-    }
+    const v = val.toLowerCase();
+    for (const [k2,cls] of Object.entries(riskMap)) { if(v.includes(k2)){el.className='risk-val '+cls;break;} }
   };
-  setRisk('asts-risk-launch', p.risk_launch);
-  setRisk('asts-risk-dilution', p.risk_dilution);
-  setRisk('asts-risk-konkurrenz', p.risk_konkurrenz);
-  setRisk('asts-risk-zeitplan', p.risk_zeitplan);
+  setRisk('asts-risk-launch',      p.risk_launch || k.cash_runway?.wert);
+  setRisk('asts-risk-dilution',    p.risk_dilution);
+  setRisk('asts-risk-konkurrenz',  p.risk_konkurrenz);
+  setRisk('asts-risk-zeitplan',    p.risk_zeitplan);
+  if ($('asts-next-milestone') && p.naechster_meilenstein) $('asts-next-milestone').textContent = stripTags(p.naechster_meilenstein);
+  // Interpretation
+  if (p.interpretation && $('asts-kpi-interp')) {
+    $('asts-kpi-interp').textContent = stripTags(p.interpretation);
+    $('asts-kpi-interp').style.display = 'block';
+  }
+  // Treiber & Risiken
+  if ($('asts-kpi-drivers')) {
+    setDrivers('asts-drivers-list', p.haupttreiber, 'kpi-driver');
+    setDrivers('asts-risks-list',   p.hauptrisiken,  'kpi-risk-tag');
+    $('asts-kpi-drivers').style.display = 'block';
+  }
   if ($('asts-milestone-ts')) $('asts-milestone-ts').textContent = 'KI-Analyse · Täglich aktualisiert';
 }
 
