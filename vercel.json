@@ -17,12 +17,24 @@
       "schedule": "0 11 * * *"
     },
     {
+      "path": "/api/cron?scope=spcx",
+      "schedule": "0 11 * * *"
+    },
+    {
       "path": "/api/cron?scope=global",
       "schedule": "0 11 * * *"
     },
     {
-      "path": "/api/cron?scope=spcx",
-      "schedule": "0 11 * * *"
+      "path": "/api/cron?scope=rklb_slow",
+      "schedule": "0 11 * * 1,3,5"
+    },
+    {
+      "path": "/api/cron?scope=asts_slow",
+      "schedule": "0 11 * * 1,3,5"
+    },
+    {
+      "path": "/api/cron?scope=spcx_slow",
+      "schedule": "0 11 * * 1,3,5"
     }
   ],
   "functions": {
