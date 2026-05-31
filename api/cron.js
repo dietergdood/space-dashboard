@@ -211,6 +211,12 @@ export default async function handler(req, res) {
       asts: `Aktuelle AST SpaceMobile (ASTS) Firmendaten: Cash, Satelliten im Orbit, Partner-Carrier, Gründungsjahr. Quellen: ast-science.com, SEC Filings, letzter Earnings Call. Antworte NUR mit JSON, KEIN HTML, keine <cite> Tags: {"desc":"1-2 Sätze ohne HTML","tags":[{"text":"Tag","type":"green"}],"stats":[{"label":"Cash","val":"$X Mrd"}]}`
     };
 
+    const SPCX_NEWS_PROMPT = `Suche aktuelle SpaceX Nachrichten der letzten 48h. Fokus auf: IPO-Vorbereitungen (S-1, SEC Filings, Roadshow), Starlink Performance, Starship Entwicklung, NASA Artemis Aufträge, Konkurrenz. Quellen: spacex.com/updates, spacenews.com, nasaspaceflight.com, reuters.com, bloomberg.com, wsj.com, X @SpaceX, Reddit r/spacex. Antworte NUR mit gültigem JSON, keine Zeilenumbrüche in Strings: {"articles":[{"title":"Titel max 80 Zeichen","sentiment":"pos|neg|neu","body":"2-3 Sätze auf Deutsch","source":"Quelle"}]}`;
+
+    const SPCX_SECTOR_PROMPT = `Analysiere SpaceX Marktposition und IPO-Status aktuell. Quellen: spacex.com, sec.gov, spacenews.com, reuters.com, bloomberg.com, wsj.com. Antworte NUR mit JSON, KEIN HTML: {"intro":"1 Satz","ipo_status":"aktueller IPO Status ohne HTML","ipo_date":"Datum oder Quartal","bewertung":"$XXX Mrd","cards":[{"emoji":"🛸","name":"Starlink","val":"X Satelliten","val_color":"green","desc":"aktueller Status"},{"emoji":"🚀","name":"Falcon 9","val":"X Starts","val_color":"blue","desc":"aktueller Status"},{"emoji":"⭐","name":"Starship","val":"Status","val_color":"amber","desc":"aktueller Status"},{"emoji":"🏆","name":"Marktanteil","val":"X%","val_color":"green","desc":"kommerzieller Launch Markt"}]}`;
+
+    const SPCX_CTX_PROMPT = `Aktuelle SpaceX Firmendaten für Investoren. Quellen: spacex.com, sec.gov S-1, reuters.com, bloomberg.com, wsj.com, spacenews.com. Antworte NUR mit JSON, KEIN HTML: {"desc":"1-2 Sätze aktueller Stand","tags":[{"text":"Tag","type":"green"}],"stats":[{"label":"Bewertung","val":"$XXX Mrd"}]}`;
+
     const GLOSSAR_PROMPT = `Analysiere aktuelle RKLB und ASTS News. Quellen: SpaceNews (spacenews.com), NASASpaceFlight (nasaspaceflight.com), SpaceflightNow, Ars Technica Space, Space.com, Aviation Week, Via Satellite (viasatellite.com), Parabolic Arc, SpaceRef, CNBC, Bloomberg, Reuters, Wall Street Journal, Financial Times, Forbes, Business Insider, Fortune, The Economist, Yahoo Finance, MarketWatch, Barron's, TheStreet, InvestorPlace, Benzinga, Motley Fool, Seeking Alpha, Zacks, TipRanks, Simply Wall St, Stockanalysis.com, Finviz, TradingView, Investopedia, 24/7 Wall St, Nasdaq.com, NYSE.com, SEC EDGAR, Reddit r/RocketLab r/ASTS r/space r/investing r/wallstreetbets r/stocks, X/Twitter @RocketLab @AST_SpaceMobile #RKLB #ASTS, StockTwits RKLB ASTS, Telegram RKLB/ASTS Channels, Facebook Investor Groups RKLB/ASTS, Instagram @rocketlab @astspacemobile, Discord RKLB/ASTS Community Servers, rocketlabusa.com, ast-science.com. Welche 2-4 neue Fachbegriffe aus Space/Finance tauchen auf? Suche auch das aktuelle Budget des US "Golden Dome" Programms auf defense.gov. Antworte NUR mit JSON, KEIN HTML, keine <cite> Tags: {"golden_dome_def":"US-Raketenabwehr (BETRAG). Rocket Lab Lieferant.","terms":[{"term":"Begriff","def":"Kurze Erklärung ohne HTML"}]}`;
 
     const GOV_RKLB_PROMPT = `Aktuelle US Gov & internationale Aufträge für RKLB. Quellen: defense.gov, sda.mil, spaceforce.mil, nasa.gov, breakingdefense.com, spacenews.com, esa.int, jaxa.jp, SEC EDGAR. Analysiere: 1) Golden Dome Budget + RKLB Anteil. 2) SDA Tracking Layer RKLB Aufträge. 3) NASA VCLS/CLPS Launch-Aufträge. 4) Space Force NSSL Status. 5) ESA/JAXA internationale Kooperationen.
@@ -231,12 +237,16 @@ export default async function handler(req, res) {
       { ticker:'rklb', section:'ctx',      prompt: CTX_PROMPTS.rklb },
       { ticker:'asts', section:'ctx',      prompt: CTX_PROMPTS.asts },
       { ticker:null,   section:'glossar',  prompt: GLOSSAR_PROMPT },
+      { ticker:'spcx', section:'news',     prompt: SPCX_NEWS_PROMPT },
+      { ticker:'spcx', section:'sector',   prompt: SPCX_SECTOR_PROMPT },
+      { ticker:'spcx', section:'ctx',      prompt: SPCX_CTX_PROMPT },
       { ticker:'rklb', section:'gov_space', prompt: GOV_RKLB_PROMPT },
       { ticker:'asts', section:'gov_space', prompt: GOV_ASTS_PROMPT },
     ];
     // Filter by scope for faster execution
     const calls = scope === 'rklb' ? allCalls.filter(c => c.ticker === 'rklb') :
                   scope === 'asts' ? allCalls.filter(c => c.ticker === 'asts') :
+                  scope === 'spcx' ? allCalls.filter(c => c.ticker === 'spcx') :
                   scope === 'global' ? allCalls.filter(c => !c.ticker) :
                   allCalls;
     console.log(`Running ${calls.length} calls for scope: ${scope}`);
