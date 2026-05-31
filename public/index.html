@@ -2848,20 +2848,14 @@ async function loadFromCache() {
 }
 async function loadSyncStatus() {
   try {
-    const r=await fetch('/api/sync-status');
-    if(r.ok){
-      const d=await r.json();
-      const toggle=document.getElementById('sync-toggle');
-      const lbl=document.getElementById('sync-status-label');
-      const lastLbl=document.getElementById('last-sync-label');
-      if(toggle) toggle.checked=d.sync_enabled!==false;
-      if(lbl) lbl.textContent=d.sync_enabled!==false?'✅ Auto-Sync aktiv':'⏸ Auto-Sync pausiert';
-      if(lastLbl&&d.last_sync){
-        const dt=new Date(d.last_sync);
-        lastLbl.textContent=dt.toLocaleString('de-CH',{day:'2-digit',month:'2-digit',hour:'2-digit',minute:'2-digit'});
-      }
+    // Get actual last update time from rec cache (most frequently updated)
+    const d = await fetchFromCache('rec', 'rklb');
+    const lastLbl = document.getElementById('last-sync-label');
+    if (lastLbl && d?.updated_at) {
+      const dt = new Date(d.updated_at);
+      lastLbl.textContent = dt.toLocaleString('de-CH', {day:'2-digit', month:'2-digit', hour:'2-digit', minute:'2-digit'}) + ' Uhr';
     }
-  } catch(e){}
+  } catch(e) {}
 }
 async function manualRefreshFromSettings() {
   const key=getKey();
