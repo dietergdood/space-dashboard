@@ -757,6 +757,9 @@ body{font-family:'DM Sans',sans-serif;background:var(--bg);color:var(--text);min
   <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png">
   <link rel="icon" type="image/png" sizes="192x192" href="/icon-192.png">
   <link rel="icon" type="image/png" sizes="512x512" href="/icon-512.png">
+  <script src="/supabase.js"></script>
+  <script src="/chart.min.js"></script>
+  <script>if(typeof Chart==='undefined'){document.write('<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.min.js"><\/script>')}</script>
 </head>
 <body>
 
@@ -3960,8 +3963,6 @@ async function refreshAllNews() {
       });
     });
   }
-  buildHistoryChart('rklb','rklb-chart','#1d4ed8','rgba(29,78,216,.06)',null,null,null);
-  build5yrChart('rklb','rklb-chart5');
   loadAll();
   setInterval(loadAll,15000);
   loadFromCache();
@@ -3990,6 +3991,8 @@ async function refreshAllNews() {
       setTimeout(initRangeCharts, 200);
       return;
     }
+    buildHistoryChart('rklb','rklb-chart','#1d4ed8','rgba(29,78,216,.06)',null,null,null);
+    build5yrChart('rklb','rklb-chart5');
     loadRangeChart('rklb', '1mo');
     rangeChartLoaded.rklb = true;
   }
