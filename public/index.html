@@ -2,7 +2,7 @@
 <html lang="de">
 <head>
   <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Space Stocks Dashboard</title>
   <meta name="description" content="RKLB · ASTS · SpaceX Analyse-Dashboard">
   <link rel="manifest" href="/manifest.json">
@@ -61,7 +61,7 @@ body{font-family:'DM Sans',sans-serif;background:var(--bg);color:var(--text);min
 .logo-icon{font-size:22px;}
 .logo-text{font-weight:700;font-size:15px;line-height:1.2;}
 .logo-sub{font-size:12px;color:var(--text3);font-weight:400;}
-.hdr-mid{flex:1;display:flex;justify-content:center;min-width:0;overflow:hidden;}
+.hdr-mid{flex:1;display:flex;justify-content:center;}
 .hdr-r{display:flex;align-items:center;gap:8px;flex-shrink:0;}
 .container{max-width:1200px;margin:0 auto;padding:10px 24px 80px;}
 
@@ -507,7 +507,7 @@ body{font-family:'DM Sans',sans-serif;background:var(--bg);color:var(--text);min
 }
 
 /* ══════════════════════════════════
-   MOBILE (max 640px)
+   MOBILE (max 800px)
 ══════════════════════════════════ */
 
   .card-sub{font-size:11px;}
@@ -539,30 +539,28 @@ body{font-family:'DM Sans',sans-serif;background:var(--bg);color:var(--text);min
   .kpi-sub{font-size:12px;}
   .settings-label{font-size:11px;}
 }
-@media(max-width:640px){
+@media(max-width:800px){
 
   /* ── Header ── */
-  .hdr-inner{padding:0 12px;gap:6px;height:52px;max-width:100%;width:100%;}
-  .logo{gap:8px;}
-  .logo-icon{font-size:20px;}
-  .logo-text{font-size:14px;}
+  .hdr-inner{padding:0 10px;gap:8px;height:52px;}
+  .logo{gap:6px;flex-shrink:0;}
+  .logo-icon{font-size:18px;}
+  .logo-text{font-size:13px;}
   .logo-sub{display:none;}
   .live-badge span{display:none;}
   .live-badge{padding:5px 8px;}
-  .hdr-mid{flex:1;min-width:0;overflow:hidden;max-width:calc(100% - 120px);}
+  .hdr-mid{flex:1;display:flex;justify-content:center;}
   .hdr-r{gap:6px;flex-shrink:0;}
   .settings-btn{width:32px;height:32px;font-size:14px;}
   .ki-status-pill{display:none !important;}
-
-  /* ── Tabs ── */
+    /* ── Tabs ── */
   .tabs{gap:2px;padding:3px;width:100%;}
-  .tab{padding:8px 10px;font-size:13px;flex:1;text-align:center;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
-  .tab-logo{width:15px;height:15px;margin-right:3px;}
-  .tab-full{display:none;}
-  .tab-short{display:inline;}
+  .tab{padding:6px 4px;font-size:12px;flex:1;text-align:center;min-width:0;}
+  .tab-logo{display:none !important;}
+  .tab-full{display:none !important;}
+  .tab-short{display:inline !important;}
   .spcx-icon{display:none;}
-
-  /* ── Container ── */
+    /* ── Container ── */
   .container{padding:8px 8px 80px;}
 
   /* ── Context bar ── */
@@ -771,7 +769,7 @@ body{font-family:'DM Sans',sans-serif;background:var(--bg);color:var(--text);min
   <link rel="manifest" href="/manifest.json">
   <link rel="icon" type="image/x-icon" href="/favicon.ico">
   <link rel="icon" type="image/png" href="/favicon.png">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <meta name="theme-color" content="#1d4ed8">
   <meta name="mobile-web-app-capable" content="yes">
   <meta name="apple-mobile-web-app-capable" content="yes">
@@ -3971,7 +3969,7 @@ async function refreshAllNews() {
   loadKey();
   loadTx();
   // Force mobile tab display
-  if (window.innerWidth <= 640) {
+  if (window.innerWidth <= 800) {
     document.querySelectorAll('.tab-full').forEach(el => el.style.display = 'none');
     document.querySelectorAll('.tab-short').forEach(el => el.style.display = 'inline');
     document.querySelectorAll('.tab-logo').forEach(el => el.style.display = 'none');
@@ -3989,7 +3987,7 @@ async function refreshAllNews() {
   if (spcxBtn) spcxBtn.addEventListener('click', () => switchTab('spcx'));
   switchTab('rklb');
   document.querySelectorAll('.card').forEach(c=>c.classList.add('open'));
-  if(window.innerWidth<=640){
+  if(window.innerWidth<=800){
     ['charts','df','pf','news','sector'].forEach(s=>{
       ['rklb','asts'].forEach(t=>{
         const c=$('card-'+t+'-'+s);
@@ -4029,7 +4027,7 @@ async function refreshAllNews() {
   }
   setTimeout(initRangeCharts, 100);
   // Collapse glossar on mobile by default
-  if (window.innerWidth <= 640) {
+  if (window.innerWidth <= 800) {
     const glossar = document.getElementById('card-glossar');
     if (glossar) glossar.classList.remove('open');
   }
