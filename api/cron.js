@@ -111,7 +111,7 @@ async function kiCall(prompt, retries=3, maxSearches=8, model='claude-sonnet-4-5
               articles.push({
                 title: titleMatches[i][1],
                 sentiment: sentMatches[i][1],
-                body: bodyMatches[i] ? bodyMatches[i][1].replace(/<[^>]*>/g,'').replace(/\\n/g,' ').trim() : '',
+                body: bodyMatches[i] ? bodyMatches[i][1].replace(/<[^>"]*(?:"[^"]*"[^>"]*)*>/g,'').replace(/\\n/g,' ').replace(/\\t/g,' ').trim() : '',
                 source: sourceMatches[i] ? sourceMatches[i][1] : ''
               });
             }
@@ -320,7 +320,14 @@ KONKURRENZ: rocketlabusa.com, blueorigin.com, virgingalactic.com, unitedlaunchal
       try {
         const isLight = ['ctx','gov_space','glossar'].includes(call.section);
         const data = await kiCall(call.prompt, 3, isLight ? 5 : 8, isLight ? 'claude-haiku-4-5' : 'claude-sonnet-4-5');
-        await saveToCache(call.ticker, call.section, data);
+        // Strip any HTML tags from string values recursively
+        function deepStrip(obj) {
+          if (typeof obj === 'string') return obj.replace(/<[^>]*>/g,'').trim();
+          if (Array.isArray(obj)) return obj.map(deepStrip);
+          if (obj && typeof obj === 'object') { const r={}; for(const k in obj) r[k]=deepStrip(obj[k]); return r; }
+          return obj;
+        }
+        await saveToCache(call.ticker, call.section, deepStrip(data));
         results.success.push(`${call.ticker}/${call.section}`);
       } catch(e) {
         results.failed.push(`${call.ticker}/${call.section}: ${e.message}`);
