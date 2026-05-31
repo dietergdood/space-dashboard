@@ -244,6 +244,10 @@ SOCIAL MEDIA: Reddit r/spacex r/SpaceXLounge r/investing r/wallstreetbets, X @Sp
 BEHÖRDEN: nasa.gov, faa.gov (Launch-Lizenzen), defense.gov, spaceforce.mil, sec.gov, ftc.gov.
 KONKURRENZ: rocketlabusa.com, blueorigin.com, virgingalactic.com, unitedlaunchalliance.com, arianespace.com. Antworte NUR mit JSON, KEIN HTML, keine Zeilenumbrüche: {"desc":"1-2 Sätze aktueller Stand","tags":[{"text":"Raketen","type":"blue"},{"text":"Starlink","type":"green"},{"text":"IPO 2026","type":"amber"}],"stats":[{"label":"Bewertung","val":"$XXX Mrd"},{"label":"Mitarbeiter","val":"~13000"},{"label":"Starts 2025","val":"X"}]}`;
 
+    const INSIDER_RKLB_PROMPT = `Suche aktuelle Insider-Trades für Rocket Lab (RKLB) der letzten 90 Tage. Quellen: sec.gov/cgi-bin/browse-edgar (Form 4 Filings), openinsider.com/RKLB, finviz.com/insidertrading, marketbeat.com RKLB Insider. Analysiere Form 4 Einreichungen. Antworte NUR mit gültigem JSON, KEIN HTML, keine <cite> Tags: {"trades":[{"name":"Person Name","title":"CEO|CFO|Director|etc","type":"buy|sell","shares":1000,"price":95.50,"value":95500,"date":"2026-05-15","significance":"high|medium|low","note":"1 Satz Bedeutung"}],"summary":"1 Satz Gesamtbild ohne HTML","signal":"bullish|bearish|neutral"}`;
+
+    const INSIDER_ASTS_PROMPT = `Suche aktuelle Insider-Trades für AST SpaceMobile (ASTS) der letzten 90 Tage. Quellen: sec.gov/cgi-bin/browse-edgar (Form 4 Filings), openinsider.com/ASTS, finviz.com/insidertrading, marketbeat.com ASTS Insider. Analysiere Form 4 Einreichungen. Antworte NUR mit gültigem JSON, KEIN HTML, keine <cite> Tags: {"trades":[{"name":"Person Name","title":"CEO|CFO|Director|etc","type":"buy|sell","shares":1000,"price":95.50,"value":95500,"date":"2026-05-15","significance":"high|medium|low","note":"1 Satz Bedeutung"}],"summary":"1 Satz Gesamtbild ohne HTML","signal":"bullish|bearish|neutral"}`;
+
     const GLOSSAR_PROMPT = `Analysiere aktuelle RKLB und ASTS News. Quellen: SpaceNews (spacenews.com), NASASpaceFlight (nasaspaceflight.com), SpaceflightNow, Ars Technica Space, Space.com, Aviation Week, Via Satellite (viasatellite.com), Parabolic Arc, SpaceRef, CNBC, Bloomberg, Reuters, Wall Street Journal, Financial Times, Forbes, Business Insider, Fortune, The Economist, Yahoo Finance, MarketWatch, Barron's, TheStreet, InvestorPlace, Benzinga, Motley Fool, Seeking Alpha, Zacks, TipRanks, Simply Wall St, Stockanalysis.com, Finviz, TradingView, Investopedia, 24/7 Wall St, Nasdaq.com, NYSE.com, SEC EDGAR, Reddit r/RocketLab r/ASTS r/space r/investing r/wallstreetbets r/stocks, X/Twitter @RocketLab @AST_SpaceMobile #RKLB #ASTS, StockTwits RKLB ASTS, Telegram RKLB/ASTS Channels, Facebook Investor Groups RKLB/ASTS, Instagram @rocketlab @astspacemobile, YouTube @RocketLab @ASTSpaceMobile, Discord RKLB/ASTS Community Servers, rocketlabusa.com, ast-science.com. Welche 2-4 neue Fachbegriffe aus Space/Finance tauchen auf? Suche auch das aktuelle Budget des US "Golden Dome" Programms auf defense.gov. Antworte NUR mit JSON, KEIN HTML, keine <cite> Tags: {"golden_dome_def":"US-Raketenabwehr (BETRAG). Rocket Lab Lieferant.","terms":[{"term":"Begriff","def":"Kurze Erklärung ohne HTML"}]}`;
 
     const GOV_RKLB_PROMPT = `Aktuelle US Gov & internationale Aufträge für RKLB. Quellen: defense.gov, sda.mil, spaceforce.mil, nasa.gov, breakingdefense.com, spacenews.com, esa.int, jaxa.jp, SEC EDGAR. Analysiere: 1) Golden Dome Budget + RKLB Anteil. 2) SDA Tracking Layer RKLB Aufträge. 3) NASA VCLS/CLPS Launch-Aufträge. 4) Space Force NSSL Status. 5) ESA/JAXA internationale Kooperationen.
@@ -264,6 +268,8 @@ KONKURRENZ: rocketlabusa.com, blueorigin.com, virgingalactic.com, unitedlaunchal
       { ticker:'rklb', section:'ctx',      prompt: CTX_PROMPTS.rklb },
       { ticker:'asts', section:'ctx',      prompt: CTX_PROMPTS.asts },
       { ticker:null,   section:'glossar',  prompt: GLOSSAR_PROMPT },
+      { ticker:'rklb', section:'insider',   prompt: INSIDER_RKLB_PROMPT },
+      { ticker:'asts', section:'insider',   prompt: INSIDER_ASTS_PROMPT },
       { ticker:'spcx', section:'news',     prompt: SPCX_NEWS_PROMPT },
       { ticker:'spcx', section:'sector',   prompt: SPCX_SECTOR_PROMPT },
       { ticker:'spcx', section:'gov_space', prompt: SPCX_SECTOR_PROMPT },
@@ -273,7 +279,7 @@ KONKURRENZ: rocketlabusa.com, blueorigin.com, virgingalactic.com, unitedlaunchal
     ];
     // Filter by scope for faster execution
     const FAST_SECTIONS = ['rec','news','scenarios'];
-    const SLOW_SECTIONS = ['sector','gov_space','ctx'];
+    const SLOW_SECTIONS = ['sector','gov_space','ctx','insider'];
     // Smart scheduling: check day of week
     const dayOfWeek = new Date().getDay(); // 0=Sun, 6=Sat
     const isWeekend = dayOfWeek === 0 || dayOfWeek === 6;
