@@ -3095,6 +3095,12 @@ async function loadFinancials(t) {
     const r = await fetch(`/api/financials?ticker=${t}`);
     if (!r.ok) return;
     const d = await r.json();
+    if (d.error) {
+      console.warn('financials error:', t, d.error);
+      const srcEl = $(t === 'rklb' ? 'rklb-fin-source' : 'asts-fin-source');
+      if (srcEl) srcEl.textContent = '· SEC EDGAR nicht verfügbar';
+      return;
+    }
 
     const fmt = (m) => m != null ? `$${Math.abs(m) >= 1000 ? (m/1000).toFixed(1)+'Mrd' : m+'Mio'}` : '—';
     const fmtPct = (p) => p != null ? `${p > 0 ? '+' : ''}${p}%` : '—';
