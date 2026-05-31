@@ -39,6 +39,18 @@
   --shadow:0 1px 4px rgba(0,0,0,.12),0 1px 3px rgba(0,0,0,.08);
   --shadow-md:0 4px 12px rgba(0,0,0,.1),0 2px 4px rgba(0,0,0,.06);
 }
+[data-theme="dark"]{
+  --bg:#0f0f0d; --surface:#1a1a17; --surface2:#222220; --surface3:#2a2a27;
+  --border:rgba(255,255,255,.1); --border2:rgba(255,255,255,.2);
+  --text:#f0f0ec; --text2:#b0b0a8; --text3:#72726c;
+  --green:#22c55e; --green-bg:rgba(34,197,94,.1); --green-bd:rgba(34,197,94,.25);
+  --red:#f87171;   --red-bg:rgba(248,113,113,.1);  --red-bd:rgba(248,113,113,.2);
+  --blue:#60a5fa;  --blue-bg:rgba(96,165,250,.1);
+  --amber:#fbbf24; --amber-bg:rgba(251,191,36,.1);
+  --purple:#a78bfa;--purple-bg:rgba(167,139,250,.1);
+  --shadow:0 1px 4px rgba(0,0,0,.4),0 1px 3px rgba(0,0,0,.3);
+  --shadow-md:0 4px 12px rgba(0,0,0,.4),0 2px 4px rgba(0,0,0,.3);
+}
 body{font-family:'DM Sans',sans-serif;background:var(--bg);color:var(--text);min-height:100vh;font-size:15px;line-height:1.6;}
 /* Safe area for notch devices */
 .hdr-inner{padding-left:max(24px,env(safe-area-inset-left));padding-right:max(24px,env(safe-area-inset-right));}
@@ -319,6 +331,19 @@ body{font-family:'DM Sans',sans-serif;background:var(--bg);color:var(--text);min
 /* ── News ── */
 .news-header{display:flex;align-items:center;justify-content:space-between;margin-bottom:12px;}
 .news-live{display:flex;align-items:center;gap:6px;font-size:12px;font-weight:500;color:var(--text3);}
+.earnings-bar{display:flex;align-items:center;gap:8px;padding:8px 12px;background:var(--amber-bg, #fefce8);border:1px solid var(--amber-bd, #fde68a);border-radius:8px;margin-bottom:10px;font-size:12px;}
+.rec-history{margin-top:12px;padding-top:12px;border-top:1px solid var(--border);}
+.rec-history-title{font-size:11px;color:var(--text3);font-weight:600;letter-spacing:.05em;text-transform:uppercase;margin-bottom:8px;}
+.rec-history-items{display:flex;gap:6px;flex-wrap:wrap;}
+.rec-hist-item{display:flex;flex-direction:column;align-items:center;gap:2px;padding:6px 8px;background:var(--surface2);border-radius:8px;border:1px solid var(--border);min-width:60px;}
+.rec-hist-date{font-size:10px;color:var(--text3);}
+.rec-hist-badge{font-size:10px;font-weight:700;padding:2px 6px;border-radius:4px;}
+.rec-hist-badge.buy{background:var(--green-bg);color:var(--green);}
+.rec-hist-badge.hold{background:var(--surface3);color:var(--text2);}
+.rec-hist-badge.sell{background:var(--red-bg);color:var(--red);}
+.earnings-date{font-family:"DM Mono",monospace;font-weight:600;color:#854F0B;}
+.earnings-label{color:#92400e;}
+.earnings-countdown{margin-left:auto;background:#854F0B;color:#fff;padding:2px 8px;border-radius:10px;font-size:11px;font-weight:600;}
 .news-ts{font-size:11px;color:var(--text3);}
 .news-loading{display:none;align-items:center;gap:10px;padding:12px;background:var(--surface2);border-radius:8px;font-size:13px;color:var(--text2);}
 .news-loading.show{display:flex;}
@@ -670,6 +695,7 @@ body{font-family:'DM Sans',sans-serif;background:var(--bg);color:var(--text);min
       </div>
     </div>
     <div class="hdr-r">
+        <button id="dark-mode-btn" onclick="toggleDarkMode()" style="width:36px;height:36px;border-radius:50%;border:1px solid var(--border2);background:var(--surface2);cursor:pointer;font-size:16px;display:flex;align-items:center;justify-content:center;" title="Dark Mode">🌙</button>
       
       <div id="ki-status" class="ki-status-pill" style="display:none;"></div>
       <div class="settings-wrap">
@@ -699,6 +725,9 @@ body{font-family:'DM Sans',sans-serif;background:var(--bg);color:var(--text);min
           <div style="font-size:12px;color:var(--text2);line-height:1.8;">
             <div>⚡ <b>Kurse</b> — alle 15 Sekunden (Yahoo Finance)</div>
             <div>🤖 <b>KI-Analysen</b> — täglich um 13:00 Uhr</div>
+            <div style="margin-top:8px;">
+              <button onclick="requestPushPermission()" style="padding:6px 12px;border:1px solid var(--border2);background:var(--surface2);border-radius:7px;font-size:12px;cursor:pointer;font-family:inherit;">🔔 Push-Benachrichtigungen aktivieren</button>
+            </div>
             <div>📦 <b>Beim Öffnen</b> — letzte gespeicherte Daten sofort</div>
             <div style="margin-top:6px;color:var(--text3);">Letzte KI-Aktualisierung: <span id="last-sync-label">—</span></div>
           </div>
@@ -867,6 +896,10 @@ body{font-family:'DM Sans',sans-serif;background:var(--bg);color:var(--text);min
         <div class="score-explain" id="rklb-explain-bewertung" style="color:var(--text3);font-style:italic;"><b>Bewertung</b> — wird mit KI aktualisiert</div>
       </div>
     </div>
+    <div class="rec-history" id="rklb-rec-history" style="display:none;">
+          <div class="rec-history-title">📊 Verlauf Empfehlungen</div>
+          <div class="rec-history-items" id="rklb-rec-history-items"></div>
+        </div>
     <div class="rec-levels" id="rklb-rec-levels">
       <div class="rec-level"><span class="tip"><b>Guter Einstieg:</b> <span id="rklb-pill-einstieg-val">—</span><span class="tip-icon">?</span><span class="tip-box">Unter welchem Kurs ein Einstieg sinnvoller wäre als zum aktuellen Preis.</span></span></div>
       <div class="rec-level"><span class="tip"><b>Kursziel:</b> <span id="rklb-pill-ziel-val">—</span><span class="tip-icon">?</span><span class="tip-box">Wo der Kurs hinlaufen könnte wenn die Entwicklung wie erwartet verläuft.</span></span></div>
@@ -1048,6 +1081,7 @@ body{font-family:'DM Sans',sans-serif;background:var(--bg);color:var(--text);min
         <input class="pf-input" id="rklb-tx-date" type="date">
         <input class="pf-input" id="rklb-tx-note" type="text" placeholder="Notiz (optional)" style="grid-column:1/-1;">
         <button class="pf-add" onclick="addTx('rklb')" style="grid-column:1/-1;" id="rklb-add-btn">＋ Hinzufügen</button>
+        <button onclick="exportPortfolio('rklb')" style="grid-column:1/-1;padding:6px 14px;border:1px solid var(--border2);background:var(--surface2);border-radius:7px;font-family:inherit;font-size:12px;font-weight:500;cursor:pointer;color:var(--text2);">⬇ Export CSV</button>
       </div>
     </div>
     <div class="pf-tx-list" id="rklb-tx-list">
@@ -1080,6 +1114,11 @@ body{font-family:'DM Sans',sans-serif;background:var(--bg);color:var(--text);min
   </div>
   <div class="card-body" id="body-rklb-news">
     <div class="news-header">
+      <div id="rklb-earnings-bar" style="display:none;" class="earnings-bar">
+        <span>📅</span>
+        <span class="earnings-label">Nächste Earnings: <b id="rklb-earnings-date">—</b></span>
+        <span class="earnings-countdown" id="rklb-earnings-countdown"></span>
+      </div>
       <div class="news-live"><div class="live-dot"></div>Nachrichten · RKLB</div>
       <div class="news-ts" id="rklb-news-ts"></div>
     </div>
@@ -1271,6 +1310,10 @@ body{font-family:'DM Sans',sans-serif;background:var(--bg);color:var(--text);min
         <div class="score-explain" id="asts-explain-bewertung" style="color:var(--text3);font-style:italic;"><b>Bewertung</b> — wird mit KI aktualisiert</div>
       </div>
     </div>
+    <div class="rec-history" id="asts-rec-history" style="display:none;">
+          <div class="rec-history-title">📊 Verlauf Empfehlungen</div>
+          <div class="rec-history-items" id="asts-rec-history-items"></div>
+        </div>
     <div class="rec-levels" id="asts-rec-levels">
       <div class="rec-level"><span class="tip"><b>Guter Einstieg:</b> <span id="asts-pill-einstieg-val">—</span><span class="tip-icon">?</span><span class="tip-box">Unter welchem Kurs ein Einstieg sinnvoller wäre als zum aktuellen Preis.</span></span></div>
       <div class="rec-level"><span class="tip"><b>Kursziel:</b> <span id="asts-pill-ziel-val">—</span><span class="tip-icon">?</span><span class="tip-box">Wo der Kurs hinlaufen könnte wenn die Entwicklung wie erwartet verläuft.</span></span></div>
@@ -1452,6 +1495,7 @@ body{font-family:'DM Sans',sans-serif;background:var(--bg);color:var(--text);min
         <input class="pf-input" id="asts-tx-date" type="date">
         <input class="pf-input" id="asts-tx-note" type="text" placeholder="Notiz (optional)" style="grid-column:1/-1;">
         <button class="pf-add" onclick="addTx('asts')" style="grid-column:1/-1;" id="asts-add-btn">＋ Hinzufügen</button>
+        <button onclick="exportPortfolio('asts')" style="grid-column:1/-1;padding:6px 14px;border:1px solid var(--border2);background:var(--surface2);border-radius:7px;font-family:inherit;font-size:12px;font-weight:500;cursor:pointer;color:var(--text2);">⬇ Export CSV</button>
       </div>
     </div>
     <div class="pf-tx-list" id="asts-tx-list">
@@ -1484,6 +1528,11 @@ body{font-family:'DM Sans',sans-serif;background:var(--bg);color:var(--text);min
   </div>
   <div class="card-body" id="body-asts-news">
     <div class="news-header">
+      <div id="asts-earnings-bar" style="display:none;" class="earnings-bar">
+        <span>📅</span>
+        <span class="earnings-label">Nächste Earnings: <b id="asts-earnings-date">—</b></span>
+        <span class="earnings-countdown" id="asts-earnings-countdown"></span>
+      </div>
       <div class="news-live"><div class="live-dot"></div>Nachrichten · ASTS</div>
       <div class="news-ts" id="asts-news-ts"></div>
     </div>
@@ -1598,6 +1647,11 @@ body{font-family:'DM Sans',sans-serif;background:var(--bg);color:var(--text);min
     <div class="card-arrow">▼</div>
   </div>
   <div class="card-body" id="body-spcx-news">
+    <div id="spcx-earnings-bar" style="display:none;" class="earnings-bar">
+        <span>🚀</span>
+        <span class="earnings-label">SpaceX IPO / Nächstes Event: <b id="spcx-earnings-date">—</b></span>
+        <span class="earnings-countdown" id="spcx-earnings-countdown"></span>
+      </div>
     <div class="news-live"><div class="live-dot"></div>Nachrichten · SPCX</div>
     <div id="spcx-news-content"><div style="color:var(--text3);font-style:italic;font-size:13px;">Wird täglich mit KI aktualisiert...</div></div>
   </div>
@@ -2456,7 +2510,14 @@ function recalcPF(t) {
 }
 
 // ── Cache Reader ───────────────────────────────────────────
-async function fetchFromCache(section, ticker) {
+const _kiCache = {};
+async function fetchFromCache(section, ticker, maxAgeHours=25) {
+  const key = (ticker||'global')+'/'+section;
+  // Return in-memory cache if fresh
+  if (_kiCache[key]) {
+    const age = (Date.now() - _kiCache[key].ts) / 3600000;
+    if (age < maxAgeHours) return _kiCache[key].result;
+  }
   try {
     let url='/api/ki-data?section='+section;
     if(ticker) url+='&ticker='+ticker;
@@ -2464,7 +2525,9 @@ async function fetchFromCache(section, ticker) {
     if(!r.ok) return null;
     const d=await r.json();
     if(!d.data) return null;
-    return {data: d.data, updated_at: d.updated_at||null};
+    const result = {data: d.data, updated_at: d.updated_at||null};
+    _kiCache[key] = {result, ts: Date.now()};
+    return result;
   } catch(e){ return null; }
 }
 async function loadFromCache() {
@@ -2664,6 +2727,173 @@ function applySpcxSector(p) {
   if (p.bewertung && $('spcx-val')) $('spcx-val').textContent = p.bewertung;
 }
 
+// ── Push Notifications ──────────────────────────────────────
+async function requestPushPermission() {
+  if (!('Notification' in window)) return;
+  if (Notification.permission === 'granted') {
+    showToast('Push-Benachrichtigungen bereits aktiviert ✓');
+    return;
+  }
+  const perm = await Notification.requestPermission();
+  if (perm === 'granted') {
+    showToast('Push-Benachrichtigungen aktiviert ✓');
+    localStorage.setItem('push_enabled', '1');
+  }
+}
+
+function sendPushIfEnabled(title, body) {
+  if (Notification.permission !== 'granted') return;
+  if (!localStorage.getItem('push_enabled')) return;
+  new Notification(title, {
+    body,
+    icon: '/icon-192.png',
+    badge: '/icon-192.png',
+  });
+}
+
+function showToast(msg, duration=3000) {
+  let t = document.getElementById('toast');
+  if (!t) {
+    t = document.createElement('div');
+    t.id = 'toast';
+    t.style.cssText = 'position:fixed;bottom:24px;left:50%;transform:translateX(-50%);background:var(--text);color:var(--surface);padding:10px 20px;border-radius:20px;font-size:13px;font-weight:500;z-index:9999;transition:opacity .3s;';
+    document.body.appendChild(t);
+  }
+  t.textContent = msg;
+  t.style.opacity = '1';
+  clearTimeout(t._timer);
+  t._timer = setTimeout(() => { t.style.opacity = '0'; }, duration);
+}
+
+// Notify when fresh KI data loaded
+function notifyNewData(ticker) {
+  sendPushIfEnabled(`Space Stocks — Neue Daten`, `${ticker.toUpperCase()} Analyse wurde aktualisiert`);
+}
+
+// ── Portfolio Export ────────────────────────────────────────
+function exportPortfolio(t) {
+  const txs = txData[t] || [];
+  if (!txs.length) { alert('Keine Transaktionen vorhanden.'); return; }
+  const sym = t.toUpperCase();
+  const q = quotes[t];
+  const curPrice = q?.price || 0;
+  const rows = [
+    ['Datum','Typ','Anzahl','Preis (USD)','Wert (USD)','Aktueller Kurs','Aktueller Wert','G/V (USD)','G/V (%)']
+  ];
+  txs.forEach(tx => {
+    const curVal = tx.qty * curPrice;
+    const buyVal = tx.qty * tx.price;
+    const gv = tx.type === 'buy' ? curVal - buyVal : buyVal - curVal;
+    const gvPct = tx.type === 'buy' ? (gv / buyVal * 100) : 0;
+    rows.push([
+      tx.date, tx.type === 'buy' ? 'Kauf' : 'Verkauf',
+      tx.qty, tx.price.toFixed(2),
+      buyVal.toFixed(2), curPrice.toFixed(2),
+      curVal.toFixed(2), gv.toFixed(2),
+      gvPct.toFixed(2) + '%'
+    ]);
+  });
+  const csv = rows.map(r => r.join(';')).join('\n');
+  const blob = new Blob(['﻿' + csv], {type:'text/csv;charset=utf-8;'});
+  const url = URL.createObjectURL(blob);
+  const a = document.createElement('a');
+  a.href = url; a.download = `portfolio_${sym}_${new Date().toISOString().split('T')[0]}.csv`;
+  a.click(); URL.revokeObjectURL(url);
+}
+
+// ── Dark Mode ──────────────────────────────────────────────
+function toggleDarkMode() {
+  const isDark = document.documentElement.getAttribute('data-theme') === 'dark';
+  const newTheme = isDark ? 'light' : 'dark';
+  document.documentElement.setAttribute('data-theme', newTheme);
+  localStorage.setItem('theme', newTheme);
+  const btn = document.getElementById('dark-mode-btn');
+  if (btn) btn.textContent = newTheme === 'dark' ? '☀️' : '🌙';
+}
+
+// ── Recommendation History ──────────────────────────────────
+async function loadRecHistory(t) {
+  try {
+    const r = await fetch(`/api/ki-data?section=rec&ticker=${t}&history=1`);
+    if (!r.ok) return;
+    const d = await r.json();
+    if (!d.history || !d.history.length) return;
+    const container = $(`${t}-rec-history-items`);
+    const wrapper = $(`${t}-rec-history`);
+    if (!container || !wrapper) return;
+    // Show last 7 entries
+    const items = d.history.slice(-7).reverse();
+    container.innerHTML = items.map(h => {
+      const rec = (h.data?.empfehlung || '—').toUpperCase();
+      const cls = rec.includes('KAUF') ? 'buy' : rec.includes('VERK') ? 'sell' : 'hold';
+      const label = rec.includes('KAUF') ? 'KAUFEN' : rec.includes('VERK') ? 'VERKAUFEN' : 'HALTEN';
+      const date = new Date(h.updated_at).toLocaleDateString('de-CH', {day:'2-digit', month:'2-digit'});
+      return `<div class="rec-hist-item"><div class="rec-hist-date">${date}</div><div class="rec-hist-badge ${cls}">${label}</div></div>`;
+    }).join('');
+    if (items.length > 1) wrapper.style.display = 'block';
+  } catch(e) { console.warn('loadRecHistory:', e.message); }
+}
+
+// ── Earnings Calendar ─────────────────────────────────────
+async function loadEarningsCalendar() {
+  const tickers = [
+    {t:'rklb', sym:'RKLB'},
+    {t:'asts', sym:'ASTS'},
+  ];
+  for (const {t, sym} of tickers) {
+    try {
+      const r = await fetch('/api/quote?ticker='+sym+'&earnings=1');
+      const d = r.ok ? await r.json() : null;
+      const earningsDate = d?.earningsDate || getEstimatedEarnings(sym);
+      if (earningsDate) showEarningsBar(t, earningsDate);
+    } catch(e) {
+      const estimated = getEstimatedEarnings(sym);
+      if (estimated) showEarningsBar(t, estimated);
+    }
+  }
+}
+
+function getEstimatedEarnings(sym) {
+  // Approximate next earnings based on typical quarterly schedule
+  const now = new Date();
+  const year = now.getFullYear();
+  const month = now.getMonth(); // 0-indexed
+  // RKLB: typically Feb, May, Aug, Nov
+  // ASTS: typically Mar, May, Aug, Nov
+  const schedules = {
+    RKLB: [1,4,7,10], // Feb, May, Aug, Nov
+    ASTS: [2,4,7,10], // Mar, May, Aug, Nov
+  };
+  const months = schedules[sym] || [];
+  for (let m of months) {
+    const d = new Date(year, m, 10); // approx 10th of month
+    if (d > now) return d.toISOString().split('T')[0];
+  }
+  // Next year
+  if (months.length) return new Date(year+1, months[0], 10).toISOString().split('T')[0];
+  return null;
+}
+
+function showEarningsBar(t, dateStr) {
+  const bar = $(t+'-earnings-bar');
+  const dateEl = $(t+'-earnings-date');
+  const cdEl = $(t+'-earnings-countdown');
+  if (!bar || !dateEl) return;
+  const date = new Date(dateStr);
+  const now = new Date();
+  const diffDays = Math.ceil((date - now) / 86400000);
+  if (diffDays < 0 || diffDays > 90) return; // only show if within 90 days
+  const fmt = date.toLocaleDateString('de-CH', {day:'numeric', month:'long', year:'numeric'});
+  dateEl.textContent = fmt;
+  if (diffDays <= 7) {
+    cdEl.textContent = diffDays === 0 ? 'Heute!' : `in ${diffDays} Tag${diffDays===1?'':'en'}`;
+    cdEl.style.background = '#dc2626';
+  } else {
+    cdEl.textContent = `in ${diffDays} Tagen`;
+  }
+  bar.style.display = 'flex';
+}
+
 function applyGovSpace(t, p) {
   if(!p) return;
   if(t === 'rklb') {
@@ -2798,6 +3028,7 @@ async function fetchRec(t) {
   catch(e){ console.warn('fetchRec:',e.message); }
 }
 function applyRec(t,p) {
+  notifyNewData(t);
   if(!p) return;
   // Analyst consensus — zuerst setzen
   if($(t+'-cons-price')&&p.kursziel) $(t+'-cons-price').textContent=p.kursziel;
@@ -2918,6 +3149,22 @@ async function refreshAllNews() {
   setInterval(loadAll,15000);
   loadFromCache();
   // Init range chart for active tab
+  // Dark mode
+  if (localStorage.getItem('theme') === 'dark') {
+    document.documentElement.setAttribute('data-theme','dark');
+    const btn = document.getElementById('dark-mode-btn');
+    if (btn) btn.textContent = '☀️';
+  }
+  loadEarningsCalendar();
+  // Check for cron errors
+  fetchFromCache('cron_errors', 'system').then(d => {
+    if (d?.data?.failed?.length) {
+      const age = d.updated_at ? (Date.now() - new Date(d.updated_at)) / 3600000 : 99;
+      if (age < 25) showToast(`⚠️ Cron Fehler: ${d.data.failed.join(', ')}`, 6000);
+    }
+  }).catch(()=>{});
+  loadRecHistory('rklb');
+  loadRecHistory('asts');
   loadRangeChart('rklb', '1mo');
   rangeChartLoaded.rklb = true;
   // Collapse glossar on mobile by default
