@@ -1490,52 +1490,34 @@ body{font-family:'DM Sans',sans-serif;background:var(--bg);color:var(--text);min
   </div>
   <div class="card-body" id="body-asts-milestone">
     <div id="asts-milestone-content">
-      <div style="display:flex;align-items:center;gap:14px;margin-bottom:12px;">
-        <div class="kpi-score-badge good" id="asts-score-badge">—</div>
-        <div style="flex:1;">
-          <div style="font-size:13px;font-weight:600;">KI-KPI-Score <span class="kpi-info" style="vertical-align:middle;">?</span><div class="kpi-tooltip" style="display:none" style="left:0;transform:none;width:220px;">Gesamtbewertung 0–100 basierend auf Cash, Umsatz-Ramp, Launch-Status, Technologie, Partner und Risiko. Grün ≥80, Blau ≥60, Orange ≥40, Rot &lt;40</div></div>
-          <div style="font-size:11px;color:var(--text3);" id="asts-score-sub">Wird berechnet...</div>
+      <div class="kpi-section-title">BlueBird Satelliten-Status <span class="kpi-info">?</span><div class="kpi-tooltip" style="display:none;">Ohne Satelliten im Orbit kein Service — der wichtigste operative KPI für ASTS</div> <span style="font-weight:400;text-transform:none;font-size:10px;color:var(--text3);">KI-Analyse</span></div>
+      <div id="asts-bluebird-status"><div style="color:var(--text3);font-size:13px;font-style:italic;">Wird aktualisiert...</div></div>
+      <div class="kpi-section-title" style="margin-top:12px;">Regulierung & Partner</div>
+      <div class="kpi-grid">
+        <div class="kpi-box">
+          <div class="kpi-label">FCC Status <span class="kpi-info">?</span><div class="kpi-tooltip" style="display:none;">Die FCC (US-Telekombehörde) hat ASTS im April 2026 die Lizenz für 248 Satelliten erteilt — kritische Voraussetzung für US-Betrieb</div></div>
+          <div class="kpi-val" id="asts-fcc-status" style="font-size:12px;">—</div>
+        </div>
+        <div class="kpi-box">
+          <div class="kpi-label">ITU Status <span class="kpi-info">?</span><div class="kpi-tooltip" style="display:none;">ITU koordiniert Frequenzen international — für globalen Betrieb in jedem Land nötig</div></div>
+          <div class="kpi-val" id="asts-itu-status" style="font-size:12px;">—</div>
+        </div>
+        <div class="kpi-box">
+          <div class="kpi-label">MNO Partner <span class="kpi-info">?</span><div class="kpi-tooltip" style="display:none;">Mobilfunkanbieter die ASTS vermarkten. Mehr Partner = mehr potenzielle Nutzer und Einnahmen</div></div>
+          <div class="kpi-val" id="asts-mno-count">—</div>
+          <div class="kpi-sub" id="asts-mno-list" style="font-size:10px;">—</div>
+        </div>
+        <div class="kpi-box">
+          <div class="kpi-label">Nächster Meilenstein <span class="kpi-info">?</span><div class="kpi-tooltip" style="display:none;">Der wichtigste bevorstehende operative Schritt</div></div>
+          <div class="kpi-val" id="asts-next-milestone" style="font-size:11px;">—</div>
         </div>
       </div>
-      <div class="kpi-cat-grid">
-        <div class="kpi-cat" onclick="toggleDrill('asts','cash')"><div class="kpi-cat-name">Cash <span class="kpi-info">?</span><div class="kpi-tooltip" style="display:none">Verfügbares Geld minus Schulden. Bei ASTS kritisch: das Unternehmen macht noch Verluste und braucht Cash zum Überleben</div></div><div class="kpi-cat-score" id="asts-score-cash">—</div></div>
-        <div class="kpi-cat" onclick="toggleDrill('asts','umsatz')"><div class="kpi-cat-name">Umsatz-Ramp <span class="kpi-info">?</span><div class="kpi-tooltip" style="display:none">Wie schnell steigen die Einnahmen? ASTS ist noch in der Frühphase — der Umsatz muss stark wachsen um die Kosten zu decken</div></div><div class="kpi-cat-score" id="asts-score-umsatz">—</div></div>
-        <div class="kpi-cat" onclick="toggleDrill('asts','launch')"><div class="kpi-cat-name">Launch <span class="kpi-info">?</span><div class="kpi-tooltip" style="display:none">Status der BlueBird Satelliten-Starts. Ohne Satelliten im Orbit kein Service — der wichtigste operative KPI</div></div><div class="kpi-cat-score" id="asts-score-launch">—</div></div>
-        <div class="kpi-cat" onclick="toggleDrill('asts','technologie')"><div class="kpi-cat-name">Technologie <span class="kpi-info">?</span><div class="kpi-tooltip" style="display:none">Funktioniert die Technologie? FCC-Lizenz, Speed-Tests und Regulierung zeigen ob das Produkt einsatzbereit ist</div></div><div class="kpi-cat-score" id="asts-score-technologie">—</div></div>
-        <div class="kpi-cat" onclick="toggleDrill('asts','partner')"><div class="kpi-cat-name">Partner <span class="kpi-info">?</span><div class="kpi-tooltip" style="display:none">MNO-Partner (Mobilfunkanbieter) sind der Vertriebskanal. Mehr Partner = mehr potenzielle Nutzer und Einnahmen</div></div><div class="kpi-cat-score" id="asts-score-partner">—</div></div>
-        <div class="kpi-cat" onclick="toggleDrill('asts','risiko')"><div class="kpi-cat-name">Risiko <span class="kpi-info">?</span><div class="kpi-tooltip" style="display:none">Hoher Score = geringeres Risiko. Faktoren: Launch-Verzögerungen, Verwässerung durch neue Aktien, Konkurrenz von Starlink</div></div><div class="kpi-cat-score" id="asts-score-risiko">—</div></div>
-      </div>
-      <div class="kpi-drill" id="asts-drill-cash">
-        <div class="kpi-drill-row"><span class="kpi-drill-label">Cash Total</span><span class="kpi-drill-val"><span id="asts-d-cash">—</span><span class="kpi-tag-sec">SEC</span></span></div>
-        <div class="kpi-drill-source" id="asts-d-cash-src"></div>
-        <div class="kpi-drill-row"><span class="kpi-drill-label">Long-term Debt</span><span class="kpi-drill-val"><span id="asts-d-debt">—</span><span class="kpi-tag-sec">SEC</span></span></div>
-        <div class="kpi-drill-row"><span class="kpi-drill-label kpi-tooltip-wrap">Cash Runway <span class="kpi-info">?</span><div class="kpi-tooltip" style="display:none">Wie lange reicht das Geld? Zeigt wie viele Monate das Unternehmen ohne neue Finanzierung überleben kann</div></span><span class="kpi-drill-val"><span id="asts-d-runway">—</span><span class="kpi-tag-ki">KI</span></span></div>
-        <div class="kpi-drill-row"><span class="kpi-drill-label">Nettoverlust</span><span class="kpi-drill-val"><span id="asts-d-netloss">—</span><span class="kpi-tag-sec">SEC</span></span></div>
-      </div>
-      <div class="kpi-drill" id="asts-drill-umsatz">
-        <div class="kpi-drill-row"><span class="kpi-drill-label">Revenue Q1 2026</span><span class="kpi-drill-val"><span id="asts-d-rev">—</span><span class="kpi-tag-sec">SEC</span></span></div>
-        <div class="kpi-drill-row"><span class="kpi-drill-label">YoY Wachstum</span><span class="kpi-drill-val" id="asts-d-yoy">—</span></div>
-        <div class="kpi-drill-row"><span class="kpi-drill-label">2026 Guidance</span><span class="kpi-drill-val"><span id="asts-d-guidance">—</span><span class="kpi-tag-ki">KI</span></span></div>
-        <div class="kpi-drill-row"><span class="kpi-drill-label kpi-tooltip-wrap">Guidance Progress <span class="kpi-info">?</span><div class="kpi-tooltip" style="display:none">Wie viel des Jahresziels ist bereits erreicht? Zeigt ob ASTS auf Kurs für die eigene Prognose liegt</div></span><span class="kpi-drill-val"><span id="asts-d-guidance-prog">—</span><span class="kpi-tag-ki">KI</span></span></div>
-      </div>
-      <div class="kpi-drill" id="asts-drill-launch">
-        <div id="asts-bluebird-status"><div style="color:var(--text3);font-size:12px;font-style:italic;">Wird aktualisiert...</div></div>
-      </div>
-      <div class="kpi-drill" id="asts-drill-technologie">
-        <div class="kpi-drill-row"><span class="kpi-drill-label">Peak Speed</span><span class="kpi-drill-val"><span id="asts-d-speed">—</span><span class="kpi-tag-ki">KI</span></span></div>
-        <div class="kpi-drill-row"><span class="kpi-drill-label">FCC Status</span><span class="kpi-drill-val"><span id="asts-fcc-status">—</span><span class="kpi-tag-ki">KI</span></span></div>
-        <div class="kpi-drill-row"><span class="kpi-drill-label">ITU Status</span><span class="kpi-drill-val"><span id="asts-itu-status">—</span><span class="kpi-tag-ki">KI</span></span></div>
-      </div>
-      <div class="kpi-drill" id="asts-drill-partner">
-        <div class="kpi-drill-row"><span class="kpi-drill-label kpi-tooltip-wrap">MNO Partner <span class="kpi-info">?</span><div class="kpi-tooltip" style="display:none">MNO = Mobile Network Operator (Mobilfunkanbieter). Diese Partner vermarkten den ASTS-Service an ihre bestehenden Kunden</div></span><span class="kpi-drill-val"><span id="asts-d-mnos">—</span><span class="kpi-tag-ki">KI</span></span></div>
-        <div class="kpi-drill-row"><span class="kpi-drill-label">Aktive Partner</span><span class="kpi-drill-val" id="asts-d-mno-list">—</span></div>
-      </div>
-      <div class="kpi-drill" id="asts-drill-risiko">
-        <div class="kpi-drill-row"><span class="kpi-drill-label">Launch-Risiko</span><span class="kpi-drill-val risk-val" id="asts-risk-launch">—</span></div>
-        <div class="kpi-drill-row"><span class="kpi-drill-label">Dilution</span><span class="kpi-drill-val risk-val" id="asts-risk-dilution">—</span></div>
-        <div class="kpi-drill-row"><span class="kpi-drill-label">Konkurrenz</span><span class="kpi-drill-val risk-val" id="asts-risk-konkurrenz">—</span></div>
-        <div class="kpi-drill-row"><span class="kpi-drill-label">Zeitplan</span><span class="kpi-drill-val risk-val" id="asts-risk-zeitplan">—</span></div>
-        <div class="kpi-drill-row"><span class="kpi-drill-label">Nächster Meilenstein</span><span class="kpi-drill-val" id="asts-next-milestone">—</span></div>
+      <div class="kpi-section-title" style="margin-top:12px;">Risikoampel</div>
+      <div class="risk-grid">
+        <div class="risk-item"><div class="risk-label">Launch-Risiko <span class="kpi-info">?</span><div class="kpi-tooltip" style="display:none;">Risiko weiterer Satelliten-Anomalien wie BB-7. Kritisch für das 45-Satelliten-Ziel 2026</div></div><div class="risk-val" id="asts-risk-launch">—</div></div>
+        <div class="risk-item"><div class="risk-label">Dilution <span class="kpi-info">?</span><div class="kpi-tooltip" style="display:none;">Risiko neuer Aktienausgaben zur Finanzierung — verwässert bestehende Aktionäre</div></div><div class="risk-val" id="asts-risk-dilution">—</div></div>
+        <div class="risk-item"><div class="risk-label">Konkurrenz <span class="kpi-info">?</span><div class="kpi-tooltip" style="display:none;">Hauptkonkurrenten: Starlink Direct-to-Cell, Lynk Global, Amazon Kuiper D2D</div></div><div class="risk-val" id="asts-risk-konkurrenz">—</div></div>
+        <div class="risk-item"><div class="risk-label">Zeitplan <span class="kpi-info">?</span><div class="kpi-tooltip" style="display:none;">Risiko von Verzögerungen beim Satelliten-Deployment und kommerziellen Launch</div></div><div class="risk-val" id="asts-risk-zeitplan">—</div></div>
       </div>
       <div class="kpi-interp" id="asts-kpi-interp" style="display:none;"></div>
       <div id="asts-kpi-drivers" style="display:none;">
@@ -1563,22 +1545,23 @@ body{font-family:'DM Sans',sans-serif;background:var(--bg);color:var(--text);min
       <div style="display:flex;align-items:center;gap:14px;margin-bottom:12px;">
         <div class="kpi-score-badge good" id="asts-kpi-score-badge">—</div>
         <div style="flex:1;">
-          <div style="font-size:13px;font-weight:600;">KI-KPI-Score <span class="kpi-info" style="vertical-align:middle;">?</span><div class="kpi-tooltip" style="display:none;">Gesamtbewertung 0–100. Grün ≥80, Blau ≥60, Orange ≥40, Rot &lt;40</div></div>
+          <div style="font-size:13px;font-weight:600;">KI-KPI-Score <span class="kpi-info" style="vertical-align:middle;">?</span><div class="kpi-tooltip" style="display:none;">Gesamtbewertung 0–100 basierend auf Cash, Umsatz, Technologie, Partner, Risiko und Bewertung. Grün ≥80, Blau ≥60, Orange ≥40, Rot &lt;40</div></div>
           <div style="font-size:11px;color:var(--text3);" id="asts-kpi-score-sub">Wird berechnet...</div>
         </div>
       </div>
       <div class="kpi-cat-grid">
-        <div class="kpi-cat" onclick="toggleDrill('asts-kpi','cash')"><div class="kpi-cat-name">Cash <span class="kpi-info">?</span><div class="kpi-tooltip" style="display:none;">Cash minus Schulden — zeigt wie lange ASTS ohne neue Finanzierung überleben kann</div></div><div class="kpi-cat-score" id="asts-kpi-score-cash">—</div></div>
+        <div class="kpi-cat" onclick="toggleDrill('asts-kpi','cash')"><div class="kpi-cat-name">Cash <span class="kpi-info">?</span><div class="kpi-tooltip" style="display:none;">Verfügbares Kapital minus Schulden. Bei ASTS kritisch — macht noch Verluste und braucht Cash</div></div><div class="kpi-cat-score" id="asts-kpi-score-cash">—</div></div>
         <div class="kpi-cat" onclick="toggleDrill('asts-kpi','umsatz')"><div class="kpi-cat-name">Umsatz-Ramp <span class="kpi-info">?</span><div class="kpi-tooltip" style="display:none;">Wie schnell wächst der Umsatz? ASTS muss schnell skalieren um profitabel zu werden</div></div><div class="kpi-cat-score" id="asts-kpi-score-umsatz">—</div></div>
-        <div class="kpi-cat" onclick="toggleDrill('asts-kpi','tech')"><div class="kpi-cat-name">Technologie <span class="kpi-info">?</span><div class="kpi-tooltip" style="display:none;">Funktioniert die Technologie? FCC-Lizenz, Speed-Tests und Satellitenstatus</div></div><div class="kpi-cat-score" id="asts-kpi-score-tech">—</div></div>
-        <div class="kpi-cat" onclick="toggleDrill('asts-kpi','partner')"><div class="kpi-cat-name">Partner <span class="kpi-info">?</span><div class="kpi-tooltip" style="display:none;">MNO-Partner = Mobilfunkanbieter die ASTS vermarkten</div></div><div class="kpi-cat-score" id="asts-kpi-score-partner">—</div></div>
-        <div class="kpi-cat" onclick="toggleDrill('asts-kpi','risiko')"><div class="kpi-cat-name">Risiko <span class="kpi-info">?</span><div class="kpi-tooltip" style="display:none;">Hoher Score = geringeres Risiko. Launch-Verzögerungen, Verwässerung, Konkurrenz</div></div><div class="kpi-cat-score" id="asts-kpi-score-risiko">—</div></div>
-        <div class="kpi-cat" onclick="toggleDrill('asts-kpi','bewertung')"><div class="kpi-cat-name">Bewertung <span class="kpi-info">?</span><div class="kpi-tooltip" style="display:none;">Ist die Aktie günstig oder teuer relativ zu Umsatz und Wachstum?</div></div><div class="kpi-cat-score" id="asts-kpi-score-bewertung">—</div></div>
+        <div class="kpi-cat" onclick="toggleDrill('asts-kpi','tech')"><div class="kpi-cat-name">Technologie <span class="kpi-info">?</span><div class="kpi-tooltip" style="display:none;">Funktioniert die Technologie? FCC-Lizenz, Speed-Tests und BlueBird-Status</div></div><div class="kpi-cat-score" id="asts-kpi-score-tech">—</div></div>
+        <div class="kpi-cat" onclick="toggleDrill('asts-kpi','partner')"><div class="kpi-cat-name">Partner <span class="kpi-info">?</span><div class="kpi-tooltip" style="display:none;">MNO-Partner = Mobilfunkanbieter die ASTS-Service an ihre Kunden vermarkten</div></div><div class="kpi-cat-score" id="asts-kpi-score-partner">—</div></div>
+        <div class="kpi-cat" onclick="toggleDrill('asts-kpi','risiko')"><div class="kpi-cat-name">Risiko <span class="kpi-info">?</span><div class="kpi-tooltip" style="display:none;">Hoher Score = geringeres Risiko. Faktoren: Launch-Verzögerungen, Verwässerung, Konkurrenz</div></div><div class="kpi-cat-score" id="asts-kpi-score-risiko">—</div></div>
+        <div class="kpi-cat" onclick="toggleDrill('asts-kpi','bewertung')"><div class="kpi-cat-name">Bewertung <span class="kpi-info">?</span><div class="kpi-tooltip" style="display:none;">Ist die Aktie günstig oder teuer? Niedriger Score = hohe Bewertung relativ zu Umsatz</div></div><div class="kpi-cat-score" id="asts-kpi-score-bewertung">—</div></div>
       </div>
       <div class="kpi-drill" id="asts-kpi-drill-cash">
         <div class="kpi-drill-row"><span class="kpi-drill-label">Cash Total</span><span class="kpi-drill-val"><span id="asts-kpi-d-cash">—</span><span class="kpi-tag-sec">SEC</span></span></div>
-        <div class="kpi-drill-row"><span class="kpi-drill-label kpi-tooltip-wrap">Cash Runway <span class="kpi-info">?</span><div class="kpi-tooltip" style="display:none;">Wie lange reicht das Geld ohne neue Finanzierung?</div></span><span class="kpi-drill-val"><span id="asts-kpi-d-runway">—</span><span class="kpi-tag-ki">KI</span></span></div>
+        <div class="kpi-drill-source" id="asts-kpi-d-cash-src"></div>
         <div class="kpi-drill-row"><span class="kpi-drill-label">Long-term Debt</span><span class="kpi-drill-val"><span id="asts-kpi-d-debt">—</span><span class="kpi-tag-sec">SEC</span></span></div>
+        <div class="kpi-drill-row"><span class="kpi-drill-label kpi-tooltip-wrap">Cash Runway <span class="kpi-info">?</span><div class="kpi-tooltip" style="display:none;">Wie lange reicht das Geld ohne neue Finanzierung?</div></span><span class="kpi-drill-val"><span id="asts-kpi-d-runway">—</span><span class="kpi-tag-ki">KI</span></span></div>
         <div class="kpi-drill-row"><span class="kpi-drill-label">Nettoverlust</span><span class="kpi-drill-val"><span id="asts-kpi-d-netloss">—</span><span class="kpi-tag-sec">SEC</span></span></div>
       </div>
       <div class="kpi-drill" id="asts-kpi-drill-umsatz">
@@ -3260,6 +3243,42 @@ async function loadFinancials(t) {
         el.style.color = d.net_income_m < 0 ? 'var(--red)' : 'var(--green)';
       }
       if ($('asts-fin-source')) $('asts-fin-source').textContent = '· SEC EDGAR ' + (d.revenue?.date?.substring(0,7) || '');
+      // Also populate ASTS KPI card (same structure as RKLB)
+      if (d.revenue?.latest_m != null && $('asts-kpi-d-rev')) {
+        const yoy2 = d.revenue.yoy_pct;
+        const arrow2 = yoy2 > 0 ? ' <span class="kpi-trend-up">↑</span>' : yoy2 < 0 ? ' <span class="kpi-trend-down">↓</span>' : '';
+        $('asts-kpi-d-rev').innerHTML = fmt(d.revenue.latest_m) + arrow2;
+        if ($('asts-kpi-d-yoy') && yoy2 != null) $('asts-kpi-d-yoy').innerHTML = `<span class="${yoy2>=0?'kpi-trend-up':'kpi-trend-down'}">${fmtPct(yoy2)} YoY</span>`;
+      }
+      if (d.cash_m != null && $('asts-kpi-d-cash')) {
+        $('asts-kpi-d-cash').textContent = fmt(d.cash_m);
+        if ($('asts-kpi-d-cash-src')) $('asts-kpi-d-cash-src').textContent = 'SEC EDGAR · ' + (d.cash_date?.substring(0,7)||'');
+      }
+      if (d.debt_m != null && $('asts-kpi-d-debt')) $('asts-kpi-d-debt').textContent = fmt(d.debt_m);
+      if (d.net_income_m != null && $('asts-kpi-d-netloss')) {
+        $('asts-kpi-d-netloss').textContent = fmt(d.net_income_m);
+        $('asts-kpi-d-netloss').style.color = d.net_income_m < 0 ? 'var(--red)' : 'var(--green)';
+      }
+      // Also populate ASTS KPI2 simple card
+      if (d.revenue?.latest_m != null && $('asts-kpi2-rev')) {
+        const yoy2 = d.revenue.yoy_pct;
+        const arrow2 = yoy2 > 0 ? ' ↑' : yoy2 < 0 ? ' ↓' : '';
+        $('asts-kpi2-rev').textContent = fmt(d.revenue.latest_m) + arrow2;
+        if ($('asts-kpi2-rev-sub')) $('asts-kpi2-rev-sub').textContent = d.revenue.date?.substring(0,7)||'';
+      }
+      if (d.cash_m != null && $('asts-kpi2-cash')) {
+        $('asts-kpi2-cash').textContent = fmt(d.cash_m);
+        if ($('asts-kpi2-cash-sub')) $('asts-kpi2-cash-sub').textContent = d.cash_date?.substring(0,7)||'';
+      }
+      if (d.debt_m != null && $('asts-kpi2-debt')) {
+        $('asts-kpi2-debt').textContent = fmt(d.debt_m);
+        if ($('asts-kpi2-debt-sub')) $('asts-kpi2-debt-sub').textContent = d.debt_date?.substring(0,7)||'';
+      }
+      if (d.net_income_m != null && $('asts-kpi2-netloss')) {
+        $('asts-kpi2-netloss').textContent = fmt(d.net_income_m);
+        $('asts-kpi2-netloss').style.color = d.net_income_m < 0 ? 'var(--red)' : 'var(--green)';
+      }
+      if ($('asts-fin-source2')) $('asts-fin-source2').textContent = '· SEC EDGAR ' + (d.revenue?.date?.substring(0,7)||'');
       // Also populate ASTS KPI card drills
       if (d.revenue?.latest_m != null && $('asts-kpi-d-rev')) {
         const yoy2 = d.revenue.yoy_pct;
@@ -3368,24 +3387,6 @@ function applyRklbKpi(p) {
 // ── ASTS Milestone (from KI cache) ─────────────────────────────
 function applyAstsMilestone(p) {
   if (!p) return;
-  setScore('asts-score-badge', 'asts-score-sub', p.score_gesamt, 'Operative Stärke · Satelliten · Partner');
-  setCatScore('asts-score-cash',        p.score_cash);
-  setCatScore('asts-score-umsatz',      p.score_umsatz_ramp);
-  setCatScore('asts-score-launch',      p.score_launch);
-  setCatScore('asts-score-technologie', p.score_technologie);
-  setCatScore('asts-score-partner',     p.score_partner);
-  setCatScore('asts-score-risiko',      p.score_risiko);
-  // Cash drill (brief)
-  setDrillRow('asts-d-cash',   p.cash_wert);
-  if ($('asts-d-cash-src')) $('asts-d-cash-src').textContent = (p.cash_quelle||'') + ' · ' + (p.cash_datum||'');
-  setDrillRow('asts-d-debt',   p.debt_wert);
-  setDrillRow('asts-d-runway', p.cash_runway);
-  if ($('asts-d-netloss')) $('asts-d-netloss').textContent = p.netloss_wert||'—';
-  // Umsatz drill
-  setDrillRow('asts-d-rev',          p.umsatz_wert);
-  setDrillRow('asts-d-yoy',          p.umsatz_yoy);
-  setDrillRow('asts-d-guidance',     p.guidance_2026);
-  setDrillRow('asts-d-guidance-prog',p.guidance_progress);
   // BlueBird status
   const bbEl = $('asts-bluebird-status');
   if (bbEl) {
@@ -3400,14 +3401,13 @@ function applyAstsMilestone(p) {
       return `<div class="milestone-row"><div class="milestone-dot ${cls}"></div><div class="milestone-name">${stripTags(s.sat)}</div><div class="milestone-status">${stripTags(s.status)}</div></div>`;
     }).join('');
   }
-  // Tech
+  // Regulierung & Partner
   if ($('asts-fcc-status')) $('asts-fcc-status').textContent = stripTags(p.fcc_status||'—');
   if ($('asts-itu-status')) $('asts-itu-status').textContent = stripTags(p.itu_status||'—');
-  setDrillRow('asts-d-speed', p.peak_speed);
-  // Partner
-  if ($('asts-d-mnos'))     $('asts-d-mnos').textContent     = p.mno_anzahl ? p.mno_anzahl+' Partner' : '—';
-  if ($('asts-d-mno-list')) $('asts-d-mno-list').textContent = stripTags(p.mno_aktive||'—');
-  // Risiko
+  if ($('asts-mno-count'))  $('asts-mno-count').textContent  = p.mno_anzahl ? p.mno_anzahl + ' Partner' : '—';
+  if ($('asts-mno-list'))   $('asts-mno-list').textContent   = stripTags(p.mno_aktive||'—');
+  if ($('asts-next-milestone')) $('asts-next-milestone').textContent = stripTags(p.naechster_meilenstein||'—');
+  // Risikoampel
   const riskMap = {hoch:'risk-hoch',mittel:'risk-mittel',niedrig:'risk-niedrig'};
   const setRisk = (id,val) => {
     const el=$(id); if(!el||!val) return;
@@ -3419,8 +3419,7 @@ function applyAstsMilestone(p) {
   setRisk('asts-risk-dilution',   p.risk_dilution);
   setRisk('asts-risk-konkurrenz', p.risk_konkurrenz);
   setRisk('asts-risk-zeitplan',   p.risk_zeitplan);
-  if ($('asts-next-milestone')) $('asts-next-milestone').textContent = stripTags(p.naechster_meilenstein||'—');
-  // Interpretation + Treiber ONLY in milestone
+  // Interpretation + Treiber
   if (p.interpretation && $('asts-kpi-interp')) {
     $('asts-kpi-interp').textContent = stripTags(p.interpretation);
     $('asts-kpi-interp').style.display = 'block';
@@ -3436,46 +3435,43 @@ function applyAstsMilestone(p) {
 // ── ASTS KPI (mirror of RKLB KPI) ───────────────────────────
 function applyAstsKpi(p) {
   if (!p) return;
-  // Different subtitle - financial focus only
-  setScore('asts-kpi-score-badge', 'asts-kpi-score-sub', p.score_gesamt, 'Finanzielle Stärke');
+  setScore('asts-kpi-score-badge', 'asts-kpi-score-sub', p.score_gesamt, 'Cash · Umsatz · Technologie · Partner');
   setCatScore('asts-kpi-score-cash',     p.score_cash);
   setCatScore('asts-kpi-score-umsatz',   p.score_umsatz_ramp);
   setCatScore('asts-kpi-score-tech',     p.score_technologie);
   setCatScore('asts-kpi-score-partner',  p.score_partner);
   setCatScore('asts-kpi-score-risiko',   p.score_risiko);
   setCatScore('asts-kpi-score-bewertung',p.score_bewertung || 50);
-  // Cash drill
   setDrillRow('asts-kpi-d-cash',    p.cash_wert);
-  setDrillRow('asts-kpi-d-runway',  p.cash_runway);
   setDrillRow('asts-kpi-d-debt',    p.debt_wert);
+  setDrillRow('asts-kpi-d-runway',  p.cash_runway);
   if ($('asts-kpi-d-netloss')) $('asts-kpi-d-netloss').textContent = p.netloss_wert||'—';
-  // Umsatz drill
+  if ($('asts-kpi-d-cash-src') && p.cash_quelle) $('asts-kpi-d-cash-src').textContent = p.cash_quelle + ' · ' + (p.cash_datum||'');
   setDrillRow('asts-kpi-d-rev',          p.umsatz_wert);
   setDrillRow('asts-kpi-d-yoy',          p.umsatz_yoy);
   setDrillRow('asts-kpi-d-guidance',     p.guidance_2026);
   setDrillRow('asts-kpi-d-guidance-prog',p.guidance_progress);
-  // Tech drill - brief only
   if ($('asts-kpi-d-fcc'))  $('asts-kpi-d-fcc').textContent  = stripTags(p.fcc_status||'—');
   setDrillRow('asts-kpi-d-speed', p.peak_speed);
-  // Partner drill
   if ($('asts-kpi-d-mnos'))     $('asts-kpi-d-mnos').textContent     = p.mno_anzahl ? p.mno_anzahl+' Partner' : '—';
   if ($('asts-kpi-d-mno-list')) $('asts-kpi-d-mno-list').textContent = stripTags(p.mno_aktive||'—');
-  // Risiko drill
   const riskMap = {hoch:'risk-hoch',mittel:'risk-mittel',niedrig:'risk-niedrig'};
-  const setRisk2 = (id,val) => {
-    const el=$(id); if(!el||!val) return;
-    el.textContent=stripTags(val);
-    const v=val.toLowerCase();
-    for(const [k,cls] of Object.entries(riskMap)){if(v.includes(k)){el.className='risk-val '+cls;break;}}
-  };
-  setRisk2('asts-kpi-d-risk-launch',     p.risk_launch);
-  setRisk2('asts-kpi-d-risk-dilution',   p.risk_dilution);
-  setRisk2('asts-kpi-d-risk-konkurrenz', p.risk_konkurrenz);
-  // Bewertung drill
+  const setR = (id,val) => { const el=$(id); if(!el||!val) return; el.textContent=stripTags(val); const v=val.toLowerCase(); for(const [k,cls] of Object.entries(riskMap)){if(v.includes(k)){el.className='risk-val '+cls;break;}} };
+  setR('asts-kpi-d-risk-launch',     p.risk_launch);
+  setR('asts-kpi-d-risk-dilution',   p.risk_dilution);
+  setR('asts-kpi-d-risk-konkurrenz', p.risk_konkurrenz);
   setDrillRow('asts-kpi-d-evsales',       p.ev_sales||'—');
   setDrillRow('asts-kpi-d-vs-konsens',    p.kurs_vs_konsens||'—');
   setDrillRow('asts-kpi-d-analyst-range', p.analyst_range||'—');
-  // NO interpretation/treiber here - those are in milestone tracker
+  if (p.interpretation && $('asts-kpi-interp2')) {
+    $('asts-kpi-interp2').textContent = stripTags(p.interpretation);
+    $('asts-kpi-interp2').style.display = 'block';
+  }
+  if ($('asts-kpi-drivers2')) {
+    setDrivers('asts-kpi-drivers2-list', p.haupttreiber, 'kpi-driver');
+    setDrivers('asts-kpi-risks2-list',   p.hauptrisiken,  'kpi-risk-tag');
+    $('asts-kpi-drivers2').style.display = 'block';
+  }
   if ($('asts-kpi-ts2')) $('asts-kpi-ts2').textContent = 'KI-Analyse · Täglich aktualisiert';
 }
 
