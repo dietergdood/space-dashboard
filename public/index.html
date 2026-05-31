@@ -141,8 +141,8 @@ body{font-family:var(--font-sans);background:var(--bg);color:var(--text);min-hei
 .auto-dot{width:8px;height:8px;border-radius:50%;background:var(--text3);flex-shrink:0;}
 .auto-dot.on{background:var(--green);animation:pulse 2s infinite;}
 .divider{height:1px;background:var(--border);margin:14px 0;}
-.auto-progress-track{height:2px;background:var(--border);border-radius:1px;margin-top:8px;}
-.auto-progress-fill{height:100%;background:var(--blue);border-radius:1px;width:0%;transition:width 1s linear;}
+
+
 
 /* ── Context Bar ── */
 .ctx-bar{position:relative;background:var(--surface);border:1px solid var(--border);border-radius:var(--rl);padding:16px 18px 16px 26px;display:none;flex-direction:column;gap:10px;box-shadow:0 2px 12px rgba(0,0,0,.07);overflow:hidden;margin-bottom:10px;}
@@ -398,7 +398,7 @@ body{font-family:var(--font-sans);background:var(--bg);color:var(--text);min-hei
 .kpi-score-badge{display:inline-flex;align-items:center;justify-content:center;width:52px;height:52px;border-radius:50%;font-size:18px;font-weight:700;font-family:var(--font-mono);flex-shrink:0;}
 .kpi-score-badge.excellent{background:rgba(22,163,74,.12);color:var(--green);}
 .kpi-score-badge.good{background:rgba(37,99,235,.1);color:var(--blue);}
-.kpi-score-badge.warn{background:rgba(217,119,6,.1);color:#d97706;}
+.kpi-score-badge.warn{background:rgba(217,119,6,.1);color:var(--amber);}
 .kpi-score-badge.poor{background:var(--red-bg);color:var(--red);}
 .kpi-cat-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:6px;margin:10px 0;}
 .kpi-cat{background:var(--surface2);border-radius:8px;padding:8px 10px;cursor:pointer;border:1px solid transparent;transition:border-color .2s;}
@@ -407,7 +407,7 @@ body{font-family:var(--font-sans);background:var(--bg);color:var(--text);min-hei
 .kpi-cat-score{font-size:20px;font-weight:700;font-family:var(--font-mono);margin-top:2px;}
 .kpi-cat-score.excellent{color:var(--green);}
 .kpi-cat-score.good{color:var(--blue);}
-.kpi-cat-score.warn{color:#d97706;}
+.kpi-cat-score.warn{color:var(--amber);}
 .kpi-cat-score.poor{color:var(--red);}
 .kpi-drill{background:var(--surface2);border-radius:8px;padding:10px 12px;margin-top:8px;display:none;}
 .kpi-drill.open{display:block;}
@@ -420,7 +420,7 @@ body{font-family:var(--font-sans);background:var(--bg);color:var(--text);min-hei
 .kpi-trend-down{color:var(--red);}
 .kpi-trend-neutral{color:var(--text3);}
 .kpi-tag-sec{background:rgba(37,99,235,.1);color:var(--blue);font-size:12px;font-weight:600;padding:1px 5px;border-radius:4px;text-transform:uppercase;}
-.kpi-tag-ki{background:rgba(124,58,237,.1);color:#7c3aed;font-size:12px;font-weight:600;padding:1px 5px;border-radius:4px;text-transform:uppercase;}
+.kpi-tag-ki{background:rgba(124,58,237,.1);color:var(--purple);font-size:12px;font-weight:600;padding:1px 5px;border-radius:4px;text-transform:uppercase;}
 .kpi-interp{font-size:13px;color:var(--text2);line-height:1.5;margin:10px 0;padding:10px;background:var(--surface2);border-radius:8px;border-left:3px solid var(--blue);}
 .kpi-drivers{display:flex;flex-wrap:wrap;gap:4px;margin-top:6px;}
 .kpi-driver{font-size:13px;padding:2px 8px;border-radius:10px;background:var(--green-bg);color:var(--green);}
@@ -450,7 +450,7 @@ body{font-family:var(--font-sans);background:var(--bg);color:var(--text);min-hei
 .risk-label{color:var(--text3);font-size:12px;text-transform:uppercase;letter-spacing:.04em;}
 .risk-val{font-weight:600;margin-top:1px;}
 .risk-hoch{color:var(--red);}
-.risk-mittel{color:#d97706;}
+.risk-mittel{color:var(--amber);}
 .risk-niedrig{color:var(--green);}
 .insider-card{background:var(--surface2);border-radius:8px;padding:10px 12px;margin-bottom:8px;border-left:3px solid var(--border2);display:flex;gap:12px;align-items:flex-start;}
 .insider-card.buy{border-left-color:var(--green);}
@@ -735,9 +735,9 @@ body{font-family:var(--font-sans);background:var(--bg);color:var(--text);min-hei
     </div>
     <div class="hdr-mid">
       <div class="tabs" id="main-tabs">
-        <button class="tab rklb-tab active" id="tab-rklb-btn"><img src="/rklb-logo.png" class="tab-logo"><span class="tab-full">Rocket Lab (RKLB)</span><span class="tab-short">RKLB</span></button>
-        <button class="tab asts-tab" id="tab-asts-btn"><img src="/asts-logo.png" class="tab-logo"><span class="tab-full">AST SpaceMobile (ASTS)</span><span class="tab-short">ASTS</span></button>
-        <button class="tab spcx-tab" id="tab-spcx-btn"><img src="/spacex-logo.svg" class="tab-logo spcx-icon" style="width:18px;height:18px;object-fit:contain;filter:invert(0);margin-right:4px;vertical-align:middle;"><span class="tab-full">SpaceX (IPO ausstehend)</span><span class="tab-short">SPCX</span></button>
+        <button class="tab rklb-tab active" id="tab-rklb-btn"><img src="/rklb-logo.png" class="tab-logo" alt="RKLB"><span class="tab-full">Rocket Lab (RKLB)</span><span class="tab-short">RKLB</span></button>
+        <button class="tab asts-tab" id="tab-asts-btn"><img src="/asts-logo.png" class="tab-logo" alt="ASTS"><span class="tab-full">AST SpaceMobile (ASTS)</span><span class="tab-short">ASTS</span></button>
+        <button class="tab spcx-tab" id="tab-spcx-btn"><img src="/spacex-logo.svg" class="tab-logo spcx-icon" alt="SpaceX" style="width:18px;height:18px;object-fit:contain;filter:invert(0);margin-right:4px;vertical-align:middle;"><span class="tab-full">SpaceX (IPO ausstehend)</span><span class="tab-short">SPCX</span></button>
       </div>
     </div>
     <div class="hdr-r">
@@ -1001,7 +1001,7 @@ body{font-family:var(--font-sans);background:var(--bg);color:var(--text);min-hei
     <div id="rklb-kpi-content">
       <div style="display:flex;gap:8px;margin-bottom:10px;flex-wrap:wrap;">
         <span style="font-size:10px;padding:2px 7px;border-radius:4px;background:rgba(37,99,235,.1);color:var(--blue);font-weight:600;">SEC = Direkt von SEC EDGAR</span>
-        <span style="font-size:10px;padding:2px 7px;border-radius:4px;background:rgba(124,58,237,.1);color:#7c3aed;font-weight:600;">KI = Claude Web-Search Analyse</span>
+        <span style="font-size:10px;padding:2px 7px;border-radius:4px;background:var(--purple-bg);color:var(--purple);font-weight:600;">KI = Claude Web-Search Analyse</span>
       </div>
       <div style="display:flex;align-items:center;gap:14px;margin-bottom:12px;">
         <div class="kpi-score-badge good" id="rklb-score-badge">—</div>
@@ -1144,7 +1144,7 @@ body{font-family:var(--font-sans);background:var(--bg);color:var(--text);min-hei
           <div class="lgbox" id="rklb-lgbox">
             <div class="lgr"><div class="lgl"><div class="lgs" style="background:var(--rklb);"></div></div><div><div class="lgt">Was wirklich passiert ist</div><div class="lgx" id="rklb-lg-actual">Echter Kursverlauf der letzten 12 Monate</div></div></div>
             <div class="lgr"><div class="lgl"><div class="lgd" style="border-color:var(--green);"></div><div class="lgdot" style="background:var(--green);"></div></div><div><div class="lgt" style="color:var(--green);" id="rklb-lg-bull">Optimistisches Szenario — wird mit KI geladen</div></div></div>
-            <div class="lgr"><div class="lgl"><div class="lgd" style="border-color:#bbb;"></div><div class="lgdot" style="background:#bbb;"></div></div><div><div class="lgt" style="color:#888;" id="rklb-lg-base">Bankexperten-Konsens — wird mit KI geladen</div></div></div>
+            <div class="lgr"><div class="lgl"><div class="lgd" style="border-color:var(--border2);"></div><div class="lgdot" style="background:#bbb;"></div></div><div><div class="lgt" style="color:var(--text3);" id="rklb-lg-base">Bankexperten-Konsens — wird mit KI geladen</div></div></div>
             <div class="lgr"><div class="lgl"><div class="lgd" style="border-color:var(--red);"></div><div class="lgdot" style="background:var(--red);"></div></div><div><div class="lgt" style="color:var(--red);" id="rklb-lg-bear">Pessimistisches Szenario — wird mit KI geladen</div></div></div>
           </div>
         </div>
@@ -1554,7 +1554,7 @@ body{font-family:var(--font-sans);background:var(--bg);color:var(--text);min-hei
     <div id="asts-kpi-content">
       <div style="display:flex;gap:8px;margin-bottom:10px;flex-wrap:wrap;">
         <span style="font-size:10px;padding:2px 7px;border-radius:4px;background:rgba(37,99,235,.1);color:var(--blue);font-weight:600;">SEC = Direkt von SEC EDGAR</span>
-        <span style="font-size:10px;padding:2px 7px;border-radius:4px;background:rgba(124,58,237,.1);color:#7c3aed;font-weight:600;">KI = Claude Web-Search Analyse</span>
+        <span style="font-size:10px;padding:2px 7px;border-radius:4px;background:var(--purple-bg);color:var(--purple);font-weight:600;">KI = Claude Web-Search Analyse</span>
       </div>
       <div style="display:flex;align-items:center;gap:14px;margin-bottom:12px;">
         <div class="kpi-score-badge good" id="asts-kpi-score-badge">—</div>
@@ -1700,7 +1700,7 @@ body{font-family:var(--font-sans);background:var(--bg);color:var(--text);min-hei
           <div class="lgbox" id="asts-lgbox">
             <div class="lgr"><div class="lgl"><div class="lgs" style="background:var(--asts);"></div></div><div><div class="lgt">Was wirklich passiert ist</div><div class="lgx" id="asts-lg-actual">Echter Kursverlauf der letzten 12 Monate</div></div></div>
             <div class="lgr"><div class="lgl"><div class="lgd" style="border-color:var(--green);"></div><div class="lgdot" style="background:var(--green);"></div></div><div><div class="lgt" style="color:var(--green);" id="asts-lg-bull">Optimistisches Szenario — wird mit KI geladen</div></div></div>
-            <div class="lgr"><div class="lgl"><div class="lgd" style="border-color:#bbb;"></div><div class="lgdot" style="background:#bbb;"></div></div><div><div class="lgt" style="color:#888;" id="asts-lg-base">Bankexperten-Konsens — wird mit KI geladen</div></div></div>
+            <div class="lgr"><div class="lgl"><div class="lgd" style="border-color:var(--border2);"></div><div class="lgdot" style="background:#bbb;"></div></div><div><div class="lgt" style="color:var(--text3);" id="asts-lg-base">Bankexperten-Konsens — wird mit KI geladen</div></div></div>
             <div class="lgr"><div class="lgl"><div class="lgd" style="border-color:var(--red);"></div><div class="lgdot" style="background:var(--red);"></div></div><div><div class="lgt" style="color:var(--red);" id="asts-lg-bear">Pessimistisches Szenario — wird mit KI geladen</div></div></div>
           </div>
         </div>
@@ -2514,16 +2514,16 @@ const chartOpts = (minY) => ({
     callbacks: { label: ctx => ' $' + fmt(ctx.raw) }
   }},
   scales: {
-    x: { grid:{color:'rgba(0,0,0,.04)'}, ticks:{color:'#aaa',font:{size:10},maxRotation:0} },
-    y: { grid:{color:'rgba(0,0,0,.04)'}, ticks:{color:'#aaa',font:{size:10},callback:v=>'$'+v}, min:minY }
+    x: { grid:{color:'rgba(0,0,0,.04)'}, ticks:{color:'var(--text3)',font:{size:10},maxRotation:0} },
+    y: { grid:{color:'rgba(0,0,0,.04)'}, ticks:{color:'var(--text3)',font:{size:10},callback:v=>'$'+v}, min:minY }
   }
 });
 const chartOpts5 = () => ({
   responsive: true, maintainAspectRatio: false,
   plugins: { legend: {display:true,position:'top',labels:{font:{size:11},padding:10}} },
   scales: {
-    x: { grid:{color:'rgba(0,0,0,.04)'}, ticks:{color:'#aaa',font:{size:11}} },
-    y: { grid:{color:'rgba(0,0,0,.04)'}, ticks:{color:'#aaa',font:{size:11},callback:v=>'$'+v} }
+    x: { grid:{color:'rgba(0,0,0,.04)'}, ticks:{color:'var(--text3)',font:{size:11}} },
+    y: { grid:{color:'rgba(0,0,0,.04)'}, ticks:{color:'var(--text3)',font:{size:11},callback:v=>'$'+v} }
   }
 });
 
