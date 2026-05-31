@@ -328,12 +328,15 @@ body{font-family:var(--font-sans);background:var(--bg);color:var(--text);min-hei
 .pf-form-title span{font-size:12px;font-weight:600;letter-spacing:.07em;color:var(--text3);text-transform:uppercase;}
 .pf-export-btn{padding:4px 10px;border:1px solid var(--border2);border-radius:7px;background:var(--surface);color:var(--text2);font-size:12px;font-weight:500;cursor:pointer;font-family:var(--font-sans);}
 .pf-export-btn:hover{background:var(--surface3);}
-.pf-form{display:grid;grid-template-columns:1fr 1fr;gap:8px;}
-.pf-input-full,.pf-add-full{grid-column:1/-1;}
-.pf-input{padding:9px 10px;border:1px solid var(--border2);border-radius:8px;font-family:var(--font-sans);font-size:14px;outline:none;background:var(--surface);color:var(--text);width:100%;}
-.pf-input:focus{border-color:var(--blue);}
-.pf-select{padding:9px 10px;border:1px solid var(--border2);border-radius:8px;font-family:var(--font-sans);font-size:14px;outline:none;background:var(--surface);color:var(--text);cursor:pointer;width:100%;}
-.pf-add{padding:10px 14px;background:var(--blue);color:#fff;border:none;border-radius:8px;font-family:var(--font-sans);font-size:14px;font-weight:600;cursor:pointer;transition:opacity .2s;width:100%;}
+.pf-form{display:flex;flex-direction:column;gap:8px;}
+.pf-row{display:grid;grid-template-columns:1fr 1fr;gap:8px;}
+.pf-input{padding:10px 12px;border:1px solid var(--border2);border-radius:8px;font-family:var(--font-sans);font-size:15px;outline:none;background:var(--surface);color:var(--text);width:100%;-webkit-appearance:none;}
+.pf-input:focus{border-color:var(--blue);box-shadow:0 0 0 3px var(--blue-bg);}
+.pf-input-date{font-size:14px;}
+.pf-select{padding:10px 12px;border:1px solid var(--border2);border-radius:8px;font-family:var(--font-sans);font-size:15px;outline:none;background:var(--surface);color:var(--text);cursor:pointer;width:100%;-webkit-appearance:none;background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='8' viewBox='0 0 12 8'%3E%3Cpath d='M1 1l5 5 5-5' stroke='%23999' stroke-width='1.5' fill='none' stroke-linecap='round'/%3E%3C/svg%3E");background-repeat:no-repeat;background-position:right 12px center;padding-right:32px;}
+.pf-select:focus{border-color:var(--blue);}
+.pf-select-type{font-weight:600;}
+.pf-add{padding:12px;background:var(--blue);color:#fff;border:none;border-radius:8px;font-family:var(--font-sans);font-size:15px;font-weight:600;cursor:pointer;transition:opacity .2s;width:100%;}
 .pf-add:hover{opacity:.88;}
 .pf-tx-list{margin-bottom:14px;}
 .pf-tx{display:flex;align-items:center;gap:8px;padding:10px 12px;background:var(--surface);border:1px solid var(--border);border-radius:10px;margin-bottom:6px;font-size:13px;transition:border-color .15s;}
@@ -648,7 +651,6 @@ body{font-family:var(--font-sans);background:var(--bg);color:var(--text);min-hei
 
   /* ── Portfolio ── */
   .pf-table{font-size:12px;}
-  .pf-form{grid-template-columns:1fr 1fr;gap:6px;}
   .pf-tx-line1{font-size:12px;}
   .pf-edit-row{gap:4px;}
   .pf-edit-input{width:70px;}
@@ -1246,15 +1248,19 @@ body{font-family:var(--font-sans);background:var(--bg);color:var(--text);min-hei
         <button class="pf-export-btn" onclick="exportPortfolio('rklb')" title="Export CSV">⬇ CSV</button>
       </div>
       <div class="pf-form">
-        <select class="pf-select" id="rklb-tx-type">
-          <option value="buy">Kauf</option>
-          <option value="sell">Verkauf</option>
-        </select>
-        <input class="pf-input" id="rklb-tx-qty" type="number" placeholder="Anzahl" min="0.01" step="0.01">
-        <input class="pf-input" id="rklb-tx-price" type="number" placeholder="Preis $" min="0.01" step="0.01">
-        <input class="pf-input" id="rklb-tx-date" type="date">
-        <input class="pf-input pf-input-full" id="rklb-tx-note" type="text" placeholder="Notiz (optional)">
-        <button class="pf-add pf-add-full" onclick="addTx('rklb')" id="rklb-add-btn">＋ Hinzufügen</button>
+        <div class="pf-row">
+          <select class="pf-select pf-select-type" id="rklb-tx-type">
+            <option value="buy">📈 Kauf</option>
+            <option value="sell">📉 Verkauf</option>
+          </select>
+          <input class="pf-input pf-input-date" id="rklb-tx-date" type="date">
+        </div>
+        <div class="pf-row">
+          <input class="pf-input" id="rklb-tx-qty" type="number" placeholder="Anzahl Aktien" min="0.01" step="0.01">
+          <input class="pf-input" id="rklb-tx-price" type="number" placeholder="Preis $" min="0.01" step="0.01">
+        </div>
+        <input class="pf-input" id="rklb-tx-note" type="text" placeholder="Notiz (optional)">
+        <button class="pf-add" onclick="addTx('rklb')" id="rklb-add-btn">＋ Hinzufügen</button>
       </div>
     </div>
     <div class="pf-tx-list" id="rklb-tx-list">
@@ -1796,15 +1802,19 @@ body{font-family:var(--font-sans);background:var(--bg);color:var(--text);min-hei
         <button class="pf-export-btn" onclick="exportPortfolio('asts')" title="Export CSV">⬇ CSV</button>
       </div>
       <div class="pf-form">
-        <select class="pf-select" id="asts-tx-type">
-          <option value="buy">Kauf</option>
-          <option value="sell">Verkauf</option>
-        </select>
-        <input class="pf-input" id="asts-tx-qty" type="number" placeholder="Anzahl" min="0.01" step="0.01">
-        <input class="pf-input" id="asts-tx-price" type="number" placeholder="Preis $" min="0.01" step="0.01">
-        <input class="pf-input" id="asts-tx-date" type="date">
-        <input class="pf-input pf-input-full" id="asts-tx-note" type="text" placeholder="Notiz (optional)">
-        <button class="pf-add pf-add-full" onclick="addTx('asts')" id="asts-add-btn">＋ Hinzufügen</button>
+        <div class="pf-row">
+          <select class="pf-select pf-select-type" id="asts-tx-type">
+            <option value="buy">📈 Kauf</option>
+            <option value="sell">📉 Verkauf</option>
+          </select>
+          <input class="pf-input pf-input-date" id="asts-tx-date" type="date">
+        </div>
+        <div class="pf-row">
+          <input class="pf-input" id="asts-tx-qty" type="number" placeholder="Anzahl Aktien" min="0.01" step="0.01">
+          <input class="pf-input" id="asts-tx-price" type="number" placeholder="Preis $" min="0.01" step="0.01">
+        </div>
+        <input class="pf-input" id="asts-tx-note" type="text" placeholder="Notiz (optional)">
+        <button class="pf-add" onclick="addTx('asts')" id="asts-add-btn">＋ Hinzufügen</button>
       </div>
     </div>
     <div class="pf-tx-list" id="asts-tx-list">
