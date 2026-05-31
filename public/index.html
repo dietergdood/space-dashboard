@@ -695,7 +695,6 @@ body{font-family:'DM Sans',sans-serif;background:var(--bg);color:var(--text);min
       </div>
     </div>
     <div class="hdr-r">
-        <button id="dark-mode-btn" onclick="toggleDarkMode()" style="width:36px;height:36px;border-radius:50%;border:1px solid var(--border2);background:var(--surface2);cursor:pointer;font-size:16px;display:flex;align-items:center;justify-content:center;" title="Dark Mode">🌙</button>
       
       <div id="ki-status" class="ki-status-pill" style="display:none;"></div>
       <div class="settings-wrap">
@@ -725,6 +724,12 @@ body{font-family:'DM Sans',sans-serif;background:var(--bg);color:var(--text);min
           <div style="font-size:12px;color:var(--text2);line-height:1.8;">
             <div>⚡ <b>Kurse</b> — alle 15 Sekunden (Yahoo Finance)</div>
             <div>🤖 <b>KI-Analysen</b> — täglich um 13:00 Uhr</div>
+            <div style="margin-top:10px;padding-top:10px;border-top:1px solid var(--border);">
+              <div style="display:flex;align-items:center;justify-content:space-between;">
+                <span style="font-size:13px;font-weight:500;">🌙 Dark Mode</span>
+                <button id="dark-mode-btn" onclick="toggleDarkMode()" style="padding:6px 14px;border:1px solid var(--border2);background:var(--surface2);border-radius:20px;font-size:12px;font-weight:500;cursor:pointer;font-family:inherit;color:var(--text2);">Aktivieren</button>
+              </div>
+            </div>
             <div style="margin-top:8px;">
               <button onclick="requestPushPermission()" style="padding:6px 12px;border:1px solid var(--border2);background:var(--surface2);border-radius:7px;font-size:12px;cursor:pointer;font-family:inherit;">🔔 Push-Benachrichtigungen aktivieren</button>
             </div>
@@ -2808,7 +2813,7 @@ function toggleDarkMode() {
   document.documentElement.setAttribute('data-theme', newTheme);
   localStorage.setItem('theme', newTheme);
   const btn = document.getElementById('dark-mode-btn');
-  if (btn) btn.textContent = newTheme === 'dark' ? '☀️' : '🌙';
+  if (btn) btn.textContent = newTheme === 'dark' ? 'Deaktivieren' : 'Aktivieren';
 }
 
 // ── Recommendation History ──────────────────────────────────
@@ -2841,36 +2846,35 @@ async function loadEarningsCalendar() {
     {t:'asts', sym:'ASTS'},
   ];
   for (const {t, sym} of tickers) {
-    try {
-      const r = await fetch('/api/quote?ticker='+sym+'&earnings=1');
-      const d = r.ok ? await r.json() : null;
-      const earningsDate = d?.earningsDate || getEstimatedEarnings(sym);
-      if (earningsDate) showEarningsBar(t, earningsDate);
-    } catch(e) {
-      const estimated = getEstimatedEarnings(sym);
-      if (estimated) showEarningsBar(t, estimated);
-    }
+    const cached = await fetchFromCache('rec', t);
+    const cachedDate = cached?.data?.earnings_date;
+    if (cachedDate) showEarningsBar(t, cachedDate);
   }
 }
 
 function getEstimatedEarnings(sym) {
-  // Approximate next earnings based on typical quarterly schedule
+  // Known upcoming earnings dates (updated based on official reports)
+  const known = {
+    RKLB: '2026-08-06', // Q2 2026 confirmed Aug 6, 2026 (TipRanks)
+    ASTS: '2026-08-11', // Q2 2026 est. mid-Aug 2026 (last Q1: May 11)
+  };
+  if (known[sym]) {
+    const d = new Date(known[sym]);
+    if (d > new Date()) return known[sym];
+  }
+  // Fallback: estimate next quarter
   const now = new Date();
   const year = now.getFullYear();
-  const month = now.getMonth(); // 0-indexed
-  // RKLB: typically Feb, May, Aug, Nov
-  // ASTS: typically Mar, May, Aug, Nov
   const schedules = {
-    RKLB: [1,4,7,10], // Feb, May, Aug, Nov
-    ASTS: [2,4,7,10], // Mar, May, Aug, Nov
+    RKLB: [[1,26],[4,7],[7,6],[10,5]],  // [month, approx_day]
+    ASTS: [[2,10],[4,11],[7,11],[10,10]],
   };
-  const months = schedules[sym] || [];
-  for (let m of months) {
-    const d = new Date(year, m, 10); // approx 10th of month
+  const quarters = schedules[sym] || [];
+  for (let [m, day] of quarters) {
+    const d = new Date(year, m, day);
     if (d > now) return d.toISOString().split('T')[0];
   }
-  // Next year
-  if (months.length) return new Date(year+1, months[0], 10).toISOString().split('T')[0];
+  if (quarters.length) return new Date(year+1, quarters[0][0], quarters[0][1]).toISOString().split('T')[0];
   return null;
 }
 
@@ -3153,7 +3157,7 @@ async function refreshAllNews() {
   if (localStorage.getItem('theme') === 'dark') {
     document.documentElement.setAttribute('data-theme','dark');
     const btn = document.getElementById('dark-mode-btn');
-    if (btn) btn.textContent = '☀️';
+    if (btn) btn.textContent = 'Deaktivieren';
   }
   loadEarningsCalendar();
   // Check for cron errors
