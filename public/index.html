@@ -3505,6 +3505,7 @@ function applyRklbMilestone(p) {
       <div class="milestone-row"><div class="milestone-dot dot-gray"></div><div class="milestone-name">Erstflug-Ziel</div><div class="milestone-status">${stripTags(p.neutron_erstflug||'—')}</div></div>`;
   }
   if ($('rklb-ms-launches'))    $('rklb-ms-launches').textContent    = stripTags(p.launches_2026||'—');
+  if ($('rklb-ms-launches-sub'))$('rklb-ms-launches-sub').textContent= stripTags(p.launches_2026_note || (p.launches_2026 ? 'Electron' : '—'));
   if ($('rklb-ms-success'))     $('rklb-ms-success').textContent     = stripTags(p.launch_success||'—');
   if ($('rklb-ms-defense-pct')) $('rklb-ms-defense-pct').textContent = stripTags(p.defense_sda||'—');
   if ($('rklb-ms-defense-sub')) $('rklb-ms-defense-sub').textContent = stripTags(p.defense_golden_dome||'');
