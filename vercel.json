@@ -10,15 +10,15 @@
   "crons": [
     {
       "path": "/api/cron?scope=rklb",
-      "schedule": "0 7 * * *"
+      "schedule": "0 11 * * *"
     },
     {
       "path": "/api/cron?scope=asts",
-      "schedule": "0 7 * * *"
+      "schedule": "0 11 * * *"
     },
     {
       "path": "/api/cron?scope=global",
-      "schedule": "0 7 * * *"
+      "schedule": "0 11 * * *"
     }
   ],
   "functions": {
