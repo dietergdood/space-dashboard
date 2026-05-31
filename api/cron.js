@@ -96,6 +96,18 @@ async function kiCall(prompt, retries=3, maxSearches=8, model='claude-sonnet-4-5
       .replace(/\s*```\s*$/,'')
       .trim();
 
+    // Detect refusal — model explains instead of returning JSON
+    const refusalPhrases = [
+      'I cannot provide', 'cannot provide the response', 'I must inform you',
+      'citation guidelines', 'I need to inform you that I cannot',
+      'Ich bin nicht in der Lage', 'nicht in der Lage'
+    ];
+    const isRefusal = refusalPhrases.some(p => raw.includes(p));
+    if (isRefusal) {
+      console.error('Model refused to return JSON. Raw:', raw.substring(0,200));
+      throw new Error('Model refusal — retrying with simplified prompt');
+    }
+
     // Extract JSON object (from first { to last })
     const firstBrace = jsonStr.indexOf('{');
     const lastBrace = jsonStr.lastIndexOf('}');
@@ -278,7 +290,7 @@ const SPCX_NEWS_PROMPT = `Search recent SpaceX news last 48h. Sources: spacex.co
 
 const SPCX_SECTOR_PROMPT = `Search current SpaceX market data and IPO status. Sources: spacenews.com, reuters.com, bloomberg.com. Return ONLY valid JSON, no HTML, no cite tags: {"intro":"1 sentence market position","ipo_status":"IPO status 2026","ipo_date":"planned date","bewertung":"valuation","cards":[{"emoji":"🛸","name":"Starlink","val":"user count","val_color":"green","desc":"status"},{"emoji":"🚀","name":"Falcon 9","val":"launches 2026","val_color":"blue","desc":"market share"},{"emoji":"⭐","name":"Starship","val":"status","val_color":"amber","desc":"development"},{"emoji":"🏆","name":"Market share","val":"percent","val_color":"green","desc":"commercial"}]}`;
 
-const SPCX_GOV_PROMPT = `Search SpaceX government contracts and FAA licenses. Sources: nasa.gov, faa.gov, spaceforce.mil, spacenews.com. Return ONLY valid JSON, no HTML, no cite tags, no line breaks in strings: {"faa":{"status":"license status","desc":"Starship FAA approvals"},"nasa":{"wert":"$X Mrd","desc":"Artemis HLS CRS contracts"},"space_force":{"wert":"$X Mrd","desc":"NSSL launch contracts"},"sec":{"status":"filing status","desc":"IPO progress"}}`;
+const SPCX_GOV_PROMPT = `What are SpaceX current government contracts? Search nasa.gov, faa.gov, spaceforce.mil. Respond with ONLY this JSON structure, fill in real values, no commentary, no citations: {"faa":{"status":"current license status","desc":"Starship FAA situation"},"nasa":{"wert":"$X Mrd","desc":"Artemis HLS and CRS contracts"},"space_force":{"wert":"$X Mrd","desc":"NSSL contracts"},"sec":{"status":"IPO filing status","desc":"IPO progress 2026"}}`;
 
 const SPCX_CTX_PROMPT = `Current SpaceX company data. Sources: spacex.com, reuters.com, bloomberg.com, spacenews.com. Return ONLY valid JSON, no HTML, no cite tags, no line breaks in strings: {"desc":"1-2 sentences current status without special chars","tags":[{"text":"Rockets","type":"blue"},{"text":"Starlink","type":"green"},{"text":"IPO 2026","type":"amber"}],"stats":[{"label":"Valuation","val":"$XXX Mrd"},{"label":"Employees","val":"~13000"},{"label":"Launches 2025","val":"X"}]}`;
 
