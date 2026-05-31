@@ -664,6 +664,7 @@ body{font-family:'DM Sans',sans-serif;background:var(--bg);color:var(--text);min
       <div class="tabs" id="main-tabs">
         <button class="tab rklb-tab active" id="tab-rklb-btn"><img src="/rklb-logo.png" class="tab-logo"><span class="tab-full">Rocket Lab (RKLB)</span><span class="tab-short">RKLB</span></button>
         <button class="tab asts-tab" id="tab-asts-btn"><img src="/asts-logo.png" class="tab-logo"><span class="tab-full">AST SpaceMobile (ASTS)</span><span class="tab-short">ASTS</span></button>
+        <button class="tab spcx-tab" id="tab-spcx-btn"><span style="font-size:18px;margin-right:4px;">🚀</span><span class="tab-full">SpaceX (IPO ausstehend)</span><span class="tab-short">SPCX</span></button>
       </div>
     </div>
     <div class="hdr-r">
@@ -1143,6 +1144,26 @@ body{font-family:'DM Sans',sans-serif;background:var(--bg);color:var(--text);min
   </div>
 </div>
 
+<!-- ═══ SPCX CONTEXT ═══ -->
+<div class="ctx-bar" id="ctx-spcx" style="display:none;">
+  <div class="ctx-top-row">
+    <div style="width:44px;height:44px;border-radius:10px;background:#000;display:flex;align-items:center;justify-content:center;font-size:24px;flex-shrink:0;">🚀</div>
+    <div class="ctx-name">SpaceX · SPCX</div>
+  </div>
+  <div class="ctx-info">
+    <div class="ctx-desc" id="spcx-ctx-desc">SpaceX (Space Exploration Technologies Corp.) ist das wertvollste private Unternehmen der Welt. Gegründet 2002 von Elon Musk — entwickelt Raketen (Falcon 9, Starship), Starlink Satelliten-Internet und bereitet Mondmissionen vor.</div>
+    <div class="ctx-tags" id="spcx-ctx-tags">
+      <span class="ctx-tag" style="color:var(--text3);font-style:italic;">IPO ausstehend</span>
+    </div>
+    <div class="ctx-stats" id="spcx-ctx-stats">
+      <div class="ctx-stat">Gegründet <b>2002</b></div>
+      <div class="ctx-stat">HQ <b>Hawthorne, CA</b></div>
+      <div class="ctx-stat">CEO <b>Elon Musk</b></div>
+      <div class="ctx-stat" id="spcx-stat-val">Bewertung <b>~$350 Mrd</b></div>
+    </div>
+  </div>
+</div>
+
 <!-- ═══ ASTS PANEL ═══ -->
 <div class="panel" id="p-asts">
 <div class="card open" id="card-asts-alert">
@@ -1526,6 +1547,103 @@ body{font-family:'DM Sans',sans-serif;background:var(--bg);color:var(--text);min
     </div>
   </div>
 </div>
+<!-- ═══ SPCX PANEL ═══ -->
+<div class="panel" id="p-spcx">
+
+<!-- IPO Status Banner -->
+<div class="card open" id="card-spcx-ipo">
+  <div class="card-header" onclick="toggleCard('spcx-ipo')">
+    <div class="card-icon">🚀</div>
+    <div>
+      <div class="card-title">SpaceX IPO Status</div>
+      <div class="card-sub">Ticker SPCX · Voraussichtlich 2026</div>
+    </div>
+    <div class="card-arrow">▼</div>
+  </div>
+  <div class="card-body" id="body-spcx-ipo">
+    <div style="background:var(--surface2);border-radius:10px;padding:16px;border-left:4px solid var(--amber);">
+      <div style="font-size:13px;font-weight:600;color:var(--amber);margin-bottom:6px;">⏳ IPO noch nicht erfolgt</div>
+      <div style="font-size:13px;color:var(--text2);line-height:1.6;" id="spcx-ipo-status">SpaceX hat am 20. Mai 2026 das S-1 Formular bei der SEC eingereicht. Geplanter Börsengang im Juni 2026 unter Ticker SPCX. Die angestrebte Bewertung liegt bei ~$350 Milliarden.</div>
+    </div>
+    <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:10px;margin-top:12px;">
+      <div class="met" style="text-align:center;">
+        <div class="met-label">Bewertung</div>
+        <div class="met-val mono" id="spcx-val">~$350 Mrd</div>
+        <div class="met-sub">Privat</div>
+      </div>
+      <div class="met" style="text-align:center;">
+        <div class="met-label">IPO Datum</div>
+        <div class="met-val mono" id="spcx-ipo-date">Jun 2026</div>
+        <div class="met-sub">Geplant</div>
+      </div>
+      <div class="met" style="text-align:center;">
+        <div class="met-label">Ticker</div>
+        <div class="met-val mono">SPCX</div>
+        <div class="met-sub">Geplant NASDAQ</div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- SpaceX News -->
+<div class="card open" id="card-spcx-news">
+  <div class="card-header" onclick="toggleCard('spcx-news')">
+    <div class="card-icon">📰</div>
+    <div>
+      <div class="card-title">SpaceX Nachrichten</div>
+      <div class="card-sub">Täglich um 13:00 Uhr aktualisiert</div>
+    </div>
+    <div class="card-arrow">▼</div>
+  </div>
+  <div class="card-body" id="body-spcx-news">
+    <div class="news-live"><div class="live-dot"></div>Nachrichten · SPCX</div>
+    <div id="spcx-news-content"><div style="color:var(--text3);font-style:italic;font-size:13px;">Wird täglich mit KI aktualisiert...</div></div>
+  </div>
+</div>
+
+<!-- SpaceX Sektor-Kontext -->
+<div class="card open" id="card-spcx-sector">
+  <div class="card-header" onclick="toggleCard('spcx-sector')">
+    <div class="card-icon">🌌</div>
+    <div>
+      <div class="card-title">SpaceX Marktposition</div>
+      <div class="card-sub">Starlink · Falcon · Starship · Konkurrenz</div>
+    </div>
+    <div class="card-arrow">▼</div>
+  </div>
+  <div class="card-body" id="body-spcx-sector">
+    <div class="sector-intro" id="spcx-sector-intro">SpaceX dominiert den kommerziellen Raumfahrtmarkt.</div>
+    <div class="sector-grid" id="spcx-sector-grid">
+      <div class="sector-card">
+        <div class="sector-emoji">🛸</div>
+        <div class="sector-name">Starlink</div>
+        <div class="sector-val" style="color:var(--green)" id="spcx-starlink-val">~6000 Satelliten</div>
+        <div class="sector-desc" id="spcx-starlink-desc">Weltgrösstes Satelliten-Internet Netzwerk</div>
+      </div>
+      <div class="sector-card">
+        <div class="sector-emoji">🚀</div>
+        <div class="sector-name">Falcon 9</div>
+        <div class="sector-val" style="color:var(--blue)" id="spcx-falcon-val">~250 Starts/Jahr</div>
+        <div class="sector-desc" id="spcx-falcon-desc">Meistgeflogene Rakete der Geschichte</div>
+      </div>
+      <div class="sector-card">
+        <div class="sector-emoji">⭐</div>
+        <div class="sector-name">Starship</div>
+        <div class="sector-val" style="color:var(--amber)" id="spcx-starship-val">In Entwicklung</div>
+        <div class="sector-desc" id="spcx-starship-desc">Grösste Rakete aller Zeiten — Mars-Mission</div>
+      </div>
+      <div class="sector-card">
+        <div class="sector-emoji">🏆</div>
+        <div class="sector-name">Marktanteil</div>
+        <div class="sector-val" style="color:var(--green)" id="spcx-market-val">~60%</div>
+        <div class="sector-desc" id="spcx-market-desc">Kommerzieller Raketenmarkt global</div>
+      </div>
+    </div>
+  </div>
+</div>
+
+</div>
+
 <!-- ═══ GLOSSAR ═══ -->
 <div class="card open" id="card-glossar">
   <div class="card-header" onclick="this.closest('.card').classList.toggle('open')">
@@ -1812,18 +1930,21 @@ function loadTx() {
 let activeTab = 'rklb';
 function switchTab(id) {
   activeTab = id;
-  ['rklb','asts'].forEach(t => {
-    $('p-'+t).classList.toggle('active', t===id);
+  ['rklb','asts','spcx'].forEach(t => {
+    const panel = $('p-'+t);
+    if (panel) panel.classList.toggle('active', t===id);
     const ctxEl = $('ctx-'+t);
-    if (t === id) { ctxEl.style.display = 'flex'; ctxEl.style.flexDirection = 'row'; }
-    else { ctxEl.style.display = 'none'; }
+    if (ctxEl) {
+      if (t === id) { ctxEl.style.display = 'flex'; ctxEl.style.flexDirection = 'row'; }
+      else { ctxEl.style.display = 'none'; }
+    }
     const btn = document.querySelector(`.tab.${t}-tab`);
     if (btn) btn.classList.toggle('active', t===id);
-    // Show/hide gov cards per tab
     const govEl = $('card-'+t+'-gov');
     if (govEl) govEl.style.display = t===id ? 'block' : 'none';
   });
   if (id === 'asts') setTimeout(initAstsCharts, 50);
+  if (id === 'spcx') loadSpcxData();
 }
 
 // ── Card Toggle ────────────────────────────────────────────
@@ -2511,6 +2632,36 @@ async function fetchCtxBar(t) {
 }
 
 const GLOSSAR_PROMPT=`Du bist Finanz-Erklärer. Suche das aktuelle Budget des US "Golden Dome" Programms. Welche 2-4 neue Fachbegriffe tauchen in RKLB/ASTS News auf? Antworte NUR mit JSON: {"golden_dome_def":"US-Raketenabwehr (BETRAG). Rocket Lab Lieferant.","terms":[{"term":"Begriff","def":"Erklärung"}]}`;
+async function loadSpcxData() {
+  // Load SpaceX news and sector from cache
+  const news = await fetchFromCache('news', 'spcx');
+  if (news && news.data) applyLiveNewsData('spcx', news.data, news.updated_at);
+  const sector = await fetchFromCache('sector', 'spcx');
+  if (sector && sector.data) applySpcxSector(sector.data);
+  const ctx = await fetchFromCache('ctx', 'spcx');
+  if (ctx && ctx.data) {
+    if ($('spcx-ctx-desc') && ctx.data.desc) $('spcx-ctx-desc').textContent = stripTags(ctx.data.desc);
+    if ($('spcx-stat-val') && ctx.data.stats && ctx.data.stats[0]) $('spcx-stat-val').textContent = ctx.data.stats[0].label + ' ' + ctx.data.stats[0].val;
+  }
+}
+
+function applySpcxSector(p) {
+  if (!p) return;
+  if ($('spcx-sector-intro') && p.intro) $('spcx-sector-intro').textContent = stripTags(p.intro);
+  if (p.cards && p.cards.length) {
+    const ids = ['starlink', 'falcon', 'starship', 'market'];
+    p.cards.forEach((c, i) => {
+      if (ids[i]) {
+        if ($('spcx-'+ids[i]+'-val')) $('spcx-'+ids[i]+'-val').textContent = c.val || '—';
+        if ($('spcx-'+ids[i]+'-desc')) $('spcx-'+ids[i]+'-desc').textContent = stripTags(c.desc || '');
+      }
+    });
+  }
+  if (p.ipo_status && $('spcx-ipo-status')) $('spcx-ipo-status').textContent = stripTags(p.ipo_status);
+  if (p.ipo_date && $('spcx-ipo-date')) $('spcx-ipo-date').textContent = p.ipo_date;
+  if (p.bewertung && $('spcx-val')) $('spcx-val').textContent = p.bewertung;
+}
+
 function applyGovSpace(t, p) {
   if(!p) return;
   if(t === 'rklb') {
@@ -2745,8 +2896,10 @@ async function refreshAllNews() {
   // Tab event listeners (defined here so script is loaded)
   const rklbBtn = document.getElementById('tab-rklb-btn');
   const astsBtn = document.getElementById('tab-asts-btn');
+  const spcxBtn = document.getElementById('tab-spcx-btn');
   if (rklbBtn) rklbBtn.addEventListener('click', () => switchTab('rklb'));
   if (astsBtn) astsBtn.addEventListener('click', () => switchTab('asts'));
+  if (spcxBtn) spcxBtn.addEventListener('click', () => switchTab('spcx'));
   switchTab('rklb');
   document.querySelectorAll('.card').forEach(c=>c.classList.add('open'));
   if(window.innerWidth<=640){
