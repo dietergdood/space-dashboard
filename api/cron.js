@@ -278,6 +278,20 @@ KONKURRENZ: rocketlabusa.com, blueorigin.com, virgingalactic.com, unitedlaunchal
     // Filter by scope for faster execution
     const FAST_SECTIONS = ['rec','news','scenarios'];
     const SLOW_SECTIONS = ['sector','gov_space','ctx','insider'];
+
+    // scope=all: bypass all scheduling, run everything
+    if (scope === 'all') {
+      console.log(`Full refresh: running all ${allCalls.length} calls`);
+      const results = { success: [], failed: [], startTime: Date.now() };
+      for (const call of allCalls) {
+        await runCall(call);
+        await delay(2000);
+      }
+      const duration = ((Date.now() - results.startTime) / 1000).toFixed(1);
+      console.log(`Full refresh done in ${duration}s. OK: ${results.success.join(', ')}. FAIL: ${results.failed.join(', ')}`);
+      return res.status(200).json({ message: 'Full refresh complete', success: results.success.length, failed: results.failed, scope });
+    }
+
     // Smart scheduling: check day of week
     const dayOfWeek = new Date().getDay(); // 0=Sun, 6=Sat
     const isWeekend = dayOfWeek === 0 || dayOfWeek === 6;
@@ -308,8 +322,9 @@ KONKURRENZ: rocketlabusa.com, blueorigin.com, virgingalactic.com, unitedlaunchal
     } else if (scope === 'asts_news') {
       calls = allCalls.filter(c => c.ticker === 'asts' && c.section === 'news');
     } else if (scope === 'all') {
-      // Full refresh — alle Sektionen, alle Ticker
-      calls = allCalls;
+      // Full refresh — ignoriert Smart-Scheduling, alle Sektionen alle Ticker
+      console.log('Full refresh: running ALL', allCalls.length, 'calls');
+      calls = allCalls; // no filter
     } else {
       calls = allCalls;
     }
