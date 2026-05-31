@@ -279,17 +279,26 @@ KONKURRENZ: rocketlabusa.com, blueorigin.com, virgingalactic.com, unitedlaunchal
     const FAST_SECTIONS = ['rec','news','scenarios'];
     const SLOW_SECTIONS = ['sector','gov_space','ctx','insider'];
 
-    // scope=all: bypass all scheduling, run everything
-    if (scope === 'all') {
-      console.log(`Full refresh: running all ${allCalls.length} calls`);
+    // Manual full refresh — split into fast and slow to avoid timeout
+    const ALL_FAST = ['rec','news','scenarios'];
+    const ALL_SLOW = ['sector','gov_space','ctx','insider','glossar'];
+    if (scope === 'all_fast') {
+      const fastCalls = allCalls.filter(c => ALL_FAST.includes(c.section));
+      console.log(`Full refresh FAST: ${fastCalls.length} calls`);
       const results = { success: [], failed: [], startTime: Date.now() };
-      for (const call of allCalls) {
-        await runCall(call);
-        await delay(2000);
-      }
+      for (const call of fastCalls) { await runCall(call); await delay(2000); }
       const duration = ((Date.now() - results.startTime) / 1000).toFixed(1);
-      console.log(`Full refresh done in ${duration}s. OK: ${results.success.join(', ')}. FAIL: ${results.failed.join(', ')}`);
-      return res.status(200).json({ message: 'Full refresh complete', success: results.success.length, failed: results.failed, scope });
+      console.log(`Fast refresh done in ${duration}s`);
+      return res.status(200).json({ message: 'Fast refresh complete', success: results.success.length, failed: results.failed });
+    }
+    if (scope === 'all_slow') {
+      const slowCalls = allCalls.filter(c => ALL_SLOW.includes(c.section));
+      console.log(`Full refresh SLOW: ${slowCalls.length} calls`);
+      const results = { success: [], failed: [], startTime: Date.now() };
+      for (const call of slowCalls) { await runCall(call); await delay(2000); }
+      const duration = ((Date.now() - results.startTime) / 1000).toFixed(1);
+      console.log(`Slow refresh done in ${duration}s`);
+      return res.status(200).json({ message: 'Slow refresh complete', success: results.success.length, failed: results.failed });
     }
 
     // Smart scheduling: check day of week
