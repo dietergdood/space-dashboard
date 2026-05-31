@@ -506,6 +506,8 @@ body{font-family:'DM Sans',sans-serif;background:var(--bg);color:var(--text);min
   .tabs{gap:2px;padding:3px;width:100%;}
   .tab{padding:6px 8px;font-size:13px;flex:1;text-align:center;min-width:0;white-space:nowrap;}
   .tab-logo{width:14px;height:14px;margin-right:2px;}
+  .tab-full{display:none !important;}
+  .tab-short{display:inline !important;}
   .spcx-icon{display:none;}
 
   /* ── Container ── */
@@ -613,9 +615,9 @@ body{font-family:'DM Sans',sans-serif;background:var(--bg);color:var(--text);min
     </div>
     <div class="hdr-mid">
       <div class="tabs" id="main-tabs">
-        <button class="tab rklb-tab active" id="tab-rklb-btn"><img src="/rklb-logo.png" class="tab-logo">RKLB</button>
-        <button class="tab asts-tab" id="tab-asts-btn"><img src="/asts-logo.png" class="tab-logo">ASTS</button>
-        <button class="tab spcx-tab" id="tab-spcx-btn"><img src="/spacex-logo.svg" class="tab-logo spcx-icon" style="width:18px;height:18px;object-fit:contain;filter:invert(0);margin-right:4px;vertical-align:middle;">SPCX</button>
+        <button class="tab rklb-tab active" id="tab-rklb-btn"><img src="/rklb-logo.png" class="tab-logo"><span class="tab-full">Rocket Lab (RKLB)</span><span class="tab-short">RKLB</span></button>
+        <button class="tab asts-tab" id="tab-asts-btn"><img src="/asts-logo.png" class="tab-logo"><span class="tab-full">AST SpaceMobile (ASTS)</span><span class="tab-short">ASTS</span></button>
+        <button class="tab spcx-tab" id="tab-spcx-btn"><img src="/spacex-logo.svg" class="tab-logo spcx-icon" style="width:18px;height:18px;object-fit:contain;filter:invert(0);margin-right:4px;vertical-align:middle;"><span class="tab-full">SpaceX (IPO ausstehend)</span><span class="tab-short">SPCX</span></button>
       </div>
     </div>
     <div class="hdr-r">
