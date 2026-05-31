@@ -1003,6 +1003,54 @@ body{font-family:'DM Sans',sans-serif;background:var(--bg);color:var(--text);min
   </div>
 </div>
 
+<div class="card open" id="card-rklb-milestone">
+  <div class="card-header" onclick="toggleCard('rklb-milestone')">
+    <div class="card-icon">🚀</div>
+    <div>
+      <div class="card-title">Meilenstein-Tracker</div>
+      <div class="card-sub">Neutron · Launch · Defense · Profitabilität</div>
+    </div>
+    <div class="card-arrow">▼</div>
+  </div>
+  <div class="card-body" id="body-rklb-milestone">
+    <div id="rklb-milestone-content">
+      <div class="kpi-section-title">Neutron Programm <span style="font-weight:400;text-transform:none;font-size:10px;color:var(--text3);">KI-Analyse</span></div>
+      <div id="rklb-neutron-status"><div style="color:var(--text3);font-size:13px;font-style:italic;">Wird aktualisiert...</div></div>
+      <div class="kpi-section-title" style="margin-top:12px;">Launch Cadence</div>
+      <div class="kpi-grid">
+        <div class="kpi-box">
+          <div class="kpi-label">Starts 2026</div>
+          <div class="kpi-val" id="rklb-ms-launches">—</div>
+          <div class="kpi-sub" id="rklb-ms-launches-sub">—</div>
+        </div>
+        <div class="kpi-box">
+          <div class="kpi-label">Erfolgsquote</div>
+          <div class="kpi-val" id="rklb-ms-success">—</div>
+          <div class="kpi-sub">Electron</div>
+        </div>
+        <div class="kpi-box">
+          <div class="kpi-label">Defense-Anteil</div>
+          <div class="kpi-val" id="rklb-ms-defense-pct">—</div>
+          <div class="kpi-sub" id="rklb-ms-defense-sub">—</div>
+        </div>
+        <div class="kpi-box">
+          <div class="kpi-label">Backlog Coverage</div>
+          <div class="kpi-val" id="rklb-ms-coverage">—</div>
+          <div class="kpi-sub" id="rklb-ms-coverage-sub">—</div>
+        </div>
+      </div>
+      <div class="kpi-section-title" style="margin-top:12px;">Risikoampel</div>
+      <div class="risk-grid">
+        <div class="risk-item"><div class="risk-label">Neutron-Timing</div><div class="risk-val" id="rklb-ms-risk-neutron">—</div></div>
+        <div class="risk-item"><div class="risk-label">Bewertung</div><div class="risk-val" id="rklb-ms-risk-bewertung">—</div></div>
+        <div class="risk-item"><div class="risk-label">Abhängigkeit Gov</div><div class="risk-val" id="rklb-ms-risk-gov">—</div></div>
+        <div class="risk-item"><div class="risk-label">Cashburn</div><div class="risk-val" id="rklb-ms-risk-cash">—</div></div>
+      </div>
+      <div class="kpi-source" id="rklb-milestone-ts">Wird täglich mit KI aktualisiert</div>
+    </div>
+  </div>
+</div>
+
 <div class="card open" id="card-rklb-rec">
   <div class="card-header" onclick="toggleCard('rklb-rec')">
     <div class="card-icon">🎯</div>
@@ -1497,6 +1545,74 @@ body{font-family:'DM Sans',sans-serif;background:var(--bg);color:var(--text);min
         <div class="kpi-drivers" id="asts-risks-list"></div>
       </div>
       <div class="kpi-source" id="asts-milestone-ts">Wird täglich mit KI aktualisiert</div>
+    </div>
+  </div>
+</div>
+
+<div class="card open" id="card-asts-kpi">
+  <div class="card-header" onclick="toggleCard('asts-kpi')">
+    <div class="card-icon">📊</div>
+    <div>
+      <div class="card-title">Investment-KPIs</div>
+      <div class="card-sub">Cash · Umsatz · Bewertung · Risiko</div>
+    </div>
+    <div class="card-arrow">▼</div>
+  </div>
+  <div class="card-body" id="body-asts-kpi">
+    <div id="asts-kpi-content">
+      <div style="display:flex;align-items:center;gap:14px;margin-bottom:12px;">
+        <div class="kpi-score-badge good" id="asts-kpi-score-badge">—</div>
+        <div style="flex:1;">
+          <div style="font-size:13px;font-weight:600;">KI-KPI-Score <span class="kpi-info" style="vertical-align:middle;">?</span><div class="kpi-tooltip" style="display:none;">Gesamtbewertung 0–100. Grün ≥80, Blau ≥60, Orange ≥40, Rot &lt;40</div></div>
+          <div style="font-size:11px;color:var(--text3);" id="asts-kpi-score-sub">Wird berechnet...</div>
+        </div>
+      </div>
+      <div class="kpi-cat-grid">
+        <div class="kpi-cat" onclick="toggleDrill('asts-kpi','cash')"><div class="kpi-cat-name">Cash <span class="kpi-info">?</span><div class="kpi-tooltip" style="display:none;">Cash minus Schulden — zeigt wie lange ASTS ohne neue Finanzierung überleben kann</div></div><div class="kpi-cat-score" id="asts-kpi-score-cash">—</div></div>
+        <div class="kpi-cat" onclick="toggleDrill('asts-kpi','umsatz')"><div class="kpi-cat-name">Umsatz-Ramp <span class="kpi-info">?</span><div class="kpi-tooltip" style="display:none;">Wie schnell wächst der Umsatz? ASTS muss schnell skalieren um profitabel zu werden</div></div><div class="kpi-cat-score" id="asts-kpi-score-umsatz">—</div></div>
+        <div class="kpi-cat" onclick="toggleDrill('asts-kpi','tech')"><div class="kpi-cat-name">Technologie <span class="kpi-info">?</span><div class="kpi-tooltip" style="display:none;">Funktioniert die Technologie? FCC-Lizenz, Speed-Tests und Satellitenstatus</div></div><div class="kpi-cat-score" id="asts-kpi-score-tech">—</div></div>
+        <div class="kpi-cat" onclick="toggleDrill('asts-kpi','partner')"><div class="kpi-cat-name">Partner <span class="kpi-info">?</span><div class="kpi-tooltip" style="display:none;">MNO-Partner = Mobilfunkanbieter die ASTS vermarkten</div></div><div class="kpi-cat-score" id="asts-kpi-score-partner">—</div></div>
+        <div class="kpi-cat" onclick="toggleDrill('asts-kpi','risiko')"><div class="kpi-cat-name">Risiko <span class="kpi-info">?</span><div class="kpi-tooltip" style="display:none;">Hoher Score = geringeres Risiko. Launch-Verzögerungen, Verwässerung, Konkurrenz</div></div><div class="kpi-cat-score" id="asts-kpi-score-risiko">—</div></div>
+        <div class="kpi-cat" onclick="toggleDrill('asts-kpi','bewertung')"><div class="kpi-cat-name">Bewertung <span class="kpi-info">?</span><div class="kpi-tooltip" style="display:none;">Ist die Aktie günstig oder teuer relativ zu Umsatz und Wachstum?</div></div><div class="kpi-cat-score" id="asts-kpi-score-bewertung">—</div></div>
+      </div>
+      <div class="kpi-drill" id="asts-kpi-drill-cash">
+        <div class="kpi-drill-row"><span class="kpi-drill-label">Cash Total</span><span class="kpi-drill-val"><span id="asts-kpi-d-cash">—</span><span class="kpi-tag-sec">SEC</span></span></div>
+        <div class="kpi-drill-row"><span class="kpi-drill-label kpi-tooltip-wrap">Cash Runway <span class="kpi-info">?</span><div class="kpi-tooltip" style="display:none;">Wie lange reicht das Geld ohne neue Finanzierung?</div></span><span class="kpi-drill-val"><span id="asts-kpi-d-runway">—</span><span class="kpi-tag-ki">KI</span></span></div>
+        <div class="kpi-drill-row"><span class="kpi-drill-label">Long-term Debt</span><span class="kpi-drill-val"><span id="asts-kpi-d-debt">—</span><span class="kpi-tag-sec">SEC</span></span></div>
+        <div class="kpi-drill-row"><span class="kpi-drill-label">Nettoverlust</span><span class="kpi-drill-val"><span id="asts-kpi-d-netloss">—</span><span class="kpi-tag-sec">SEC</span></span></div>
+      </div>
+      <div class="kpi-drill" id="asts-kpi-drill-umsatz">
+        <div class="kpi-drill-row"><span class="kpi-drill-label">Revenue</span><span class="kpi-drill-val"><span id="asts-kpi-d-rev">—</span><span class="kpi-tag-sec">SEC</span></span></div>
+        <div class="kpi-drill-row"><span class="kpi-drill-label">YoY Wachstum</span><span class="kpi-drill-val" id="asts-kpi-d-yoy">—</span></div>
+        <div class="kpi-drill-row"><span class="kpi-drill-label">2026 Guidance</span><span class="kpi-drill-val"><span id="asts-kpi-d-guidance">—</span><span class="kpi-tag-ki">KI</span></span></div>
+        <div class="kpi-drill-row"><span class="kpi-drill-label kpi-tooltip-wrap">Guidance Progress <span class="kpi-info">?</span><div class="kpi-tooltip" style="display:none;">Wie viel des Jahresziels ist bereits erreicht?</div></span><span class="kpi-drill-val"><span id="asts-kpi-d-guidance-prog">—</span><span class="kpi-tag-ki">KI</span></span></div>
+      </div>
+      <div class="kpi-drill" id="asts-kpi-drill-tech">
+        <div class="kpi-drill-row"><span class="kpi-drill-label">FCC Status</span><span class="kpi-drill-val"><span id="asts-kpi-d-fcc">—</span><span class="kpi-tag-ki">KI</span></span></div>
+        <div class="kpi-drill-row"><span class="kpi-drill-label">Peak Speed</span><span class="kpi-drill-val"><span id="asts-kpi-d-speed">—</span><span class="kpi-tag-ki">KI</span></span></div>
+      </div>
+      <div class="kpi-drill" id="asts-kpi-drill-partner">
+        <div class="kpi-drill-row"><span class="kpi-drill-label kpi-tooltip-wrap">MNO Partner <span class="kpi-info">?</span><div class="kpi-tooltip" style="display:none;">Mobilfunkanbieter die ASTS-Service vermarkten</div></span><span class="kpi-drill-val"><span id="asts-kpi-d-mnos">—</span><span class="kpi-tag-ki">KI</span></span></div>
+        <div class="kpi-drill-row"><span class="kpi-drill-label">Aktive Partner</span><span class="kpi-drill-val" id="asts-kpi-d-mno-list">—</span></div>
+      </div>
+      <div class="kpi-drill" id="asts-kpi-drill-risiko">
+        <div class="kpi-drill-row"><span class="kpi-drill-label">Launch-Risiko</span><span class="kpi-drill-val risk-val" id="asts-kpi-d-risk-launch">—</span></div>
+        <div class="kpi-drill-row"><span class="kpi-drill-label">Dilution</span><span class="kpi-drill-val risk-val" id="asts-kpi-d-risk-dilution">—</span></div>
+        <div class="kpi-drill-row"><span class="kpi-drill-label">Konkurrenz</span><span class="kpi-drill-val risk-val" id="asts-kpi-d-risk-konkurrenz">—</span></div>
+      </div>
+      <div class="kpi-drill" id="asts-kpi-drill-bewertung">
+        <div class="kpi-drill-row"><span class="kpi-drill-label kpi-tooltip-wrap">EV/Sales <span class="kpi-info">?</span><div class="kpi-tooltip" style="display:none;">Wie teuer ist die Aktie relativ zum Umsatz?</div></span><span class="kpi-drill-val"><span id="asts-kpi-d-evsales">—</span><span class="kpi-tag-ki">KI</span></span></div>
+        <div class="kpi-drill-row"><span class="kpi-drill-label kpi-tooltip-wrap">Kurs vs. Konsens <span class="kpi-info">?</span><div class="kpi-tooltip" style="display:none;">Wie weit ist der Kurs vom Analysten-Konsens entfernt?</div></span><span class="kpi-drill-val" id="asts-kpi-d-vs-konsens">—</span></div>
+        <div class="kpi-drill-row"><span class="kpi-drill-label">Analysten-Range</span><span class="kpi-drill-val" id="asts-kpi-d-analyst-range">—</span></div>
+      </div>
+      <div class="kpi-interp" id="asts-kpi-interp2" style="display:none;"></div>
+      <div id="asts-kpi-drivers2" style="display:none;">
+        <div style="font-size:11px;color:var(--text3);margin-top:8px;margin-bottom:4px;">Haupttreiber</div>
+        <div class="kpi-drivers" id="asts-kpi-drivers2-list"></div>
+        <div style="font-size:11px;color:var(--text3);margin-top:6px;margin-bottom:4px;">Hauptrisiken</div>
+        <div class="kpi-drivers" id="asts-kpi-risks2-list"></div>
+      </div>
+      <div class="kpi-source" id="asts-kpi-ts2">Wird täglich mit KI aktualisiert</div>
     </div>
   </div>
 </div>
@@ -2830,7 +2946,10 @@ async function loadFromCache() {
     {fn:(d,ts)=>applyCtx('rklb',d),section:'ctx',ticker:'rklb'},
     {fn:(d,ts)=>applyCtx('asts',d),section:'ctx',ticker:'asts'},
     {fn:(d,ts)=>applyGlossar(d),section:'glossar',ticker:null},
-    {fn:(d,ts)=>applyRklbKpi(d),      section:'kpi',      ticker:'rklb'},
+    {fn:(d,ts)=>applyRklbKpi(d),       section:'kpi',       ticker:'rklb'},
+    {fn:(d,ts)=>applyRklbMilestone(d),  section:'kpi',       ticker:'rklb'},
+    {fn:(d,ts)=>applyAstsMilestone(d),  section:'milestone', ticker:'asts'},
+    {fn:(d,ts)=>applyAstsKpi(d),        section:'milestone', ticker:'asts'},
     {fn:(d,ts)=>applyAstsMilestone(d), section:'milestone',ticker:'asts'},
     {fn:(d,ts)=>applyInsider('rklb',d),section:'insider',  ticker:'rklb'},
     {fn:(d,ts)=>applyInsider('asts',d),section:'insider',ticker:'asts'},
@@ -3141,6 +3260,19 @@ async function loadFinancials(t) {
         el.style.color = d.net_income_m < 0 ? 'var(--red)' : 'var(--green)';
       }
       if ($('asts-fin-source')) $('asts-fin-source').textContent = '· SEC EDGAR ' + (d.revenue?.date?.substring(0,7) || '');
+      // Also populate ASTS KPI card drills
+      if (d.revenue?.latest_m != null && $('asts-kpi-d-rev')) {
+        const yoy2 = d.revenue.yoy_pct;
+        const arrow2 = yoy2 > 0 ? ' <span class="kpi-trend-up">↑</span>' : '';
+        $('asts-kpi-d-rev').innerHTML = fmt(d.revenue.latest_m) + arrow2;
+        if ($('asts-kpi-d-yoy') && yoy2 != null) $('asts-kpi-d-yoy').innerHTML = `<span class="${yoy2>=0?'kpi-trend-up':'kpi-trend-down'}">${fmtPct(yoy2)} YoY</span>`;
+      }
+      if (d.cash_m != null && $('asts-kpi-d-cash')) $('asts-kpi-d-cash').textContent = fmt(d.cash_m);
+      if (d.debt_m != null && $('asts-kpi-d-debt')) $('asts-kpi-d-debt').textContent = fmt(d.debt_m);
+      if (d.net_income_m != null && $('asts-kpi-d-netloss')) {
+        $('asts-kpi-d-netloss').textContent = fmt(d.net_income_m);
+        $('asts-kpi-d-netloss').style.color = d.net_income_m < 0 ? 'var(--red)' : 'var(--green)';
+      }
     }
   } catch(e) { console.warn('loadFinancials:', e.message); }
 }
@@ -3294,6 +3426,85 @@ function applyAstsMilestone(p) {
     $('asts-kpi-drivers').style.display = 'block';
   }
   if ($('asts-milestone-ts')) $('asts-milestone-ts').textContent = 'KI-Analyse · Täglich aktualisiert';
+}
+
+// ── ASTS KPI (mirror of RKLB KPI) ───────────────────────────
+function applyAstsKpi(p) {
+  if (!p) return;
+  setScore('asts-kpi-score-badge', 'asts-kpi-score-sub', p.score_gesamt, 'Cash · Umsatz · Technologie · Partner');
+  setCatScore('asts-kpi-score-cash',     p.score_cash);
+  setCatScore('asts-kpi-score-umsatz',   p.score_umsatz_ramp);
+  setCatScore('asts-kpi-score-tech',     p.score_technologie);
+  setCatScore('asts-kpi-score-partner',  p.score_partner);
+  setCatScore('asts-kpi-score-risiko',   p.score_risiko);
+  setCatScore('asts-kpi-score-bewertung',p.score_bewertung || 50);
+  setDrillRow('asts-kpi-d-cash',    p.cash_wert);
+  setDrillRow('asts-kpi-d-runway',  p.cash_runway);
+  setDrillRow('asts-kpi-d-debt',    p.debt_wert);
+  if ($('asts-kpi-d-netloss')) $('asts-kpi-d-netloss').textContent = p.netloss_wert||'—';
+  setDrillRow('asts-kpi-d-rev',          p.umsatz_wert);
+  setDrillRow('asts-kpi-d-yoy',          p.umsatz_yoy);
+  setDrillRow('asts-kpi-d-guidance',     p.guidance_2026);
+  setDrillRow('asts-kpi-d-guidance-prog',p.guidance_progress);
+  if ($('asts-kpi-d-fcc'))   $('asts-kpi-d-fcc').textContent   = stripTags(p.fcc_status||'—');
+  setDrillRow('asts-kpi-d-speed',  p.peak_speed);
+  if ($('asts-kpi-d-mnos'))     $('asts-kpi-d-mnos').textContent     = p.mno_anzahl ? p.mno_anzahl+' Partner' : '—';
+  if ($('asts-kpi-d-mno-list')) $('asts-kpi-d-mno-list').textContent = stripTags(p.mno_aktive||'—');
+  const riskMap = {hoch:'risk-hoch',mittel:'risk-mittel',niedrig:'risk-niedrig'};
+  const setRisk2 = (id,val) => {
+    const el=$(id); if(!el||!val) return;
+    el.textContent=stripTags(val);
+    const v=val.toLowerCase();
+    for(const [k,cls] of Object.entries(riskMap)){if(v.includes(k)){el.className='risk-val '+cls;break;}}
+  };
+  setRisk2('asts-kpi-d-risk-launch',     p.risk_launch);
+  setRisk2('asts-kpi-d-risk-dilution',   p.risk_dilution);
+  setRisk2('asts-kpi-d-risk-konkurrenz', p.risk_konkurrenz);
+  setDrillRow('asts-kpi-d-evsales',       p.ev_sales||'—');
+  setDrillRow('asts-kpi-d-vs-konsens',    p.kurs_vs_konsens||'—');
+  setDrillRow('asts-kpi-d-analyst-range', p.analyst_range||'—');
+  if (p.interpretation && $('asts-kpi-interp2')) {
+    $('asts-kpi-interp2').textContent = stripTags(p.interpretation);
+    $('asts-kpi-interp2').style.display = 'block';
+  }
+  if ($('asts-kpi-drivers2')) {
+    setDrivers('asts-kpi-drivers2-list', p.haupttreiber, 'kpi-driver');
+    setDrivers('asts-kpi-risks2-list',   p.hauptrisiken,  'kpi-risk-tag');
+    $('asts-kpi-drivers2').style.display = 'block';
+  }
+  if ($('asts-kpi-ts2')) $('asts-kpi-ts2').textContent = 'KI-Analyse · Täglich aktualisiert';
+}
+
+// ── RKLB Milestone (mirror of ASTS Milestone) ───────────────
+function applyRklbMilestone(p) {
+  if (!p) return;
+  // Neutron status
+  const neutronEl = $('rklb-neutron-status');
+  if (neutronEl && p.neutron_status) {
+    const dotCls = p.neutron_risiko?.toLowerCase().includes('hoch') ? 'dot-red' :
+                   p.neutron_risiko?.toLowerCase().includes('mittel') ? 'dot-yellow' : 'dot-green';
+    neutronEl.innerHTML = `
+      <div class="milestone-row"><div class="milestone-dot ${dotCls}"></div><div class="milestone-name">Status</div><div class="milestone-status">${stripTags(p.neutron_status)}</div></div>
+      <div class="milestone-row"><div class="milestone-dot dot-gray"></div><div class="milestone-name">Erstflug-Ziel</div><div class="milestone-status">${stripTags(p.neutron_erstflug||'—')}</div></div>`;
+  }
+  if ($('rklb-ms-launches'))    $('rklb-ms-launches').textContent    = stripTags(p.launches_2026||'—');
+  if ($('rklb-ms-success'))     $('rklb-ms-success').textContent     = stripTags(p.launch_success||'—');
+  if ($('rklb-ms-defense-pct')) $('rklb-ms-defense-pct').textContent = stripTags(p.defense_sda||'—');
+  if ($('rklb-ms-defense-sub')) $('rklb-ms-defense-sub').textContent = stripTags(p.defense_golden_dome||'');
+  if ($('rklb-ms-coverage'))    $('rklb-ms-coverage').textContent    = stripTags(p.backlog_coverage||'—');
+  if ($('rklb-ms-coverage-sub'))$('rklb-ms-coverage-sub').textContent= stripTags(p.backlog_qoq||'');
+  const riskMap = {hoch:'risk-hoch',mittel:'risk-mittel',niedrig:'risk-niedrig'};
+  const setRisk3 = (id,val) => {
+    const el=$(id); if(!el||!val) return;
+    el.textContent=stripTags(val);
+    const v=val.toLowerCase();
+    for(const [k,cls] of Object.entries(riskMap)){if(v.includes(k)){el.className='risk-val '+cls;break;}}
+  };
+  setRisk3('rklb-ms-risk-neutron',  p.neutron_risiko);
+  setRisk3('rklb-ms-risk-bewertung',p.ev_sales ? 'Hoch' : '—');
+  setRisk3('rklb-ms-risk-gov',      p.defense_sda ? 'Mittel' : '—');
+  setRisk3('rklb-ms-risk-cash',     p.ebitda_wert?.includes('-') ? 'Mittel' : 'Niedrig');
+  if ($('rklb-milestone-ts')) $('rklb-milestone-ts').textContent = 'KI-Analyse · Täglich aktualisiert';
 }
 
 // ── Insider Trades ──────────────────────────────────────────
