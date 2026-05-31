@@ -307,6 +307,9 @@ KONKURRENZ: rocketlabusa.com, blueorigin.com, virgingalactic.com, unitedlaunchal
       calls = allCalls.filter(c => c.ticker === 'rklb' && c.section === 'news');
     } else if (scope === 'asts_news') {
       calls = allCalls.filter(c => c.ticker === 'asts' && c.section === 'news');
+    } else if (scope === 'all') {
+      // Full refresh — alle Sektionen, alle Ticker
+      calls = allCalls;
     } else {
       calls = allCalls;
     }
