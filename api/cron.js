@@ -365,7 +365,7 @@ KONKURRENZ: rocketlabusa.com, blueorigin.com, virgingalactic.com, unitedlaunchal
 
     // Manual full refresh — split into fast and slow to avoid timeout
     const ALL_FAST = ['rec','news','scenarios'];
-    const ALL_SLOW = ['sector','gov_space','ctx','insider','glossar'];
+    const ALL_SLOW = ['sector','gov_space','ctx','insider','glossar','kpi','milestone'];
     if (scope === 'all_fast') {
       const fastCalls = allCalls.filter(c => ALL_FAST.includes(c.section));
       console.log(`Full refresh FAST: ${fastCalls.length} calls`);
