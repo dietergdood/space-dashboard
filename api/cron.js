@@ -74,11 +74,21 @@ async function kiCall(prompt, retries=3, maxSearches=8, model='claude-sonnet-4-5
     console.log('Response content blocks:', data.content?.length, data.content?.map(b=>b.type).join(','));
     const raw = data.content.filter(b=>b.type==='text').map(b=>b.text).join('').trim();
     console.log('Raw text length:', raw.length, '| First 100:', raw.substring(0,100));
-    // Strip markdown code blocks if present
-    let jsonStr = raw.replace(/^```json\s*/,'').replace(/^```\s*/,'').replace(/\s*```$/,'').trim();
-    // Find JSON object or array
-    const match = jsonStr.match(/\{[\s\S]*\}/);
-    if (!match) {
+    // Strip markdown code blocks - handle multiple formats
+    let jsonStr = raw
+      .replace(/^```json\s*/m,'')
+      .replace(/^```\s*/m,'')
+      .replace(/\s*```\s*$/,'')
+      .trim();
+    // Find JSON object (greedy - from first { to last })
+    const firstBrace = jsonStr.indexOf('{');
+    const lastBrace = jsonStr.lastIndexOf('}');
+    if (firstBrace === -1 || lastBrace === -1) {
+      console.error('No JSON found. Raw:', raw.substring(0,300));
+      throw new Error('No JSON in response');
+    }
+    const match = [jsonStr.substring(firstBrace, lastBrace + 1)];
+    if (!match[0]) {
       console.error('No JSON found. Raw:', raw.substring(0,300));
       throw new Error('No JSON in response');
     }
@@ -263,7 +273,9 @@ SOCIAL MEDIA: Reddit r/spacex r/SpaceXLounge r/investing r/wallstreetbets, X @Sp
 BEHÖRDEN: nasa.gov, faa.gov (Launch-Lizenzen), defense.gov, spaceforce.mil, sec.gov, ftc.gov.
 KONKURRENZ: rocketlabusa.com, blueorigin.com, virgingalactic.com, unitedlaunchalliance.com, arianespace.com. Fokus auf: IPO-Status, Starlink, Starship, NASA Aufträge, FAA Lizenzen, Konkurrenz. Antworte NUR mit gültigem JSON. KRITISCH: Keine <cite> Tags, kein HTML, keine Anführungszeichen in Strings, keine Zeilenumbrüche: {"articles":[{"title":"Titel max 80 Zeichen","sentiment":"pos|neg|neu","body":"2-3 Sätze auf Deutsch ohne jegliche Tags","source":"Exakte Quelle"}]}`;
 
-    const SPCX_SECTOR_PROMPT = `Analysiere SpaceX Marktposition, IPO-Status und US Behörden-Aufträge. Quellen: spacex.com, faa.gov, nasa.gov, spaceforce.mil, sec.gov, spacenews.com, nasaspaceflight.com, reuters.com, bloomberg.com, breakingdefense.com, Payload Space, CSIS. WICHTIG: Antworte NUR mit gültigem JSON, KEIN HTML, keine <cite> Tags, keine Zeilenumbrüche in Strings: {"intro":"1 Satz","ipo_status":"IPO Status","ipo_date":"Datum","bewertung":"$XXX Mrd","cards":[{"emoji":"🛸","name":"Starlink","val":"X Mio Nutzer","val_color":"green","desc":"Revenue und Wachstum"},{"emoji":"🚀","name":"Falcon 9","val":"X Starts 2026","val_color":"blue","desc":"Marktanteil kommerziell"},{"emoji":"⭐","name":"Starship","val":"Status","val_color":"amber","desc":"FAA Status und nächster Testflug"},{"emoji":"🏆","name":"Marktanteil","val":"X%","val_color":"green","desc":"global kommerziell"}],"faa":{"status":"Lizenz aktiv/ausstehend","desc":"Starship und Falcon FAA Genehmigungen aktuell"},"nasa":{"wert":"$X Mrd","desc":"Artemis HLS und CRS Aufträge"},"space_force":{"wert":"$X Mrd","desc":"NSSL Launch-Aufträge aktuell"},"sec":{"status":"S-1 eingereicht/ausstehend","desc":"IPO SEC Filing Fortschritt"}}`;
+    const SPCX_SECTOR_PROMPT = `Recherchiere aktuelle SpaceX Marktdaten und IPO-Status. Quellen: spacenews.com, reuters.com, bloomberg.com, nasaspaceflight.com. Antworte NUR mit JSON ohne HTML Tags: {"intro":"1 Satz Marktposition","ipo_status":"IPO Status Mai 2026","ipo_date":"geplantes Datum","bewertung":"Bewertung","cards":[{"emoji":"🛸","name":"Starlink","val":"Nutzerzahl","val_color":"green","desc":"Status"},{"emoji":"🚀","name":"Falcon 9","val":"Starts 2026","val_color":"blue","desc":"Marktanteil"},{"emoji":"⭐","name":"Starship","val":"Status","val_color":"amber","desc":"Entwicklung"},{"emoji":"🏆","name":"Marktanteil","val":"Prozent","val_color":"green","desc":"kommerziell"}]}`;
+
+    const SPCX_GOV_PROMPT = `Recherchiere SpaceX Behörden-Aufträge und Lizenzen. Quellen: nasa.gov, faa.gov, spaceforce.mil, sec.gov, spacenews.com, reuters.com. Antworte NUR mit JSON ohne HTML Tags: {"faa":{"status":"FAA Lizenz Status","desc":"Starship FAA Genehmigungen"},"nasa":{"wert":"NASA Auftragswert","desc":"Artemis und CRS Aufträge"},"space_force":{"wert":"Space Force Aufträge","desc":"NSSL Programm"},"sec":{"status":"S-1 Status","desc":"IPO Fortschritt"}}`;
 
     const SPCX_CTX_PROMPT = `Aktuelle SpaceX Firmendaten. OFFIZIELLE QUELLEN: spacex.com/updates, spacex.com/careers, SEC EDGAR S-1/8-K (wenn IPO erfolgt), Elon Musk X Posts, SpaceX Pressemitteilungen.
 FINANZMEDIEN: Reuters, Bloomberg, CNBC, Wall Street Journal, Financial Times, Forbes, Business Insider, The Economist.
@@ -302,7 +314,7 @@ KONKURRENZ: rocketlabusa.com, blueorigin.com, virgingalactic.com, unitedlaunchal
       { ticker:'asts', section:'insider',   prompt: INSIDER_ASTS_PROMPT },
       { ticker:'spcx', section:'news',     prompt: SPCX_NEWS_PROMPT },
       { ticker:'spcx', section:'sector',   prompt: SPCX_SECTOR_PROMPT },
-      { ticker:'spcx', section:'gov_space', prompt: SPCX_SECTOR_PROMPT },
+      { ticker:'spcx', section:'gov_space', prompt: SPCX_GOV_PROMPT },
       { ticker:'spcx', section:'ctx',      prompt: SPCX_CTX_PROMPT },
       { ticker:'rklb', section:'gov_space', prompt: GOV_RKLB_PROMPT },
       { ticker:'asts', section:'gov_space', prompt: GOV_ASTS_PROMPT },
