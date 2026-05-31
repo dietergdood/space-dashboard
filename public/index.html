@@ -333,6 +333,33 @@ body{font-family:'DM Sans',sans-serif;background:var(--bg);color:var(--text);min
 .news-live{display:flex;align-items:center;gap:6px;font-size:12px;font-weight:500;color:var(--text3);}
 .earnings-bar{display:flex;align-items:center;gap:8px;padding:8px 12px;background:var(--amber-bg, #fefce8);border:1px solid var(--amber-bd, #fde68a);border-radius:8px;margin-bottom:10px;font-size:12px;}
 .rec-history{margin-top:12px;padding-top:12px;border-top:1px solid var(--border);}
+.kpi-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(140px,1fr));gap:8px;margin-bottom:12px;}
+.kpi-box{background:var(--surface2);border-radius:8px;padding:10px 12px;border:1px solid var(--border);}
+.kpi-label{font-size:10px;color:var(--text3);font-weight:600;text-transform:uppercase;letter-spacing:.05em;margin-bottom:3px;}
+.kpi-val{font-size:16px;font-weight:700;color:var(--text);font-family:"DM Mono",monospace;}
+.kpi-sub{font-size:11px;color:var(--text3);margin-top:2px;}
+.kpi-badge{display:inline-block;font-size:10px;font-weight:600;padding:1px 6px;border-radius:8px;margin-left:4px;}
+.kpi-badge.up{background:var(--green-bg);color:var(--green);}
+.kpi-badge.down{background:var(--red-bg);color:var(--red);}
+.kpi-badge.warn{background:rgba(217,119,6,.1);color:#92400e;}
+.kpi-section-title{font-size:11px;font-weight:600;color:var(--text3);text-transform:uppercase;letter-spacing:.05em;margin:10px 0 6px;}
+.kpi-source{font-size:10px;color:var(--text3);font-style:italic;margin-top:8px;}
+.milestone-row{display:flex;align-items:center;gap:10px;padding:7px 0;border-bottom:1px solid var(--border);}
+.milestone-row:last-child{border-bottom:none;}
+.milestone-dot{width:10px;height:10px;border-radius:50%;flex-shrink:0;}
+.dot-green{background:var(--green);}
+.dot-red{background:var(--red);}
+.dot-yellow{background:#f59e0b;}
+.dot-gray{background:var(--text3);}
+.milestone-name{font-size:13px;font-weight:500;flex:1;}
+.milestone-status{font-size:12px;color:var(--text2);}
+.risk-grid{display:grid;grid-template-columns:1fr 1fr;gap:6px;margin-top:8px;}
+.risk-item{background:var(--surface2);border-radius:6px;padding:6px 10px;font-size:12px;}
+.risk-label{color:var(--text3);font-size:10px;text-transform:uppercase;letter-spacing:.04em;}
+.risk-val{font-weight:600;margin-top:1px;}
+.risk-hoch{color:var(--red);}
+.risk-mittel{color:#d97706;}
+.risk-niedrig{color:var(--green);}
 .insider-card{background:var(--surface2);border-radius:8px;padding:10px 12px;margin-bottom:8px;border-left:3px solid var(--border2);display:flex;gap:12px;align-items:flex-start;}
 .insider-card.buy{border-left-color:var(--green);}
 .insider-card.sell{border-left-color:var(--red);}
@@ -870,6 +897,68 @@ body{font-family:'DM Sans',sans-serif;background:var(--bg);color:var(--text);min
     </div>
   </div>
 </div>
+<div class="card open" id="card-rklb-kpi">
+  <div class="card-header" onclick="toggleCard('rklb-kpi')">
+    <div class="card-icon">📊</div>
+    <div>
+      <div class="card-title">Investment-KPIs</div>
+      <div class="card-sub">Backlog · Neutron · Defense · Bewertung</div>
+    </div>
+    <div class="card-arrow">▼</div>
+  </div>
+  <div class="card-body" id="body-rklb-kpi">
+    <div id="rklb-kpi-content">
+      <div class="kpi-section-title">Finanzen <span id="rklb-fin-source" style="font-weight:400;text-transform:none;letter-spacing:0;color:var(--text3);">lädt...</span></div>
+      <div class="kpi-grid">
+        <div class="kpi-box">
+          <div class="kpi-label">Revenue (letztes Quartal)</div>
+          <div class="kpi-val" id="rklb-kpi-rev">—</div>
+          <div class="kpi-sub" id="rklb-kpi-rev-sub">—</div>
+        </div>
+        <div class="kpi-box">
+          <div class="kpi-label">Bruttomarge</div>
+          <div class="kpi-val" id="rklb-kpi-margin">—</div>
+          <div class="kpi-sub" id="rklb-kpi-margin-sub">—</div>
+        </div>
+        <div class="kpi-box">
+          <div class="kpi-label">Cash</div>
+          <div class="kpi-val" id="rklb-kpi-cash">—</div>
+          <div class="kpi-sub" id="rklb-kpi-cash-sub">—</div>
+        </div>
+        <div class="kpi-box">
+          <div class="kpi-label">Nettoverlust</div>
+          <div class="kpi-val" id="rklb-kpi-netloss">—</div>
+          <div class="kpi-sub">Letztes Quartal</div>
+        </div>
+      </div>
+      <div class="kpi-section-title">Backlog & Aufträge <span style="font-weight:400;text-transform:none;font-size:10px;color:var(--text3);">KI-Analyse</span></div>
+      <div class="kpi-grid">
+        <div class="kpi-box">
+          <div class="kpi-label">Backlog</div>
+          <div class="kpi-val" id="rklb-kpi-backlog">—</div>
+          <div class="kpi-sub" id="rklb-kpi-backlog-sub">—</div>
+        </div>
+        <div class="kpi-box">
+          <div class="kpi-label">Defense</div>
+          <div class="kpi-val" id="rklb-kpi-defense">—</div>
+          <div class="kpi-sub" id="rklb-kpi-defense-sub">—</div>
+        </div>
+        <div class="kpi-box">
+          <div class="kpi-label">Neutron Status</div>
+          <div class="kpi-val" id="rklb-kpi-neutron" style="font-size:13px;">—</div>
+          <div class="kpi-sub" id="rklb-kpi-neutron-sub">—</div>
+        </div>
+        <div class="kpi-box">
+          <div class="kpi-label">Kurs vs. Konsens</div>
+          <div class="kpi-val" id="rklb-kpi-vs-konsens" style="font-size:13px;">—</div>
+          <div class="kpi-sub" id="rklb-kpi-analyst-range">—</div>
+        </div>
+      </div>
+      <div class="kpi-source" id="rklb-kpi-ts">Wird täglich mit KI aktualisiert</div>
+    </div>
+  </div>
+</div>
+
 <div class="card open" id="card-rklb-rec">
   <div class="card-header" onclick="toggleCard('rklb-rec')">
     <div class="card-icon">🎯</div>
@@ -1298,6 +1387,74 @@ body{font-family:'DM Sans',sans-serif;background:var(--bg);color:var(--text);min
     </div>
   </div>
 </div>
+<div class="card open" id="card-asts-milestone">
+  <div class="card-header" onclick="toggleCard('asts-milestone')">
+    <div class="card-icon">🛰</div>
+    <div>
+      <div class="card-title">Meilenstein-Tracker</div>
+      <div class="card-sub">BlueBird · FCC · MNOs · Risiken</div>
+    </div>
+    <div class="card-arrow">▼</div>
+  </div>
+  <div class="card-body" id="body-asts-milestone">
+    <div id="asts-milestone-content">
+      <div class="kpi-section-title">Finanzen <span id="asts-fin-source" style="font-weight:400;text-transform:none;letter-spacing:0;color:var(--text3);">lädt...</span></div>
+      <div class="kpi-grid">
+        <div class="kpi-box">
+          <div class="kpi-label">Revenue (letztes Quartal)</div>
+          <div class="kpi-val" id="asts-kpi-rev">—</div>
+          <div class="kpi-sub" id="asts-kpi-rev-sub">—</div>
+        </div>
+        <div class="kpi-box">
+          <div class="kpi-label">Cash</div>
+          <div class="kpi-val" id="asts-kpi-cash">—</div>
+          <div class="kpi-sub" id="asts-kpi-cash-sub">—</div>
+        </div>
+        <div class="kpi-box">
+          <div class="kpi-label">Long-term Debt</div>
+          <div class="kpi-val" id="asts-kpi-debt">—</div>
+          <div class="kpi-sub" id="asts-kpi-debt-sub">—</div>
+        </div>
+        <div class="kpi-box">
+          <div class="kpi-label">Nettoverlust</div>
+          <div class="kpi-val" id="asts-kpi-netloss">—</div>
+          <div class="kpi-sub">Letztes Quartal</div>
+        </div>
+      </div>
+      <div class="kpi-section-title">BlueBird Satelliten-Status <span style="font-weight:400;text-transform:none;font-size:10px;color:var(--text3);">KI-Analyse</span></div>
+      <div id="asts-bluebird-status"><div style="color:var(--text3);font-size:13px;font-style:italic;">Wird aktualisiert...</div></div>
+      <div class="kpi-section-title" style="margin-top:12px;">Regulierung & Partner</div>
+      <div class="kpi-grid">
+        <div class="kpi-box">
+          <div class="kpi-label">FCC Status</div>
+          <div class="kpi-val" id="asts-fcc-status" style="font-size:12px;">—</div>
+        </div>
+        <div class="kpi-box">
+          <div class="kpi-label">ITU Status</div>
+          <div class="kpi-val" id="asts-itu-status" style="font-size:12px;">—</div>
+        </div>
+        <div class="kpi-box">
+          <div class="kpi-label">Runway</div>
+          <div class="kpi-val" id="asts-runway">—</div>
+          <div class="kpi-sub">Monate</div>
+        </div>
+        <div class="kpi-box">
+          <div class="kpi-label">Nächster Meilenstein</div>
+          <div class="kpi-val" id="asts-next-milestone" style="font-size:12px;">—</div>
+        </div>
+      </div>
+      <div class="kpi-section-title" style="margin-top:12px;">Risikoampel</div>
+      <div class="risk-grid" id="asts-risk-grid">
+        <div class="risk-item"><div class="risk-label">Launch</div><div class="risk-val" id="asts-risk-launch">—</div></div>
+        <div class="risk-item"><div class="risk-label">Dilution</div><div class="risk-val" id="asts-risk-dilution">—</div></div>
+        <div class="risk-item"><div class="risk-label">Konkurrenz</div><div class="risk-val" id="asts-risk-konkurrenz">—</div></div>
+        <div class="risk-item"><div class="risk-label">Zeitplan</div><div class="risk-val" id="asts-risk-zeitplan">—</div></div>
+      </div>
+      <div class="kpi-source" id="asts-milestone-ts">Wird täglich mit KI aktualisiert</div>
+    </div>
+  </div>
+</div>
+
 <div class="card open" id="card-asts-rec">
   <div class="card-header" onclick="toggleCard('asts-rec')">
     <div class="card-icon">🎯</div>
@@ -2630,7 +2787,9 @@ async function loadFromCache() {
     {fn:(d,ts)=>applyCtx('rklb',d),section:'ctx',ticker:'rklb'},
     {fn:(d,ts)=>applyCtx('asts',d),section:'ctx',ticker:'asts'},
     {fn:(d,ts)=>applyGlossar(d),section:'glossar',ticker:null},
-    {fn:(d,ts)=>applyInsider('rklb',d),section:'insider',ticker:'rklb'},
+    {fn:(d,ts)=>applyRklbKpi(d),      section:'kpi',      ticker:'rklb'},
+    {fn:(d,ts)=>applyAstsMilestone(d), section:'milestone',ticker:'asts'},
+    {fn:(d,ts)=>applyInsider('rklb',d),section:'insider',  ticker:'rklb'},
     {fn:(d,ts)=>applyInsider('asts',d),section:'insider',ticker:'asts'},
     {fn:(d,ts)=>applyGovSpace('rklb',d),section:'gov_space',ticker:'rklb'},
     {fn:(d,ts)=>applyGovSpace('spcx',d),section:'gov_space',ticker:'spcx'},
@@ -2887,6 +3046,128 @@ function exportPortfolio(t) {
   const a = document.createElement('a');
   a.href = url; a.download = `portfolio_${sym}_${new Date().toISOString().split('T')[0]}.csv`;
   a.click(); URL.revokeObjectURL(url);
+}
+
+// ── Financial KPIs (SEC EDGAR) ──────────────────────────────
+async function loadFinancials(t) {
+  try {
+    const r = await fetch(`/api/financials?ticker=${t}`);
+    if (!r.ok) return;
+    const d = await r.json();
+
+    const fmt = (m) => m != null ? `$${Math.abs(m) >= 1000 ? (m/1000).toFixed(1)+'Mrd' : m+'Mio'}` : '—';
+    const fmtPct = (p) => p != null ? `${p > 0 ? '+' : ''}${p}%` : '—';
+
+    if (t === 'rklb') {
+      const rev = $(t+'-kpi-rev');
+      const revSub = $(t+'-kpi-rev-sub');
+      if (rev && d.revenue?.latest_m != null) {
+        rev.textContent = fmt(d.revenue.latest_m);
+        const yoy = d.revenue.yoy_pct;
+        if (yoy != null) {
+          const badge = `<span class="kpi-badge ${yoy >= 0 ? 'up' : 'down'}">${fmtPct(yoy)} YoY</span>`;
+          rev.innerHTML = fmt(d.revenue.latest_m) + badge;
+        }
+        if (revSub) revSub.textContent = d.revenue.date ? d.revenue.date.substring(0,7) : '';
+      }
+      if ($('rklb-kpi-margin') && d.gross_margin_pct != null) {
+        $('rklb-kpi-margin').textContent = d.gross_margin_pct + '%';
+        if ($('rklb-kpi-margin-sub')) $('rklb-kpi-margin-sub').textContent = 'Bruttomarge';
+      }
+      if ($('rklb-kpi-cash') && d.cash_m != null) {
+        $('rklb-kpi-cash').textContent = fmt(d.cash_m);
+        if ($('rklb-kpi-cash-sub')) $('rklb-kpi-cash-sub').textContent = d.cash_date?.substring(0,7) || '';
+      }
+      if ($('rklb-kpi-netloss') && d.net_income_m != null) {
+        const el = $('rklb-kpi-netloss');
+        el.textContent = fmt(d.net_income_m);
+        el.style.color = d.net_income_m < 0 ? 'var(--red)' : 'var(--green)';
+      }
+      if ($('rklb-fin-source')) $('rklb-fin-source').textContent = '· SEC EDGAR ' + (d.revenue?.date?.substring(0,7) || '');
+    }
+
+    if (t === 'asts') {
+      if ($('asts-kpi-rev') && d.revenue?.latest_m != null) {
+        const yoy = d.revenue.yoy_pct;
+        const badge = yoy != null ? `<span class="kpi-badge ${yoy >= 0 ? 'up' : 'down'}">${fmtPct(yoy)} YoY</span>` : '';
+        $('asts-kpi-rev').innerHTML = fmt(d.revenue.latest_m) + badge;
+        if ($('asts-kpi-rev-sub')) $('asts-kpi-rev-sub').textContent = d.revenue.date?.substring(0,7) || '';
+      }
+      if ($('asts-kpi-cash') && d.cash_m != null) {
+        $('asts-kpi-cash').textContent = fmt(d.cash_m);
+        if ($('asts-kpi-cash-sub')) $('asts-kpi-cash-sub').textContent = d.cash_date?.substring(0,7) || '';
+      }
+      if ($('asts-kpi-debt') && d.debt_m != null) {
+        $('asts-kpi-debt').textContent = fmt(d.debt_m);
+        if ($('asts-kpi-debt-sub')) $('asts-kpi-debt-sub').textContent = d.debt_date?.substring(0,7) || '';
+      }
+      if ($('asts-kpi-netloss') && d.net_income_m != null) {
+        const el = $('asts-kpi-netloss');
+        el.textContent = fmt(d.net_income_m);
+        el.style.color = d.net_income_m < 0 ? 'var(--red)' : 'var(--green)';
+      }
+      if ($('asts-fin-source')) $('asts-fin-source').textContent = '· SEC EDGAR ' + (d.revenue?.date?.substring(0,7) || '');
+    }
+  } catch(e) { console.warn('loadFinancials:', e.message); }
+}
+
+// ── RKLB KPI (from KI cache) ─────────────────────────────────
+function applyRklbKpi(p) {
+  if (!p) return;
+  if ($('rklb-kpi-backlog') && p.backlog_usd) {
+    $('rklb-kpi-backlog').textContent = p.backlog_usd;
+    if ($('rklb-kpi-backlog-sub')) $('rklb-kpi-backlog-sub').textContent = (p.backlog_qoq || '') + ' ' + (p.backlog_mix || '');
+  }
+  if ($('rklb-kpi-defense') && p.defense_sda) {
+    $('rklb-kpi-defense').textContent = p.defense_sda;
+    if ($('rklb-kpi-defense-sub')) $('rklb-kpi-defense-sub').textContent = p.defense_golden_dome || '';
+  }
+  if ($('rklb-kpi-neutron') && p.neutron_status) {
+    $('rklb-kpi-neutron').textContent = p.neutron_status;
+    if ($('rklb-kpi-neutron-sub')) $('rklb-kpi-neutron-sub').textContent = 'Erstflug: ' + (p.neutron_erstflug || '—');
+  }
+  if ($('rklb-kpi-vs-konsens') && p.kurs_vs_konsens) {
+    $('rklb-kpi-vs-konsens').textContent = p.kurs_vs_konsens;
+    if ($('rklb-kpi-analyst-range')) $('rklb-kpi-analyst-range').textContent = p.analyst_range || '';
+  }
+  if ($('rklb-kpi-ts')) $('rklb-kpi-ts').textContent = 'KI-Analyse · Täglich aktualisiert';
+}
+
+// ── ASTS Milestone (from KI cache) ─────────────────────────────
+function applyAstsMilestone(p) {
+  if (!p) return;
+  // BlueBird status
+  const bbEl = $('asts-bluebird-status');
+  if (bbEl && p.bluebird_status?.length) {
+    bbEl.innerHTML = p.bluebird_status.map(s => {
+      const dotCls = s.ampel === 'gruen' ? 'dot-green' : s.ampel === 'rot' ? 'dot-red' : s.ampel === 'gelb' ? 'dot-yellow' : 'dot-gray';
+      return `<div class="milestone-row">
+        <div class="milestone-dot ${dotCls}"></div>
+        <div class="milestone-name">${stripTags(s.sat)}</div>
+        <div class="milestone-status">${stripTags(s.status)}</div>
+      </div>`;
+    }).join('');
+  }
+  if ($('asts-fcc-status') && p.fcc_status) $('asts-fcc-status').textContent = stripTags(p.fcc_status);
+  if ($('asts-itu-status') && p.itu_status) $('asts-itu-status').textContent = stripTags(p.itu_status);
+  if ($('asts-runway') && p.runway_monate) $('asts-runway').textContent = p.runway_monate;
+  if ($('asts-next-milestone') && p.naechster_meilenstein) $('asts-next-milestone').textContent = stripTags(p.naechster_meilenstein);
+  // Risk
+  const riskMap = { hoch: 'risk-hoch', mittel: 'risk-mittel', niedrig: 'risk-niedrig' };
+  const setRisk = (id, val) => {
+    const el = $(id);
+    if (!el || !val) return;
+    const v = val.toLowerCase();
+    el.textContent = stripTags(val);
+    for (const [k,cls] of Object.entries(riskMap)) {
+      if (v.includes(k)) { el.className = 'risk-val ' + cls; break; }
+    }
+  };
+  setRisk('asts-risk-launch', p.risk_launch);
+  setRisk('asts-risk-dilution', p.risk_dilution);
+  setRisk('asts-risk-konkurrenz', p.risk_konkurrenz);
+  setRisk('asts-risk-zeitplan', p.risk_zeitplan);
+  if ($('asts-milestone-ts')) $('asts-milestone-ts').textContent = 'KI-Analyse · Täglich aktualisiert';
 }
 
 // ── Insider Trades ──────────────────────────────────────────
@@ -3302,6 +3583,8 @@ async function refreshAllNews() {
   }).catch(()=>{});
   loadRecHistory('rklb');
   loadRecHistory('asts');
+  loadFinancials('rklb');
+  loadFinancials('asts');
   loadRangeChart('rklb', '1mo');
   rangeChartLoaded.rklb = true;
   // Collapse glossar on mobile by default
