@@ -324,28 +324,35 @@ body{font-family:var(--font-sans);background:var(--bg);color:var(--text);min-hei
 
 /* ── Portfolio ── */
 .pf-new{background:var(--surface2);border-radius:10px;padding:14px;margin-bottom:14px;}
-.pf-form{display:grid;grid-template-columns:1fr 1fr 1fr;gap:8px;margin-top:10px;}
-.pf-input{padding:7px 10px;border:1px solid var(--border2);border-radius:7px;font-family:inherit;font-size:13px;outline:none;background:var(--surface);}
+.pf-form-title{display:flex;align-items:center;justify-content:space-between;margin-bottom:10px;}
+.pf-form-title span{font-size:12px;font-weight:600;letter-spacing:.07em;color:var(--text3);text-transform:uppercase;}
+.pf-export-btn{padding:4px 10px;border:1px solid var(--border2);border-radius:7px;background:var(--surface);color:var(--text2);font-size:12px;font-weight:500;cursor:pointer;font-family:var(--font-sans);}
+.pf-export-btn:hover{background:var(--surface3);}
+.pf-form{display:grid;grid-template-columns:1fr 1fr;gap:8px;}
+.pf-input-full,.pf-add-full{grid-column:1/-1;}
+.pf-input{padding:9px 10px;border:1px solid var(--border2);border-radius:8px;font-family:var(--font-sans);font-size:14px;outline:none;background:var(--surface);color:var(--text);width:100%;}
 .pf-input:focus{border-color:var(--blue);}
-.pf-select{padding:7px 10px;border:1px solid var(--border2);border-radius:7px;font-family:inherit;font-size:13px;outline:none;background:var(--surface);cursor:pointer;}
-.pf-add{padding:7px 14px;background:var(--blue);color:#fff;border:none;border-radius:7px;font-family:inherit;font-size:13px;font-weight:500;cursor:pointer;transition:opacity .2s;}
-.pf-add:hover{opacity:.85;}
+.pf-select{padding:9px 10px;border:1px solid var(--border2);border-radius:8px;font-family:var(--font-sans);font-size:14px;outline:none;background:var(--surface);color:var(--text);cursor:pointer;width:100%;}
+.pf-add{padding:10px 14px;background:var(--blue);color:#fff;border:none;border-radius:8px;font-family:var(--font-sans);font-size:14px;font-weight:600;cursor:pointer;transition:opacity .2s;width:100%;}
+.pf-add:hover{opacity:.88;}
 .pf-tx-list{margin-bottom:14px;}
-.pf-tx{display:flex;align-items:center;gap:10px;padding:8px 10px;background:var(--surface2);border-radius:8px;margin-bottom:6px;font-size:14px;}
-.pf-tx-type{font-weight:600;padding:2px 8px;border-radius:4px;font-size:14px;}
+.pf-tx{display:flex;align-items:center;gap:8px;padding:10px 12px;background:var(--surface);border:1px solid var(--border);border-radius:10px;margin-bottom:6px;font-size:13px;transition:border-color .15s;}
+.pf-tx:hover{border-color:var(--border2);}
+.pf-tx.editing{background:var(--surface2);border-color:var(--blue);padding:12px;flex-wrap:wrap;}
+.pf-tx-type{font-weight:700;padding:2px 7px;border-radius:5px;font-size:12px;flex-shrink:0;}
 .pf-tx-type.buy{background:var(--green-bg);color:var(--green);}
 .pf-tx-type.sell{background:var(--red-bg);color:var(--red);}
-.pf-tx-remove{background:none;border:none;color:var(--text3);cursor:pointer;font-size:14px;padding:4px 6px;border-radius:6px;transition:background .15s,color .15s;line-height:1;}
+.pf-tx-main{flex:1;min-width:0;overflow:hidden;}
+.pf-tx-line1{font-weight:600;font-family:var(--font-mono);font-size:13px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
+.pf-tx-line2{font-size:11px;color:var(--text3);margin-top:1px;}
+.pf-tx-actions{display:flex;gap:2px;flex-shrink:0;}
+.pf-tx-remove{background:none;border:none;color:var(--text3);cursor:pointer;padding:5px;border-radius:6px;transition:background .15s,color .15s;line-height:1;}
 .pf-tx-remove:hover{background:var(--red-bg);color:var(--red);}
-.pf-tx-edit{background:none;border:none;color:var(--text3);cursor:pointer;font-size:14px;padding:4px 6px;border-radius:6px;transition:background .15s,color .15s;line-height:1;}
-.pf-tx-edit:hover{background:var(--surface3,#e5e5e2);color:var(--text);}
-.pf-tx-actions{display:flex;gap:2px;margin-left:auto;flex-shrink:0;}
-.pf-tx{display:flex;align-items:center;gap:10px;padding:9px 12px;background:var(--surface);border:1px solid var(--border);border-radius:10px;margin-bottom:6px;font-size:14px;transition:border-color .15s;}
-.pf-tx:hover{border-color:var(--border2);}
-.pf-tx.editing{background:var(--surface2);border-color:var(--blue);padding:12px;}
+.pf-tx-edit{background:none;border:none;color:var(--text3);cursor:pointer;padding:5px;border-radius:6px;transition:background .15s,color .15s;line-height:1;}
+.pf-tx-edit:hover{background:var(--surface3);color:var(--text);}
 .pf-edit-row{display:flex;align-items:center;gap:6px;flex-wrap:wrap;width:100%;}
-.pf-edit-select{padding:6px 8px;border:1px solid var(--border2);border-radius:7px;font-family:inherit;font-size:12px;background:var(--surface);outline:none;cursor:pointer;}
-.pf-edit-input{padding:6px 8px;border:1px solid var(--border2);border-radius:7px;font-family:inherit;font-size:12px;background:var(--surface);outline:none;width:80px;}
+.pf-edit-select{padding:6px 8px;border:1px solid var(--border2);border-radius:7px;font-family:var(--font-sans);font-size:12px;background:var(--surface);outline:none;cursor:pointer;}
+.pf-edit-input{padding:6px 8px;border:1px solid var(--border2);border-radius:7px;font-family:var(--font-sans);font-size:12px;background:var(--surface);outline:none;width:80px;}
 .pf-edit-input:focus,.pf-edit-select:focus{border-color:var(--blue);}
 .pf-edit-save{padding:6px 12px;background:var(--green);color:#fff;border:none;border-radius:7px;font-size:12px;font-weight:600;cursor:pointer;}
 .pf-edit-cancel{padding:6px 10px;background:var(--surface2);border:1px solid var(--border2);border-radius:7px;font-size:12px;cursor:pointer;}
@@ -642,10 +649,7 @@ body{font-family:var(--font-sans);background:var(--bg);color:var(--text);min-hei
   /* ── Portfolio ── */
   .pf-table{font-size:12px;}
   .pf-form{grid-template-columns:1fr 1fr;gap:6px;}
-  .pf-input,.pf-select{font-size:14px;padding:9px 10px;}
-  .pf-tx{flex-wrap:wrap;gap:5px;padding:9px 10px;}
-  .pf-tx-type{font-size:11px;flex-shrink:0;}
-  .pf-tx-actions{margin-left:auto;flex-shrink:0;}
+  .pf-tx-line1{font-size:12px;}
   .pf-edit-row{gap:4px;}
   .pf-edit-input{width:70px;}
   .pf-edit-input[data-field="note"]{width:auto;flex:1 1 100%;}
@@ -1237,18 +1241,20 @@ body{font-family:var(--font-sans);background:var(--bg);color:var(--text);min-hei
   </div>
   <div class="card-body" id="body-rklb-pf">
     <div class="pf-new">
-      <div class="section-head">Transaktion hinzufügen</div>
+      <div class="pf-form-title">
+        <span>Transaktion</span>
+        <button class="pf-export-btn" onclick="exportPortfolio('rklb')" title="Export CSV">⬇ CSV</button>
+      </div>
       <div class="pf-form">
         <select class="pf-select" id="rklb-tx-type">
           <option value="buy">Kauf</option>
           <option value="sell">Verkauf</option>
         </select>
-        <input class="pf-input" id="rklb-tx-qty" type="number" placeholder="Anzahl Aktien" min="0.01" step="0.01">
-        <input class="pf-input" id="rklb-tx-price" type="number" placeholder="Preis pro Aktie $" min="0.01" step="0.01">
+        <input class="pf-input" id="rklb-tx-qty" type="number" placeholder="Anzahl" min="0.01" step="0.01">
+        <input class="pf-input" id="rklb-tx-price" type="number" placeholder="Preis $" min="0.01" step="0.01">
         <input class="pf-input" id="rklb-tx-date" type="date">
-        <input class="pf-input" id="rklb-tx-note" type="text" placeholder="Notiz (optional)" style="grid-column:1/-1;">
-        <button class="pf-add" onclick="addTx('rklb')" style="grid-column:1/-1;" id="rklb-add-btn">＋ Hinzufügen</button>
-        <button onclick="exportPortfolio('rklb')" style="grid-column:1/-1;padding:6px 14px;border:1px solid var(--border2);background:var(--surface2);border-radius:7px;font-family:inherit;font-size:12px;font-weight:500;cursor:pointer;color:var(--text2);">⬇ Export CSV</button>
+        <input class="pf-input pf-input-full" id="rklb-tx-note" type="text" placeholder="Notiz (optional)">
+        <button class="pf-add pf-add-full" onclick="addTx('rklb')" id="rklb-add-btn">＋ Hinzufügen</button>
       </div>
     </div>
     <div class="pf-tx-list" id="rklb-tx-list">
@@ -1785,18 +1791,20 @@ body{font-family:var(--font-sans);background:var(--bg);color:var(--text);min-hei
   </div>
   <div class="card-body" id="body-asts-pf">
     <div class="pf-new">
-      <div class="section-head">Transaktion hinzufügen</div>
+      <div class="pf-form-title">
+        <span>Transaktion</span>
+        <button class="pf-export-btn" onclick="exportPortfolio('asts')" title="Export CSV">⬇ CSV</button>
+      </div>
       <div class="pf-form">
         <select class="pf-select" id="asts-tx-type">
           <option value="buy">Kauf</option>
           <option value="sell">Verkauf</option>
         </select>
-        <input class="pf-input" id="asts-tx-qty" type="number" placeholder="Anzahl Aktien" min="0.01" step="0.01">
-        <input class="pf-input" id="asts-tx-price" type="number" placeholder="Preis pro Aktie $" min="0.01" step="0.01">
+        <input class="pf-input" id="asts-tx-qty" type="number" placeholder="Anzahl" min="0.01" step="0.01">
+        <input class="pf-input" id="asts-tx-price" type="number" placeholder="Preis $" min="0.01" step="0.01">
         <input class="pf-input" id="asts-tx-date" type="date">
-        <input class="pf-input" id="asts-tx-note" type="text" placeholder="Notiz (optional)" style="grid-column:1/-1;">
-        <button class="pf-add" onclick="addTx('asts')" style="grid-column:1/-1;" id="asts-add-btn">＋ Hinzufügen</button>
-        <button onclick="exportPortfolio('asts')" style="grid-column:1/-1;padding:6px 14px;border:1px solid var(--border2);background:var(--surface2);border-radius:7px;font-family:inherit;font-size:12px;font-weight:500;cursor:pointer;color:var(--text2);">⬇ Export CSV</button>
+        <input class="pf-input pf-input-full" id="asts-tx-note" type="text" placeholder="Notiz (optional)">
+        <button class="pf-add pf-add-full" onclick="addTx('asts')" id="asts-add-btn">＋ Hinzufügen</button>
       </div>
     </div>
     <div class="pf-tx-list" id="asts-tx-list">
@@ -2791,23 +2799,23 @@ function renderTxList(t) {
   el.innerHTML = txData[t].map(tx => {
     const total = fmt(tx.qty * tx.price);
     const sid = String(tx.id).replace(/[^a-zA-Z0-9_-]/g,'_');
-    return '<div class="pf-tx" id="pf-tx-' + sid + '">'
-      + '<span class="pf-tx-type ' + tx.type + '">' + (tx.type==='buy'?'KAUF':'VERK.') + '</span>'
-      + '<span class="mono" style="font-weight:600;">' + tx.qty + ' &times; $' + fmt(tx.price) + '</span>'
-      + '<span style="color:var(--text2);font-size:12px;">= $' + total + '</span>'
-      + '<span style="color:var(--text3);font-size:11px;">' + tx.date + '</span>'
-      + (tx.note ? '<span style="color:var(--text3);font-size:11px;font-style:italic;">' + tx.note + '</span>' : '')
-      + '<div class="pf-tx-actions">'
-      + '<button class="pf-tx-edit" data-ticker="' + t + '" data-id="' + tx.id + '" title="Bearbeiten">'
-      + '<svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"/><path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"/></svg>'
-      + '</button>'
-      + '<button class="pf-tx-remove" data-ticker="' + t + '" data-id="' + tx.id + '" title="Löschen">'
-      + '<svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><polyline points="3 6 5 6 21 6"/><path d="M19 6l-1 14a2 2 0 0 1-2 2H8a2 2 0 0 1-2-2L5 6"/><path d="M10 11v6"/><path d="M14 11v6"/><path d="M9 6V4a1 1 0 0 1 1-1h4a1 1 0 0 1 1 1v2"/></svg>'
-      + '</button>'
-      + '</div>'
-      + '</div>';
+    const note = tx.note ? ` · ${tx.note}` : '';
+    return `<div class="pf-tx" id="pf-tx-${sid}">
+      <span class="pf-tx-type ${tx.type}">${tx.type==='buy'?'KAUF':'VERK.'}</span>
+      <div class="pf-tx-main">
+        <div class="pf-tx-line1">${tx.qty} × $${fmt(tx.price)} = $${total}</div>
+        <div class="pf-tx-line2">${tx.date}${note}</div>
+      </div>
+      <div class="pf-tx-actions">
+        <button class="pf-tx-edit" data-ticker="${t}" data-id="${tx.id}" title="Bearbeiten">
+          <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"/><path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"/></svg>
+        </button>
+        <button class="pf-tx-remove" data-ticker="${t}" data-id="${tx.id}" title="Löschen">
+          <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><polyline points="3 6 5 6 21 6"/><path d="M19 6l-1 14a2 2 0 0 1-2 2H8a2 2 0 0 1-2-2L5 6"/><path d="M10 11v6"/><path d="M14 11v6"/><path d="M9 6V4a1 1 0 0 1 1-1h4a1 1 0 0 1 1 1v2"/></svg>
+        </button>
+      </div>
+    </div>`;
   }).join('');
-  // Attach event listeners (no inline onclick!)
   el.querySelectorAll('.pf-tx-edit').forEach(btn => {
     btn.addEventListener('click', () => editTx(btn.dataset.ticker, btn.dataset.id));
   });
