@@ -199,12 +199,28 @@ const delay = ms => new Promise(r => setTimeout(r, ms));
 async function saveToCache(section, ticker, data) {
   const key = ticker ? `${ticker}/${section}` : `global/${section}`;
   try {
-    await supa('/ki_cache?on_conflict=ticker,section', 'POST', [{
+    const body = [{
       ticker: ticker || 'global',
       section,
       data,
       updated_at: new Date().toISOString()
-    }]);
+    }];
+    // Use PATCH upsert with merge-duplicates to update existing rows
+    const opts = {
+      method: 'POST',
+      headers: {
+        'apikey': SUPABASE_SERVICE_KEY,
+        'Authorization': `Bearer ${SUPABASE_SERVICE_KEY}`,
+        'Content-Type': 'application/json',
+        'Prefer': 'return=minimal,resolution=merge-duplicates',
+      },
+      body: JSON.stringify(body)
+    };
+    const r = await fetch(`${SUPABASE_URL}/rest/v1/ki_cache?on_conflict=ticker,section`, opts);
+    if (!r.ok) {
+      const errText = await r.text();
+      throw new Error(`Supabase ${r.status}: ${errText}`);
+    }
     console.log(`Saved: ${ticker||'global'} ${section}`);
   } catch(e) {
     console.error(`Save failed ${key}:`, e.message);
@@ -318,17 +334,25 @@ export default async function handler(req, res) {
   const failed = [];
   let succeeded = 0;
 
-  for (let i = 0; i < calls.length; i++) {
-    const { ticker, section, prompt } = calls[i];
+  // Group by ticker and run each ticker's calls in parallel (max 3 concurrent)
+  // This fits 14 calls in ~120s instead of ~300s
+  async function runCall(c) {
     try {
-      const data = await kiCall(prompt);
-      await saveToCache(section, ticker, data);
+      const data = await kiCall(c.prompt);
+      await saveToCache(c.section, c.ticker, data);
       succeeded++;
     } catch(e) {
-      console.error(`Failed: ${ticker} ${section} — ${e.message}`);
-      failed.push(`${ticker}/${section}`);
+      console.error(`Failed: ${c.ticker} ${c.section} — ${e.message}`);
+      failed.push(`${c.ticker||'global'}/${c.section}`);
     }
-    if (i < calls.length - 1) await delay(2000);
+  }
+
+  // Run in batches of 3 to avoid rate limits
+  const batchSize = 3;
+  for (let i = 0; i < calls.length; i += batchSize) {
+    const batch = calls.slice(i, i + batchSize);
+    await Promise.all(batch.map(c => runCall(c)));
+    if (i + batchSize < calls.length) await delay(2000);
   }
 
   // Log errors to Supabase for dashboard alert
