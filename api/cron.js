@@ -231,14 +231,9 @@ SOCIAL MEDIA: Reddit r/spacex r/SpaceXLounge r/investing r/wallstreetbets, X @Sp
 BEHÖRDEN: nasa.gov, faa.gov (Launch-Lizenzen), defense.gov, spaceforce.mil, sec.gov, ftc.gov.
 KONKURRENZ: rocketlabusa.com, blueorigin.com, virgingalactic.com, unitedlaunchalliance.com, arianespace.com. Fokus auf: IPO-Status, Starlink, Starship, NASA Aufträge, FAA Lizenzen, Konkurrenz. Antworte NUR mit gültigem JSON. KRITISCH: Keine <cite> Tags, kein HTML, keine Anführungszeichen in Strings, keine Zeilenumbrüche: {"articles":[{"title":"Titel max 80 Zeichen","sentiment":"pos|neg|neu","body":"2-3 Sätze auf Deutsch ohne jegliche Tags","source":"Exakte Quelle"}]}`;
 
-    const SPCX_SECTOR_PROMPT = `Analysiere SpaceX Marktposition und IPO-Status. OFFIZIELLE QUELLEN: spacex.com/updates, spacex.com/careers, SEC EDGAR S-1/8-K (wenn IPO erfolgt), Elon Musk X Posts, SpaceX Pressemitteilungen.
-FINANZMEDIEN: Reuters, Bloomberg, CNBC, Wall Street Journal, Financial Times, Forbes, Business Insider, The Economist.
-BÖRSENPORTALE: Yahoo Finance, MarketWatch, Barron's, Seeking Alpha, TheStreet, Benzinga, TipRanks, Zacks, TradingView, Finviz, Stockanalysis.com.
-ANALYSTEN: Goldman Sachs, Morgan Stanley, JPMorgan, Bank of America, ARK Invest (Cathie Wood), Wedbush (Dan Ives), Piper Sandler.
-SPACE-MEDIEN: SpaceNews, NASASpaceFlight, SpaceflightNow, Via Satellite, Aviation Week, Ars Technica Space, Payload Space (payload.space), Space Policy Online (spacepolicyonline.com), Space Capital (spacecapital.com), Bryce Tech (brycetech.com), The Orbit Report, Commercial Space News. POLICY: CSIS (csis.org), Secure World Foundation (swfound.org), Space Foundation (spacefoundation.org), Bryce Tech Space Reports.
-SOCIAL MEDIA: Reddit r/spacex r/SpaceXLounge r/investing r/wallstreetbets, X @SpaceX @elonmusk #SPCX #SpaceX, StockTwits SPCX, Telegram SpaceX Channels, Facebook SpaceX Groups, Instagram @spacex, YouTube SpaceX Channel, Discord SpaceX Communities.
-BEHÖRDEN: nasa.gov, faa.gov (Launch-Lizenzen), defense.gov, spaceforce.mil, sec.gov, ftc.gov.
-KONKURRENZ: rocketlabusa.com, blueorigin.com, virgingalactic.com, unitedlaunchalliance.com, arianespace.com. Analysiere: IPO-Vorbereitungen (S-1, Roadshow, Bewertung), Starlink Nutzerzahlen/Revenue, Starship Entwicklungsstand, FAA Lizenzen, NASA Artemis Aufträge, Konkurrenz (RKLB, Blue Origin, ULA, Arianespace). WICHTIG: Antworte NUR mit gültigem JSON, KEIN HTML, keine <cite> Tags, keine Zeilenumbrüche in Strings: {"intro":"1 Satz","ipo_status":"aktueller IPO Status","ipo_date":"Datum","bewertung":"$XXX Mrd","cards":[{"emoji":"🛸","name":"Starlink","val":"X Mio Nutzer","val_color":"green","desc":"Revenue und Wachstum"},{"emoji":"🚀","name":"Falcon 9","val":"X Starts","val_color":"blue","desc":"Marktanteil"},{"emoji":"⭐","name":"Starship","val":"Status","val_color":"amber","desc":"Entwicklungsstand"},{"emoji":"🏆","name":"Marktanteil","val":"X%","val_color":"green","desc":"global kommerziell"}]}`;
+    const SPCX_SECTOR_PROMPT = `Analysiere SpaceX Marktposition, IPO-Status und US Behörden-Aufträge. Quellen: spacex.com, faa.gov, nasa.gov, spaceforce.mil, sec.gov, spacenews.com, nasaspaceflight.com, reuters.com, bloomberg.com, breakingdefense.com, Payload Space, CSIS. WICHTIG: Antworte NUR mit gültigem JSON, KEIN HTML, keine <cite> Tags, keine Zeilenumbrüche in Strings: {"intro":"1 Satz","ipo_status":"IPO Status","ipo_date":"Datum","bewertung":"$XXX Mrd","cards":[{"emoji":"🛸","name":"Starlink","val":"X Mio Nutzer","val_color":"green","desc":"Revenue und Wachstum"},{"emoji":"🚀","name":"Falcon 9","val":"X Starts 2026","val_color":"blue","desc":"Marktanteil kommerziell"},{"emoji":"⭐","name":"Starship","val":"Status","val_color":"amber","desc":"FAA Status und nächster Testflug"},{"emoji":"🏆","name":"Marktanteil","val":"X%","val_color":"green","desc":"global kommerziell"}],"faa":{"status":"Lizenz aktiv/ausstehend","desc":"Starship und Falcon FAA Genehmigungen aktuell"},"nasa":{"wert":"$X Mrd","desc":"Artemis HLS und CRS Aufträge"},"space_force":{"wert":"$X Mrd","desc":"NSSL Launch-Aufträge aktuell"},"sec":{"status":"S-1 eingereicht/ausstehend","desc":"IPO SEC Filing Fortschritt"}}`;
+
+    const SPCX_CTX_PROMPT
 
     const SPCX_CTX_PROMPT = `Aktuelle SpaceX Firmendaten. OFFIZIELLE QUELLEN: spacex.com/updates, spacex.com/careers, SEC EDGAR S-1/8-K (wenn IPO erfolgt), Elon Musk X Posts, SpaceX Pressemitteilungen.
 FINANZMEDIEN: Reuters, Bloomberg, CNBC, Wall Street Journal, Financial Times, Forbes, Business Insider, The Economist.
@@ -271,6 +266,7 @@ KONKURRENZ: rocketlabusa.com, blueorigin.com, virgingalactic.com, unitedlaunchal
       { ticker:null,   section:'glossar',  prompt: GLOSSAR_PROMPT },
       { ticker:'spcx', section:'news',     prompt: SPCX_NEWS_PROMPT },
       { ticker:'spcx', section:'sector',   prompt: SPCX_SECTOR_PROMPT },
+      { ticker:'spcx', section:'gov_space', prompt: SPCX_SECTOR_PROMPT },
       { ticker:'spcx', section:'ctx',      prompt: SPCX_CTX_PROMPT },
       { ticker:'rklb', section:'gov_space', prompt: GOV_RKLB_PROMPT },
       { ticker:'asts', section:'gov_space', prompt: GOV_ASTS_PROMPT },
