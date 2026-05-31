@@ -28,7 +28,7 @@ async function supa(path, method='GET', body=null) {
   return text ? JSON.parse(text) : {};
 }
 
-async function kiCall(prompt, retries=3) {
+async function kiCall(prompt, retries=3, maxSearches=8) {
   for (let attempt = 0; attempt < retries; attempt++) {
     if (attempt > 0) {
       const wait = attempt * 15000;
@@ -51,7 +51,7 @@ async function kiCall(prompt, retries=3) {
         body: JSON.stringify({
           model: 'claude-sonnet-4-5',
           max_tokens: 1024,
-          tools: [{type: 'web_search_20250305', name: 'web_search', max_uses: 8}],
+          tools: [{type: 'web_search_20250305', name: 'web_search', max_uses: maxSearches}],
           messages: [{role: 'user', content: prompt}]
         })
       });
@@ -184,7 +184,7 @@ export default async function handler(req, res) {
       return res.status(200).json({ message: 'Sync disabled, skipping' });
     }
 
-    const results = { success: [], failed: [] };
+    const results = { success: [], failed: [], startTime: Date.now() };
 
     const REC_PROMPTS = {
       rklb: `Analysiere Rocket Lab (RKLB). Suche auf: rocketlabusa.com/investors, SEC Filings, Reuters, Bloomberg, CNBC, Seeking Alpha, SpaceNews, NASASpaceFlight, Breaking Defense, SpaceForce.mil, Reddit r/RocketLab r/space, X/@RocketLab, StockTwits RKLB, TipRanks, Zacks. Berücksichtige Abhängigkeiten: SpaceX (Konkurrenz Electron vs Falcon9, Neutron vs Falcon9), Blue Origin New Glenn, Amazon Kuiper Aufträge, NASA/SpaceForce Aufträge, SDA Tracking Layer. Antworte NUR mit JSON, KEIN HTML in Texten ausser bei explain_* Feldern, keine <cite> Tags: {"empfehlung":"KAUFEN","titel":"Max 80 Zeichen","begruendung":"2-4 Sätze","fundamentals":8,"momentum":7,"risiko":6,"bewertung":5,"explain_fundamentals":"<b>Fundamentals</b> — 1 Satz","explain_momentum":"<b>Momentum</b> — 1 Satz","explain_risiko":"<b>Risiko</b> — <b>Höherer Score = niedrigeres Risiko.</b> 1 Satz","explain_bewertung":"<b>Bewertung</b> — 1 Satz","einstieg":"$120-130","kursziel":"$180","stopp":"$105","lage":"<b>Aktuelle Lage:</b> 1-2 Sätze","lage_typ":"positive","analysten":"12x Kaufen"}`,
@@ -265,10 +265,15 @@ KONKURRENZ: rocketlabusa.com, blueorigin.com, virgingalactic.com, unitedlaunchal
       { ticker:'asts', section:'gov_space', prompt: GOV_ASTS_PROMPT },
     ];
     // Filter by scope for faster execution
-    const calls = scope === 'rklb' ? allCalls.filter(c => c.ticker === 'rklb') :
-                  scope === 'asts' ? allCalls.filter(c => c.ticker === 'asts') :
-                  scope === 'spcx' ? allCalls.filter(c => c.ticker === 'spcx') :
-                  scope === 'global' ? allCalls.filter(c => !c.ticker) :
+    const FAST_SECTIONS = ['rec','news','scenarios'];
+    const SLOW_SECTIONS = ['sector','gov_space','ctx'];
+    const calls = scope === 'rklb'      ? allCalls.filter(c => c.ticker === 'rklb' && FAST_SECTIONS.includes(c.section)) :
+                  scope === 'asts'      ? allCalls.filter(c => c.ticker === 'asts' && FAST_SECTIONS.includes(c.section)) :
+                  scope === 'spcx'      ? allCalls.filter(c => c.ticker === 'spcx' && FAST_SECTIONS.includes(c.section)) :
+                  scope === 'rklb_slow' ? allCalls.filter(c => c.ticker === 'rklb' && SLOW_SECTIONS.includes(c.section)) :
+                  scope === 'asts_slow' ? allCalls.filter(c => c.ticker === 'asts' && SLOW_SECTIONS.includes(c.section)) :
+                  scope === 'spcx_slow' ? allCalls.filter(c => c.ticker === 'spcx' && SLOW_SECTIONS.includes(c.section)) :
+                  scope === 'global'    ? allCalls.filter(c => !c.ticker) :
                   allCalls;
     console.log(`Running ${calls.length} calls for scope: ${scope}`);
 
@@ -278,7 +283,8 @@ KONKURRENZ: rocketlabusa.com, blueorigin.com, virgingalactic.com, unitedlaunchal
 
     async function runCall(call) {
       try {
-        const data = await kiCall(call.prompt);
+        const isLight = ['ctx','gov_space'].includes(call.section);
+        const data = await kiCall(call.prompt, 3, isLight ? 5 : 8);
         await saveToCache(call.ticker, call.section, data);
         results.success.push(`${call.ticker}/${call.section}`);
       } catch(e) {
@@ -306,10 +312,36 @@ KONKURRENZ: rocketlabusa.com, blueorigin.com, virgingalactic.com, unitedlaunchal
       sync_enabled: true
     });
 
-    return res.status(200).json({ 
+    const duration = ((Date.now() - results.startTime) / 1000).toFixed(1);
+    console.log(`Cron done in ${duration}s | OK: ${results.success.join(', ')} | FAIL: ${results.failed.join(', ')}`);
+
+    if (results.failed.length > 0) {
+      console.error('CRON FAILURES:', results.failed.join(', '));
+      try {
+        await fetch(`${SUPABASE_URL}/rest/v1/ki_cache`, {
+          method: 'POST',
+          headers: {
+            'apikey': SUPABASE_SERVICE_KEY,
+            'Authorization': `Bearer ${SUPABASE_SERVICE_KEY}`,
+            'Content-Type': 'application/json',
+            'Prefer': 'resolution=merge-duplicates',
+          },
+          body: JSON.stringify({
+            ticker: 'system',
+            section: 'cron_errors',
+            data: { failed: results.failed, scope, duration },
+            updated_at: new Date().toISOString()
+          })
+        });
+      } catch(e) { console.error('Error logging failed:', e.message); }
+    }
+
+    return res.status(200).json({
       message: 'Sync complete',
       success: results.success.length,
-      failed: results.failed
+      failed: results.failed,
+      duration: duration + 's',
+      scope
     });
 
   } catch(e) {
