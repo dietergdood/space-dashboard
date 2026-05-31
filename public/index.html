@@ -933,6 +933,65 @@ body{font-family:'DM Sans',sans-serif;background:var(--bg);color:var(--text);min
     </div>
   </div>
 </div>
+<div class="card open" id="card-rklb-rec">
+  <div class="card-header" onclick="toggleCard('rklb-rec')">
+    <div class="card-icon">🎯</div>
+    <div>
+      <div class="card-title">Kauf/Halt/Verkauf-Empfehlung</div>
+      <div class="card-sub">KI-basiert, aktualisierbar</div>
+    </div>
+    <div class="card-arrow">▼</div>
+  </div>
+  <div class="card-body" id="body-rklb-rec">
+    <div class="rec-banner empty" id="rklb-rec-banner">
+      <div class="rec-head">
+        <span class="rec-pill empty" id="rklb-rec-pill">—</span>
+        <div>
+          <div class="rec-title" id="rklb-rec-title" style="color:var(--text2);font-weight:400;">KI-Analyse ausstehend</div>
+          <div class="rec-ts" id="rklb-rec-ts"></div>
+          <div style="font-size:10px;color:var(--text3);margin-top:4px;">🤖 KI-Analyse auf Basis von 100+ Quellen · Keine Anlageberatung</div>
+        </div>
+      </div>
+      <div class="rec-explain" id="rklb-rec-sub" style="color:var(--text3);font-style:italic;">Noch keine Analyse geladen. Mit KI-Schlüssel im ⚙️-Menü wird die Empfehlung automatisch generiert.</div>
+    </div>
+    <div class="rec-scores" id="rklb-rec-scores">
+      <div class="score-card">
+        <div class="score-top"><div class="score-emoji">📈</div><div class="score-label">Wie gut läuft<br>das Geschäft?</div></div>
+        <div class="score-val wn" id="rklb-s1">—</div>
+        <div class="score-meter"><div class="score-fill" id="rklb-m1"></div></div>
+        <div class="score-explain" id="rklb-explain-fundamentals" style="color:var(--text3);font-style:italic;"><b>Fundamentals</b> — wird mit KI aktualisiert</div>
+      </div>
+      <div class="score-card">
+        <div class="score-top"><div class="score-emoji">🚀</div><div class="score-label">Wie stark steigt<br>der Kurs gerade?</div></div>
+        <div class="score-val wn" id="rklb-s2">—</div>
+        <div class="score-meter"><div class="score-fill" id="rklb-m2"></div></div>
+        <div class="score-explain" id="rklb-explain-momentum" style="color:var(--text3);font-style:italic;"><b>Momentum</b> — wird mit KI aktualisiert</div>
+      </div>
+      <div class="score-card">
+        <div class="score-top"><div class="score-emoji">⚠️</div><div class="score-label">Wie hoch ist<br>das Risiko?</div></div>
+        <div class="score-val wn" id="rklb-s3">—</div>
+        <div class="score-meter"><div class="score-fill" id="rklb-m3"></div></div>
+        <div class="score-explain" id="rklb-explain-risiko" style="color:var(--text3);font-style:italic;"><b>Risiko</b> — <b>Höherer Score = niedrigeres Risiko.</b> Wird mit KI aktualisiert</div>
+      </div>
+      <div class="score-card">
+        <div class="score-top"><div class="score-emoji">💎</div><div class="score-label">Ist der Preis<br>fair?</div></div>
+        <div class="score-val wn" id="rklb-s4">—</div>
+        <div class="score-meter"><div class="score-fill" id="rklb-m4"></div></div>
+        <div class="score-explain" id="rklb-explain-bewertung" style="color:var(--text3);font-style:italic;"><b>Bewertung</b> — wird mit KI aktualisiert</div>
+      </div>
+    </div>
+    <div class="rec-history" id="rklb-rec-history" style="display:none;">
+          <div class="rec-history-title">📊 Verlauf Empfehlungen</div>
+          <div class="rec-history-items" id="rklb-rec-history-items"></div>
+        </div>
+    <div class="rec-levels" id="rklb-rec-levels">
+      <div class="rec-level"><span class="tip"><b>Guter Einstieg:</b> <span id="rklb-pill-einstieg-val">—</span><span class="tip-icon">?</span><span class="tip-box">Unter welchem Kurs ein Einstieg sinnvoller wäre als zum aktuellen Preis.</span></span></div>
+      <div class="rec-level"><span class="tip"><b>Kursziel:</b> <span id="rklb-pill-ziel-val">—</span><span class="tip-icon">?</span><span class="tip-box">Wo der Kurs hinlaufen könnte wenn die Entwicklung wie erwartet verläuft.</span></span></div>
+      <div class="rec-level"><span class="tip"><b>Stopp-Loss:</b> <span id="rklb-pill-stopp-val">—</span><span class="tip-icon">?</span><span class="tip-box">Unter diesem Kurs sollte man die Position überdenken — Sicherheitsnetz.</span></span></div>
+    </div>
+
+  </div>
+</div>
 <div class="card open" id="card-rklb-kpi">
   <div class="card-header" onclick="toggleCard('rklb-kpi')">
     <div class="card-icon">📊</div>
@@ -1006,7 +1065,6 @@ body{font-family:'DM Sans',sans-serif;background:var(--bg);color:var(--text);min
     </div>
   </div>
 </div>
-
 <div class="card open" id="card-rklb-milestone">
   <div class="card-header" onclick="toggleCard('rklb-milestone')">
     <div class="card-icon">🚀</div>
@@ -1052,66 +1110,6 @@ body{font-family:'DM Sans',sans-serif;background:var(--bg);color:var(--text);min
       </div>
       <div class="kpi-source" id="rklb-milestone-ts">Wird täglich mit KI aktualisiert</div>
     </div>
-  </div>
-</div>
-
-<div class="card open" id="card-rklb-rec">
-  <div class="card-header" onclick="toggleCard('rklb-rec')">
-    <div class="card-icon">🎯</div>
-    <div>
-      <div class="card-title">Kauf/Halt/Verkauf-Empfehlung</div>
-      <div class="card-sub">KI-basiert, aktualisierbar</div>
-    </div>
-    <div class="card-arrow">▼</div>
-  </div>
-  <div class="card-body" id="body-rklb-rec">
-    <div class="rec-banner empty" id="rklb-rec-banner">
-      <div class="rec-head">
-        <span class="rec-pill empty" id="rklb-rec-pill">—</span>
-        <div>
-          <div class="rec-title" id="rklb-rec-title" style="color:var(--text2);font-weight:400;">KI-Analyse ausstehend</div>
-          <div class="rec-ts" id="rklb-rec-ts"></div>
-          <div style="font-size:10px;color:var(--text3);margin-top:4px;">🤖 KI-Analyse auf Basis von 100+ Quellen · Keine Anlageberatung</div>
-        </div>
-      </div>
-      <div class="rec-explain" id="rklb-rec-sub" style="color:var(--text3);font-style:italic;">Noch keine Analyse geladen. Mit KI-Schlüssel im ⚙️-Menü wird die Empfehlung automatisch generiert.</div>
-    </div>
-    <div class="rec-scores" id="rklb-rec-scores">
-      <div class="score-card">
-        <div class="score-top"><div class="score-emoji">📈</div><div class="score-label">Wie gut läuft<br>das Geschäft?</div></div>
-        <div class="score-val wn" id="rklb-s1">—</div>
-        <div class="score-meter"><div class="score-fill" id="rklb-m1"></div></div>
-        <div class="score-explain" id="rklb-explain-fundamentals" style="color:var(--text3);font-style:italic;"><b>Fundamentals</b> — wird mit KI aktualisiert</div>
-      </div>
-      <div class="score-card">
-        <div class="score-top"><div class="score-emoji">🚀</div><div class="score-label">Wie stark steigt<br>der Kurs gerade?</div></div>
-        <div class="score-val wn" id="rklb-s2">—</div>
-        <div class="score-meter"><div class="score-fill" id="rklb-m2"></div></div>
-        <div class="score-explain" id="rklb-explain-momentum" style="color:var(--text3);font-style:italic;"><b>Momentum</b> — wird mit KI aktualisiert</div>
-      </div>
-      <div class="score-card">
-        <div class="score-top"><div class="score-emoji">⚠️</div><div class="score-label">Wie hoch ist<br>das Risiko?</div></div>
-        <div class="score-val wn" id="rklb-s3">—</div>
-        <div class="score-meter"><div class="score-fill" id="rklb-m3"></div></div>
-        <div class="score-explain" id="rklb-explain-risiko" style="color:var(--text3);font-style:italic;"><b>Risiko</b> — <b>Höherer Score = niedrigeres Risiko.</b> Wird mit KI aktualisiert</div>
-      </div>
-      <div class="score-card">
-        <div class="score-top"><div class="score-emoji">💎</div><div class="score-label">Ist der Preis<br>fair?</div></div>
-        <div class="score-val wn" id="rklb-s4">—</div>
-        <div class="score-meter"><div class="score-fill" id="rklb-m4"></div></div>
-        <div class="score-explain" id="rklb-explain-bewertung" style="color:var(--text3);font-style:italic;"><b>Bewertung</b> — wird mit KI aktualisiert</div>
-      </div>
-    </div>
-    <div class="rec-history" id="rklb-rec-history" style="display:none;">
-          <div class="rec-history-title">📊 Verlauf Empfehlungen</div>
-          <div class="rec-history-items" id="rklb-rec-history-items"></div>
-        </div>
-    <div class="rec-levels" id="rklb-rec-levels">
-      <div class="rec-level"><span class="tip"><b>Guter Einstieg:</b> <span id="rklb-pill-einstieg-val">—</span><span class="tip-icon">?</span><span class="tip-box">Unter welchem Kurs ein Einstieg sinnvoller wäre als zum aktuellen Preis.</span></span></div>
-      <div class="rec-level"><span class="tip"><b>Kursziel:</b> <span id="rklb-pill-ziel-val">—</span><span class="tip-icon">?</span><span class="tip-box">Wo der Kurs hinlaufen könnte wenn die Entwicklung wie erwartet verläuft.</span></span></div>
-      <div class="rec-level"><span class="tip"><b>Stopp-Loss:</b> <span id="rklb-pill-stopp-val">—</span><span class="tip-icon">?</span><span class="tip-box">Unter diesem Kurs sollte man die Position überdenken — Sicherheitsnetz.</span></span></div>
-    </div>
-
   </div>
 </div>
 <div class="card open" id="card-rklb-charts">
@@ -1278,7 +1276,6 @@ body{font-family:'DM Sans',sans-serif;background:var(--bg);color:var(--text);min
     <div id="rklb-insider-content" style="color:var(--text3);font-style:italic;font-size:13px;">Wird täglich mit KI aktualisiert...</div>
   </div>
 </div>
-
 <div class="card open" id="card-rklb-pf">
   <div class="card-header" onclick="toggleCard('rklb-pf')">
     <div class="card-icon">🧮</div>
@@ -1369,8 +1366,6 @@ body{font-family:'DM Sans',sans-serif;background:var(--bg);color:var(--text);min
     </div>
   </div>
 </div>
-</div>
-
 <div class="card open" id="card-rklb-gov">
   <div class="card-header" onclick="toggleCard('rklb-gov')">
     <div class="card-icon">🏛</div>
@@ -1405,29 +1400,6 @@ body{font-family:'DM Sans',sans-serif;background:var(--bg);color:var(--text);min
     </div>
   </div>
 </div>
-
-<!-- ═══ SPCX CONTEXT ═══ -->
-<div class="ctx-bar" id="ctx-spcx" style="display:none;">
-  <div class="ctx-top-row">
-    <img src="/spacex-logo.svg" style="width:44px;height:44px;border-radius:10px;background:#000;object-fit:contain;padding:6px;flex-shrink:0;">
-    <div class="ctx-name">SpaceX · SPCX</div>
-  </div>
-  <div class="ctx-info">
-    <div class="ctx-desc" id="spcx-ctx-desc">SpaceX (Space Exploration Technologies Corp.) ist das wertvollste private Unternehmen der Welt. Gegründet 2002 von Elon Musk — entwickelt Raketen (Falcon 9, Starship), Starlink Satelliten-Internet und bereitet Mondmissionen vor.</div>
-    <div class="ctx-tags" id="spcx-ctx-tags">
-      <span class="ctx-tag" style="color:var(--text3);font-style:italic;">IPO ausstehend</span>
-    </div>
-    <div class="ctx-stats" id="spcx-ctx-stats">
-      <div class="ctx-stat">Gegründet <b>2002</b></div>
-      <div class="ctx-stat">HQ <b>Hawthorne, CA</b></div>
-      <div class="ctx-stat">CEO <b>Elon Musk</b></div>
-      <div class="ctx-stat" id="spcx-stat-val">Bewertung <b>~$350 Mrd</b></div>
-    </div>
-  </div>
-</div>
-
-<!-- ═══ ASTS PANEL ═══ -->
-<div class="panel" id="p-asts">
 <div class="card open" id="card-asts-alert">
   <div class="card-header" onclick="toggleCard('asts-alert')">
     <div class="card-icon">⚠️</div>
@@ -1485,55 +1457,63 @@ body{font-family:'DM Sans',sans-serif;background:var(--bg);color:var(--text);min
     </div>
   </div>
 </div>
-<div class="card open" id="card-asts-milestone">
-  <div class="card-header" onclick="toggleCard('asts-milestone')">
-    <div class="card-icon">🛰</div>
+<div class="card open" id="card-asts-rec">
+  <div class="card-header" onclick="toggleCard('asts-rec')">
+    <div class="card-icon">🎯</div>
     <div>
-      <div class="card-title">Meilenstein-Tracker</div>
-      <div class="card-sub">BlueBird · FCC · MNOs · Risiken</div>
+      <div class="card-title">Kauf/Halt/Verkauf-Empfehlung</div>
+      <div class="card-sub">KI-basiert, aktualisierbar</div>
     </div>
     <div class="card-arrow">▼</div>
   </div>
-  <div class="card-body" id="body-asts-milestone">
-    <div id="asts-milestone-content">
-      <div class="kpi-section-title">BlueBird Satelliten-Status <span class="kpi-info">?</span><div class="kpi-tooltip" style="display:none;">Ohne Satelliten im Orbit kein Service — der wichtigste operative KPI für ASTS</div> <span style="font-weight:400;text-transform:none;font-size:10px;color:var(--text3);">KI-Analyse</span></div>
-      <div id="asts-bluebird-status"><div style="color:var(--text3);font-size:13px;font-style:italic;">Wird aktualisiert...</div></div>
-      <div class="kpi-section-title" style="margin-top:12px;">Regulierung & Partner</div>
-      <div class="kpi-grid">
-        <div class="kpi-box">
-          <div class="kpi-label">FCC Status <span class="kpi-info">?</span><div class="kpi-tooltip" style="display:none;">Die FCC (US-Telekombehörde) hat ASTS im April 2026 die Lizenz für 248 Satelliten erteilt — kritische Voraussetzung für US-Betrieb</div></div>
-          <div class="kpi-val" id="asts-fcc-status" style="font-size:12px;">—</div>
-        </div>
-        <div class="kpi-box">
-          <div class="kpi-label">ITU Status <span class="kpi-info">?</span><div class="kpi-tooltip" style="display:none;">ITU koordiniert Frequenzen international — für globalen Betrieb in jedem Land nötig</div></div>
-          <div class="kpi-val" id="asts-itu-status" style="font-size:12px;">—</div>
-        </div>
-        <div class="kpi-box">
-          <div class="kpi-label">MNO Partner <span class="kpi-info">?</span><div class="kpi-tooltip" style="display:none;">Mobilfunkanbieter die ASTS vermarkten. Mehr Partner = mehr potenzielle Nutzer und Einnahmen</div></div>
-          <div class="kpi-val" id="asts-mno-count">—</div>
-          <div class="kpi-sub" id="asts-mno-list" style="font-size:10px;">—</div>
-        </div>
-        <div class="kpi-box">
-          <div class="kpi-label">Nächster Meilenstein <span class="kpi-info">?</span><div class="kpi-tooltip" style="display:none;">Der wichtigste bevorstehende operative Schritt</div></div>
-          <div class="kpi-val" id="asts-next-milestone" style="font-size:11px;">—</div>
+  <div class="card-body" id="body-asts-rec">
+    <div class="rec-banner empty" id="asts-rec-banner">
+      <div class="rec-head">
+        <span class="rec-pill empty" id="asts-rec-pill">—</span>
+        <div>
+          <div class="rec-title" id="asts-rec-title" style="color:var(--text2);font-weight:400;">KI-Analyse ausstehend</div>
+          <div class="rec-ts" id="asts-rec-ts"></div>
+          <div style="font-size:10px;color:var(--text3);margin-top:4px;">🤖 KI-Analyse auf Basis von 100+ Quellen · Keine Anlageberatung</div>
         </div>
       </div>
-      <div class="kpi-section-title" style="margin-top:12px;">Risikoampel</div>
-      <div class="risk-grid">
-        <div class="risk-item"><div class="risk-label">Launch-Risiko <span class="kpi-info">?</span><div class="kpi-tooltip" style="display:none;">Risiko weiterer Satelliten-Anomalien wie BB-7. Kritisch für das 45-Satelliten-Ziel 2026</div></div><div class="risk-val" id="asts-risk-launch">—</div></div>
-        <div class="risk-item"><div class="risk-label">Dilution <span class="kpi-info">?</span><div class="kpi-tooltip" style="display:none;">Risiko neuer Aktienausgaben zur Finanzierung — verwässert bestehende Aktionäre</div></div><div class="risk-val" id="asts-risk-dilution">—</div></div>
-        <div class="risk-item"><div class="risk-label">Konkurrenz <span class="kpi-info">?</span><div class="kpi-tooltip" style="display:none;">Hauptkonkurrenten: Starlink Direct-to-Cell, Lynk Global, Amazon Kuiper D2D</div></div><div class="risk-val" id="asts-risk-konkurrenz">—</div></div>
-        <div class="risk-item"><div class="risk-label">Zeitplan <span class="kpi-info">?</span><div class="kpi-tooltip" style="display:none;">Risiko von Verzögerungen beim Satelliten-Deployment und kommerziellen Launch</div></div><div class="risk-val" id="asts-risk-zeitplan">—</div></div>
-      </div>
-      <div class="kpi-interp" id="asts-kpi-interp" style="display:none;"></div>
-      <div id="asts-kpi-drivers" style="display:none;">
-        <div style="font-size:11px;color:var(--text3);margin-top:8px;margin-bottom:4px;">Haupttreiber</div>
-        <div class="kpi-drivers" id="asts-drivers-list"></div>
-        <div style="font-size:11px;color:var(--text3);margin-top:6px;margin-bottom:4px;">Hauptrisiken</div>
-        <div class="kpi-drivers" id="asts-risks-list"></div>
-      </div>
-      <div class="kpi-source" id="asts-milestone-ts">Wird täglich mit KI aktualisiert</div>
+      <div class="rec-explain" id="asts-rec-sub" style="color:var(--text3);font-style:italic;">Noch keine Analyse geladen. Mit KI-Schlüssel im ⚙️-Menü wird die Empfehlung automatisch generiert.</div>
     </div>
+    <div class="rec-scores" id="asts-rec-scores">
+      <div class="score-card">
+        <div class="score-top"><div class="score-emoji">📈</div><div class="score-label">Wie gut läuft<br>das Geschäft?</div></div>
+        <div class="score-val wn" id="asts-s1">—</div>
+        <div class="score-meter"><div class="score-fill" id="asts-m1"></div></div>
+        <div class="score-explain" id="asts-explain-fundamentals" style="color:var(--text3);font-style:italic;"><b>Fundamentals</b> — wird mit KI aktualisiert</div>
+      </div>
+      <div class="score-card">
+        <div class="score-top"><div class="score-emoji">🚀</div><div class="score-label">Wie stark steigt<br>der Kurs gerade?</div></div>
+        <div class="score-val wn" id="asts-s2">—</div>
+        <div class="score-meter"><div class="score-fill" id="asts-m2"></div></div>
+        <div class="score-explain" id="asts-explain-momentum" style="color:var(--text3);font-style:italic;"><b>Momentum</b> — wird mit KI aktualisiert</div>
+      </div>
+      <div class="score-card">
+        <div class="score-top"><div class="score-emoji">⚠️</div><div class="score-label">Wie hoch ist<br>das Risiko?</div></div>
+        <div class="score-val wn" id="asts-s3">—</div>
+        <div class="score-meter"><div class="score-fill" id="asts-m3"></div></div>
+        <div class="score-explain" id="asts-explain-risiko" style="color:var(--text3);font-style:italic;"><b>Risiko</b> — <b>Höherer Score = niedrigeres Risiko.</b> Wird mit KI aktualisiert</div>
+      </div>
+      <div class="score-card">
+        <div class="score-top"><div class="score-emoji">💎</div><div class="score-label">Ist der Preis<br>fair?</div></div>
+        <div class="score-val wn" id="asts-s4">—</div>
+        <div class="score-meter"><div class="score-fill" id="asts-m4"></div></div>
+        <div class="score-explain" id="asts-explain-bewertung" style="color:var(--text3);font-style:italic;"><b>Bewertung</b> — wird mit KI aktualisiert</div>
+      </div>
+    </div>
+    <div class="rec-history" id="asts-rec-history" style="display:none;">
+          <div class="rec-history-title">📊 Verlauf Empfehlungen</div>
+          <div class="rec-history-items" id="asts-rec-history-items"></div>
+        </div>
+    <div class="rec-levels" id="asts-rec-levels">
+      <div class="rec-level"><span class="tip"><b>Guter Einstieg:</b> <span id="asts-pill-einstieg-val">—</span><span class="tip-icon">?</span><span class="tip-box">Unter welchem Kurs ein Einstieg sinnvoller wäre als zum aktuellen Preis.</span></span></div>
+      <div class="rec-level"><span class="tip"><b>Kursziel:</b> <span id="asts-pill-ziel-val">—</span><span class="tip-icon">?</span><span class="tip-box">Wo der Kurs hinlaufen könnte wenn die Entwicklung wie erwartet verläuft.</span></span></div>
+      <div class="rec-level"><span class="tip"><b>Stopp-Loss:</b> <span id="asts-pill-stopp-val">—</span><span class="tip-icon">?</span><span class="tip-box">Unter diesem Kurs sollte man die Position überdenken — Sicherheitsnetz.</span></span></div>
+    </div>
+
   </div>
 </div>
 <div class="card open" id="card-asts-kpi">
@@ -1608,64 +1588,55 @@ body{font-family:'DM Sans',sans-serif;background:var(--bg);color:var(--text);min
     </div>
   </div>
 </div>
-
-<div class="card open" id="card-asts-rec">
-  <div class="card-header" onclick="toggleCard('asts-rec')">
-    <div class="card-icon">🎯</div>
+<div class="card open" id="card-asts-milestone">
+  <div class="card-header" onclick="toggleCard('asts-milestone')">
+    <div class="card-icon">🛰</div>
     <div>
-      <div class="card-title">Kauf/Halt/Verkauf-Empfehlung</div>
-      <div class="card-sub">KI-basiert, aktualisierbar</div>
+      <div class="card-title">Meilenstein-Tracker</div>
+      <div class="card-sub">BlueBird · FCC · MNOs · Risiken</div>
     </div>
     <div class="card-arrow">▼</div>
   </div>
-  <div class="card-body" id="body-asts-rec">
-    <div class="rec-banner empty" id="asts-rec-banner">
-      <div class="rec-head">
-        <span class="rec-pill empty" id="asts-rec-pill">—</span>
-        <div>
-          <div class="rec-title" id="asts-rec-title" style="color:var(--text2);font-weight:400;">KI-Analyse ausstehend</div>
-          <div class="rec-ts" id="asts-rec-ts"></div>
-          <div style="font-size:10px;color:var(--text3);margin-top:4px;">🤖 KI-Analyse auf Basis von 100+ Quellen · Keine Anlageberatung</div>
+  <div class="card-body" id="body-asts-milestone">
+    <div id="asts-milestone-content">
+      <div class="kpi-section-title">BlueBird Satelliten-Status <span class="kpi-info">?</span><div class="kpi-tooltip" style="display:none;">Ohne Satelliten im Orbit kein Service — der wichtigste operative KPI für ASTS</div> <span style="font-weight:400;text-transform:none;font-size:10px;color:var(--text3);">KI-Analyse</span></div>
+      <div id="asts-bluebird-status"><div style="color:var(--text3);font-size:13px;font-style:italic;">Wird aktualisiert...</div></div>
+      <div class="kpi-section-title" style="margin-top:12px;">Regulierung & Partner</div>
+      <div class="kpi-grid">
+        <div class="kpi-box">
+          <div class="kpi-label">FCC Status <span class="kpi-info">?</span><div class="kpi-tooltip" style="display:none;">Die FCC (US-Telekombehörde) hat ASTS im April 2026 die Lizenz für 248 Satelliten erteilt — kritische Voraussetzung für US-Betrieb</div></div>
+          <div class="kpi-val" id="asts-fcc-status" style="font-size:12px;">—</div>
+        </div>
+        <div class="kpi-box">
+          <div class="kpi-label">ITU Status <span class="kpi-info">?</span><div class="kpi-tooltip" style="display:none;">ITU koordiniert Frequenzen international — für globalen Betrieb in jedem Land nötig</div></div>
+          <div class="kpi-val" id="asts-itu-status" style="font-size:12px;">—</div>
+        </div>
+        <div class="kpi-box">
+          <div class="kpi-label">MNO Partner <span class="kpi-info">?</span><div class="kpi-tooltip" style="display:none;">Mobilfunkanbieter die ASTS vermarkten. Mehr Partner = mehr potenzielle Nutzer und Einnahmen</div></div>
+          <div class="kpi-val" id="asts-mno-count">—</div>
+          <div class="kpi-sub" id="asts-mno-list" style="font-size:10px;">—</div>
+        </div>
+        <div class="kpi-box">
+          <div class="kpi-label">Nächster Meilenstein <span class="kpi-info">?</span><div class="kpi-tooltip" style="display:none;">Der wichtigste bevorstehende operative Schritt</div></div>
+          <div class="kpi-val" id="asts-next-milestone" style="font-size:11px;">—</div>
         </div>
       </div>
-      <div class="rec-explain" id="asts-rec-sub" style="color:var(--text3);font-style:italic;">Noch keine Analyse geladen. Mit KI-Schlüssel im ⚙️-Menü wird die Empfehlung automatisch generiert.</div>
+      <div class="kpi-section-title" style="margin-top:12px;">Risikoampel</div>
+      <div class="risk-grid">
+        <div class="risk-item"><div class="risk-label">Launch-Risiko <span class="kpi-info">?</span><div class="kpi-tooltip" style="display:none;">Risiko weiterer Satelliten-Anomalien wie BB-7. Kritisch für das 45-Satelliten-Ziel 2026</div></div><div class="risk-val" id="asts-risk-launch">—</div></div>
+        <div class="risk-item"><div class="risk-label">Dilution <span class="kpi-info">?</span><div class="kpi-tooltip" style="display:none;">Risiko neuer Aktienausgaben zur Finanzierung — verwässert bestehende Aktionäre</div></div><div class="risk-val" id="asts-risk-dilution">—</div></div>
+        <div class="risk-item"><div class="risk-label">Konkurrenz <span class="kpi-info">?</span><div class="kpi-tooltip" style="display:none;">Hauptkonkurrenten: Starlink Direct-to-Cell, Lynk Global, Amazon Kuiper D2D</div></div><div class="risk-val" id="asts-risk-konkurrenz">—</div></div>
+        <div class="risk-item"><div class="risk-label">Zeitplan <span class="kpi-info">?</span><div class="kpi-tooltip" style="display:none;">Risiko von Verzögerungen beim Satelliten-Deployment und kommerziellen Launch</div></div><div class="risk-val" id="asts-risk-zeitplan">—</div></div>
+      </div>
+      <div class="kpi-interp" id="asts-kpi-interp" style="display:none;"></div>
+      <div id="asts-kpi-drivers" style="display:none;">
+        <div style="font-size:11px;color:var(--text3);margin-top:8px;margin-bottom:4px;">Haupttreiber</div>
+        <div class="kpi-drivers" id="asts-drivers-list"></div>
+        <div style="font-size:11px;color:var(--text3);margin-top:6px;margin-bottom:4px;">Hauptrisiken</div>
+        <div class="kpi-drivers" id="asts-risks-list"></div>
+      </div>
+      <div class="kpi-source" id="asts-milestone-ts">Wird täglich mit KI aktualisiert</div>
     </div>
-    <div class="rec-scores" id="asts-rec-scores">
-      <div class="score-card">
-        <div class="score-top"><div class="score-emoji">📈</div><div class="score-label">Wie gut läuft<br>das Geschäft?</div></div>
-        <div class="score-val wn" id="asts-s1">—</div>
-        <div class="score-meter"><div class="score-fill" id="asts-m1"></div></div>
-        <div class="score-explain" id="asts-explain-fundamentals" style="color:var(--text3);font-style:italic;"><b>Fundamentals</b> — wird mit KI aktualisiert</div>
-      </div>
-      <div class="score-card">
-        <div class="score-top"><div class="score-emoji">🚀</div><div class="score-label">Wie stark steigt<br>der Kurs gerade?</div></div>
-        <div class="score-val wn" id="asts-s2">—</div>
-        <div class="score-meter"><div class="score-fill" id="asts-m2"></div></div>
-        <div class="score-explain" id="asts-explain-momentum" style="color:var(--text3);font-style:italic;"><b>Momentum</b> — wird mit KI aktualisiert</div>
-      </div>
-      <div class="score-card">
-        <div class="score-top"><div class="score-emoji">⚠️</div><div class="score-label">Wie hoch ist<br>das Risiko?</div></div>
-        <div class="score-val wn" id="asts-s3">—</div>
-        <div class="score-meter"><div class="score-fill" id="asts-m3"></div></div>
-        <div class="score-explain" id="asts-explain-risiko" style="color:var(--text3);font-style:italic;"><b>Risiko</b> — <b>Höherer Score = niedrigeres Risiko.</b> Wird mit KI aktualisiert</div>
-      </div>
-      <div class="score-card">
-        <div class="score-top"><div class="score-emoji">💎</div><div class="score-label">Ist der Preis<br>fair?</div></div>
-        <div class="score-val wn" id="asts-s4">—</div>
-        <div class="score-meter"><div class="score-fill" id="asts-m4"></div></div>
-        <div class="score-explain" id="asts-explain-bewertung" style="color:var(--text3);font-style:italic;"><b>Bewertung</b> — wird mit KI aktualisiert</div>
-      </div>
-    </div>
-    <div class="rec-history" id="asts-rec-history" style="display:none;">
-          <div class="rec-history-title">📊 Verlauf Empfehlungen</div>
-          <div class="rec-history-items" id="asts-rec-history-items"></div>
-        </div>
-    <div class="rec-levels" id="asts-rec-levels">
-      <div class="rec-level"><span class="tip"><b>Guter Einstieg:</b> <span id="asts-pill-einstieg-val">—</span><span class="tip-icon">?</span><span class="tip-box">Unter welchem Kurs ein Einstieg sinnvoller wäre als zum aktuellen Preis.</span></span></div>
-      <div class="rec-level"><span class="tip"><b>Kursziel:</b> <span id="asts-pill-ziel-val">—</span><span class="tip-icon">?</span><span class="tip-box">Wo der Kurs hinlaufen könnte wenn die Entwicklung wie erwartet verläuft.</span></span></div>
-      <div class="rec-level"><span class="tip"><b>Stopp-Loss:</b> <span id="asts-pill-stopp-val">—</span><span class="tip-icon">?</span><span class="tip-box">Unter diesem Kurs sollte man die Position überdenken — Sicherheitsnetz.</span></span></div>
-    </div>
-
   </div>
 </div>
 <div class="card open" id="card-asts-charts">
@@ -1832,7 +1803,6 @@ body{font-family:'DM Sans',sans-serif;background:var(--bg);color:var(--text);min
     <div id="asts-insider-content" style="color:var(--text3);font-style:italic;font-size:13px;">Wird täglich mit KI aktualisiert...</div>
   </div>
 </div>
-
 <div class="card open" id="card-asts-pf">
   <div class="card-header" onclick="toggleCard('asts-pf')">
     <div class="card-icon">🧮</div>
@@ -1923,8 +1893,6 @@ body{font-family:'DM Sans',sans-serif;background:var(--bg);color:var(--text);min
     </div>
   </div>
 </div>
-</div>
-
 <div class="card open" id="card-asts-gov">
   <div class="card-header" onclick="toggleCard('asts-gov')">
     <div class="card-icon">🏛</div>
