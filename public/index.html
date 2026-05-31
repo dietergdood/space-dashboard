@@ -3368,22 +3368,25 @@ function applyRklbKpi(p) {
 // ── ASTS Milestone (from KI cache) ─────────────────────────────
 function applyAstsMilestone(p) {
   if (!p) return;
-  setScore('asts-score-badge', 'asts-score-sub', p.score_gesamt, 'Cash · Satelliten · Partner · Risiko');
+  setScore('asts-score-badge', 'asts-score-sub', p.score_gesamt, 'Operative Stärke · Satelliten · Partner');
   setCatScore('asts-score-cash',        p.score_cash);
   setCatScore('asts-score-umsatz',      p.score_umsatz_ramp);
   setCatScore('asts-score-launch',      p.score_launch);
   setCatScore('asts-score-technologie', p.score_technologie);
   setCatScore('asts-score-partner',     p.score_partner);
   setCatScore('asts-score-risiko',      p.score_risiko);
-  setDrillRow('asts-d-cash',    p.cash_wert);
+  // Cash drill (brief)
+  setDrillRow('asts-d-cash',   p.cash_wert);
   if ($('asts-d-cash-src')) $('asts-d-cash-src').textContent = (p.cash_quelle||'') + ' · ' + (p.cash_datum||'');
-  setDrillRow('asts-d-debt',    p.debt_wert);
-  setDrillRow('asts-d-runway',  p.cash_runway);
-  if ($('asts-d-netloss')) { $('asts-d-netloss').textContent = p.netloss_wert||'—'; }
+  setDrillRow('asts-d-debt',   p.debt_wert);
+  setDrillRow('asts-d-runway', p.cash_runway);
+  if ($('asts-d-netloss')) $('asts-d-netloss').textContent = p.netloss_wert||'—';
+  // Umsatz drill
   setDrillRow('asts-d-rev',          p.umsatz_wert);
   setDrillRow('asts-d-yoy',          p.umsatz_yoy);
   setDrillRow('asts-d-guidance',     p.guidance_2026);
   setDrillRow('asts-d-guidance-prog',p.guidance_progress);
+  // BlueBird status
   const bbEl = $('asts-bluebird-status');
   if (bbEl) {
     const sats = [
@@ -3392,23 +3395,24 @@ function applyAstsMilestone(p) {
       {sat:'BB-7',          status:p.bb7_status,   ampel:p.bb7_ampel},
       {sat:'BB-8 bis BB-10',status:p.bb8_10_status,ampel:p.bb8_10_ampel},
     ].filter(s => s.status);
-    if (sats.length) {
-      bbEl.innerHTML = sats.map(s => {
-        const cls = s.ampel==='gruen'?'dot-green':s.ampel==='rot'?'dot-red':s.ampel==='gelb'?'dot-yellow':'dot-gray';
-        return `<div class="milestone-row"><div class="milestone-dot ${cls}"></div><div class="milestone-name">${stripTags(s.sat)}</div><div class="milestone-status">${stripTags(s.status)}</div></div>`;
-      }).join('');
-    }
+    if (sats.length) bbEl.innerHTML = sats.map(s => {
+      const cls = s.ampel==='gruen'?'dot-green':s.ampel==='rot'?'dot-red':s.ampel==='gelb'?'dot-yellow':'dot-gray';
+      return `<div class="milestone-row"><div class="milestone-dot ${cls}"></div><div class="milestone-name">${stripTags(s.sat)}</div><div class="milestone-status">${stripTags(s.status)}</div></div>`;
+    }).join('');
   }
+  // Tech
   if ($('asts-fcc-status')) $('asts-fcc-status').textContent = stripTags(p.fcc_status||'—');
   if ($('asts-itu-status')) $('asts-itu-status').textContent = stripTags(p.itu_status||'—');
-  setDrillRow('asts-d-speed',    p.peak_speed);
-  if ($('asts-d-mnos'))     $('asts-d-mnos').textContent     = p.mno_anzahl ? p.mno_anzahl + ' Partner' : '—';
+  setDrillRow('asts-d-speed', p.peak_speed);
+  // Partner
+  if ($('asts-d-mnos'))     $('asts-d-mnos').textContent     = p.mno_anzahl ? p.mno_anzahl+' Partner' : '—';
   if ($('asts-d-mno-list')) $('asts-d-mno-list').textContent = stripTags(p.mno_aktive||'—');
+  // Risiko
   const riskMap = {hoch:'risk-hoch',mittel:'risk-mittel',niedrig:'risk-niedrig'};
-  const setRisk = (id, val) => {
+  const setRisk = (id,val) => {
     const el=$(id); if(!el||!val) return;
-    el.textContent = stripTags(val);
-    const v = val.toLowerCase();
+    el.textContent=stripTags(val);
+    const v=val.toLowerCase();
     for(const [k,cls] of Object.entries(riskMap)){if(v.includes(k)){el.className='risk-val '+cls;break;}}
   };
   setRisk('asts-risk-launch',     p.risk_launch);
@@ -3416,6 +3420,7 @@ function applyAstsMilestone(p) {
   setRisk('asts-risk-konkurrenz', p.risk_konkurrenz);
   setRisk('asts-risk-zeitplan',   p.risk_zeitplan);
   if ($('asts-next-milestone')) $('asts-next-milestone').textContent = stripTags(p.naechster_meilenstein||'—');
+  // Interpretation + Treiber ONLY in milestone
   if (p.interpretation && $('asts-kpi-interp')) {
     $('asts-kpi-interp').textContent = stripTags(p.interpretation);
     $('asts-kpi-interp').style.display = 'block';
@@ -3431,25 +3436,31 @@ function applyAstsMilestone(p) {
 // ── ASTS KPI (mirror of RKLB KPI) ───────────────────────────
 function applyAstsKpi(p) {
   if (!p) return;
-  setScore('asts-kpi-score-badge', 'asts-kpi-score-sub', p.score_gesamt, 'Cash · Umsatz · Technologie · Partner');
+  // Different subtitle - financial focus only
+  setScore('asts-kpi-score-badge', 'asts-kpi-score-sub', p.score_gesamt, 'Finanzielle Stärke');
   setCatScore('asts-kpi-score-cash',     p.score_cash);
   setCatScore('asts-kpi-score-umsatz',   p.score_umsatz_ramp);
   setCatScore('asts-kpi-score-tech',     p.score_technologie);
   setCatScore('asts-kpi-score-partner',  p.score_partner);
   setCatScore('asts-kpi-score-risiko',   p.score_risiko);
   setCatScore('asts-kpi-score-bewertung',p.score_bewertung || 50);
+  // Cash drill
   setDrillRow('asts-kpi-d-cash',    p.cash_wert);
   setDrillRow('asts-kpi-d-runway',  p.cash_runway);
   setDrillRow('asts-kpi-d-debt',    p.debt_wert);
   if ($('asts-kpi-d-netloss')) $('asts-kpi-d-netloss').textContent = p.netloss_wert||'—';
+  // Umsatz drill
   setDrillRow('asts-kpi-d-rev',          p.umsatz_wert);
   setDrillRow('asts-kpi-d-yoy',          p.umsatz_yoy);
   setDrillRow('asts-kpi-d-guidance',     p.guidance_2026);
   setDrillRow('asts-kpi-d-guidance-prog',p.guidance_progress);
-  if ($('asts-kpi-d-fcc'))   $('asts-kpi-d-fcc').textContent   = stripTags(p.fcc_status||'—');
-  setDrillRow('asts-kpi-d-speed',  p.peak_speed);
+  // Tech drill - brief only
+  if ($('asts-kpi-d-fcc'))  $('asts-kpi-d-fcc').textContent  = stripTags(p.fcc_status||'—');
+  setDrillRow('asts-kpi-d-speed', p.peak_speed);
+  // Partner drill
   if ($('asts-kpi-d-mnos'))     $('asts-kpi-d-mnos').textContent     = p.mno_anzahl ? p.mno_anzahl+' Partner' : '—';
   if ($('asts-kpi-d-mno-list')) $('asts-kpi-d-mno-list').textContent = stripTags(p.mno_aktive||'—');
+  // Risiko drill
   const riskMap = {hoch:'risk-hoch',mittel:'risk-mittel',niedrig:'risk-niedrig'};
   const setRisk2 = (id,val) => {
     const el=$(id); if(!el||!val) return;
@@ -3460,18 +3471,11 @@ function applyAstsKpi(p) {
   setRisk2('asts-kpi-d-risk-launch',     p.risk_launch);
   setRisk2('asts-kpi-d-risk-dilution',   p.risk_dilution);
   setRisk2('asts-kpi-d-risk-konkurrenz', p.risk_konkurrenz);
+  // Bewertung drill
   setDrillRow('asts-kpi-d-evsales',       p.ev_sales||'—');
   setDrillRow('asts-kpi-d-vs-konsens',    p.kurs_vs_konsens||'—');
   setDrillRow('asts-kpi-d-analyst-range', p.analyst_range||'—');
-  if (p.interpretation && $('asts-kpi-interp2')) {
-    $('asts-kpi-interp2').textContent = stripTags(p.interpretation);
-    $('asts-kpi-interp2').style.display = 'block';
-  }
-  if ($('asts-kpi-drivers2')) {
-    setDrivers('asts-kpi-drivers2-list', p.haupttreiber, 'kpi-driver');
-    setDrivers('asts-kpi-risks2-list',   p.hauptrisiken,  'kpi-risk-tag');
-    $('asts-kpi-drivers2').style.display = 'block';
-  }
+  // NO interpretation/treiber here - those are in milestone tracker
   if ($('asts-kpi-ts2')) $('asts-kpi-ts2').textContent = 'KI-Analyse · Täglich aktualisiert';
 }
 
