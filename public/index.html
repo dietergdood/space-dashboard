@@ -820,16 +820,7 @@ body{font-family:'DM Sans',sans-serif;background:var(--bg);color:var(--text);min
             <div>📦 <b>Beim Öffnen</b> — letzte gespeicherte Daten sofort</div>
             <div style="margin-top:6px;color:var(--text3);">Letzte KI-Aktualisierung: <span id="last-sync-label">—</span></div>
           </div>
-          <div class="divider"></div>
-          <div class="settings-label">🔄 Auto-Sync (Cron)</div>
-          <div style="display:flex;align-items:center;justify-content:space-between;">
-            <div style="font-size:13px;color:var(--text2);" id="sync-status-label">Status wird geladen...</div>
-            <label class="toggle-switch">
-              <input type="checkbox" id="sync-toggle" onchange="toggleSync(this.checked)">
-              <span class="toggle-slider"></span>
-            </label>
-          </div>
-          <div style="font-size:11px;color:var(--text3);margin-top:6px;">Täglich um 13:00 Uhr automatisch aktualisieren (~$1.50/Monat)</div>
+
         </div>
       </div>
     </div>
@@ -2871,14 +2862,6 @@ async function loadSyncStatus() {
       }
     }
   } catch(e){}
-}
-async function toggleSync(enabled) {
-  const lbl=document.getElementById('sync-status-label');
-  if(lbl) lbl.textContent=enabled?'Wird aktiviert...':'Wird deaktiviert...';
-  try {
-    await fetch('/api/sync-toggle',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({enabled})});
-    if(lbl) lbl.textContent=enabled?'✅ Auto-Sync aktiv':'⏸ Auto-Sync pausiert';
-  } catch(e){ if(lbl) lbl.textContent='Fehler'; }
 }
 async function manualRefreshFromSettings() {
   const key=getKey();
