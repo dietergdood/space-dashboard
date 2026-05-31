@@ -267,17 +267,29 @@ KONKURRENZ: rocketlabusa.com, blueorigin.com, virgingalactic.com, unitedlaunchal
     // Filter by scope for faster execution
     const FAST_SECTIONS = ['rec','news','scenarios'];
     const SLOW_SECTIONS = ['sector','gov_space','ctx'];
-    const calls = scope === 'rklb'       ? allCalls.filter(c => c.ticker === 'rklb' && FAST_SECTIONS.includes(c.section)) :
-                  scope === 'asts'       ? allCalls.filter(c => c.ticker === 'asts' && FAST_SECTIONS.includes(c.section)) :
-                  scope === 'spcx'       ? allCalls.filter(c => c.ticker === 'spcx' && FAST_SECTIONS.includes(c.section)) :
-                  scope === 'rklb_news'  ? allCalls.filter(c => c.ticker === 'rklb' && c.section === 'news') :
-                  scope === 'asts_news'  ? allCalls.filter(c => c.ticker === 'asts' && c.section === 'news') :
-                  scope === 'spcx_news'  ? allCalls.filter(c => c.ticker === 'spcx' && c.section === 'news') :
-                  scope === 'rklb_slow'  ? allCalls.filter(c => c.ticker === 'rklb' && SLOW_SECTIONS.includes(c.section)) :
-                  scope === 'asts_slow'  ? allCalls.filter(c => c.ticker === 'asts' && SLOW_SECTIONS.includes(c.section)) :
-                  scope === 'spcx_slow'  ? allCalls.filter(c => c.ticker === 'spcx' && SLOW_SECTIONS.includes(c.section)) :
-                  scope === 'global'     ? allCalls.filter(c => !c.ticker) :
-                  allCalls;
+    // Smart scheduling: check day of week
+    const dayOfWeek = new Date().getDay(); // 0=Sun, 6=Sat
+    const isWeekend = dayOfWeek === 0 || dayOfWeek === 6;
+    const isSlowDay = dayOfWeek === 1 || dayOfWeek === 3 || dayOfWeek === 5; // Mon/Wed/Fri
+
+    let calls;
+    const ticker = ['rklb','asts','spcx'].includes(scope) ? scope : null;
+    if (ticker) {
+      if (isWeekend) {
+        // Weekend: news only
+        calls = allCalls.filter(c => c.ticker === ticker && c.section === 'news');
+      } else if (isSlowDay) {
+        // Mon/Wed/Fri: fast + slow
+        calls = allCalls.filter(c => c.ticker === ticker && [...FAST_SECTIONS, ...SLOW_SECTIONS].includes(c.section));
+      } else {
+        // Tue/Thu: fast only
+        calls = allCalls.filter(c => c.ticker === ticker && FAST_SECTIONS.includes(c.section));
+      }
+    } else if (scope === 'global') {
+      calls = allCalls.filter(c => !c.ticker);
+    } else {
+      calls = allCalls;
+    }
     console.log(`Running ${calls.length} calls for scope: ${scope}`);
 
     // Run in parallel batches to stay within timeout
