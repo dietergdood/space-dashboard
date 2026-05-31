@@ -774,7 +774,9 @@ body{font-family:var(--font-sans);background:var(--bg);color:var(--text);min-hei
             </div>
             <div class="sdd-row" style="margin-top:10px;">
               <span class="sdd-row-label">🔔 Push-Benachrichtigungen</span>
-              <button class="sdd-btn" onclick="requestPushPermission()">Aktivieren</button>
+              <button class="sdd-toggle" id="push-toggle-btn" onclick="togglePushPermission()" role="switch" aria-checked="false">
+                <span class="sdd-toggle-thumb"></span>
+              </button>
             </div>
           </div>
 
@@ -3097,16 +3099,32 @@ function applySpcxSector(p) {
 }
 
 // ── Push Notifications ──────────────────────────────────────
-async function requestPushPermission() {
-  if (!('Notification' in window)) return;
-  if (Notification.permission === 'granted') {
-    showToast('Push-Benachrichtigungen bereits aktiviert ✓');
+async function togglePushPermission() {
+  const btn = document.getElementById('push-toggle-btn');
+  const isOn = btn?.getAttribute('aria-checked') === 'true';
+  if (isOn) {
+    // Turn off
+    localStorage.removeItem('push_enabled');
+    if (btn) btn.setAttribute('aria-checked', 'false');
+    showToast('Push-Benachrichtigungen deaktiviert');
+    return;
+  }
+  // Turn on
+  if (!('Notification' in window)) {
+    showToast('Push nicht unterstützt auf diesem Gerät');
+    return;
+  }
+  if (Notification.permission === 'denied') {
+    showToast('⚠️ Push blockiert — bitte in Browser-Einstellungen erlauben');
     return;
   }
   const perm = await Notification.requestPermission();
   if (perm === 'granted') {
-    showToast('Push-Benachrichtigungen aktiviert ✓');
     localStorage.setItem('push_enabled', '1');
+    if (btn) btn.setAttribute('aria-checked', 'true');
+    showToast('Push-Benachrichtigungen aktiviert ✓');
+  } else {
+    showToast('Push-Berechtigung verweigert');
   }
 }
 
@@ -3972,6 +3990,11 @@ async function refreshAllNews() {
     document.documentElement.setAttribute('data-theme','dark');
     const btn = document.getElementById('dark-mode-btn');
     if (btn) btn.setAttribute('aria-checked', 'true');
+  }
+  // Push toggle
+  if (localStorage.getItem('push_enabled') && Notification?.permission === 'granted') {
+    const pushBtn = document.getElementById('push-toggle-btn');
+    if (pushBtn) pushBtn.setAttribute('aria-checked', 'true');
   }
   loadEarningsCalendar();
   // Check for cron errors
