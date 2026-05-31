@@ -268,11 +268,11 @@ body{font-family:'DM Sans',sans-serif;background:var(--bg);color:var(--text);min
 .scv.up{color:var(--green);}
 .scv.wn{color:var(--amber);}
 .sentiment-box{margin-top:14px;background:var(--surface2);border-radius:10px;padding:14px;}
-.sentiment-platforms{display:grid;grid-template-columns:repeat(5,1fr);gap:8px;margin-top:10px;}
-.sentiment-platform{background:var(--surface);border:1px solid var(--border);border-radius:8px;padding:10px;text-align:center;}
+.sentiment-platforms{display:grid;grid-template-columns:repeat(auto-fit,minmax(130px,1fr));gap:8px;margin-top:10px;}
+.sentiment-platform{background:var(--surface);border:1px solid var(--border);border-radius:8px;padding:12px 8px;text-align:center;}
 .sentiment-platform-icon{font-size:18px;margin-bottom:4px;}
 .sentiment-platform-name{font-size:10px;color:var(--text3);font-weight:600;text-transform:uppercase;letter-spacing:.05em;}
-.sentiment-platform-val{font-size:13px;font-weight:700;margin-top:2px;}
+.sentiment-platform-val{font-size:14px;font-weight:700;margin-top:3px;}
 .sentiment-platform-val.bullish{color:var(--green);}
 .sentiment-platform-val.bearish{color:var(--red);}
 .sentiment-platform-val.neutral{color:var(--text3);}
@@ -560,7 +560,7 @@ body{font-family:'DM Sans',sans-serif;background:var(--bg);color:var(--text);min
   /* ── Sector ── */
   .sector-intro{font-size:12px;}
   .sector-grid{grid-template-columns:repeat(2,1fr);gap:8px;}
-  .sentiment-platforms{grid-template-columns:repeat(2,1fr);}
+  .sentiment-platforms{grid-template-columns:repeat(2,1fr);gap:6px;}
   .sector-card{padding:10px;}
   .sector-emoji{font-size:20px;margin-bottom:4px;}
   .sector-name{font-size:11px;}
