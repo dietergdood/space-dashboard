@@ -2946,12 +2946,17 @@ async function loadFromCache() {
 }
 async function loadSyncStatus() {
   try {
-    // Get actual last update time from rec cache (most frequently updated)
     const d = await fetchFromCache('rec', 'rklb');
     const lastLbl = document.getElementById('last-sync-label');
     if (lastLbl && d?.updated_at) {
       const dt = new Date(d.updated_at);
-      lastLbl.textContent = dt.toLocaleString('de-CH', {day:'2-digit', month:'2-digit', hour:'2-digit', minute:'2-digit'}) + ' Uhr';
+      const now = new Date();
+      const diffH = Math.round((now - dt) / 3600000);
+      const timeStr = dt.toLocaleString('de-CH', {day:'2-digit', month:'2-digit', hour:'2-digit', minute:'2-digit'});
+      const ago = diffH < 1 ? 'vor <1h' : diffH < 24 ? `vor ${diffH}h` : `vor ${Math.round(diffH/24)}d`;
+      lastLbl.textContent = `${timeStr} Uhr (${ago})`;
+    } else if (lastLbl) {
+      lastLbl.textContent = '—';
     }
   } catch(e) {}
 }
@@ -2964,6 +2969,9 @@ async function manualRefreshFromSettings() {
   }
   if(btn){btn.disabled=true;btn.textContent='⏳ Lädt...';}
   await refreshAllNews();
+  // Invalidate cache so loadSyncStatus fetches fresh updated_at
+  delete _kiCache['rklb/rec'];
+  await loadSyncStatus();
   if(btn){btn.disabled=false;btn.textContent='✓ Fertig';setTimeout(()=>btn.textContent='↺ Jetzt manuell aktualisieren',3000);}
 }
 function applyLiveNewsData(t,p,updated_at) {
