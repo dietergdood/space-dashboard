@@ -3946,6 +3946,10 @@ async function refreshAllNews() {
 (function init() {
   loadKey();
   loadTx();
+  // Start data loading immediately - no Chart.js needed
+  loadAll();
+  setInterval(loadAll, 15000);
+  loadFromCache();
   // Tab event listeners (defined here so script is loaded)
   const rklbBtn = document.getElementById('tab-rklb-btn');
   const astsBtn = document.getElementById('tab-asts-btn');
@@ -3963,9 +3967,6 @@ async function refreshAllNews() {
       });
     });
   }
-  loadAll();
-  setInterval(loadAll,15000);
-  loadFromCache();
   // Init range chart for active tab
   // Dark mode
   if (localStorage.getItem('theme') === 'dark') {
