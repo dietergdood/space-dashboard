@@ -290,43 +290,9 @@ KONKURRENZ: rocketlabusa.com, blueorigin.com, virgingalactic.com, unitedlaunchal
 
     const INSIDER_ASTS_PROMPT = `Suche aktuelle Insider-Trades für AST SpaceMobile (ASTS) der letzten 90 Tage. Quellen: sec.gov/cgi-bin/browse-edgar (Form 4 Filings), openinsider.com/ASTS, finviz.com/insidertrading, marketbeat.com ASTS Insider. Analysiere Form 4 Einreichungen. Alle Texte AUF DEUTSCH. KRITISCH: Keine Schrägstriche "/" in name/note Feldern, keine Anführungszeichen in Strings. Antworte NUR mit gültigem JSON: {"trades":[{"name":"Vorname Nachname","title":"CEO","type":"buy","shares":1000,"price":95.50,"value":95500,"date":"2026-05-15","significance":"high","note":"Kurze Notiz auf Deutsch ohne Sonderzeichen"}],"summary":"1 Satz auf Deutsch","signal":"bullish"}`;
 
-    const RKLB_KPI_PROMPT = `Search for Rocket Lab (RKLB) financial KPIs from latest earnings and SEC filings. Sources: rocketlabusa.com/investors, SEC EDGAR 10-Q, earnings call transcripts, spacenews.com, breakingdefense.com, reuters.com. Extract VERIFIED data with sources and dates. Return ONLY valid JSON no HTML no cite tags:
-{"score_gesamt":78,"score_wachstum":85,"score_backlog":90,"score_marge":72,"score_liquiditaet":88,"score_risiko":55,"score_bewertung":40,
-"kpis":{
-"umsatz":{"wert":"$200.3 Mio","yoy":"+121%","quelle":"Q1 2026 Earnings","datum":"2026-05-07","trend":"up"},
-"backlog":{"wert":"$2.2 Mrd","qoq":"+20%","mix":"60% Space Systems","quelle":"Q1 2026 Earnings","datum":"2026-05-07","trend":"up"},
-"backlog_coverage":{"wert":"2.75x","formel":"Backlog / annualisierter Umsatz","quelle":"berechnet","trend":"up"},
-"gross_margin":{"wert":"38.2%","qoq":"+2.1%","quelle":"Q1 2026 10-Q","datum":"2026-05-07","trend":"up"},
-"ebitda":{"wert":"-$X Mio","quelle":"Q1 2026 Earnings","datum":"2026-05-07","trend":"neutral"},
-"liquiditaet":{"wert":"$2.0 Mrd","quelle":"Q1 2026 10-Q","datum":"2026-03-31","trend":"up"},
-"neutron":{"status":"Qualifikationstests Q2 2026","erstflug":"Ende 2026","risiko":"Mittel","quelle":"Earnings Call","datum":"2026-05-07"},
-"defense":{"sda":"$816 Mio Tranche 3","golden_dome":"Raytheon Partner","haste":"$190 Mio 20 Flüge","quelle":"IR Website","datum":"2026-Q1"},
-"launch_cadence":{"starts_2026":"X","erfolgsquote":"100%","quelle":"spacenews.com","datum":"2026-05"},
-"ev_sales":{"wert":"PS 60x","warnung":"Hoch vs. Peers","quelle":"berechnet","trend":"neutral"}
-},
-"interpretation":"2-3 Saetze Gesamtbild ohne HTML",
-"haupttreiber":["Backlog-Wachstum","Defense-Auftraege","Gross Margin Expansion"],
-"hauptrisiken":["Neutron-Timing","Hohe Bewertung","Cashburn"]
-}`;
+    const RKLB_KPI_PROMPT = `Search for Rocket Lab (RKLB) latest financial KPIs from Q1 2026 earnings and SEC 10-Q. Sources: rocketlabusa.com/investors, SEC EDGAR, spacenews.com, breakingdefense.com. Return ONLY valid JSON no HTML no cite tags no line breaks in strings: {"score_gesamt":82,"score_wachstum":88,"score_backlog":92,"score_marge":76,"score_liquiditaet":90,"score_risiko":58,"score_bewertung":38,"umsatz_wert":"$200 Mio","umsatz_yoy":"+121%","umsatz_quelle":"Q1 2026 Earnings","umsatz_datum":"2026-05-07","umsatz_trend":"up","backlog_wert":"$2.2 Mrd","backlog_qoq":"+20%","backlog_mix":"60% Space Systems","backlog_coverage":"2.75x","backlog_quelle":"Q1 2026 Earnings","gross_margin_wert":"38.2%","gross_margin_qoq":"+2.1%","ebitda_wert":"-$X Mio","liquiditaet_wert":"$2.0 Mrd","liquiditaet_quelle":"Q1 2026 10-Q","neutron_status":"Qualifikationstests","neutron_erstflug":"Ende 2026","neutron_risiko":"Mittel","defense_sda":"$816 Mio Tranche 3","defense_golden_dome":"Raytheon Partner","launches_2026":"X Starts","ev_sales":"PS 60x","analyst_range":"$60-$150","analyst_konsens":"$104","kurs_vs_konsens":"38% ueber Konsens","interpretation":"2 Saetze Gesamtbild ohne HTML Sonderzeichen","haupttreiber":["Backlog-Wachstum","Defense","Gross Margin"],"hauptrisiken":["Neutron-Timing","Hohe Bewertung"]}`;
 
-    const ASTS_MILESTONE_PROMPT = `Search for AST SpaceMobile (ASTS) operational KPIs from latest earnings and SEC filings. Sources: ast-science.com/investors, SEC EDGAR 10-Q, fcc.gov, spacenews.com, reuters.com. Extract VERIFIED data with sources and dates. Return ONLY valid JSON no HTML no cite tags:
-{"score_gesamt":69,"score_cash":85,"score_umsatz_ramp":45,"score_launch":55,"score_technologie":88,"score_partner":82,"score_risiko":50,
-"kpis":{
-"cash":{"wert":"$3.0 Mrd","cash_equivalents":"$429 Mio restricted","quelle":"Q1 2026 10-Q","datum":"2026-03-31","trend":"neutral"},
-"debt":{"wert":"$2.96 Mrd","typ":"Long-term","quelle":"Q1 2026 10-Q","datum":"2026-03-31","trend":"down"},
-"cash_runway":{"wert":"X Monate","formel":"Cash / Quartals-Burn","quelle":"berechnet","trend":"neutral"},
-"umsatz":{"wert":"$14.7 Mio","yoy":"+1946%","quelle":"Q1 2026 Earnings","datum":"2026-05-11","trend":"up"},
-"guidance":{"ziel_2026":"$150-200 Mio","progress":"X% erreicht","quelle":"Earnings Call","datum":"2026-05-11"},
-"guidance_progress":{"wert":"X%","formel":"bisheriger Umsatz / Jahresguidance-Mitte","quelle":"berechnet"},
-"satelliten_orbit":{"wert":"X von 45 Ziel","bb1_5":"Im Orbit","bb6":"Im Orbit","bb7":"Anomalie deorbited","bb8_10":"Start Q3 2026","quelle":"spacenews.com","datum":"2026-05"},
-"mno_partner":{"anzahl":60,"aktive":["AT&T","Verizon","Vodafone","Rakuten","Google"],"quelle":"IR Website","datum":"2026-Q1"},
-"fcc_status":{"status":"Genehmigt April 2026","248_satelliten":"Lizenz bis 2033","quelle":"fcc.gov","datum":"2026-04"},
-"peak_speed":{"wert":"98.9 Mbps","quelle":"AST IR","datum":"2026-Q1","trend":"up"}
-},
-"interpretation":"2-3 Saetze Gesamtbild ohne HTML",
-"haupttreiber":["Starke Liquiditaet","MNO-Partnernetzwerk","Technologie-Validierung"],
-"hauptrisiken":["Launch-Cadence","Hoher Debt","Cashburn","Dilution-Risiko"]
-}`;
+    const ASTS_MILESTONE_PROMPT = `Search for AST SpaceMobile (ASTS) latest operational KPIs from Q1 2026 earnings and SEC 10-Q. Sources: ast-science.com/investors, SEC EDGAR, fcc.gov, spacenews.com. Return ONLY valid JSON no HTML no cite tags no line breaks in strings: {"score_gesamt":68,"score_cash":82,"score_umsatz_ramp":48,"score_launch":52,"score_technologie":90,"score_partner":85,"score_risiko":48,"cash_wert":"$3.0 Mrd","cash_datum":"2026-03-31","cash_quelle":"Q1 2026 10-Q","debt_wert":"$2.96 Mrd","cash_runway":"X Monate","umsatz_wert":"$14.7 Mio","umsatz_yoy":"+1946%","umsatz_datum":"2026-05-11","guidance_2026":"$150-200 Mio","guidance_progress":"X% erreicht","netloss_wert":"-$191 Mio","bb1_5_status":"Im Orbit","bb1_5_ampel":"gruen","bb6_status":"Im Orbit","bb6_ampel":"gruen","bb7_status":"Anomalie deorbited","bb7_ampel":"rot","bb8_10_status":"Start Q3 2026","bb8_10_ampel":"gelb","fcc_status":"Genehmigt April 2026","itu_status":"Koordination laeuft","mno_anzahl":60,"mno_aktive":"AT&T Verizon Vodafone Rakuten","peak_speed":"98.9 Mbps","risk_launch":"Mittel","risk_dilution":"Hoch","risk_konkurrenz":"Starlink D2D aktiv","risk_zeitplan":"Verzoegerungen moeglich","naechster_meilenstein":"BB-8-10 Start Q3 2026","interpretation":"2 Saetze Gesamtbild ohne HTML Sonderzeichen","haupttreiber":["Starke Liquiditaet","MNO-Partnernetzwerk","Technologie"],"hauptrisiken":["Launch-Cadence","Hoher Debt","Cashburn"]}`;
 
     const GLOSSAR_PROMPT = `Search for 2-3 new finance or space terms from recent RKLB, ASTS, SpaceX news. Also find current Golden Dome program budget. Return ONLY valid JSON: {"golden_dome_def":"US missile defense budget and RKLB role","terms":[{"term":"English Term","def":"Kurze deutsche Erklaerung ohne Sonderzeichen"}]}`;
 
