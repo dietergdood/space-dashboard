@@ -100,9 +100,20 @@ async function kiCall(prompt, retries=3, maxSearches=8, model='claude-sonnet-4-5
           // Try to salvage articles array
           if (raw2.includes('"articles"')) {
             const articles = [];
-            const artMatches = raw2.matchAll(/"title":\s*"([^"]+)"[^}]*?"sentiment":\s*"([^"]+)"[^}]*?"body":\s*"([^"]+)"[^}]*?"source":\s*"([^"]+)"/g);
-            for (const m of artMatches) {
-              articles.push({title:m[1], sentiment:m[2], body:m[3], source:m[4]});
+            // Split by article objects
+            const titleMatches = [...raw2.matchAll(/"title":\s*"([^"]{1,120})"/g)];
+            const sentMatches  = [...raw2.matchAll(/"sentiment":\s*"([^"]{1,10})"/g)];
+            const sourceMatches= [...raw2.matchAll(/"source":\s*"([^"]{1,100})"/g)];
+            // For body: take text between "body":" and the next ","sentiment" or ","source"
+            const bodyMatches  = [...raw2.matchAll(/"body":\s*"(.*?)(?:","sentiment"|","source")/gs)];
+            const count = Math.min(titleMatches.length, sentMatches.length);
+            for (let i = 0; i < count; i++) {
+              articles.push({
+                title: titleMatches[i][1],
+                sentiment: sentMatches[i][1],
+                body: bodyMatches[i] ? bodyMatches[i][1].replace(/<[^>]*>/g,'').replace(/\\n/g,' ').trim() : '',
+                source: sourceMatches[i] ? sourceMatches[i][1] : ''
+              });
             }
             if (articles.length > 0) {
               console.log('Salvaged', articles.length, 'articles');
@@ -218,7 +229,7 @@ ANALYSTEN: Goldman Sachs, Morgan Stanley, JPMorgan, Bank of America, ARK Invest 
 SPACE-MEDIEN: SpaceNews, NASASpaceFlight, SpaceflightNow, Via Satellite, Aviation Week, Ars Technica Space, Payload Space (payload.space), Space Policy Online (spacepolicyonline.com), Space Capital (spacecapital.com), Bryce Tech (brycetech.com), The Orbit Report, Commercial Space News. POLICY: CSIS (csis.org), Secure World Foundation (swfound.org), Space Foundation (spacefoundation.org), Bryce Tech Space Reports.
 SOCIAL MEDIA: Reddit r/spacex r/SpaceXLounge r/investing r/wallstreetbets, X @SpaceX @elonmusk #SPCX #SpaceX, StockTwits SPCX, Telegram SpaceX Channels, Facebook SpaceX Groups, Instagram @spacex, YouTube SpaceX Channel, Discord SpaceX Communities.
 BEHÖRDEN: nasa.gov, faa.gov (Launch-Lizenzen), defense.gov, spaceforce.mil, sec.gov, ftc.gov.
-KONKURRENZ: rocketlabusa.com, blueorigin.com, virgingalactic.com, unitedlaunchalliance.com, arianespace.com. Fokus auf: IPO-Status, Starlink, Starship, NASA Aufträge, FAA Lizenzen, Konkurrenz. Antworte NUR mit gültigem JSON, keine Zeilenumbrüche in Strings: {"articles":[{"title":"Titel max 80 Zeichen","sentiment":"pos|neg|neu","body":"2-3 Sätze auf Deutsch","source":"Exakte Quelle"}]}`;
+KONKURRENZ: rocketlabusa.com, blueorigin.com, virgingalactic.com, unitedlaunchalliance.com, arianespace.com. Fokus auf: IPO-Status, Starlink, Starship, NASA Aufträge, FAA Lizenzen, Konkurrenz. Antworte NUR mit gültigem JSON. KRITISCH: Keine <cite> Tags, kein HTML, keine Anführungszeichen in Strings, keine Zeilenumbrüche: {"articles":[{"title":"Titel max 80 Zeichen","sentiment":"pos|neg|neu","body":"2-3 Sätze auf Deutsch ohne jegliche Tags","source":"Exakte Quelle"}]}`;
 
     const SPCX_SECTOR_PROMPT = `Analysiere SpaceX Marktposition und IPO-Status. OFFIZIELLE QUELLEN: spacex.com/updates, spacex.com/careers, SEC EDGAR S-1/8-K (wenn IPO erfolgt), Elon Musk X Posts, SpaceX Pressemitteilungen.
 FINANZMEDIEN: Reuters, Bloomberg, CNBC, Wall Street Journal, Financial Times, Forbes, Business Insider, The Economist.
