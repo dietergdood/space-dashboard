@@ -643,23 +643,6 @@ body{font-family:'DM Sans',sans-serif;background:var(--bg);color:var(--text);min
   .met-val{font-size:18px;}
 }
 </style>
-  <!-- PWA -->
-  <link rel="manifest" href="/manifest.json">
-  <link rel="icon" type="image/x-icon" href="/favicon.ico">
-  <link rel="icon" type="image/png" href="/favicon.png">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <meta name="theme-color" content="#1d4ed8">
-  <meta name="mobile-web-app-capable" content="yes">
-  <meta name="apple-mobile-web-app-capable" content="yes">
-  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
-  <meta name="apple-mobile-web-app-title" content="Space Stocks">
-  <link rel="apple-touch-icon" href="/apple-touch-icon.png">
-  <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png">
-  <link rel="icon" type="image/png" sizes="192x192" href="/icon-192.png">
-  <link rel="icon" type="image/png" sizes="512x512" href="/icon-512.png">
-  <script src="/supabase.js"></script>
-  <script src="/chart.min.js"></script>
-  <script>if(typeof Chart==='undefined'){document.write('<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.min.js"><\/script>')}</script>
 </head>
 <body>
 
@@ -2712,7 +2695,7 @@ function addTx(t) {
   const price = parseFloat($(t+'-tx-price').value);
   const date = $(t+'-tx-date') ? $(t+'-tx-date').value : '';
   const note = $(t+'-tx-note') ? $(t+'-tx-note').value.trim() : '';
-  if (!qty || !price || qty<=0 || price<=0) { alert('Bitte Anzahl und Preis eingeben.'); return; }
+  if (!qty || !price || qty<=0 || price<=0) { showToast('⚠️ Bitte Anzahl und Preis eingeben.'); return; }
   txData[t].push({type,qty,price,date:date||new Date().toISOString().split('T')[0],note,id:Date.now()});
   saveTx(t);
   if ($(t+'-tx-qty')) $(t+'-tx-qty').value='';
@@ -2753,7 +2736,7 @@ function saveEditTx(t, id, el) {
   const price = parseFloat(row.querySelector('[data-field="price"]').value);
   const date  = row.querySelector('[data-field="date"]').value;
   const note  = row.querySelector('[data-field="note"]').value.trim();
-  if (!qty || !price || qty<=0 || price<=0) { alert('Bitte gültige Anzahl und Preis eingeben.'); return; }
+  if (!qty || !price || qty<=0 || price<=0) { showToast('⚠️ Bitte gültige Anzahl und Preis eingeben.'); return; }
   const idx = txData[t].findIndex(x=>String(x.id)===id);
   if (idx>=0) { txData[t][idx] = {...txData[t][idx], type, qty, price, date, note}; }
   saveTx(t); renderTxList(t); recalcPF(t);
@@ -2877,7 +2860,6 @@ async function loadFromCache() {
     {fn:(d,ts)=>applyRklbMilestone(d),  section:'kpi',       ticker:'rklb'},
     {fn:(d,ts)=>applyAstsMilestone(d),  section:'milestone', ticker:'asts'},
     {fn:(d,ts)=>applyAstsKpi(d),        section:'milestone', ticker:'asts'},
-    {fn:(d,ts)=>applyAstsMilestone(d), section:'milestone',ticker:'asts'},
     {fn:(d,ts)=>applyInsider('rklb',d),section:'insider',  ticker:'rklb'},
     {fn:(d,ts)=>applyInsider('asts',d),section:'insider',ticker:'asts'},
     {fn:(d,ts)=>applyGovSpace('rklb',d),section:'gov_space',ticker:'rklb'},
@@ -3095,7 +3077,7 @@ function notifyNewData(ticker) {
 // ── Portfolio Export ────────────────────────────────────────
 function exportPortfolio(t) {
   const txs = txData[t] || [];
-  if (!txs.length) { alert('Keine Transaktionen vorhanden.'); return; }
+  if (!txs.length) { showToast('Keine Transaktionen vorhanden.'); return; }
   const sym = t.toUpperCase();
   const q = quotes[t];
   const curPrice = q?.price || 0;
@@ -3498,10 +3480,6 @@ function handleLogout() {
   }
 }
 
-function showAuthOverlay() {
-  const overlay = document.getElementById('auth-overlay');
-  if (overlay) overlay.classList.remove('hidden');
-}
 
 function hideSettings() {
   const dd = document.getElementById('settings-dd');
@@ -3898,12 +3876,7 @@ async function refreshAllNews() {
 (function init() {
   loadKey();
   loadTx();
-  // Force mobile tab display
-  if (window.innerWidth <= 800) {
-    document.querySelectorAll('.tab-full').forEach(el => el.style.display = 'none');
-    document.querySelectorAll('.tab-short').forEach(el => el.style.display = 'inline');
-    document.querySelectorAll('.tab-logo').forEach(el => el.style.display = 'none');
-  }
+  // Tab display handled by CSS media query
   // Start data loading immediately - no Chart.js needed
   loadAll();
   setInterval(loadAll, 15000);
