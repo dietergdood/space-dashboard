@@ -133,6 +133,38 @@ async function kiCall(prompt, retries=3, maxSearches=8, model='claude-sonnet-4-5
               return {intro: introMatch?.[1]||'', cards};
             }
           }
+          // Try to salvage insider trades
+          if (raw2.includes('"trades"')) {
+            const trades = [];
+            const nameM   = [...raw2.matchAll(/"name":\s*"([^"]{1,80})"/g)];
+            const typeM   = [...raw2.matchAll(/"type":\s*"(buy|sell)"/g)];
+            const sharesM = [...raw2.matchAll(/"shares":\s*(\d+)/g)];
+            const priceM  = [...raw2.matchAll(/"price":\s*([\d.]+)/g)];
+            const valueM  = [...raw2.matchAll(/"value":\s*(\d+)/g)];
+            const dateM   = [...raw2.matchAll(/"date":\s*"([^"]{1,20})"/g)];
+            const titleM  = [...raw2.matchAll(/"title":\s*"([^"]{1,60})"/g)];
+            const noteM   = [...raw2.matchAll(/"note":\s*"([^"]{1,300})"/g)];
+            const sigM    = [...raw2.matchAll(/"significance":\s*"([^"]{1,10})"/g)];
+            for (let i = 0; i < nameM.length; i++) {
+              trades.push({
+                name: nameM[i][1],
+                title: titleM[i] ? titleM[i][1] : '',
+                type: typeM[i] ? typeM[i][1] : 'sell',
+                shares: sharesM[i] ? parseInt(sharesM[i][1]) : 0,
+                price: priceM[i] ? parseFloat(priceM[i][1]) : 0,
+                value: valueM[i] ? parseInt(valueM[i][1]) : 0,
+                date: dateM[i] ? dateM[i][1] : '',
+                significance: sigM[i] ? sigM[i][1] : 'medium',
+                note: noteM[i] ? noteM[i][1].replace(/<[^>]*>/g,'') : ''
+              });
+            }
+            const summaryM = raw2.match(/"summary":\s*"([^"]{1,300})"/);
+            const signalM  = raw2.match(/"signal":\s*"(bullish|bearish|neutral)"/);
+            if (trades.length > 0) {
+              console.log('Salvaged', trades.length, 'insider trades');
+              return { trades, summary: summaryM?.[1]||'', signal: signalM?.[1]||'neutral' };
+            }
+          }
           console.error('JSON salvage failed');
           throw new Error('JSON parse failed: ' + parseErr.message);
         } catch(e3) {
@@ -242,9 +274,9 @@ SOCIAL MEDIA: Reddit r/spacex r/SpaceXLounge r/investing r/wallstreetbets, X @Sp
 BEHÖRDEN: nasa.gov, faa.gov (Launch-Lizenzen), defense.gov, spaceforce.mil, sec.gov, ftc.gov.
 KONKURRENZ: rocketlabusa.com, blueorigin.com, virgingalactic.com, unitedlaunchalliance.com, arianespace.com. Antworte NUR mit JSON, KEIN HTML, keine Zeilenumbrüche: {"desc":"1-2 Sätze aktueller Stand","tags":[{"text":"Raketen","type":"blue"},{"text":"Starlink","type":"green"},{"text":"IPO 2026","type":"amber"}],"stats":[{"label":"Bewertung","val":"$XXX Mrd"},{"label":"Mitarbeiter","val":"~13000"},{"label":"Starts 2025","val":"X"}]}`;
 
-    const INSIDER_RKLB_PROMPT = `Suche aktuelle Insider-Trades für Rocket Lab (RKLB) der letzten 90 Tage. Quellen: sec.gov/cgi-bin/browse-edgar (Form 4 Filings), openinsider.com/RKLB, finviz.com/insidertrading, marketbeat.com RKLB Insider. Analysiere Form 4 Einreichungen. Antworte NUR mit gültigem JSON, KEIN HTML, keine <cite> Tags: {"trades":[{"name":"Person Name","title":"CEO|CFO|Director|etc","type":"buy|sell","shares":1000,"price":95.50,"value":95500,"date":"2026-05-15","significance":"high|medium|low","note":"1 Satz Bedeutung"}],"summary":"1 Satz Gesamtbild ohne HTML","signal":"bullish|bearish|neutral"}`;
+    const INSIDER_RKLB_PROMPT = `Suche aktuelle Insider-Trades für Rocket Lab (RKLB) der letzten 90 Tage. Quellen: sec.gov/cgi-bin/browse-edgar (Form 4 Filings), openinsider.com/RKLB, finviz.com/insidertrading, marketbeat.com RKLB Insider. Analysiere Form 4 Einreichungen. Alle Texte AUF DEUTSCH. KRITISCH: Keine Schrägstriche "/" in name/note Feldern, keine Anführungszeichen in Strings. Antworte NUR mit gültigem JSON: {"trades":[{"name":"Vorname Nachname","title":"CEO","type":"buy","shares":1000,"price":95.50,"value":95500,"date":"2026-05-15","significance":"high","note":"Kurze Notiz auf Deutsch ohne Sonderzeichen"}],"summary":"1 Satz auf Deutsch","signal":"bullish"}`;
 
-    const INSIDER_ASTS_PROMPT = `Suche aktuelle Insider-Trades für AST SpaceMobile (ASTS) der letzten 90 Tage. Quellen: sec.gov/cgi-bin/browse-edgar (Form 4 Filings), openinsider.com/ASTS, finviz.com/insidertrading, marketbeat.com ASTS Insider. Analysiere Form 4 Einreichungen. Antworte NUR mit gültigem JSON, KEIN HTML, keine <cite> Tags: {"trades":[{"name":"Person Name","title":"CEO|CFO|Director|etc","type":"buy|sell","shares":1000,"price":95.50,"value":95500,"date":"2026-05-15","significance":"high|medium|low","note":"1 Satz Bedeutung"}],"summary":"1 Satz Gesamtbild ohne HTML","signal":"bullish|bearish|neutral"}`;
+    const INSIDER_ASTS_PROMPT = `Suche aktuelle Insider-Trades für AST SpaceMobile (ASTS) der letzten 90 Tage. Quellen: sec.gov/cgi-bin/browse-edgar (Form 4 Filings), openinsider.com/ASTS, finviz.com/insidertrading, marketbeat.com ASTS Insider. Analysiere Form 4 Einreichungen. Alle Texte AUF DEUTSCH. KRITISCH: Keine Schrägstriche "/" in name/note Feldern, keine Anführungszeichen in Strings. Antworte NUR mit gültigem JSON: {"trades":[{"name":"Vorname Nachname","title":"CEO","type":"buy","shares":1000,"price":95.50,"value":95500,"date":"2026-05-15","significance":"high","note":"Kurze Notiz auf Deutsch ohne Sonderzeichen"}],"summary":"1 Satz auf Deutsch","signal":"bullish"}`;
 
     const GLOSSAR_PROMPT = `Analysiere aktuelle RKLB und ASTS News. Quellen: SpaceNews (spacenews.com), NASASpaceFlight (nasaspaceflight.com), SpaceflightNow, Ars Technica Space, Space.com, Aviation Week, Via Satellite (viasatellite.com), Parabolic Arc, SpaceRef, CNBC, Bloomberg, Reuters, Wall Street Journal, Financial Times, Forbes, Business Insider, Fortune, The Economist, Yahoo Finance, MarketWatch, Barron's, TheStreet, InvestorPlace, Benzinga, Motley Fool, Seeking Alpha, Zacks, TipRanks, Simply Wall St, Stockanalysis.com, Finviz, TradingView, Investopedia, 24/7 Wall St, Nasdaq.com, NYSE.com, SEC EDGAR, Reddit r/RocketLab r/ASTS r/space r/investing r/wallstreetbets r/stocks, X/Twitter @RocketLab @AST_SpaceMobile #RKLB #ASTS, StockTwits RKLB ASTS, Telegram RKLB/ASTS Channels, Facebook Investor Groups RKLB/ASTS, Instagram @rocketlab @astspacemobile, YouTube @RocketLab @ASTSpaceMobile, Discord RKLB/ASTS Community Servers, rocketlabusa.com, ast-science.com. Welche 2-4 neue Fachbegriffe aus Space/Finance tauchen auf? Suche auch das aktuelle Budget des US "Golden Dome" Programms auf defense.gov. Antworte NUR mit JSON, KEIN HTML, keine <cite> Tags: {"golden_dome_def":"US-Raketenabwehr (BETRAG). Rocket Lab Lieferant.","terms":[{"term":"Begriff","def":"Kurze Erklärung ohne HTML"}]}`;
 
