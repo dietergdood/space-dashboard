@@ -2957,11 +2957,12 @@ async function loadFromCache() {
   if(statusEl){statusEl.style.display='inline-flex';statusEl.textContent='📦 Lade Daten...';statusEl.className='ki-status-pill';}
   const sections=[
     {fn:(d,ts)=>applyRec('rklb',d),section:'rec',ticker:'rklb'},
+    {fn:(d,ts)=>applyScenarios('rklb',d),section:'scenarios',ticker:'rklb'},
+    {fn:(d,ts)=>applyScenarios('asts',d),section:'scenarios',ticker:'asts'},
+    {fn:(d,ts)=>applyRec('rklb',d),section:'rec',ticker:'rklb'},
     {fn:(d,ts)=>applyRec('asts',d),section:'rec',ticker:'asts'},
     {fn:(d,ts)=>applyLiveNewsData('rklb',d,ts),section:'news',ticker:'rklb'},
     {fn:(d,ts)=>applyLiveNewsData('asts',d,ts),section:'news',ticker:'asts'},
-    {fn:(d,ts)=>applyScenarios('rklb',d),section:'scenarios',ticker:'rklb'},
-    {fn:(d,ts)=>applyScenarios('asts',d),section:'scenarios',ticker:'asts'},
     {fn:(d,ts)=>applySector('rklb',d),section:'sector',ticker:'rklb'},
     {fn:(d,ts)=>applySector('asts',d),section:'sector',ticker:'asts'},
     {fn:(d,ts)=>applyCtx('rklb',d),section:'ctx',ticker:'rklb'},
@@ -3079,9 +3080,15 @@ function applyScenarios(t,p) {
     }
     if (subEl && p[pl.sub]) subEl.textContent = p[pl.sub];
   });
-  // Fallback: cons-price aus base_label wenn noch leer
+  // Analyst consensus price — preferably from analyst_konsens field, fallback to base_label
   const cp=$(t+'-cons-price');
-  if(cp&&(cp.textContent==='—'||!cp.textContent.trim())&&p.base_label) cp.textContent=p.base_label+' (Ø Bank)';
+  if(cp) {
+    if(p.analyst_konsens) {
+      cp.textContent = p.analyst_konsens + ' (Ø Bank)';
+    } else if(p.base_label && (cp.textContent==='—'||!cp.textContent.trim())) {
+      cp.textContent = p.base_label + ' (Ø Bank)';
+    }
+  }
 }
 function applySector(t,p) {
   if(!p||!p.cards) return;
@@ -3919,9 +3926,13 @@ async function fetchRec(t) {
 function applyRec(t,p) {
   notifyNewData(t);
   if(!p) return;
-  // Analyst consensus — zuerst setzen
-  if($(t+'-cons-price')&&p.kursziel) $(t+'-cons-price').textContent=p.kursziel;
+  // Analyst consensus from rec data (p.analysten = "11x Kaufen, 4x Halten")
   if($(t+'-cons-rating')&&p.analysten) $(t+'-cons-rating').textContent=p.analysten;
+  // cons-price: only set from rec if not already set by scenarios
+  const cpEl=$(t+'-cons-price');
+  if(cpEl && p.kursziel && (cpEl.textContent==='—'||!cpEl.textContent.trim())) {
+    cpEl.textContent=p.kursziel;
+  }
   // Recommendation pill (HTML id: rklb-rec-pill / asts-rec-pill)
   const pill=$(t+'-rec-pill');
   if(pill&&p.empfehlung){
