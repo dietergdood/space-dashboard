@@ -33,12 +33,15 @@ function getLatestValue(facts, concept, unit = 'USD') {
 function getQuarterlyRevenue(facts) {
   try {
     const data = facts?.['us-gaap']?.['Revenues']?.units?.['USD'] ||
-                 facts?.['us-gaap']?.['RevenueFromContractWithCustomerExcludingAssessedTax']?.units?.['USD'];
+                 facts?.['us-gaap']?.['RevenueFromContractWithCustomerExcludingAssessedTax']?.units?.['USD'] ||
+                 facts?.['us-gaap']?.['RevenueFromContractWithCustomerIncludingAssessedTax']?.units?.['USD'] ||
+                 facts?.['us-gaap']?.['SalesRevenueNet']?.units?.['USD'];
     if (!data?.length) return [];
+    // Prefer quarterly (Q1-Q4) over annual, and only instantaneous periods (start != end)
     return data
-      .filter(d => (d.form === '10-Q' || d.form === '10-K') && d.fp)
+      .filter(d => (d.form === '10-Q' || d.form === '10-K') && d.fp && d.start !== d.end)
       .sort((a, b) => new Date(b.end) - new Date(a.end))
-      .slice(0, 4)
+      .slice(0, 5)
       .map(d => ({ value: d.val, date: d.end, period: d.fp, form: d.form }));
   } catch { return []; }
 }
@@ -82,9 +85,11 @@ export default async function handler(req, res) {
     const cash = getLatestValue(facts.facts, 'CashAndCashEquivalentsAtCarryingValue') ||
                  getLatestValue(facts.facts, 'CashCashEquivalentsAndShortTermInvestments');
 
-    // Long-term debt
+    // Long-term debt - ASTS uses different concepts
     const debt = getLatestValue(facts.facts, 'LongTermDebt') ||
-                 getLatestValue(facts.facts, 'LongTermDebtNoncurrent');
+                 getLatestValue(facts.facts, 'LongTermDebtNoncurrent') ||
+                 getLatestValue(facts.facts, 'ConvertibleNotesPayable') ||
+                 getLatestValue(facts.facts, 'NotesPayable');
 
     // Net loss/income
     const netIncome = getLatestValue(facts.facts, 'NetIncomeLoss');
