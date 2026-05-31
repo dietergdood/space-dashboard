@@ -11,9 +11,16 @@ const EDGAR_BASE = 'https://data.sec.gov/api/xbrl/companyfacts/CIK';
 async function fetchEdgar(cik) {
   const url = `${EDGAR_BASE}${cik}.json`;
   const r = await fetch(url, {
-    headers: { 'User-Agent': 'SpaceStocksDashboard contact@space-stocks.app' }
+    headers: {
+      'User-Agent': 'SpaceStocksDashboard/1.0 (space-stocks.vercel.app; contact@space-stocks.app)',
+      'Accept': 'application/json',
+      'Accept-Encoding': 'gzip, deflate',
+    }
   });
-  if (!r.ok) throw new Error(`SEC EDGAR ${r.status} for CIK ${cik}`);
+  if (!r.ok) {
+    const body = await r.text().catch(() => '');
+    throw new Error(`SEC EDGAR ${r.status}: ${body.substring(0,100)}`);
+  }
   return r.json();
 }
 
@@ -126,6 +133,11 @@ export default async function handler(req, res) {
       updated_at: new Date().toISOString()
     });
   } catch (e) {
-    return res.status(500).json({ error: e.message });
+    console.error('financials error:', e.message);
+    return res.status(200).json({
+      error: e.message,
+      ticker: ticker.toUpperCase(),
+      note: 'SEC EDGAR fetch failed - will retry'
+    });
   }
 }
