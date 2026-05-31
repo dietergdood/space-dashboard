@@ -334,12 +334,9 @@ body{font-family:'DM Sans',sans-serif;background:var(--bg);color:var(--text);min
 .news-live{display:flex;align-items:center;gap:6px;font-size:12px;font-weight:500;color:var(--text3);}
 .earnings-bar{display:flex;align-items:center;gap:8px;padding:8px 12px;background:var(--amber-bg, #fefce8);border:1px solid var(--amber-bd, #fde68a);border-radius:8px;margin-bottom:10px;font-size:12px;}
 .rec-history{margin-top:12px;padding-top:12px;border-top:1px solid var(--border);}
-.kpi-tooltip{position:absolute;bottom:calc(100% + 8px);left:50%;transform:translateX(-50%);background:var(--text);color:var(--surface);font-size:11px;padding:6px 10px;border-radius:8px;white-space:nowrap;max-width:220px;white-space:normal;text-align:center;line-height:1.4;z-index:500;pointer-events:none;opacity:0;transition:opacity .2s;}
-.kpi-tooltip-wrap{position:relative;display:inline-flex;align-items:center;gap:3px;cursor:help;}
-.kpi-tooltip-wrap:hover .kpi-tooltip{opacity:1;}
-.kpi-cat{position:relative;}
-.kpi-cat .kpi-tooltip{bottom:calc(100% + 6px);left:50%;white-space:normal;width:180px;}
 .kpi-info{display:inline-flex;align-items:center;justify-content:center;width:13px;height:13px;border-radius:50%;background:var(--surface3);color:var(--text3);font-size:9px;font-weight:700;flex-shrink:0;cursor:help;}
+.kpi-tooltip-wrap{display:inline-flex;align-items:center;gap:3px;}
+#kpi-tt{position:fixed;background:#1a1a17;color:#f0f0ec;font-size:12px;padding:8px 12px;border-radius:8px;max-width:220px;line-height:1.5;z-index:9999;pointer-events:none;display:none;box-shadow:0 4px 12px rgba(0,0,0,.3);}
 .kpi-score-badge{display:inline-flex;align-items:center;justify-content:center;width:52px;height:52px;border-radius:50%;font-size:18px;font-weight:700;font-family:"DM Mono",monospace;flex-shrink:0;}
 .kpi-score-badge.excellent{background:rgba(22,163,74,.12);color:var(--green);}
 .kpi-score-badge.good{background:rgba(37,99,235,.1);color:var(--blue);}
@@ -950,17 +947,17 @@ body{font-family:'DM Sans',sans-serif;background:var(--bg);color:var(--text);min
       <div style="display:flex;align-items:center;gap:14px;margin-bottom:12px;">
         <div class="kpi-score-badge good" id="rklb-score-badge">—</div>
         <div style="flex:1;">
-          <div style="font-size:13px;font-weight:600;">KI-KPI-Score <span class="kpi-info" style="vertical-align:middle;">?</span><div class="kpi-tooltip" style="left:0;transform:none;width:220px;">Gesamtbewertung 0–100 basierend auf Wachstum, Backlog, Marge, Liquidität, Risiko und Bewertung. Grün ≥80, Blau ≥60, Orange ≥40, Rot &lt;40</div></div>
+          <div style="font-size:13px;font-weight:600;">KI-KPI-Score <span class="kpi-info" style="vertical-align:middle;">?</span><div class="kpi-tooltip" style="display:none" style="left:0;transform:none;width:220px;">Gesamtbewertung 0–100 basierend auf Wachstum, Backlog, Marge, Liquidität, Risiko und Bewertung. Grün ≥80, Blau ≥60, Orange ≥40, Rot &lt;40</div></div>
           <div style="font-size:11px;color:var(--text3);" id="rklb-score-sub">Wird berechnet...</div>
         </div>
       </div>
       <div class="kpi-cat-grid" id="rklb-cat-grid">
-        <div class="kpi-cat" onclick="toggleDrill('rklb','wachstum')"><div class="kpi-cat-name">Wachstum <span class="kpi-info">?</span><div class="kpi-tooltip">Wie schnell wächst der Umsatz? Hohe Werte = starkes Umsatzwachstum YoY/QoQ</div></div><div class="kpi-cat-score" id="rklb-score-wachstum">—</div></div>
-        <div class="kpi-cat" onclick="toggleDrill('rklb','backlog')"><div class="kpi-cat-name">Backlog <span class="kpi-info">?</span><div class="kpi-tooltip">Auftragsbestand = zukünftige Einnahmen. Zeigt wie viel Arbeit bereits gesichert ist — wichtigster Vorlaufindikator</div></div><div class="kpi-cat-score" id="rklb-score-backlog">—</div></div>
-        <div class="kpi-cat" onclick="toggleDrill('rklb','marge')"><div class="kpi-cat-name">Marge <span class="kpi-info">?</span><div class="kpi-tooltip">Wie viel bleibt nach Kosten übrig? Höhere Bruttomarge = profitableres Geschäftsmodell</div></div><div class="kpi-cat-score" id="rklb-score-marge">—</div></div>
-        <div class="kpi-cat" onclick="toggleDrill('rklb','liquiditaet')"><div class="kpi-cat-name">Liquidität <span class="kpi-info">?</span><div class="kpi-tooltip">Wie viel Cash hat das Unternehmen? Hohe Liquidität = kann Verluste überbrücken und investieren</div></div><div class="kpi-cat-score" id="rklb-score-liquiditaet">—</div></div>
-        <div class="kpi-cat" onclick="toggleDrill('rklb','risiko')"><div class="kpi-cat-name">Risiko <span class="kpi-info">?</span><div class="kpi-tooltip">Wie riskant ist die Aktie? Hoher Score = geringeres Risiko. Faktoren: Neutron-Timing, Abhängigkeiten, Cashburn</div></div><div class="kpi-cat-score" id="rklb-score-risiko">—</div></div>
-        <div class="kpi-cat" onclick="toggleDrill('rklb','bewertung')"><div class="kpi-cat-name">Bewertung <span class="kpi-info">?</span><div class="kpi-tooltip">Ist die Aktie günstig oder teuer? Niedriger Score = sehr hohe Bewertung relativ zum Umsatz (teuer)</div></div><div class="kpi-cat-score" id="rklb-score-bewertung">—</div></div>
+        <div class="kpi-cat" onclick="toggleDrill('rklb','wachstum')"><div class="kpi-cat-name">Wachstum <span class="kpi-info">?</span><div class="kpi-tooltip" style="display:none">Wie schnell wächst der Umsatz? Hohe Werte = starkes Umsatzwachstum YoY/QoQ</div></div><div class="kpi-cat-score" id="rklb-score-wachstum">—</div></div>
+        <div class="kpi-cat" onclick="toggleDrill('rklb','backlog')"><div class="kpi-cat-name">Backlog <span class="kpi-info">?</span><div class="kpi-tooltip" style="display:none">Auftragsbestand = zukünftige Einnahmen. Zeigt wie viel Arbeit bereits gesichert ist — wichtigster Vorlaufindikator</div></div><div class="kpi-cat-score" id="rklb-score-backlog">—</div></div>
+        <div class="kpi-cat" onclick="toggleDrill('rklb','marge')"><div class="kpi-cat-name">Marge <span class="kpi-info">?</span><div class="kpi-tooltip" style="display:none">Wie viel bleibt nach Kosten übrig? Höhere Bruttomarge = profitableres Geschäftsmodell</div></div><div class="kpi-cat-score" id="rklb-score-marge">—</div></div>
+        <div class="kpi-cat" onclick="toggleDrill('rklb','liquiditaet')"><div class="kpi-cat-name">Liquidität <span class="kpi-info">?</span><div class="kpi-tooltip" style="display:none">Wie viel Cash hat das Unternehmen? Hohe Liquidität = kann Verluste überbrücken und investieren</div></div><div class="kpi-cat-score" id="rklb-score-liquiditaet">—</div></div>
+        <div class="kpi-cat" onclick="toggleDrill('rklb','risiko')"><div class="kpi-cat-name">Risiko <span class="kpi-info">?</span><div class="kpi-tooltip" style="display:none">Wie riskant ist die Aktie? Hoher Score = geringeres Risiko. Faktoren: Neutron-Timing, Abhängigkeiten, Cashburn</div></div><div class="kpi-cat-score" id="rklb-score-risiko">—</div></div>
+        <div class="kpi-cat" onclick="toggleDrill('rklb','bewertung')"><div class="kpi-cat-name">Bewertung <span class="kpi-info">?</span><div class="kpi-tooltip" style="display:none">Ist die Aktie günstig oder teuer? Niedriger Score = sehr hohe Bewertung relativ zum Umsatz (teuer)</div></div><div class="kpi-cat-score" id="rklb-score-bewertung">—</div></div>
       </div>
       <div class="kpi-drill" id="rklb-drill-wachstum">
         <div class="kpi-drill-row"><span class="kpi-drill-label">Revenue</span><span class="kpi-drill-val"><span id="rklb-d-umsatz">—</span><span class="kpi-tag-sec">SEC</span></span></div>
@@ -990,9 +987,9 @@ body{font-family:'DM Sans',sans-serif;background:var(--bg);color:var(--text);min
         <div class="kpi-drill-row"><span class="kpi-drill-label">Defense Exposure</span><span class="kpi-drill-val"><span id="rklb-d-defense">—</span><span class="kpi-tag-ki">KI</span></span></div>
       </div>
       <div class="kpi-drill" id="rklb-drill-bewertung">
-        <div class="kpi-drill-row"><span class="kpi-drill-label kpi-tooltip-wrap">EV/Sales <span class="kpi-info">?</span><div class="kpi-tooltip">Enterprise Value geteilt durch Umsatz. PS 117x bedeutet: die Aktie kostet 117× den Jahresumsatz — sehr teuer, aber bei Wachstumsaktien üblich</div></span><span class="kpi-drill-val"><span id="rklb-d-evsales">—</span><span class="kpi-tag-ki">KI</span></span></div>
-        <div class="kpi-drill-row"><span class="kpi-drill-label kpi-tooltip-wrap">Kurs vs. Konsens <span class="kpi-info">?</span><div class="kpi-tooltip">Wie weit ist der aktuelle Kurs vom durchschnittlichen Analysten-Kursziel entfernt? 38% über Konsens = Kurs bereits über dem Durchschnittsziel</div></span><span class="kpi-drill-val" id="rklb-d-vs-konsens">—</span></div>
-        <div class="kpi-drill-row"><span class="kpi-drill-label kpi-tooltip-wrap">Analysten-Range <span class="kpi-info">?</span><div class="kpi-tooltip">Die Spanne aller Analysten-Kursziele. $60 = pessimistischstes Ziel (Bear Case), $150 = optimistischstes Ziel (Bull Case)</div></span><span class="kpi-drill-val" id="rklb-d-analyst-range">—</span></div>
+        <div class="kpi-drill-row"><span class="kpi-drill-label kpi-tooltip-wrap">EV/Sales <span class="kpi-info">?</span><div class="kpi-tooltip" style="display:none">Enterprise Value geteilt durch Umsatz. PS 117x bedeutet: die Aktie kostet 117× den Jahresumsatz — sehr teuer, aber bei Wachstumsaktien üblich</div></span><span class="kpi-drill-val"><span id="rklb-d-evsales">—</span><span class="kpi-tag-ki">KI</span></span></div>
+        <div class="kpi-drill-row"><span class="kpi-drill-label kpi-tooltip-wrap">Kurs vs. Konsens <span class="kpi-info">?</span><div class="kpi-tooltip" style="display:none">Wie weit ist der aktuelle Kurs vom durchschnittlichen Analysten-Kursziel entfernt? 38% über Konsens = Kurs bereits über dem Durchschnittsziel</div></span><span class="kpi-drill-val" id="rklb-d-vs-konsens">—</span></div>
+        <div class="kpi-drill-row"><span class="kpi-drill-label kpi-tooltip-wrap">Analysten-Range <span class="kpi-info">?</span><div class="kpi-tooltip" style="display:none">Die Spanne aller Analysten-Kursziele. $60 = pessimistischstes Ziel (Bear Case), $150 = optimistischstes Ziel (Bull Case)</div></span><span class="kpi-drill-val" id="rklb-d-analyst-range">—</span></div>
       </div>
       <div class="kpi-interp" id="rklb-kpi-interp" style="display:none;"></div>
       <div id="rklb-kpi-drivers" style="display:none;">
@@ -1448,30 +1445,30 @@ body{font-family:'DM Sans',sans-serif;background:var(--bg);color:var(--text);min
       <div style="display:flex;align-items:center;gap:14px;margin-bottom:12px;">
         <div class="kpi-score-badge good" id="asts-score-badge">—</div>
         <div style="flex:1;">
-          <div style="font-size:13px;font-weight:600;">KI-KPI-Score <span class="kpi-info" style="vertical-align:middle;">?</span><div class="kpi-tooltip" style="left:0;transform:none;width:220px;">Gesamtbewertung 0–100 basierend auf Cash, Umsatz-Ramp, Launch-Status, Technologie, Partner und Risiko. Grün ≥80, Blau ≥60, Orange ≥40, Rot &lt;40</div></div>
+          <div style="font-size:13px;font-weight:600;">KI-KPI-Score <span class="kpi-info" style="vertical-align:middle;">?</span><div class="kpi-tooltip" style="display:none" style="left:0;transform:none;width:220px;">Gesamtbewertung 0–100 basierend auf Cash, Umsatz-Ramp, Launch-Status, Technologie, Partner und Risiko. Grün ≥80, Blau ≥60, Orange ≥40, Rot &lt;40</div></div>
           <div style="font-size:11px;color:var(--text3);" id="asts-score-sub">Wird berechnet...</div>
         </div>
       </div>
       <div class="kpi-cat-grid">
-        <div class="kpi-cat" onclick="toggleDrill('asts','cash')"><div class="kpi-cat-name">Cash <span class="kpi-info">?</span><div class="kpi-tooltip">Verfügbares Geld minus Schulden. Bei ASTS kritisch: das Unternehmen macht noch Verluste und braucht Cash zum Überleben</div></div><div class="kpi-cat-score" id="asts-score-cash">—</div></div>
-        <div class="kpi-cat" onclick="toggleDrill('asts','umsatz')"><div class="kpi-cat-name">Umsatz-Ramp <span class="kpi-info">?</span><div class="kpi-tooltip">Wie schnell steigen die Einnahmen? ASTS ist noch in der Frühphase — der Umsatz muss stark wachsen um die Kosten zu decken</div></div><div class="kpi-cat-score" id="asts-score-umsatz">—</div></div>
-        <div class="kpi-cat" onclick="toggleDrill('asts','launch')"><div class="kpi-cat-name">Launch <span class="kpi-info">?</span><div class="kpi-tooltip">Status der BlueBird Satelliten-Starts. Ohne Satelliten im Orbit kein Service — der wichtigste operative KPI</div></div><div class="kpi-cat-score" id="asts-score-launch">—</div></div>
-        <div class="kpi-cat" onclick="toggleDrill('asts','technologie')"><div class="kpi-cat-name">Technologie <span class="kpi-info">?</span><div class="kpi-tooltip">Funktioniert die Technologie? FCC-Lizenz, Speed-Tests und Regulierung zeigen ob das Produkt einsatzbereit ist</div></div><div class="kpi-cat-score" id="asts-score-technologie">—</div></div>
-        <div class="kpi-cat" onclick="toggleDrill('asts','partner')"><div class="kpi-cat-name">Partner <span class="kpi-info">?</span><div class="kpi-tooltip">MNO-Partner (Mobilfunkanbieter) sind der Vertriebskanal. Mehr Partner = mehr potenzielle Nutzer und Einnahmen</div></div><div class="kpi-cat-score" id="asts-score-partner">—</div></div>
-        <div class="kpi-cat" onclick="toggleDrill('asts','risiko')"><div class="kpi-cat-name">Risiko <span class="kpi-info">?</span><div class="kpi-tooltip">Hoher Score = geringeres Risiko. Faktoren: Launch-Verzögerungen, Verwässerung durch neue Aktien, Konkurrenz von Starlink</div></div><div class="kpi-cat-score" id="asts-score-risiko">—</div></div>
+        <div class="kpi-cat" onclick="toggleDrill('asts','cash')"><div class="kpi-cat-name">Cash <span class="kpi-info">?</span><div class="kpi-tooltip" style="display:none">Verfügbares Geld minus Schulden. Bei ASTS kritisch: das Unternehmen macht noch Verluste und braucht Cash zum Überleben</div></div><div class="kpi-cat-score" id="asts-score-cash">—</div></div>
+        <div class="kpi-cat" onclick="toggleDrill('asts','umsatz')"><div class="kpi-cat-name">Umsatz-Ramp <span class="kpi-info">?</span><div class="kpi-tooltip" style="display:none">Wie schnell steigen die Einnahmen? ASTS ist noch in der Frühphase — der Umsatz muss stark wachsen um die Kosten zu decken</div></div><div class="kpi-cat-score" id="asts-score-umsatz">—</div></div>
+        <div class="kpi-cat" onclick="toggleDrill('asts','launch')"><div class="kpi-cat-name">Launch <span class="kpi-info">?</span><div class="kpi-tooltip" style="display:none">Status der BlueBird Satelliten-Starts. Ohne Satelliten im Orbit kein Service — der wichtigste operative KPI</div></div><div class="kpi-cat-score" id="asts-score-launch">—</div></div>
+        <div class="kpi-cat" onclick="toggleDrill('asts','technologie')"><div class="kpi-cat-name">Technologie <span class="kpi-info">?</span><div class="kpi-tooltip" style="display:none">Funktioniert die Technologie? FCC-Lizenz, Speed-Tests und Regulierung zeigen ob das Produkt einsatzbereit ist</div></div><div class="kpi-cat-score" id="asts-score-technologie">—</div></div>
+        <div class="kpi-cat" onclick="toggleDrill('asts','partner')"><div class="kpi-cat-name">Partner <span class="kpi-info">?</span><div class="kpi-tooltip" style="display:none">MNO-Partner (Mobilfunkanbieter) sind der Vertriebskanal. Mehr Partner = mehr potenzielle Nutzer und Einnahmen</div></div><div class="kpi-cat-score" id="asts-score-partner">—</div></div>
+        <div class="kpi-cat" onclick="toggleDrill('asts','risiko')"><div class="kpi-cat-name">Risiko <span class="kpi-info">?</span><div class="kpi-tooltip" style="display:none">Hoher Score = geringeres Risiko. Faktoren: Launch-Verzögerungen, Verwässerung durch neue Aktien, Konkurrenz von Starlink</div></div><div class="kpi-cat-score" id="asts-score-risiko">—</div></div>
       </div>
       <div class="kpi-drill" id="asts-drill-cash">
         <div class="kpi-drill-row"><span class="kpi-drill-label">Cash Total</span><span class="kpi-drill-val"><span id="asts-d-cash">—</span><span class="kpi-tag-sec">SEC</span></span></div>
         <div class="kpi-drill-source" id="asts-d-cash-src"></div>
         <div class="kpi-drill-row"><span class="kpi-drill-label">Long-term Debt</span><span class="kpi-drill-val"><span id="asts-d-debt">—</span><span class="kpi-tag-sec">SEC</span></span></div>
-        <div class="kpi-drill-row"><span class="kpi-drill-label kpi-tooltip-wrap">Cash Runway <span class="kpi-info">?</span><div class="kpi-tooltip">Wie lange reicht das Geld? Zeigt wie viele Monate das Unternehmen ohne neue Finanzierung überleben kann</div></span><span class="kpi-drill-val"><span id="asts-d-runway">—</span><span class="kpi-tag-ki">KI</span></span></div>
+        <div class="kpi-drill-row"><span class="kpi-drill-label kpi-tooltip-wrap">Cash Runway <span class="kpi-info">?</span><div class="kpi-tooltip" style="display:none">Wie lange reicht das Geld? Zeigt wie viele Monate das Unternehmen ohne neue Finanzierung überleben kann</div></span><span class="kpi-drill-val"><span id="asts-d-runway">—</span><span class="kpi-tag-ki">KI</span></span></div>
         <div class="kpi-drill-row"><span class="kpi-drill-label">Nettoverlust</span><span class="kpi-drill-val"><span id="asts-d-netloss">—</span><span class="kpi-tag-sec">SEC</span></span></div>
       </div>
       <div class="kpi-drill" id="asts-drill-umsatz">
         <div class="kpi-drill-row"><span class="kpi-drill-label">Revenue Q1 2026</span><span class="kpi-drill-val"><span id="asts-d-rev">—</span><span class="kpi-tag-sec">SEC</span></span></div>
         <div class="kpi-drill-row"><span class="kpi-drill-label">YoY Wachstum</span><span class="kpi-drill-val" id="asts-d-yoy">—</span></div>
         <div class="kpi-drill-row"><span class="kpi-drill-label">2026 Guidance</span><span class="kpi-drill-val"><span id="asts-d-guidance">—</span><span class="kpi-tag-ki">KI</span></span></div>
-        <div class="kpi-drill-row"><span class="kpi-drill-label kpi-tooltip-wrap">Guidance Progress <span class="kpi-info">?</span><div class="kpi-tooltip">Wie viel des Jahresziels ist bereits erreicht? Zeigt ob ASTS auf Kurs für die eigene Prognose liegt</div></span><span class="kpi-drill-val"><span id="asts-d-guidance-prog">—</span><span class="kpi-tag-ki">KI</span></span></div>
+        <div class="kpi-drill-row"><span class="kpi-drill-label kpi-tooltip-wrap">Guidance Progress <span class="kpi-info">?</span><div class="kpi-tooltip" style="display:none">Wie viel des Jahresziels ist bereits erreicht? Zeigt ob ASTS auf Kurs für die eigene Prognose liegt</div></span><span class="kpi-drill-val"><span id="asts-d-guidance-prog">—</span><span class="kpi-tag-ki">KI</span></span></div>
       </div>
       <div class="kpi-drill" id="asts-drill-launch">
         <div id="asts-bluebird-status"><div style="color:var(--text3);font-size:12px;font-style:italic;">Wird aktualisiert...</div></div>
@@ -1482,7 +1479,7 @@ body{font-family:'DM Sans',sans-serif;background:var(--bg);color:var(--text);min
         <div class="kpi-drill-row"><span class="kpi-drill-label">ITU Status</span><span class="kpi-drill-val"><span id="asts-itu-status">—</span><span class="kpi-tag-ki">KI</span></span></div>
       </div>
       <div class="kpi-drill" id="asts-drill-partner">
-        <div class="kpi-drill-row"><span class="kpi-drill-label kpi-tooltip-wrap">MNO Partner <span class="kpi-info">?</span><div class="kpi-tooltip">MNO = Mobile Network Operator (Mobilfunkanbieter). Diese Partner vermarkten den ASTS-Service an ihre bestehenden Kunden</div></span><span class="kpi-drill-val"><span id="asts-d-mnos">—</span><span class="kpi-tag-ki">KI</span></span></div>
+        <div class="kpi-drill-row"><span class="kpi-drill-label kpi-tooltip-wrap">MNO Partner <span class="kpi-info">?</span><div class="kpi-tooltip" style="display:none">MNO = Mobile Network Operator (Mobilfunkanbieter). Diese Partner vermarkten den ASTS-Service an ihre bestehenden Kunden</div></span><span class="kpi-drill-val"><span id="asts-d-mnos">—</span><span class="kpi-tag-ki">KI</span></span></div>
         <div class="kpi-drill-row"><span class="kpi-drill-label">Aktive Partner</span><span class="kpi-drill-val" id="asts-d-mno-list">—</span></div>
       </div>
       <div class="kpi-drill" id="asts-drill-risiko">
@@ -3370,6 +3367,40 @@ function updateSettingsAuth(user) {
     loggedOut.style.display = 'block';
   }
 }
+
+// ── KPI Tooltips ────────────────────────────────────────────
+(function() {
+  const tt = document.createElement('div');
+  tt.id = 'kpi-tt';
+  document.body.appendChild(tt);
+
+  document.addEventListener('mouseover', e => {
+    const info = e.target.closest('.kpi-info');
+    if (!info) return;
+    // Find tooltip text from adjacent .kpi-tooltip div
+    const tooltipEl = info.parentElement.querySelector('.kpi-tooltip');
+    if (!tooltipEl) return;
+    tt.textContent = tooltipEl.textContent;
+    tt.style.display = 'block';
+    positionTt(e);
+  });
+
+  document.addEventListener('mousemove', e => {
+    if (tt.style.display === 'block') positionTt(e);
+  });
+
+  document.addEventListener('mouseout', e => {
+    if (e.target.closest('.kpi-info')) tt.style.display = 'none';
+  });
+
+  function positionTt(e) {
+    const x = e.clientX, y = e.clientY;
+    const w = tt.offsetWidth, h = tt.offsetHeight;
+    const vw = window.innerWidth, vh = window.innerHeight;
+    tt.style.left = Math.min(x + 12, vw - w - 8) + 'px';
+    tt.style.top  = (y - h - 10 < 0 ? y + 20 : y - h - 10) + 'px';
+  }
+})();
 
 // ── Dark Mode ──────────────────────────────────────────────
 function toggleDarkMode() {
