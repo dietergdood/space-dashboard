@@ -3784,8 +3784,16 @@ async function refreshAllNews() {
   loadRecHistory('asts');
   loadFinancials('rklb');
   loadFinancials('asts');
-  loadRangeChart('rklb', '1mo');
-  rangeChartLoaded.rklb = true;
+  // Load range charts after DOM + Chart.js are ready
+  function initRangeCharts() {
+    if (typeof Chart === 'undefined') {
+      setTimeout(initRangeCharts, 200);
+      return;
+    }
+    loadRangeChart('rklb', '1mo');
+    rangeChartLoaded.rklb = true;
+  }
+  setTimeout(initRangeCharts, 100);
   // Collapse glossar on mobile by default
   if (window.innerWidth <= 640) {
     const glossar = document.getElementById('card-glossar');
