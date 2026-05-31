@@ -2,7 +2,7 @@
 <html lang="de">
 <head>
   <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
   <title>Space Stocks Dashboard</title>
   <meta name="description" content="RKLB · ASTS · SpaceX Analyse-Dashboard">
   <link rel="manifest" href="/manifest.json">
@@ -556,19 +556,21 @@ body{font-family:var(--font-sans);background:var(--bg);color:var(--text);min-hei
    TABLET (max 768px)
 ══════════════════════════════════ */
 
-@media(max-width@media(max-width@media(max-width:800px){
+@media(max-width:800px){
+
+  /* ── Base ── */
+  html,body{overflow-x:hidden;width:100%;}
 
   /* ── Header ── */
-  .hdr{width:100%;}
+  .hdr{width:100%;overflow:visible;}
   .hdr-inner{padding:0 10px;gap:8px;height:52px;max-width:100%;width:100%;box-sizing:border-box;}
-  .hdr-mid{overflow:hidden;}
+  .hdr-mid{flex:1;min-width:0;overflow:hidden;}
   .logo{gap:6px;flex-shrink:0;}
   .logo-icon{font-size:18px;}
   .logo-text{font-size:13px;}
   .logo-sub{display:none;}
   .live-badge span{display:none;}
   .live-badge{padding:5px 8px;}
-  .hdr-mid{flex:1;display:flex;justify-content:center;min-width:0;overflow:hidden;}
   .hdr-r{gap:6px;flex-shrink:0;}
   .settings-btn{width:32px;height:32px;font-size:14px;}
   .ki-status-pill{display:none !important;}
@@ -582,7 +584,7 @@ body{font-family:var(--font-sans);background:var(--bg);color:var(--text);min-hei
   .spcx-icon{display:none;}
 
   /* ── Container ── */
-  .container{padding:8px 8px 80px;max-width:100%;}
+  .container{padding:8px 8px 100px;max-width:100%;overflow-x:hidden;}
 
   /* ── Context bar ── */
   .ctx-bar{padding:12px;gap:6px;flex-direction:column !important;}
@@ -591,66 +593,80 @@ body{font-family:var(--font-sans);background:var(--bg);color:var(--text);min-hei
   .ctx-top-row .ctx-name{font-size:14px;font-weight:700;}
   .ctx-info .ctx-name{display:none;}
   .ctx-info{width:100%;}
-  .ctx-desc{font-size:12px;line-height:1.6;margin-top:0;}
-  .ctx-stats{gap:5px;margin-top:6px;}
-  .ctx-stat{font-size:11px;background:var(--surface2);border-radius:6px;padding:3px 8px;white-space:nowrap;}
-  .ctx-stat b{font-size:12px;}
+  .ctx-desc{font-size:12px;line-height:1.5;margin-top:0;}
+  .ctx-stats{gap:4px;margin-top:5px;flex-wrap:wrap;}
+  .ctx-stat{font-size:11px;background:var(--surface2);border-radius:6px;padding:2px 7px;white-space:nowrap;}
+  .ctx-stat b{font-size:11px;}
+  .ctx-tags{gap:4px;margin-top:5px;}
+  .ctx-tag{font-size:11px;padding:2px 7px;}
 
   /* ── Cards ── */
-  .card{border-radius:12px;margin-bottom:8px;}
-  .card-header{padding:14px 14px;}
-  .card-body{padding:12px 12px;}
+  .card{border-radius:10px;margin-bottom:8px;}
+  .card-header{padding:12px 14px;}
+  .card-body{padding:12px;}
   .card-title{font-size:15px;}
   .card-sub{font-size:11px;}
   .card-arrow{font-size:10px;}
 
-  /* ── Grids ── */
+  /* ── Metrics ── */
   .mets{grid-template-columns:repeat(2,1fr);gap:8px;}
   .met{padding:12px 10px;}
-  .met-icon{font-size:18px;margin-bottom:4px;}
-  .met-val{font-size:22px;}
+  .met-icon{font-size:16px;margin-bottom:4px;}
+  .met-val{font-size:20px;}
   .met-label{font-size:11px;}
   .met-chg{font-size:11px;}
   .met-sub{font-size:11px;}
-  .rec-scores{grid-template-columns:repeat(2,1fr);}
+
+  /* ── Charts ── */
   .chart-grid{grid-template-columns:1fr;}
-  .sector-grid{grid-template-columns:repeat(2,1fr);}
-  .glossar-grid{grid-template-columns:repeat(2,1fr);}
-  .pf-form{grid-template-columns:1fr 1fr;}
-  .pf-sum-grid{grid-template-columns:1fr 1fr;}
-  .df-stats-row{grid-template-columns:1fr 1fr 1fr;}
-  .df-pill-val{font-size:13px;}
-  .df-top-row{gap:4px;}
-  .chart-wrap{height:210px;}
+  .chart-wrap{height:200px;}
+  .range-chart-wrap{height:180px;}
 
   /* ── Recommendation ── */
+  .rec-scores{grid-template-columns:repeat(2,1fr);}
   .rec-banner{padding:12px;}
-  .rec-head{gap:10px;flex-wrap:nowrap;}
-  .rec-pill{font-size:13px;padding:5px 14px;}
-  .rec-title{font-size:14px;line-height:1.4;}
-  .rec-explain{font-size:13px;}
-  .rec-score-label{font-size:11px;}
+  .rec-head{gap:8px;}
+  .rec-pill{font-size:12px;padding:4px 12px;}
+  .rec-title{font-size:13px;line-height:1.4;}
+  .rec-explain{font-size:12px;}
   .rec-ts{font-size:11px;}
 
   /* ── KPI ── */
   .kpi-cat-grid{grid-template-columns:repeat(2,1fr);}
-  .kpi-cat-score{font-size:20px;}
+  .kpi-cat-score{font-size:18px;}
   .kpi-drill-label{font-size:12px;}
   .kpi-drill-val{font-size:12px;}
 
-  /* ── Gov ── */
+  /* ── Day Forecast ── */
+  .df-stats-row{grid-template-columns:1fr 1fr 1fr;}
+  .df-pill-val{font-size:13px;}
+  .df-top-row{gap:4px;}
+  .df-stat-num{font-size:13px;}
+
+  /* ── Sector / Gov ── */
+  .sector-grid{grid-template-columns:repeat(2,1fr);}
   .gov-grid{grid-template-columns:1fr;}
 
   /* ── News ── */
-  .news-title{font-size:13px;}
-  .news-sub{font-size:11px;}
+  .news-art-title{font-size:13px;}
+  .news-art-body{font-size:12px;}
+
+  /* ── Scenarios ── */
+  .scl{width:100px;font-size:11px;}
+
+  /* ── Glossar ── */
+  .glossar-grid{grid-template-columns:repeat(2,1fr);}
 
   /* ── Settings ── */
-  .settings-dd{width:calc(100vw - 20px);right:-8px;}
-  .scl{width:90px;font-size:11px;}
+  .settings-dd{width:calc(100vw - 20px);right:-8px;max-height:80vh;overflow-y:auto;}
 
   /* ── Portfolio ── */
-  .pf-table{font-size:12px;}
+  .pf-form{gap:6px;}
+  .pf-row{gap:6px;}
+  .pf-input{font-size:16px;padding:11px 12px;}
+  .pf-select{font-size:16px;padding:11px 12px;}
+  .pf-add{font-size:15px;padding:13px;}
+  .pf-sum-grid{grid-template-columns:1fr 1fr;}
   .pf-tx-line1{font-size:12px;}
   .pf-edit-row{gap:4px;}
   .pf-edit-input{width:70px;}
