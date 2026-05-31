@@ -101,23 +101,40 @@ body{font-family:'DM Sans',sans-serif;background:var(--bg);color:var(--text);min
 .settings-btn{width:36px;height:36px;border-radius:8px;border:1px solid var(--border);background:var(--surface);cursor:pointer;display:flex;align-items:center;justify-content:center;font-size:15px;position:relative;transition:all .2s;}
 .settings-btn:hover{background:var(--surface2);}
 .settings-wrap{position:relative;}
-.settings-dd{position:absolute;top:calc(100% + 8px);right:0;width:360px;background:var(--surface);border:1px solid var(--border2);border-radius:var(--rl);box-shadow:var(--shadow-md);z-index:200;display:none;padding:16px;}
+.settings-dd{position:absolute;top:calc(100% + 8px);right:0;width:320px;background:var(--surface);border:1px solid var(--border2);border-radius:var(--rl);box-shadow:var(--shadow-md);z-index:200;display:none;overflow:hidden;}
 .settings-dd.open{display:block;}
-.settings-label{font-size:11px;font-weight:600;letter-spacing:.08em;color:var(--text3);text-transform:uppercase;margin-bottom:10px;}
-.api-input{width:100%;padding:8px 12px;border:1px solid var(--border2);border-radius:8px;font-family:'DM Mono',monospace;font-size:13px;outline:none;transition:border-color .2s;}
+/* new sdd- classes */
+.sdd-section{padding:14px 16px;}
+.sdd-divider{height:1px;background:var(--border);}
+.sdd-section-title{font-size:11px;font-weight:600;letter-spacing:.07em;color:var(--text3);text-transform:uppercase;margin-bottom:10px;}
+.sdd-row{display:flex;align-items:center;justify-content:space-between;gap:10px;}
+.sdd-row-label{font-size:13px;color:var(--text2);font-weight:500;}
+.sdd-row-val{font-size:12px;color:var(--text3);margin-top:1px;max-width:160px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;}
+.sdd-btn{padding:5px 12px;border:1px solid var(--border2);border-radius:7px;background:var(--surface2);color:var(--text2);font-size:12px;font-weight:500;cursor:pointer;font-family:inherit;white-space:nowrap;transition:background .15s;}
+.sdd-btn:hover{background:var(--surface3);}
+.sdd-btn-danger{border-color:var(--red-bd);background:var(--red-bg);color:var(--red);}
+.sdd-btn-danger:hover{opacity:.85;}
+.sdd-hint{font-size:11px;color:var(--text3);line-height:1.5;margin-top:6px;}
+.sdd-hint a{color:var(--blue);text-decoration:none;}
+.sdd-info-rows{display:flex;flex-direction:column;gap:5px;margin-bottom:10px;}
+.sdd-info-row{display:flex;align-items:center;gap:8px;font-size:12px;color:var(--text2);}
+.sdd-info-icon{font-size:13px;flex-shrink:0;}
+.sdd-sync-status{display:flex;align-items:center;gap:6px;font-size:12px;color:var(--text2);margin-bottom:8px;}
+.sdd-refresh-btn{width:100%;padding:8px;border:1px solid var(--border2);border-radius:8px;background:var(--surface2);color:var(--text);font-size:13px;font-weight:500;cursor:pointer;font-family:inherit;transition:background .15s;}
+.sdd-refresh-btn:hover{background:var(--surface3);}
+/* toggle switch */
+.sdd-toggle{position:relative;width:40px;height:22px;border-radius:11px;border:none;background:var(--border2);cursor:pointer;transition:background .2s;flex-shrink:0;padding:0;}
+.sdd-toggle[aria-checked="true"]{background:var(--blue);}
+.sdd-toggle-thumb{position:absolute;top:3px;left:3px;width:16px;height:16px;border-radius:50%;background:#fff;transition:transform .2s;box-shadow:0 1px 3px rgba(0,0,0,.2);}
+.sdd-toggle[aria-checked="true"] .sdd-toggle-thumb{transform:translateX(18px);}
+/* legacy keep */
+.api-input{width:100%;padding:8px 12px;border:1px solid var(--border2);border-radius:8px;font-family:'DM Mono',monospace;font-size:13px;outline:none;transition:border-color .2s;background:var(--surface);color:var(--text);}
 .api-input:focus{border-color:var(--blue);}
-.api-desc{font-size:12px;color:var(--text2);margin-top:8px;line-height:1.5;}
-.api-desc a{color:var(--blue);text-decoration:none;}
-.divider{height:1px;background:var(--border);margin:14px 0;}
-.auto-bar{display:flex;align-items:center;justify-content:space-between;}
-.auto-dot{width:8px;height:8px;border-radius:50%;background:var(--text3);margin-right:8px;}
+.auto-dot{width:8px;height:8px;border-radius:50%;background:var(--text3);flex-shrink:0;}
 .auto-dot.on{background:var(--green);animation:pulse 2s infinite;}
-.auto-label{font-size:13px;color:var(--text2);display:flex;align-items:center;}
-.auto-btn{padding:6px 12px;border:1px solid var(--border2);border-radius:7px;background:var(--surface2);color:var(--text2);font-size:12px;font-weight:500;cursor:pointer;font-family:inherit;}
-.auto-btn:hover{background:var(--surface3);}
+.divider{height:1px;background:var(--border);margin:14px 0;}
 .auto-progress-track{height:2px;background:var(--border);border-radius:1px;margin-top:8px;}
 .auto-progress-fill{height:100%;background:var(--blue);border-radius:1px;width:0%;transition:width 1s linear;}
-.next-label{font-size:12px;color:var(--text3);margin-top:4px;}
 
 /* ── Context Bar ── */
 .ctx-bar{position:relative;background:var(--surface);border:1px solid var(--border);border-radius:var(--rl);padding:16px 18px 16px 26px;display:none;flex-direction:column;gap:10px;box-shadow:0 2px 12px rgba(0,0,0,.07);overflow:hidden;margin-bottom:10px;}
@@ -590,7 +607,7 @@ body{font-family:'DM Sans',sans-serif;background:var(--bg);color:var(--text);min
   .news-sub{font-size:11px;}
 
   /* ── Settings ── */
-  .settings-dd{width:calc(100vw - 24px);right:-8px;}
+  .settings-dd{width:calc(100vw - 20px);right:-8px;}
   .scl{width:90px;font-size:11px;}
 
   /* ── Portfolio ── */
@@ -646,50 +663,76 @@ body{font-family:'DM Sans',sans-serif;background:var(--bg);color:var(--text);min
       <div class="settings-wrap">
         <button class="settings-btn" id="settings-btn" onclick="toggleSettings()">⚙️</button>
         <div class="settings-dd" id="settings-dd" onclick="event.stopPropagation()">
-          <div class="settings-label">🔑 KI-Analyse Schlüssel</div>
-          <form onsubmit="return false;"><input type="text" name="username" value="api-user" style="display:none;" autocomplete="username"><input class="api-input" id="api-key" type="password" placeholder="sk-ant-api03-..." oninput="saveKey(this.value)" autocomplete="current-password"></form>
-          <div class="api-desc">
-            Ohne Schlüssel: Live-Kurse (immer kostenlos). Mit Schlüssel: KI sucht alle 2 Stunden automatisch News, Reddit-Diskussionen und Analysten-Berichte.
-            <a href="https://console.anthropic.com" target="_blank">Key holen →</a>
-            <br><small style="color:var(--text3)">Wird im Browser gespeichert, niemals auf Servern.</small>
-          </div>
-          <div class="divider"></div>
-          <div class="settings-label">↺ Aktualisierung</div>
-          <div class="auto-bar">
-            <div class="auto-label"><div class="auto-dot on" id="auto-dot"></div><span id="auto-label-txt">Cron läuft 1× täglich automatisch</span></div>
-          </div>
-          <div style="margin-top:10px;" id="manual-refresh-wrap">
-            <button class="auto-btn" style="width:100%;padding:8px;font-size:13px;" onclick="manualRefreshFromSettings()" id="manual-refresh-btn">
-              ↺ Jetzt manuell aktualisieren
-            </button>
-            <div style="font-size:11px;color:var(--text3);margin-top:4px;">Eigener API-Key nötig · nutzt dein Guthaben</div>
-          </div>
-          <div class="next-label" id="next-label" style="margin-top:6px;"></div>
-          <div class="divider"></div>
-          <div class="settings-label">ℹ️ Aktualisierungs-Übersicht</div>
-          <div style="font-size:12px;color:var(--text2);line-height:1.8;">
-            <div>⚡ <b>Kurse</b> — alle 15 Sekunden (Yahoo Finance)</div>
-            <div>🤖 <b>KI-Analysen</b> — täglich um 13:00 Uhr</div>
-            <div style="margin-top:10px;padding-top:10px;border-top:1px solid var(--border);">
-              <div style="display:flex;align-items:center;justify-content:space-between;">
-                <span style="font-size:13px;font-weight:500;">🌙 Dark Mode</span>
-                <button id="dark-mode-btn" onclick="toggleDarkMode()" style="padding:6px 14px;border:1px solid var(--border2);background:var(--surface2);border-radius:20px;font-size:12px;font-weight:500;cursor:pointer;font-family:inherit;color:var(--text2);">Aktivieren</button>
+
+          <!-- Account -->
+          <div class="sdd-section">
+            <div id="settings-logged-in" style="display:none;">
+              <div class="sdd-row">
+                <div>
+                  <div class="sdd-row-label">Eingeloggt als</div>
+                  <div class="sdd-row-val" id="settings-user-email">—</div>
+                </div>
+                <button class="sdd-btn sdd-btn-danger" onclick="handleLogout()">Ausloggen</button>
               </div>
             </div>
-            <div style="margin-top:8px;">
-              <button onclick="requestPushPermission()" style="padding:6px 12px;border:1px solid var(--border2);background:var(--surface2);border-radius:7px;font-size:12px;cursor:pointer;font-family:inherit;">🔔 Push-Benachrichtigungen aktivieren</button>
-            </div>
-            <div id="settings-auth-section" style="margin-top:10px;padding-top:10px;border-top:1px solid var(--border);">
-              <div id="settings-logged-in" style="display:none;">
-                <div style="font-size:12px;color:var(--text3);margin-bottom:6px;">Eingeloggt als <span id="settings-user-email" style="color:var(--text2);font-weight:500;"></span></div>
-                <button onclick="handleLogout()" style="padding:6px 14px;border:1px solid var(--red-bd);background:var(--red-bg);border-radius:7px;font-size:12px;font-weight:500;cursor:pointer;font-family:inherit;color:var(--red);">🚪 Ausloggen</button>
-              </div>
-              <div id="settings-logged-out" style="display:none;">
-                <button onclick="hideSettings();showAuthOverlay();" style="padding:6px 14px;border:1px solid var(--border2);background:var(--surface2);border-radius:7px;font-size:12px;font-weight:500;cursor:pointer;font-family:inherit;">🔑 Anmelden</button>
+            <div id="settings-logged-out" style="display:none;">
+              <div class="sdd-row">
+                <div>
+                  <div class="sdd-row-label">Portfolio Cloud-Sync</div>
+                  <div class="sdd-row-val">Nicht eingeloggt</div>
+                </div>
+                <button class="sdd-btn" onclick="hideSettings();showAuthOverlay();">Anmelden</button>
               </div>
             </div>
-            <div>📦 <b>Beim Öffnen</b> — letzte gespeicherte Daten sofort</div>
-            <div style="margin-top:6px;color:var(--text3);">Letzte KI-Aktualisierung: <span id="last-sync-label">—</span></div>
+          </div>
+
+          <div class="sdd-divider"></div>
+
+          <!-- KI Key -->
+          <div class="sdd-section">
+            <div class="sdd-section-title">KI-Analyse Schlüssel</div>
+            <form onsubmit="return false;">
+              <input type="text" name="username" value="api-user" style="display:none;" autocomplete="username">
+              <input class="api-input" id="api-key" type="password" placeholder="sk-ant-api03-..." oninput="saveKey(this.value)" autocomplete="current-password">
+            </form>
+            <div class="sdd-hint">Ohne Key: Live-Kurse kostenlos. Mit Key: KI analysiert täglich News &amp; Analysten. <a href="https://console.anthropic.com" target="_blank">Key holen →</a> · Nur im Browser gespeichert.</div>
+          </div>
+
+          <div class="sdd-divider"></div>
+
+          <!-- Aktualisierung -->
+          <div class="sdd-section">
+            <div class="sdd-section-title">Aktualisierung</div>
+            <div class="sdd-info-rows">
+              <div class="sdd-info-row"><span class="sdd-info-icon">⚡</span><span><b>Kurse</b> alle 15 Sekunden</span></div>
+              <div class="sdd-info-row"><span class="sdd-info-icon">🤖</span><span><b>KI-Analysen</b> täglich 13:00 Uhr</span></div>
+              <div class="sdd-info-row"><span class="sdd-info-icon">📦</span><span><b>Beim Öffnen</b> letzte Daten sofort</span></div>
+            </div>
+            <div class="sdd-sync-status">
+              <div class="auto-dot on" id="auto-dot"></div>
+              <span id="auto-label-txt">Cron läuft 1× täglich automatisch</span>
+            </div>
+            <button class="sdd-refresh-btn" onclick="manualRefreshFromSettings()" id="manual-refresh-btn">↺ Jetzt manuell aktualisieren</button>
+            <div class="sdd-hint" style="margin-top:4px;">Eigener API-Key nötig · nutzt dein Guthaben</div>
+            <div class="sdd-hint" id="next-label" style="margin-top:2px;"></div>
+            <div class="sdd-hint" style="margin-top:4px;">Letzte KI-Aktualisierung: <span id="last-sync-label">—</span></div>
+          </div>
+
+          <div class="sdd-divider"></div>
+
+          <!-- Darstellung -->
+          <div class="sdd-section">
+            <div class="sdd-section-title">Darstellung</div>
+            <div class="sdd-row">
+              <span class="sdd-row-label">🌙 Dark Mode</span>
+              <button class="sdd-toggle" id="dark-mode-btn" onclick="toggleDarkMode()" role="switch" aria-checked="false">
+                <span class="sdd-toggle-thumb"></span>
+              </button>
+            </div>
+            <div class="sdd-row" style="margin-top:10px;">
+              <span class="sdd-row-label">🔔 Push-Benachrichtigungen</span>
+              <button class="sdd-btn" onclick="requestPushPermission()">Aktivieren</button>
+            </div>
           </div>
 
         </div>
@@ -3472,7 +3515,7 @@ function toggleDarkMode() {
   document.documentElement.setAttribute('data-theme', newTheme);
   localStorage.setItem('theme', newTheme);
   const btn = document.getElementById('dark-mode-btn');
-  if (btn) btn.textContent = newTheme === 'dark' ? 'Deaktivieren' : 'Aktivieren';
+  if (btn) btn.setAttribute('aria-checked', newTheme === 'dark' ? 'true' : 'false');
 }
 
 // ── Recommendation History ──────────────────────────────────
@@ -3838,7 +3881,7 @@ async function refreshAllNews() {
   if (localStorage.getItem('theme') === 'dark') {
     document.documentElement.setAttribute('data-theme','dark');
     const btn = document.getElementById('dark-mode-btn');
-    if (btn) btn.textContent = 'Deaktivieren';
+    if (btn) btn.setAttribute('aria-checked', 'true');
   }
   loadEarningsCalendar();
   // Check for cron errors
