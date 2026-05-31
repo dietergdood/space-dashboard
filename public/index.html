@@ -3970,6 +3970,12 @@ async function refreshAllNews() {
 (function init() {
   loadKey();
   loadTx();
+  // Force mobile tab display
+  if (window.innerWidth <= 640) {
+    document.querySelectorAll('.tab-full').forEach(el => el.style.display = 'none');
+    document.querySelectorAll('.tab-short').forEach(el => el.style.display = 'inline');
+    document.querySelectorAll('.tab-logo').forEach(el => el.style.display = 'none');
+  }
   // Start data loading immediately - no Chart.js needed
   loadAll();
   setInterval(loadAll, 15000);
