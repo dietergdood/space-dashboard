@@ -71,6 +71,8 @@ body{font-family:'DM Sans',sans-serif;background:var(--bg);color:var(--text);min
 .tab.active{background:var(--surface);color:var(--text);box-shadow:var(--shadow);}
 .tab.active.rklb-tab{color:var(--rklb);}
 .tab.active.asts-tab{color:var(--asts);}
+.tab-short{display:none;}
+.tab-full{display:inline;}
 
 /* ── Panel ── */
 .panel{display:none;flex-direction:column;gap:0;margin-top:0;min-height:0;}
@@ -457,6 +459,23 @@ body{font-family:'DM Sans',sans-serif;background:var(--bg);color:var(--text);min
 .gitem{background:var(--surface2);border-radius:8px;padding:12px;}
 .gitem-term{font-weight:600;font-size:13px;margin-bottom:4px;}
 .gitem-def{font-size:12px;color:var(--text2);line-height:1.5;}
+
+/* ── Auth Overlay ── */
+.hidden{display:none!important;}
+.auth-overlay{position:fixed;inset:0;background:rgba(0,0,0,.55);z-index:1000;display:flex;align-items:center;justify-content:center;padding:16px;backdrop-filter:blur(4px);}
+.auth-box{background:var(--surface);border-radius:16px;padding:32px 28px;max-width:380px;width:100%;box-shadow:var(--shadow-md);text-align:center;}
+.auth-logo{font-size:36px;margin-bottom:12px;}
+.auth-title{font-weight:700;font-size:18px;margin-bottom:6px;}
+.auth-sub{font-size:14px;color:var(--text2);margin-bottom:20px;line-height:1.5;}
+.auth-input{width:100%;padding:10px 14px;border:1px solid var(--border2);border-radius:9px;font-family:inherit;font-size:14px;outline:none;margin-bottom:10px;background:var(--surface);color:var(--text);}
+.auth-input:focus{border-color:var(--blue);}
+.auth-btn{width:100%;padding:11px 16px;background:var(--blue);color:#fff;border:none;border-radius:9px;font-family:inherit;font-size:14px;font-weight:600;cursor:pointer;transition:opacity .2s;}
+.auth-btn:hover{opacity:.88;}
+.auth-btn:disabled{opacity:.55;cursor:not-allowed;}
+.auth-msg{font-size:13px;margin-top:8px;min-height:18px;}
+.auth-msg.err{color:var(--red);}
+.auth-msg.ok{color:var(--green);}
+.auth-footer{font-size:12px;color:var(--text3);margin-top:16px;line-height:1.5;}
 
 /* ── Utility ── */
 .up{color:var(--green);}
