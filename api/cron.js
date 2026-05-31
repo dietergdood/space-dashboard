@@ -267,13 +267,16 @@ KONKURRENZ: rocketlabusa.com, blueorigin.com, virgingalactic.com, unitedlaunchal
     // Filter by scope for faster execution
     const FAST_SECTIONS = ['rec','news','scenarios'];
     const SLOW_SECTIONS = ['sector','gov_space','ctx'];
-    const calls = scope === 'rklb'      ? allCalls.filter(c => c.ticker === 'rklb' && FAST_SECTIONS.includes(c.section)) :
-                  scope === 'asts'      ? allCalls.filter(c => c.ticker === 'asts' && FAST_SECTIONS.includes(c.section)) :
-                  scope === 'spcx'      ? allCalls.filter(c => c.ticker === 'spcx' && FAST_SECTIONS.includes(c.section)) :
-                  scope === 'rklb_slow' ? allCalls.filter(c => c.ticker === 'rklb' && SLOW_SECTIONS.includes(c.section)) :
-                  scope === 'asts_slow' ? allCalls.filter(c => c.ticker === 'asts' && SLOW_SECTIONS.includes(c.section)) :
-                  scope === 'spcx_slow' ? allCalls.filter(c => c.ticker === 'spcx' && SLOW_SECTIONS.includes(c.section)) :
-                  scope === 'global'    ? allCalls.filter(c => !c.ticker) :
+    const calls = scope === 'rklb'       ? allCalls.filter(c => c.ticker === 'rklb' && FAST_SECTIONS.includes(c.section)) :
+                  scope === 'asts'       ? allCalls.filter(c => c.ticker === 'asts' && FAST_SECTIONS.includes(c.section)) :
+                  scope === 'spcx'       ? allCalls.filter(c => c.ticker === 'spcx' && FAST_SECTIONS.includes(c.section)) :
+                  scope === 'rklb_news'  ? allCalls.filter(c => c.ticker === 'rklb' && c.section === 'news') :
+                  scope === 'asts_news'  ? allCalls.filter(c => c.ticker === 'asts' && c.section === 'news') :
+                  scope === 'spcx_news'  ? allCalls.filter(c => c.ticker === 'spcx' && c.section === 'news') :
+                  scope === 'rklb_slow'  ? allCalls.filter(c => c.ticker === 'rklb' && SLOW_SECTIONS.includes(c.section)) :
+                  scope === 'asts_slow'  ? allCalls.filter(c => c.ticker === 'asts' && SLOW_SECTIONS.includes(c.section)) :
+                  scope === 'spcx_slow'  ? allCalls.filter(c => c.ticker === 'spcx' && SLOW_SECTIONS.includes(c.section)) :
+                  scope === 'global'     ? allCalls.filter(c => !c.ticker) :
                   allCalls;
     console.log(`Running ${calls.length} calls for scope: ${scope}`);
 
