@@ -47,6 +47,9 @@
     },
     "api/history.js": {
       "maxDuration": 30
+    },
+    "api/financials.js": {
+      "maxDuration": 30
     }
   }
 }
