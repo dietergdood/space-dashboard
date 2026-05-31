@@ -3214,44 +3214,37 @@ function setDrivers(listId, items, cls) {
 // ── RKLB KPI (from KI cache) ─────────────────────────────────
 function applyRklbKpi(p) {
   if (!p) return;
-  const k = p.kpis || {};
-  // Scores
   setScore('rklb-score-badge', 'rklb-score-sub', p.score_gesamt, 'Wachstum · Backlog · Marge · Liquidität');
-  setCatScore('rklb-score-wachstum',  p.score_wachstum);
-  setCatScore('rklb-score-backlog',   p.score_backlog);
-  setCatScore('rklb-score-marge',     p.score_marge);
+  setCatScore('rklb-score-wachstum',    p.score_wachstum);
+  setCatScore('rklb-score-backlog',     p.score_backlog);
+  setCatScore('rklb-score-marge',       p.score_marge);
   setCatScore('rklb-score-liquiditaet', p.score_liquiditaet);
-  setCatScore('rklb-score-risiko',    p.score_risiko);
-  setCatScore('rklb-score-bewertung', p.score_bewertung);
-  // Drill: Wachstum
-  setDrillRow('rklb-d-umsatz',   k.umsatz?.wert,   k.umsatz?.trend);
-  setDrillRow('rklb-d-yoy',      k.umsatz?.yoy);
-  setDrillRow('rklb-d-launches', k.launch_cadence?.starts_2026);
-  if ($('rklb-d-umsatz-src') && k.umsatz?.quelle) $('rklb-d-umsatz-src').textContent = k.umsatz.quelle + ' · ' + (k.umsatz.datum||'');
-  // Drill: Backlog
-  setDrillRow('rklb-d-backlog',     k.backlog?.wert,     k.backlog?.trend);
-  setDrillRow('rklb-d-backlog-qoq', k.backlog?.qoq);
-  setDrillRow('rklb-d-coverage',    k.backlog_coverage?.wert, k.backlog_coverage?.trend);
-  setDrillRow('rklb-d-backlog-mix', k.backlog?.mix);
-  // Drill: Marge
-  setDrillRow('rklb-d-margin',     k.gross_margin?.wert, k.gross_margin?.trend);
-  setDrillRow('rklb-d-margin-qoq', k.gross_margin?.qoq);
-  setDrillRow('rklb-d-ebitda',     k.ebitda?.wert);
-  // Drill: Risiko
-  setDrillRow('rklb-d-neutron',          k.neutron?.status);
-  setDrillRow('rklb-d-neutron-erstflug', k.neutron?.erstflug);
-  setDrillRow('rklb-d-neutron-risiko',   k.neutron?.risiko);
-  setDrillRow('rklb-d-defense',          k.defense?.sda);
-  // Drill: Bewertung
-  setDrillRow('rklb-d-evsales',      k.ev_sales?.wert);
-  setDrillRow('rklb-d-vs-konsens',   p.kurs_vs_konsens || k.ev_sales?.warnung);
+  setCatScore('rklb-score-risiko',      p.score_risiko);
+  setCatScore('rklb-score-bewertung',   p.score_bewertung);
+  setDrillRow('rklb-d-umsatz',   p.umsatz_wert,  p.umsatz_trend);
+  setDrillRow('rklb-d-yoy',      p.umsatz_yoy);
+  setDrillRow('rklb-d-launches', p.launches_2026);
+  if ($('rklb-d-umsatz-src')) $('rklb-d-umsatz-src').textContent = (p.umsatz_quelle||'') + ' · ' + (p.umsatz_datum||'');
+  setDrillRow('rklb-d-backlog',     p.backlog_wert);
+  setDrillRow('rklb-d-backlog-qoq', p.backlog_qoq);
+  setDrillRow('rklb-d-coverage',    p.backlog_coverage);
+  setDrillRow('rklb-d-backlog-mix', p.backlog_mix);
+  setDrillRow('rklb-d-margin',     p.gross_margin_wert);
+  setDrillRow('rklb-d-margin-qoq', p.gross_margin_qoq);
+  setDrillRow('rklb-d-ebitda',     p.ebitda_wert);
+  setDrillRow('rklb-d-cash',    p.liquiditaet_wert);
+  if ($('rklb-d-netloss')) { $('rklb-d-netloss').textContent = p.netloss_wert||'—'; }
+  setDrillRow('rklb-d-neutron',          p.neutron_status);
+  setDrillRow('rklb-d-neutron-erstflug', p.neutron_erstflug);
+  setDrillRow('rklb-d-neutron-risiko',   p.neutron_risiko);
+  setDrillRow('rklb-d-defense',          p.defense_sda);
+  setDrillRow('rklb-d-evsales',      p.ev_sales);
+  setDrillRow('rklb-d-vs-konsens',   p.kurs_vs_konsens);
   setDrillRow('rklb-d-analyst-range', p.analyst_range);
-  // Interpretation
   if (p.interpretation && $('rklb-kpi-interp')) {
     $('rklb-kpi-interp').textContent = stripTags(p.interpretation);
     $('rklb-kpi-interp').style.display = 'block';
   }
-  // Treiber & Risiken
   if ($('rklb-kpi-drivers')) {
     setDrivers('rklb-drivers-list', p.haupttreiber, 'kpi-driver');
     setDrivers('rklb-risks-list',   p.hauptrisiken,  'kpi-risk-tag');
@@ -3263,62 +3256,58 @@ function applyRklbKpi(p) {
 // ── ASTS Milestone (from KI cache) ─────────────────────────────
 function applyAstsMilestone(p) {
   if (!p) return;
-  const k = p.kpis || {};
-  // Scores
   setScore('asts-score-badge', 'asts-score-sub', p.score_gesamt, 'Cash · Satelliten · Partner · Risiko');
-  setCatScore('asts-score-cash',       p.score_cash);
-  setCatScore('asts-score-umsatz',     p.score_umsatz_ramp);
-  setCatScore('asts-score-launch',     p.score_launch);
-  setCatScore('asts-score-technologie',p.score_technologie);
-  setCatScore('asts-score-partner',    p.score_partner);
-  setCatScore('asts-score-risiko',     p.score_risiko);
-  // Drill: Cash
-  setDrillRow('asts-d-cash',    k.cash?.wert,    k.cash?.trend);
-  setDrillRow('asts-d-debt',    k.debt?.wert,    k.debt?.trend);
-  setDrillRow('asts-d-runway',  k.cash_runway?.wert);
-  setDrillRow('asts-d-netloss', k.nettoverlust?.wert);
-  if ($('asts-d-cash-src') && k.cash?.quelle) $('asts-d-cash-src').textContent = k.cash.quelle + ' · ' + (k.cash.datum||'');
-  // Drill: Umsatz
-  setDrillRow('asts-d-rev',          k.umsatz?.wert,            k.umsatz?.trend);
-  setDrillRow('asts-d-yoy',          k.umsatz?.yoy);
-  setDrillRow('asts-d-guidance',     k.guidance?.ziel_2026);
-  setDrillRow('asts-d-guidance-prog',k.guidance_progress?.wert, k.guidance_progress?.trend);
-  // Drill: Launch (BlueBird)
+  setCatScore('asts-score-cash',        p.score_cash);
+  setCatScore('asts-score-umsatz',      p.score_umsatz_ramp);
+  setCatScore('asts-score-launch',      p.score_launch);
+  setCatScore('asts-score-technologie', p.score_technologie);
+  setCatScore('asts-score-partner',     p.score_partner);
+  setCatScore('asts-score-risiko',      p.score_risiko);
+  setDrillRow('asts-d-cash',    p.cash_wert);
+  if ($('asts-d-cash-src')) $('asts-d-cash-src').textContent = (p.cash_quelle||'') + ' · ' + (p.cash_datum||'');
+  setDrillRow('asts-d-debt',    p.debt_wert);
+  setDrillRow('asts-d-runway',  p.cash_runway);
+  if ($('asts-d-netloss')) { $('asts-d-netloss').textContent = p.netloss_wert||'—'; }
+  setDrillRow('asts-d-rev',          p.umsatz_wert);
+  setDrillRow('asts-d-yoy',          p.umsatz_yoy);
+  setDrillRow('asts-d-guidance',     p.guidance_2026);
+  setDrillRow('asts-d-guidance-prog',p.guidance_progress);
   const bbEl = $('asts-bluebird-status');
-  if (bbEl && p.bluebird_status?.length) {
-    bbEl.innerHTML = p.bluebird_status.map(s => {
-      const dotCls = s.ampel === 'gruen' ? 'dot-green' : s.ampel === 'rot' ? 'dot-red' : s.ampel === 'gelb' ? 'dot-yellow' : 'dot-gray';
-      return `<div class="milestone-row"><div class="milestone-dot ${dotCls}"></div><div class="milestone-name">${stripTags(s.sat)}</div><div class="milestone-status">${stripTags(s.status)}</div></div>`;
-    }).join('');
-  } else if (bbEl && k.satelliten_orbit) {
-    bbEl.innerHTML = `<div class="kpi-drill-row"><span class="kpi-drill-label">Satelliten im Orbit</span><span class="kpi-drill-val">${stripTags(k.satelliten_orbit.wert)}</span></div>`;
+  if (bbEl) {
+    const sats = [
+      {sat:'BB-1 bis BB-5', status:p.bb1_5_status, ampel:p.bb1_5_ampel},
+      {sat:'BB-6',          status:p.bb6_status,   ampel:p.bb6_ampel},
+      {sat:'BB-7',          status:p.bb7_status,   ampel:p.bb7_ampel},
+      {sat:'BB-8 bis BB-10',status:p.bb8_10_status,ampel:p.bb8_10_ampel},
+    ].filter(s => s.status);
+    if (sats.length) {
+      bbEl.innerHTML = sats.map(s => {
+        const cls = s.ampel==='gruen'?'dot-green':s.ampel==='rot'?'dot-red':s.ampel==='gelb'?'dot-yellow':'dot-gray';
+        return `<div class="milestone-row"><div class="milestone-dot ${cls}"></div><div class="milestone-name">${stripTags(s.sat)}</div><div class="milestone-status">${stripTags(s.status)}</div></div>`;
+      }).join('');
+    }
   }
-  // Drill: Technologie
-  setDrillRow('asts-d-speed',  k.peak_speed?.wert,  k.peak_speed?.trend);
-  if ($('asts-fcc-status') && k.fcc_status?.status) $('asts-fcc-status').textContent = stripTags(k.fcc_status.status);
-  if ($('asts-itu-status') && k.itu_status) $('asts-itu-status').textContent = stripTags(k.itu_status);
-  // Drill: Partner
-  if ($('asts-d-mnos') && k.mno_partner?.anzahl) $('asts-d-mnos').textContent = k.mno_partner.anzahl + ' Partner';
-  if ($('asts-d-mno-list') && k.mno_partner?.aktive) $('asts-d-mno-list').textContent = k.mno_partner.aktive.join(', ');
-  // Drill: Risiko
-  const riskMap = {hoch:'risk-hoch', mittel:'risk-mittel', niedrig:'risk-niedrig'};
+  if ($('asts-fcc-status')) $('asts-fcc-status').textContent = stripTags(p.fcc_status||'—');
+  if ($('asts-itu-status')) $('asts-itu-status').textContent = stripTags(p.itu_status||'—');
+  setDrillRow('asts-d-speed',    p.peak_speed);
+  if ($('asts-d-mnos'))     $('asts-d-mnos').textContent     = p.mno_anzahl ? p.mno_anzahl + ' Partner' : '—';
+  if ($('asts-d-mno-list')) $('asts-d-mno-list').textContent = stripTags(p.mno_aktive||'—');
+  const riskMap = {hoch:'risk-hoch',mittel:'risk-mittel',niedrig:'risk-niedrig'};
   const setRisk = (id, val) => {
-    const el = $(id); if (!el||!val) return;
+    const el=$(id); if(!el||!val) return;
     el.textContent = stripTags(val);
     const v = val.toLowerCase();
-    for (const [k2,cls] of Object.entries(riskMap)) { if(v.includes(k2)){el.className='risk-val '+cls;break;} }
+    for(const [k,cls] of Object.entries(riskMap)){if(v.includes(k)){el.className='risk-val '+cls;break;}}
   };
-  setRisk('asts-risk-launch',      p.risk_launch || k.cash_runway?.wert);
-  setRisk('asts-risk-dilution',    p.risk_dilution);
-  setRisk('asts-risk-konkurrenz',  p.risk_konkurrenz);
-  setRisk('asts-risk-zeitplan',    p.risk_zeitplan);
-  if ($('asts-next-milestone') && p.naechster_meilenstein) $('asts-next-milestone').textContent = stripTags(p.naechster_meilenstein);
-  // Interpretation
+  setRisk('asts-risk-launch',     p.risk_launch);
+  setRisk('asts-risk-dilution',   p.risk_dilution);
+  setRisk('asts-risk-konkurrenz', p.risk_konkurrenz);
+  setRisk('asts-risk-zeitplan',   p.risk_zeitplan);
+  if ($('asts-next-milestone')) $('asts-next-milestone').textContent = stripTags(p.naechster_meilenstein||'—');
   if (p.interpretation && $('asts-kpi-interp')) {
     $('asts-kpi-interp').textContent = stripTags(p.interpretation);
     $('asts-kpi-interp').style.display = 'block';
   }
-  // Treiber & Risiken
   if ($('asts-kpi-drivers')) {
     setDrivers('asts-drivers-list', p.haupttreiber, 'kpi-driver');
     setDrivers('asts-risks-list',   p.hauptrisiken,  'kpi-risk-tag');
