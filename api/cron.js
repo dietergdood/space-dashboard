@@ -96,23 +96,23 @@ async function kiCall(prompt, retries=3, maxSearches=8, model='claude-sonnet-4-5
       .replace(/\s*```\s*$/,'')
       .trim();
 
-    // Detect refusal — model explains instead of returning JSON
-    const refusalPhrases = [
-      'I cannot provide', 'cannot provide the response', 'I must inform you',
-      'citation guidelines', 'I need to inform you that I cannot',
-      'Ich bin nicht in der Lage', 'nicht in der Lage'
-    ];
-    const isRefusal = refusalPhrases.some(p => raw.includes(p));
-    if (isRefusal) {
-      console.error('Model refused to return JSON. Raw:', raw.substring(0,200));
-      throw new Error('Model refusal — retrying with simplified prompt');
-    }
-
     // Extract JSON object (from first { to last })
     const firstBrace = jsonStr.indexOf('{');
     const lastBrace = jsonStr.lastIndexOf('}');
+
+    // If no JSON braces found, check for refusal
     if (firstBrace === -1 || lastBrace === -1) {
-      console.error('No JSON found. Raw:', raw.substring(0,300));
+      const refusalPhrases = [
+        'I cannot provide', 'cannot provide the response',
+        'I must inform you that I cannot', 'citation guidelines',
+        'Ich bin nicht in der Lage'
+      ];
+      const isRefusal = refusalPhrases.some(p => raw.includes(p));
+      if (isRefusal) {
+        console.error('Model refused to return JSON:', raw.substring(0,150));
+      } else {
+        console.error('No JSON found. Raw:', raw.substring(0,300));
+      }
       throw new Error('No JSON in response');
     }
     let extracted = jsonStr.substring(firstBrace, lastBrace + 1);
@@ -276,9 +276,9 @@ const INSIDER_RKLB_PROMPT = `Search RKLB Rocket Lab insider trades last 90 days.
 
 const INSIDER_ASTS_PROMPT = `Search ASTS AST SpaceMobile insider trades last 90 days. Sources: sec.gov Form 4, openinsider.com/ASTS, finviz.com. Return ONLY valid JSON, no HTML, no cite tags, no line breaks, no slashes in name fields: {"trades":[{"name":"First Last","title":"CEO","type":"sell","shares":5000,"price":120.00,"value":600000,"date":"2026-05-15","note":"RSU vesting sale"}],"summary":"1 sentence in German","signal":"neutral"}`;
 
-const RKLB_KPI_PROMPT = `Search Rocket Lab (RKLB) Q1 2026 financial KPIs. Sources: rocketlabusa.com/investors, SEC EDGAR 10-Q, spacenews.com. Return ONLY valid JSON, no HTML, no cite tags, no line breaks in strings: {"score_gesamt":82,"score_wachstum":88,"score_backlog":92,"score_marge":76,"score_liquiditaet":90,"score_risiko":58,"score_bewertung":38,"umsatz_wert":"$200 Mio","umsatz_yoy":"+121%","umsatz_quelle":"Q1 2026 Earnings","umsatz_datum":"2026-05-07","umsatz_trend":"up","backlog_wert":"$2.2 Mrd","backlog_qoq":"+20%","backlog_mix":"60% Space Systems","backlog_coverage":"2.75x","backlog_quelle":"Q1 2026 Earnings","gross_margin_wert":"38.2%","gross_margin_qoq":"+2.1%","ebitda_wert":"-$55 Mio","liquiditaet_wert":"$2.0 Mrd","liquiditaet_quelle":"Q1 2026 10-Q","neutron_status":"Qualification tests","neutron_erstflug":"H2 2026","neutron_risiko":"Mittel","defense_sda":"$816 Mio Tranche 3","defense_golden_dome":"Raytheon Partner","launches_2026":"21 Starts","launches_2026_note":"Ziel 22 Starts","launch_success":"100%","ev_sales":"PS 60x","analyst_range":"$60-$150","analyst_konsens":"$104","kurs_vs_konsens":"38% ueber Konsens","netloss_wert":"-$55 Mio","interpretation":"2 sentences in German without special chars","haupttreiber":["Backlog","Defense","Gross Margin"],"hauptrisiken":["Neutron-Timing","Hohe Bewertung"]}`;
+const RKLB_KPI_PROMPT = `Search Rocket Lab (RKLB) Q1 2026 financial results. Find revenue, backlog, gross margin, cash. Fill in real numbers. Respond with ONLY this JSON, no commentary: {"score_gesamt":82,"score_wachstum":88,"score_backlog":92,"score_marge":76,"score_liquiditaet":90,"score_risiko":58,"score_bewertung":38,"umsatz_wert":"$X Mio","umsatz_yoy":"+X%","umsatz_quelle":"Q1 2026","umsatz_datum":"2026-05-07","umsatz_trend":"up","backlog_wert":"$X Mrd","backlog_qoq":"+X%","backlog_mix":"X% Space Systems","backlog_coverage":"X.Xx","backlog_quelle":"Q1 2026","gross_margin_wert":"X%","gross_margin_qoq":"+X%","ebitda_wert":"-$X Mio","liquiditaet_wert":"$X Mrd","liquiditaet_quelle":"Q1 2026","neutron_status":"Status","neutron_erstflug":"H2 2026","neutron_risiko":"Mittel","defense_sda":"$X Mio","defense_golden_dome":"Partner","launches_2026":"X Starts","launches_2026_note":"Target X","launch_success":"X%","ev_sales":"PS Xx","analyst_range":"$X-$X","analyst_konsens":"$X","kurs_vs_konsens":"X%","netloss_wert":"-$X Mio","interpretation":"2 sentences in German","haupttreiber":["Backlog","Defense","Margin"],"hauptrisiken":["Neutron","Valuation"]}`;
 
-const ASTS_MILESTONE_PROMPT = `Search AST SpaceMobile (ASTS) Q1 2026 operational KPIs. Sources: ast-science.com/investors, SEC EDGAR 10-Q, fcc.gov, spacenews.com. Return ONLY valid JSON, no HTML, no cite tags, no line breaks in strings: {"score_gesamt":68,"score_cash":82,"score_umsatz_ramp":48,"score_launch":52,"score_technologie":90,"score_partner":85,"score_risiko":48,"score_bewertung":45,"cash_wert":"$3.5 Mrd","cash_datum":"2026-03-31","cash_quelle":"Q1 2026 10-Q","debt_wert":"$2.96 Mrd","cash_runway":"18 Monate","umsatz_wert":"$14.7 Mio","umsatz_yoy":"+1946%","umsatz_datum":"2026-05-11","guidance_2026":"$150-200 Mio","guidance_progress":"10% erreicht","netloss_wert":"-$191 Mio","bb1_5_status":"Im Orbit aktiv","bb1_5_ampel":"gruen","bb6_status":"Im Orbit aktiv","bb6_ampel":"gruen","bb7_status":"Deorbited nach Anomalie","bb7_ampel":"rot","bb8_10_status":"Start Q3 2026","bb8_10_ampel":"gelb","fcc_status":"Genehmigt April 2026","itu_status":"Koordination laeuft","mno_anzahl":60,"mno_aktive":"ATT Verizon Vodafone Rakuten","peak_speed":"98.9 Mbps","ev_sales":"PS 15x","analyst_range":"$80-$250","analyst_konsens":"$150","kurs_vs_konsens":"10% unter Konsens","risk_launch":"Mittel","risk_dilution":"Hoch","risk_konkurrenz":"Starlink D2D aktiv","risk_zeitplan":"Verzoegerungen moeglich","naechster_meilenstein":"BB-8-10 Start Q3 2026","interpretation":"2 sentences in German without special chars","haupttreiber":["Starke Liquiditaet","MNO-Partnernetzwerk","Technologie"],"hauptrisiken":["Launch-Cadence","Hoher Debt","Cashburn"]}`;
+const ASTS_MILESTONE_PROMPT = `Search AST SpaceMobile (ASTS) Q1 2026 data. Find: cash position, BlueBird satellite status, FCC license, MNO partners, revenue. Fill in real numbers. Respond with ONLY this JSON, no commentary: {"score_gesamt":68,"score_cash":82,"score_umsatz_ramp":48,"score_launch":52,"score_technologie":90,"score_partner":85,"score_risiko":48,"score_bewertung":45,"cash_wert":"$X Mrd","cash_datum":"2026-03-31","cash_quelle":"Q1 2026","debt_wert":"$X Mrd","cash_runway":"X months","umsatz_wert":"$X Mio","umsatz_yoy":"+X%","umsatz_datum":"2026-05","guidance_2026":"$X-X Mio","guidance_progress":"X% reached","netloss_wert":"-$X Mio","bb1_5_status":"In orbit","bb1_5_ampel":"gruen","bb6_status":"In orbit","bb6_ampel":"gruen","bb7_status":"Deorbited","bb7_ampel":"rot","bb8_10_status":"Q3 2026 launch","bb8_10_ampel":"gelb","fcc_status":"Approved","itu_status":"Ongoing","mno_anzahl":60,"mno_aktive":"ATT Verizon Vodafone","peak_speed":"98 Mbps","ev_sales":"PS X","analyst_range":"$X-$X","analyst_konsens":"$X","kurs_vs_konsens":"X%","risk_launch":"Mittel","risk_dilution":"Hoch","risk_konkurrenz":"Starlink D2D","risk_zeitplan":"Delays possible","naechster_meilenstein":"BB-8-10 Q3 2026","interpretation":"2 sentences in German","haupttreiber":["Cash","Partners","Tech"],"hauptrisiken":["Dilution","Debt","Timeline"]}`;
 
 const GLOSSAR_PROMPT = `Search 2-3 new finance or space terms from recent RKLB ASTS SpaceX news. Find current Golden Dome program budget. Return ONLY valid JSON, no HTML, no cite tags: {"golden_dome_def":"US missile defense program, current budget and RKLB role","terms":[{"term":"Term","def":"Short German explanation without special chars"}]}`;
 
