@@ -3458,11 +3458,14 @@ function applyInsider(t, p) {
 
   if (p.trades && p.trades.length) {
     html += p.trades.slice(0, 6).map(tr => {
-      const typeLabel = tr.type === 'buy' ? 'KAUF' : 'VERKAUF';
+      // Normalize type: treat anything that's not 'buy' as 'sell'
+      const rawType = (tr.type || '').toLowerCase();
+      const type = rawType === 'buy' ? 'buy' : 'sell';
+      const typeLabel = type === 'buy' ? 'KAUF' : 'VERKAUF';
       const val = tr.value ? ('$' + (tr.value >= 1e6 ? (tr.value/1e6).toFixed(1)+'M' : (tr.value/1e3).toFixed(0)+'K')) : '';
       const date = tr.date ? new Date(tr.date).toLocaleDateString('de-CH',{day:'2-digit',month:'2-digit',year:'2-digit'}) : '';
-      return `<div class="insider-card ${tr.type}">
-        <span class="insider-type ${tr.type}">${typeLabel}</span>
+      return `<div class="insider-card ${type}">
+        <span class="insider-type ${type}">${typeLabel}</span>
         <div class="insider-info">
           <div class="insider-name">${stripTags(tr.name||'')}</div>
           <div class="insider-title">${stripTags(tr.title||'')} · ${date}</div>
