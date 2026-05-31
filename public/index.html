@@ -262,17 +262,38 @@ body{font-family:'DM Sans',sans-serif;background:var(--bg);color:var(--text);min
 .f5-assumption{font-size:12px;color:var(--text2);}
 
 /* ── Day Forecast ── */
-.day-fc{background:var(--surface2);border-radius:10px;padding:14px;}
-.day-row{display:grid;grid-template-columns:1fr 1fr 1fr;gap:10px;margin-bottom:12px;}
-.day-stat{text-align:center;}
-.day-stat-label{font-size:12px;color:var(--text3);}
-.day-stat-val{font-size:17px;font-weight:700;font-family:'DM Mono',monospace;margin-top:2px;}
-.range-bar{position:relative;height:8px;background:var(--surface3);border-radius:4px;margin:12px 0 6px;overflow:visible;}
+.day-fc{display:flex;flex-direction:column;gap:14px;}
+.df-range-wrap{background:var(--surface2);border-radius:10px;padding:14px 16px;}
+.df-top-row{display:grid;grid-template-columns:1fr auto 1fr;gap:8px;align-items:end;margin-bottom:14px;}
+.df-stat-lo{text-align:left;}
+.df-stat-mid{text-align:center;}
+.df-stat-hi{text-align:right;}
+.df-stat-lbl{font-size:11px;color:var(--text3);font-weight:500;display:flex;align-items:center;gap:3px;margin-bottom:3px;}
+.df-stat-hi .df-stat-lbl{justify-content:flex-end;}
+.df-stat-mid .df-stat-lbl{justify-content:center;}
+.df-stat-num{font-size:15px;font-weight:700;font-family:'DM Mono',monospace;}
+.df-stat-num.dn{color:var(--red);}
+.df-stat-num.up{color:var(--green);}
+.range-bar{position:relative;height:8px;background:var(--surface3);border-radius:4px;overflow:visible;}
 .range-fill{position:absolute;left:0;top:0;height:100%;border-radius:4px;background:linear-gradient(90deg,var(--red),var(--green));}
 .range-dot{position:absolute;top:50%;transform:translate(-50%,-50%);width:14px;height:14px;border-radius:50%;border:2.5px solid var(--surface);box-shadow:0 0 0 2px currentColor,0 2px 6px rgba(0,0,0,.15);}
 .range-dot-label{position:absolute;top:-28px;transform:translateX(-50%);font-size:12px;font-weight:700;font-family:"DM Mono",monospace;white-space:nowrap;background:var(--surface);color:currentColor;padding:2px 6px;border-radius:5px;border:1.5px solid currentColor;box-shadow:0 1px 4px rgba(0,0,0,.1);}
 .range-dot-label::after{content:'';position:absolute;top:100%;left:50%;transform:translateX(-50%);border:4px solid transparent;border-top-color:currentColor;}
-.range-labels{display:flex;justify-content:space-between;font-size:12px;color:var(--text3);padding:0 4px;}
+.df-range-footer{display:flex;justify-content:space-between;align-items:center;margin-top:6px;}
+.df-range-edge{font-size:11px;font-family:'DM Mono',monospace;font-weight:600;}
+.df-range-edge.lo{color:var(--red);}
+.df-range-edge.hi{color:var(--green);}
+.df-range-mid{font-size:11px;color:var(--text3);}
+/* indicator row */
+.df-stats-row{display:grid;grid-template-columns:1fr 1fr 1fr;gap:8px;}
+.df-stat-pill{background:var(--surface2);border-radius:10px;padding:12px 14px;position:relative;cursor:default;}
+.df-pill-icon{font-size:18px;margin-bottom:4px;}
+.df-pill-lbl{font-size:11px;color:var(--text3);font-weight:500;text-transform:uppercase;letter-spacing:.04em;margin-bottom:3px;}
+.df-pill-val{font-size:15px;font-weight:700;font-family:'DM Mono',monospace;}
+.df-pill-sub{font-size:11px;color:var(--text3);margin-top:1px;}
+.df-pill-tip{display:none;position:absolute;bottom:calc(100% + 6px);left:50%;transform:translateX(-50%);width:200px;background:var(--text);color:var(--surface);font-size:12px;line-height:1.5;padding:10px 12px;border-radius:8px;z-index:300;pointer-events:none;font-weight:400;}
+.df-pill-tip::after{content:'';position:absolute;top:100%;left:50%;transform:translateX(-50%);border:5px solid transparent;border-top-color:var(--text);}
+.df-stat-pill:hover .df-pill-tip{display:block;}
 .df-note{font-size:12px;color:var(--text2);margin-top:8px;padding-top:8px;border-top:1px solid var(--border);}
 
 /* ── Scenarios ── */
@@ -581,7 +602,9 @@ body{font-family:'DM Sans',sans-serif;background:var(--bg);color:var(--text);min
   .glossar-grid{grid-template-columns:repeat(2,1fr);}
   .pf-form{grid-template-columns:1fr 1fr;}
   .pf-sum-grid{grid-template-columns:1fr 1fr;}
-  .day-row{grid-template-columns:1fr 1fr 1fr;}
+  .df-stats-row{grid-template-columns:1fr 1fr 1fr;}
+  .df-pill-val{font-size:13px;}
+  .df-top-row{gap:4px;}
   .chart-wrap{height:210px;}
 
   /* ── Recommendation ── */
@@ -1134,41 +1157,53 @@ body{font-family:'DM Sans',sans-serif;background:var(--bg);color:var(--text);min
   <div class="card-body" id="body-rklb-df">
     <div class="day-fc">
       <div class="df-range-wrap">
-        <div class="df-range-labels">
-          <div class="df-edge">
-            <div class="df-edge-lbl">📉 Tagestief <span class="tip tip-left"><span class="tip-icon">?</span><span class="tip-box">Tagestief: Der niedrigste Kurs den die Aktie heute bisher erreicht hat. Ein tiefes Tagestief bei hohem Volumen kann auf Verkaufsdruck hindeuten.</span></span></div>
-            <div class="df-edge-val dn mono" id="rklb-day-lo">—</div>
+        <div class="df-top-row">
+          <div class="df-stat-lo">
+            <div class="df-stat-lbl"><span>📉</span> Tagestief <span class="tip tip-left"><span class="tip-icon">?</span><span class="tip-box">Der niedrigste Kurs heute. Tiefes Tief bei hohem Volumen = Verkaufsdruck.</span></span></div>
+            <div class="df-stat-num dn mono" id="rklb-day-lo">—</div>
           </div>
-          <div class="df-center">
-            <div class="df-edge-lbl">Eröffnung <span class="tip"><span class="tip-icon">?</span><span class="tip-box">Eröffnungskurs: Der erste Handelskurs heute um 09:30 Uhr New York Zeit. Vergleiche mit dem Vortagesschluss um die Marktlage zu verstehen.</span></span></div>
-            <div class="df-edge-val mono" id="rklb-open">—</div>
+          <div class="df-stat-mid">
+            <div class="df-stat-lbl">Eröffnung <span class="tip"><span class="tip-icon">?</span><span class="tip-box">Der erste Handelskurs heute um 09:30 Uhr NY Zeit.</span></span></div>
+            <div class="df-stat-num mono" id="rklb-open">—</div>
           </div>
-          <div class="df-edge" style="text-align:right;">
-            <div class="df-edge-lbl">📈 Tageshoch <span class="tip tip-right"><span class="tip-icon">?</span><span class="tip-box">Tageshoch: Der höchste Kurs den die Aktie heute bisher erreicht hat. Ein hohes Tageshoch bei positivem Momentum deutet auf Kaufinteresse hin.</span></span></div>
-            <div class="df-edge-val up mono" id="rklb-day-hi">—</div>
+          <div class="df-stat-hi">
+            <div class="df-stat-lbl">Tageshoch <span>📈</span> <span class="tip tip-right"><span class="tip-icon">?</span><span class="tip-box">Der höchste Kurs heute. Hohes Hoch bei positivem Momentum = Kaufinteresse.</span></span></div>
+            <div class="df-stat-num up mono" id="rklb-day-hi">—</div>
           </div>
         </div>
-        <div class="range-bar" style="margin:12px 0 4px;">
+        <div class="range-bar">
           <div class="range-fill" id="rklb-range-fill" style="width:0%"></div>
           <div class="range-dot" id="rklb-rdot" style="left:50%;color:var(--rklb);">
             <div class="range-dot-label" id="rklb-rdot-lbl">—</div>
           </div>
         </div>
-        <div class="range-labels">
-          <span id="rklb-lo-lbl" style="color:var(--red);font-size:11px;">—</span>
-          <span style="font-size:11px;color:var(--text3);">← Tagesbereich →</span>
-          <span id="rklb-hi-lbl" style="color:var(--green);font-size:11px;">—</span>
+        <div class="df-range-footer">
+          <span class="df-range-edge lo" id="rklb-lo-lbl">—</span>
+          <span class="df-range-mid">← Tagesbereich →</span>
+          <span class="df-range-edge hi" id="rklb-hi-lbl">—</span>
         </div>
       </div>
       <div class="df-stats-row" id="rklb-df-stats">
-        <div class="df-stat-pill tip-left" id="rklb-df-atr">⚡ ATR lädt...
-          <span class="tip"><span class="tip-icon">?</span><span class="tip-box">ATR (Average True Range) misst die durchschnittliche Tagesschwankung der letzten 5 Tage. Zeigt wie stark der Kurs typischerweise pro Tag schwankt — hilfreich um realistische Erwartungen für den heutigen Tag zu setzen.</span></span>
+        <div class="df-stat-pill" id="rklb-df-atr">
+          <div class="df-pill-icon">⚡</div>
+          <div class="df-pill-lbl">Schwankung</div>
+          <div class="df-pill-val" id="rklb-df-atr-val">—</div>
+          <div class="df-pill-sub" id="rklb-df-atr-sub">ATR</div>
+          <div class="df-pill-tip" id="rklb-df-atr-tip">ATR (Average True Range): durchschnittliche Tagesschwankung der letzten 5 Tage.</div>
         </div>
-        <div class="df-stat-pill" id="rklb-df-mom">📈 Momentum lädt...
-          <span class="tip"><span class="tip-icon">?</span><span class="tip-box">Momentum zeigt die Kursbewegung über die letzten 5 Tage in Prozent. Positiv = Aufwärtstrend, Negativ = Abwärtstrend. Starkes Momentum kann sich fortsetzen — muss aber nicht.</span></span>
+        <div class="df-stat-pill" id="rklb-df-mom">
+          <div class="df-pill-icon" id="rklb-df-mom-icon">📈</div>
+          <div class="df-pill-lbl">Momentum</div>
+          <div class="df-pill-val" id="rklb-df-mom-val">—</div>
+          <div class="df-pill-sub">5-Tage</div>
+          <div class="df-pill-tip" id="rklb-df-mom-tip">Kursbewegung der letzten 5 Tage. Positiv = Aufwärtstrend, Negativ = Abwärtstrend.</div>
         </div>
-        <div class="df-stat-pill tip-right" id="rklb-df-rsi">🔬 RSI lädt...
-          <span class="tip"><span class="tip-icon">?</span><span class="tip-box">RSI (Relative Strength Index) misst ob die Aktie überkauft oder überverkauft ist. Über 70 = viele haben gekauft, Kurs könnte fallen. Unter 30 = viele haben verkauft, Kurs könnte steigen. 30–70 = neutrale Zone.</span></span>
+        <div class="df-stat-pill" id="rklb-df-rsi">
+          <div class="df-pill-icon">🔬</div>
+          <div class="df-pill-lbl" id="rklb-df-rsi-lbl">RSI</div>
+          <div class="df-pill-val" id="rklb-df-rsi-val">—</div>
+          <div class="df-pill-sub" id="rklb-df-rsi-sub">—</div>
+          <div class="df-pill-tip" id="rklb-df-rsi-tip">RSI über 70 = überkauft. RSI unter 30 = überverkauft. 30–70 = neutrale Zone.</div>
         </div>
       </div>
     </div>
@@ -1664,41 +1699,53 @@ body{font-family:'DM Sans',sans-serif;background:var(--bg);color:var(--text);min
   <div class="card-body" id="body-asts-df">
     <div class="day-fc">
       <div class="df-range-wrap">
-        <div class="df-range-labels">
-          <div class="df-edge">
-            <div class="df-edge-lbl">📉 Tagestief <span class="tip tip-left"><span class="tip-icon">?</span><span class="tip-box">Tagestief: Der niedrigste Kurs den die Aktie heute bisher erreicht hat. Ein tiefes Tagestief bei hohem Volumen kann auf Verkaufsdruck hindeuten.</span></span></div>
-            <div class="df-edge-val dn mono" id="asts-day-lo">—</div>
+        <div class="df-top-row">
+          <div class="df-stat-lo">
+            <div class="df-stat-lbl"><span>📉</span> Tagestief <span class="tip tip-left"><span class="tip-icon">?</span><span class="tip-box">Der niedrigste Kurs heute. Tiefes Tief bei hohem Volumen = Verkaufsdruck.</span></span></div>
+            <div class="df-stat-num dn mono" id="asts-day-lo">—</div>
           </div>
-          <div class="df-center">
-            <div class="df-edge-lbl">Eröffnung <span class="tip"><span class="tip-icon">?</span><span class="tip-box">Eröffnungskurs: Der erste Handelskurs heute um 09:30 Uhr New York Zeit. Vergleiche mit dem Vortagesschluss um die Marktlage zu verstehen.</span></span></div>
-            <div class="df-edge-val mono" id="asts-open">—</div>
+          <div class="df-stat-mid">
+            <div class="df-stat-lbl">Eröffnung <span class="tip"><span class="tip-icon">?</span><span class="tip-box">Der erste Handelskurs heute um 09:30 Uhr NY Zeit.</span></span></div>
+            <div class="df-stat-num mono" id="asts-open">—</div>
           </div>
-          <div class="df-edge" style="text-align:right;">
-            <div class="df-edge-lbl">📈 Tageshoch <span class="tip tip-right"><span class="tip-icon">?</span><span class="tip-box">Tageshoch: Der höchste Kurs den die Aktie heute bisher erreicht hat. Ein hohes Tageshoch bei positivem Momentum deutet auf Kaufinteresse hin.</span></span></div>
-            <div class="df-edge-val up mono" id="asts-day-hi">—</div>
+          <div class="df-stat-hi">
+            <div class="df-stat-lbl">Tageshoch <span>📈</span> <span class="tip tip-right"><span class="tip-icon">?</span><span class="tip-box">Der höchste Kurs heute. Hohes Hoch bei positivem Momentum = Kaufinteresse.</span></span></div>
+            <div class="df-stat-num up mono" id="asts-day-hi">—</div>
           </div>
         </div>
-        <div class="range-bar" style="margin:12px 0 4px;">
+        <div class="range-bar">
           <div class="range-fill" id="asts-range-fill" style="width:0%"></div>
           <div class="range-dot" id="asts-rdot" style="left:50%;color:var(--asts);">
             <div class="range-dot-label" id="asts-rdot-lbl">—</div>
           </div>
         </div>
-        <div class="range-labels">
-          <span id="asts-lo-lbl" style="color:var(--red);font-size:11px;">—</span>
-          <span style="font-size:11px;color:var(--text3);">← Tagesbereich →</span>
-          <span id="asts-hi-lbl" style="color:var(--green);font-size:11px;">—</span>
+        <div class="df-range-footer">
+          <span class="df-range-edge lo" id="asts-lo-lbl">—</span>
+          <span class="df-range-mid">← Tagesbereich →</span>
+          <span class="df-range-edge hi" id="asts-hi-lbl">—</span>
         </div>
       </div>
       <div class="df-stats-row" id="asts-df-stats">
-        <div class="df-stat-pill tip-left" id="asts-df-atr">⚡ ATR lädt...
-          <span class="tip"><span class="tip-icon">?</span><span class="tip-box">ATR (Average True Range) misst die durchschnittliche Tagesschwankung der letzten 5 Tage. Zeigt wie stark der Kurs typischerweise pro Tag schwankt — hilfreich um realistische Erwartungen für den heutigen Tag zu setzen.</span></span>
+        <div class="df-stat-pill" id="asts-df-atr">
+          <div class="df-pill-icon">⚡</div>
+          <div class="df-pill-lbl">Schwankung</div>
+          <div class="df-pill-val" id="asts-df-atr-val">—</div>
+          <div class="df-pill-sub" id="asts-df-atr-sub">ATR</div>
+          <div class="df-pill-tip" id="asts-df-atr-tip">ATR (Average True Range): durchschnittliche Tagesschwankung der letzten 5 Tage.</div>
         </div>
-        <div class="df-stat-pill" id="asts-df-mom">📈 Momentum lädt...
-          <span class="tip"><span class="tip-icon">?</span><span class="tip-box">Momentum zeigt die Kursbewegung über die letzten 5 Tage in Prozent. Positiv = Aufwärtstrend, Negativ = Abwärtstrend. Starkes Momentum kann sich fortsetzen — muss aber nicht.</span></span>
+        <div class="df-stat-pill" id="asts-df-mom">
+          <div class="df-pill-icon" id="asts-df-mom-icon">📈</div>
+          <div class="df-pill-lbl">Momentum</div>
+          <div class="df-pill-val" id="asts-df-mom-val">—</div>
+          <div class="df-pill-sub">5-Tage</div>
+          <div class="df-pill-tip" id="asts-df-mom-tip">Kursbewegung der letzten 5 Tage. Positiv = Aufwärtstrend, Negativ = Abwärtstrend.</div>
         </div>
-        <div class="df-stat-pill tip-right" id="asts-df-rsi">🔬 RSI lädt...
-          <span class="tip"><span class="tip-icon">?</span><span class="tip-box">RSI (Relative Strength Index) misst ob die Aktie überkauft oder überverkauft ist. Über 70 = viele haben gekauft, Kurs könnte fallen. Unter 30 = viele haben verkauft, Kurs könnte steigen. 30–70 = neutrale Zone.</span></span>
+        <div class="df-stat-pill" id="asts-df-rsi">
+          <div class="df-pill-icon">🔬</div>
+          <div class="df-pill-lbl" id="asts-df-rsi-lbl">RSI</div>
+          <div class="df-pill-val" id="asts-df-rsi-val">—</div>
+          <div class="df-pill-sub" id="asts-df-rsi-sub">—</div>
+          <div class="df-pill-tip" id="asts-df-rsi-tip">RSI über 70 = überkauft. RSI unter 30 = überverkauft. 30–70 = neutrale Zone.</div>
         </div>
       </div>
     </div>
@@ -2605,55 +2652,57 @@ function applyQ(t, q) {
 
 // ── Day Forecast ───────────────────────────────────────────
 function calcDF(t, q) {
-  if (!q.opens || !q.highs || !q.lows || !q.closes) {
-    // Use available data
-    const hi = q.dayHi||q.price, lo = q.dayLo||q.price, op = q.open||q.price;
-    if ($(t+'-open')) $(t+'-open').textContent = '$'+fmt(op);
-    if ($(t+'-day-hi')) $(t+'-day-hi').textContent = '$'+fmt(hi);
-    if ($(t+'-day-lo')) $(t+'-day-lo').textContent = '$'+fmt(lo);
-  }
-  const closes = q.closes||[], highs = q.highs||[], lows = q.lows||[];
   const hi = q.dayHi||q.price, lo = q.dayLo||q.price, op = q.open||q.price;
-  if ($(t+'-open')) $(t+'-open').textContent = '$'+fmt(op);
+  if ($(t+'-open'))   $(t+'-open').textContent   = '$'+fmt(op);
   if ($(t+'-day-hi')) $(t+'-day-hi').textContent = '$'+fmt(hi);
   if ($(t+'-day-lo')) $(t+'-day-lo').textContent = '$'+fmt(lo);
   if ($(t+'-lo-lbl')) $(t+'-lo-lbl').textContent = '$'+fmt(lo);
   if ($(t+'-hi-lbl')) $(t+'-hi-lbl').textContent = '$'+fmt(hi);
+
   const range = hi - lo;
   const pct = range > 0 ? Math.min(100, Math.max(0, (q.price-lo)/range*100)) : 50;
-  if ($(t+'-rdot')) {
-    $(t+'-rdot').style.left = pct+'%';
+  const rdot = $(t+'-rdot');
+  if (rdot) {
+    rdot.style.left = pct+'%';
     const lbl = $(t+'-rdot-lbl');
     if (lbl) {
       lbl.textContent = '$'+fmt(q.price);
-      // Flip label to left side when near right edge
-      if (pct > 75) {
-        lbl.style.transform = 'translateX(-85%)';
-      } else if (pct < 25) {
-        lbl.style.transform = 'translateX(-15%)';
-      } else {
-        lbl.style.transform = 'translateX(-50%)';
-      }
-    }
-  }
-  const atrEl = $(t+'-df-atr'), momEl = $(t+'-df-mom'), rsiEl = $(t+'-df-rsi');
-  if (closes.length >= 5) {
-    const atr = closes.slice(-5).reduce((s,v,i,a) => i===0?s:s+Math.abs(v-a[i-1]),0)/4;
-    const atrPct = fmt(atr/q.price*100);
-    const mom = (closes[closes.length-1]-closes[0])/closes[0]*100;
-    let gains=0, losses=0;
-    for(let i=1;i<Math.min(closes.length,15);i++){const d=closes[i]-closes[i-1];d>0?gains+=d:losses-=d;}
-    const rsi = 100-100/(1+(losses===0?100:gains/losses));
-    if (atrEl) atrEl.innerHTML = `<div class="pill-tip-icon">?</div><div style="font-size:20px;margin-bottom:3px;">⚡</div><div style="font-size:11px;color:var(--text3);margin-bottom:3px;">Schwankung</div><div style="font-weight:700;">±$${fmt(atr)}</div><div style="font-size:11px;color:var(--text3);">~${atrPct}%</div><div class="pill-tip-box">ATR (Average True Range): Misst die durchschnittliche Tagesschwankung. ±$${fmt(atr)} = der Kurs bewegt sich typischerweise um diesen Betrag pro Tag.</div>`;
-    if (momEl) momEl.innerHTML = `<div class="pill-tip-icon">?</div><div style="font-size:20px;margin-bottom:3px;">${mom>=0?'📈':'📉'}</div><div style="font-size:11px;color:var(--text3);margin-bottom:3px;">Momentum</div><div class="${mom>=0?'up':'dn'}" style="font-weight:700;">${mom>=0?'+':''}${fmt(mom)}%</div><div class="pill-tip-box">Momentum zeigt die Kursbewegung der letzten 5 Tage. ${mom>=0?'Aufwärtstrend — Kurs steigt.':'Abwärtstrend — Kurs fällt.'} Starkes Momentum kann sich fortsetzen.</div>`;
-    if (rsiEl) {
-      const rsiLabel = rsi>70?'Überkauft ⚠️':rsi<30?'Überverkauft ✅':'Neutral';
-      const rsiColor = rsi>70?'var(--red)':rsi<30?'var(--green)':'var(--text2)';
-      const rsiTip = rsi>70?'RSI über 70: Viele haben gekauft — könnte bald fallen.':rsi<30?'RSI unter 30: Viele haben verkauft — könnte sich erholen.':'RSI 30–70: Normale Zone.';
-      rsiEl.innerHTML = `<div class="pill-tip-icon">?</div><div style="font-size:20px;margin-bottom:3px;">🔬</div><div style="font-size:11px;color:var(--text3);margin-bottom:3px;">RSI ${rsi.toFixed(0)}</div><div style="color:${rsiColor};font-weight:700;">${rsiLabel}</div><div class="pill-tip-box">${rsiTip} RSI über 70 = überkauft. RSI unter 30 = überverkauft. 30–70 = neutrale Zone.</div>`;
+      lbl.style.transform = pct > 75 ? 'translateX(-85%)' : pct < 25 ? 'translateX(-15%)' : 'translateX(-50%)';
     }
   }
 
+  const closes = q.closes||[], highs = q.highs||[], lows = q.lows||[];
+  if (closes.length < 5) return;
+
+  // ATR
+  const atr = closes.slice(-5).reduce((s,v,i,a) => i===0?s:s+Math.abs(v-a[i-1]),0)/4;
+  const atrPct = fmt(atr/q.price*100);
+  if ($(t+'-df-atr-val')) $(t+'-df-atr-val').textContent = '±$'+fmt(atr);
+  if ($(t+'-df-atr-sub')) $(t+'-df-atr-sub').textContent = '~'+atrPct+'% pro Tag';
+  if ($(t+'-df-atr-tip')) $(t+'-df-atr-tip').textContent = `ATR: Ø-Schwankung ±$${fmt(atr)} = ~${atrPct}% pro Tag. Hilft realistische Tageserwartungen zu setzen.`;
+
+  // Momentum
+  const mom = (closes[closes.length-1]-closes[0])/closes[0]*100;
+  const momEl = $(t+'-df-mom-val');
+  if (momEl) {
+    momEl.textContent = (mom>=0?'+':'')+fmt(mom)+'%';
+    momEl.className = 'df-pill-val '+(mom>=0?'up':'dn');
+  }
+  if ($(t+'-df-mom-icon')) $(t+'-df-mom-icon').textContent = mom>=0?'📈':'📉';
+  if ($(t+'-df-mom-tip'))  $(t+'-df-mom-tip').textContent  = `5-Tage-Momentum: ${mom>=0?'Aufwärtstrend ↑':'Abwärtstrend ↓'} ${mom>=0?'+':''}${fmt(mom)}%. Kann sich fortsetzen — muss aber nicht.`;
+
+  // RSI
+  let gains=0, losses=0;
+  for(let i=1;i<Math.min(closes.length,15);i++){const d=closes[i]-closes[i-1];d>0?gains+=d:losses-=d;}
+  const rsi = 100-100/(1+(losses===0?100:gains/losses));
+  const rsiLabel = rsi>70?'Überkauft':rsi<30?'Überverkauft':'Neutral';
+  const rsiColor = rsi>70?'var(--red)':rsi<30?'var(--green)':'var(--text2)';
+  const rsiTip   = rsi>70?'Überkauft (>70): Viele haben gekauft — Korrektur möglich.':rsi<30?'Überverkauft (<30): Viele haben verkauft — Erholung möglich.':'Neutrale Zone (30–70): Kein extremes Signal.';
+  if ($(t+'-df-rsi-lbl')) $(t+'-df-rsi-lbl').textContent = `RSI ${rsi.toFixed(0)}`;
+  const rsiValEl = $(t+'-df-rsi-val');
+  if (rsiValEl) { rsiValEl.textContent = rsiLabel; rsiValEl.style.color = rsiColor; }
+  if ($(t+'-df-rsi-sub')) $(t+'-df-rsi-sub').textContent = rsi>70?'⚠️ Signal':rsi<30?'✅ Signal':'Normal';
+  if ($(t+'-df-rsi-tip')) $(t+'-df-rsi-tip').textContent = rsiTip+' RSI über 70 = überkauft. Unter 30 = überverkauft.';
 }
 
 // ── Portfolio Functions ────────────────────────────────────
