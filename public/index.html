@@ -572,7 +572,7 @@ body{font-family:'DM Sans',sans-serif;background:var(--bg);color:var(--text);min
   .container{padding:8px 8px 80px;max-width:100%;}
 
   /* ── Context bar ── */
-  .ctx-bar{padding:12px;gap:6px;flex-direction:column;}
+  .ctx-bar{padding:12px;gap:6px;flex-direction:column !important;}
   .ctx-top-row{flex-direction:row;align-items:center;gap:10px;width:100%;}
   .ctx-top-row .ctx-logo,.ctx-top-row .ctx-logo-emoji{width:36px !important;height:36px !important;flex-shrink:0;}
   .ctx-top-row .ctx-name{font-size:14px;font-weight:700;}
@@ -2310,7 +2310,7 @@ function switchTab(id) {
     if (panel) panel.classList.toggle('active', t===id);
     const ctxEl = $('ctx-'+t);
     if (ctxEl) {
-      if (t === id) { ctxEl.style.display = 'flex'; ctxEl.style.flexDirection = 'row'; }
+      if (t === id) { ctxEl.style.display = 'flex'; ctxEl.style.flexDirection = ''; }
       else { ctxEl.style.display = 'none'; }
     }
     const btn = document.querySelector(`.tab.${t}-tab`);
