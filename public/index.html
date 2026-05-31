@@ -67,7 +67,7 @@ body{font-family:'DM Sans',sans-serif;background:var(--bg);color:var(--text);min
 
 /* ── Tabs ── */
 .tabs{display:flex;background:var(--surface2);border-radius:10px;padding:3px;gap:2px;}
-.tab{flex:1;padding:8px 20px;border:none;background:none;border-radius:8px;font-family:inherit;font-size:14px;font-weight:500;color:var(--text2);cursor:pointer;transition:all .2s;white-space:nowrap;}
+.tab{flex:1;padding:8px 16px;border:none;background:none;border-radius:8px;font-family:inherit;font-size:14px;font-weight:500;color:var(--text2);cursor:pointer;transition:all .2s;white-space:nowrap;min-width:0;overflow:hidden;text-overflow:ellipsis;}
 .tab.active{background:var(--surface);color:var(--text);box-shadow:var(--shadow);}
 .tab.active.rklb-tab{color:var(--rklb);}
 .tab.active.asts-tab{color:var(--asts);}
@@ -474,8 +474,8 @@ body{font-family:'DM Sans',sans-serif;background:var(--bg);color:var(--text);min
 @keyframes fadeIn{from{opacity:0;transform:translateY(-4px);}to{opacity:1;transform:translateY(0);}}
 
 .tab-logo{width:18px;height:18px;border-radius:3px;object-fit:cover;vertical-align:middle;margin-right:6px;flex-shrink:0;}
-.tab-short{display:none;}
-.tab-full{display:inline;}
+
+
 
 
 
@@ -556,9 +556,9 @@ body{font-family:'DM Sans',sans-serif;background:var(--bg);color:var(--text);min
     /* ── Tabs ── */
   .tabs{gap:2px;padding:3px;width:100%;}
   .tab{padding:6px 4px;font-size:12px;flex:1;text-align:center;min-width:0;}
-  .tab-logo{display:none !important;}
-  .tab-full{display:none !important;}
-  .tab-short{display:inline !important;}
+
+
+
   .spcx-icon{display:none;}
     /* ── Container ── */
   .container{padding:8px 8px 80px;}
@@ -797,9 +797,9 @@ body{font-family:'DM Sans',sans-serif;background:var(--bg);color:var(--text);min
     </div>
     <div class="hdr-mid">
       <div class="tabs" id="main-tabs">
-        <button class="tab rklb-tab active" id="tab-rklb-btn"><img src="/rklb-logo.png" class="tab-logo"><span class="tab-full">Rocket Lab (RKLB)</span><span class="tab-short">RKLB</span></button>
-        <button class="tab asts-tab" id="tab-asts-btn"><img src="/asts-logo.png" class="tab-logo"><span class="tab-full">AST SpaceMobile (ASTS)</span><span class="tab-short">ASTS</span></button>
-        <button class="tab spcx-tab" id="tab-spcx-btn"><img src="/spacex-logo.svg" class="tab-logo spcx-icon" style="width:18px;height:18px;object-fit:contain;filter:invert(0);margin-right:4px;vertical-align:middle;"><span class="tab-full">SpaceX (IPO ausstehend)</span><span class="tab-short">SPCX</span></button>
+        <button class="tab rklb-tab active" id="tab-rklb-btn"><img src="/rklb-logo.png" class="tab-logo">RKLB</button>
+        <button class="tab asts-tab" id="tab-asts-btn"><img src="/asts-logo.png" class="tab-logo">ASTS</button>
+        <button class="tab spcx-tab" id="tab-spcx-btn"><img src="/spacex-logo.svg" class="tab-logo spcx-icon" style="width:18px;height:18px;object-fit:contain;filter:invert(0);margin-right:4px;vertical-align:middle;">SPCX</button>
       </div>
     </div>
     <div class="hdr-r">
