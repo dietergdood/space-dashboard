@@ -45,11 +45,11 @@
   ],
   "crons": [
     { "path": "/api/cron?scope=rklb",      "schedule": "0 11 * * 1-5" },
-    { "path": "/api/cron?scope=asts",      "schedule": "0 11 * * 1-5" },
+    { "path": "/api/cron?scope=asts",      "schedule": "5 11 * * 1-5" },
     { "path": "/api/cron?scope=rklb_news", "schedule": "0 11 * * 0,6" },
-    { "path": "/api/cron?scope=asts_news", "schedule": "0 11 * * 0,6" },
-    { "path": "/api/cron?scope=spcx",      "schedule": "0 11 * * 2,5" },
-    { "path": "/api/cron?scope=global",    "schedule": "0 11 * * 1,4" },
+    { "path": "/api/cron?scope=asts_news", "schedule": "5 11 * * 0,6" },
+    { "path": "/api/cron?scope=spcx",      "schedule": "10 11 * * 2,5" },
+    { "path": "/api/cron?scope=global",    "schedule": "15 11 * * 1,4" },
     { "path": "/api/cron?scope=all_fast",  "schedule": "0 0 1 1 *" },
     { "path": "/api/cron?scope=all_slow",  "schedule": "0 0 1 1 *" }
   ],
