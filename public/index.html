@@ -3079,11 +3079,13 @@ function applyScenarios(t,p) {
     }
     if (subEl && p[pl.sub]) subEl.textContent = p[pl.sub];
   });
-  // Analyst consensus price — preferably from analyst_konsens field, fallback to base_label
+  // Analyst consensus price — from analyst_konsens, fallback to base_label
   const cp=$(t+'-cons-price');
   if(cp) {
     if(p.analyst_konsens) {
-      cp.textContent = p.analyst_konsens + ' (Ø Bank)';
+      cp.textContent = stripTags(String(p.analyst_konsens)) + ' (Ø Bank)';
+    } else if(p.base_label && (cp.textContent==='—'||!cp.textContent.trim())) {
+      cp.textContent = stripTags(String(p.base_label)) + ' (Ø Bank)';
     }
   }
 }
@@ -3932,11 +3934,7 @@ function applyRec(t,p) {
   if(!p.titel && p.title)    p.titel = p.title;
   // Analyst consensus from rec data (p.analysten = "11x Kaufen, 4x Halten")
   if($(t+'-cons-rating')&&p.analysten) $(t+'-cons-rating').textContent=stripTags(String(p.analysten));
-  // cons-price: only set from rec if not already set by scenarios
-  const cpEl=$(t+'-cons-price');
-  if(cpEl && p.kursziel && (cpEl.textContent==='—'||!cpEl.textContent.trim())) {
-    cpEl.textContent=stripTags(String(p.kursziel||''));
-  }
+  // cons-price comes ONLY from analyst_konsens in scenarios — never from KI kursziel
   // Recommendation pill (HTML id: rklb-rec-pill / asts-rec-pill)
   const pill=$(t+'-rec-pill');
   if(pill&&p.empfehlung){
