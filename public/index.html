@@ -2945,27 +2945,36 @@ async function loadFromCache() {
   const statusEl=document.getElementById('ki-status');
   if(statusEl){statusEl.style.display='inline-flex';statusEl.textContent='📦 Lade Daten...';statusEl.className='ki-status-pill';}
   const sections=[
-    {fn:(d,ts)=>applyRec('rklb',d),section:'rec',ticker:'rklb'},
-    {fn:(d,ts)=>applyScenarios('rklb',d),section:'scenarios',ticker:'rklb'},
-    {fn:(d,ts)=>applyScenarios('asts',d),section:'scenarios',ticker:'asts'},
-    {fn:(d,ts)=>applyRec('rklb',d),section:'rec',ticker:'rklb'},
-    {fn:(d,ts)=>applyRec('asts',d),section:'rec',ticker:'asts'},
-    {fn:(d,ts)=>applyLiveNewsData('rklb',d,ts),section:'news',ticker:'rklb'},
-    {fn:(d,ts)=>applyLiveNewsData('asts',d,ts),section:'news',ticker:'asts'},
-    {fn:(d,ts)=>applySector('rklb',d),section:'sector',ticker:'rklb'},
-    {fn:(d,ts)=>applySector('asts',d),section:'sector',ticker:'asts'},
-    {fn:(d,ts)=>applyCtx('rklb',d),section:'ctx',ticker:'rklb'},
-    {fn:(d,ts)=>applyCtx('asts',d),section:'ctx',ticker:'asts'},
-    {fn:(d,ts)=>applyGlossar(d),section:'glossar',ticker:null},
-    {fn:(d,ts)=>applyRklbKpi(d),       section:'kpi',       ticker:'rklb'},
-    {fn:(d,ts)=>applyRklbMilestone(d),  section:'kpi',       ticker:'rklb'},
-    {fn:(d,ts)=>applyAstsMilestone(d),  section:'milestone', ticker:'asts'},
-    {fn:(d,ts)=>applyAstsKpi(d),        section:'milestone', ticker:'asts'},
-    {fn:(d,ts)=>applyInsider('rklb',d),section:'insider',  ticker:'rklb'},
-    {fn:(d,ts)=>applyInsider('asts',d),section:'insider',ticker:'asts'},
-    {fn:(d,ts)=>applyGovSpace('rklb',d),section:'gov_space',ticker:'rklb'},
-    {fn:(d,ts)=>applyGovSpace('spcx',d),section:'gov_space',ticker:'spcx'},
-    {fn:(d,ts)=>applyGovSpace('asts',d),section:'gov_space',ticker:'asts'},
+    // Scenarios zuerst — setzt analyst_konsens bevor applyRec überschreiben kann
+    {fn:(d,ts)=>applyScenarios('rklb',d),  section:'scenarios', ticker:'rklb'},
+    {fn:(d,ts)=>applyScenarios('asts',d),  section:'scenarios', ticker:'asts'},
+    // Rec
+    {fn:(d,ts)=>applyRec('rklb',d),        section:'rec',       ticker:'rklb'},
+    {fn:(d,ts)=>applyRec('asts',d),        section:'rec',       ticker:'asts'},
+    // News
+    {fn:(d,ts)=>applyLiveNewsData('rklb',d,ts), section:'news', ticker:'rklb'},
+    {fn:(d,ts)=>applyLiveNewsData('asts',d,ts), section:'news', ticker:'asts'},
+    {fn:(d,ts)=>applyLiveNewsData('spcx',d,ts), section:'news', ticker:'spcx'},
+    // Sector
+    {fn:(d,ts)=>applySector('rklb',d),     section:'sector',    ticker:'rklb'},
+    {fn:(d,ts)=>applySector('asts',d),     section:'sector',    ticker:'asts'},
+    {fn:(d,ts)=>applySector('spcx',d),     section:'sector',    ticker:'spcx'},
+    // CTX
+    {fn:(d,ts)=>applyCtx('rklb',d),        section:'ctx',       ticker:'rklb'},
+    {fn:(d,ts)=>applyCtx('asts',d),        section:'ctx',       ticker:'asts'},
+    {fn:(d,ts)=>applyCtx('spcx',d),        section:'ctx',       ticker:'spcx'},
+    // Glossar
+    {fn:(d,ts)=>applyGlossar(d),           section:'glossar',   ticker:null},
+    // KPI — beide Funktionen lesen von derselben Section
+    {fn:(d,ts)=>{applyRklbKpi(d);applyRklbMilestone(d);}, section:'kpi', ticker:'rklb'},
+    {fn:(d,ts)=>{applyAstsMilestone(d);applyAstsKpi(d);}, section:'milestone', ticker:'asts'},
+    // Insider
+    {fn:(d,ts)=>applyInsider('rklb',d),    section:'insider',   ticker:'rklb'},
+    {fn:(d,ts)=>applyInsider('asts',d),    section:'insider',   ticker:'asts'},
+    // Gov
+    {fn:(d,ts)=>applyGovSpace('rklb',d),   section:'gov_space', ticker:'rklb'},
+    {fn:(d,ts)=>applyGovSpace('asts',d),   section:'gov_space', ticker:'asts'},
+    {fn:(d,ts)=>applyGovSpace('spcx',d),   section:'gov_space', ticker:'spcx'},
   ];
   let loaded=0;
   for(const s of sections){
