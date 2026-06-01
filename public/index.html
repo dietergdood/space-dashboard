@@ -2439,7 +2439,8 @@ async function loadRangeChart(t, range) {
   try {
     const sym = t === 'rklb' ? 'RKLB' : 'ASTS';
     const r = await fetch('/api/history?ticker='+sym+'&range='+range);
-    if (r.status === 404) throw new Error('API nicht verfügbar — neu deployen');
+    if (r.status === 404) throw new Error('Chart-API nicht gefunden — bitte Seite neu laden');
+    if (r.status === 502) throw new Error('Yahoo Finance nicht erreichbar');
     if (!r.ok) {
       const err = await r.json().catch(() => ({}));
       throw new Error(err.error || `HTTP ${r.status}`);
@@ -3922,12 +3923,14 @@ async function fetchRec(t) {
 function applyRec(t,p) {
   notifyNewData(t);
   if(!p) return;
-  // Normalize field names — cron previously used different names
-  if(p.erklaerung && !p.begruendung) p.begruendung = p.erklaerung;
-  if(p.score_fundamental != null && p.fundamentals == null) p.fundamentals = Math.round(p.score_fundamental/10);
-  if(p.score_momentum != null && p.momentum == null) p.momentum = Math.round(p.score_momentum/10);
-  if(p.score_risiko != null && p.risiko == null) p.risiko = Math.round(p.score_risiko/10);
-  if(p.score_bewertung != null && p.bewertung == null) p.bewertung = Math.round(p.score_bewertung/10);
+  // Normalize old field names from previous cron prompt versions
+  if(!p.begruendung) p.begruendung = p.erklaerung || p.begruendung_text || p.explanation || '';
+  if(p.fundamentals == null) p.fundamentals = p.score_fundamental != null ? Math.round(p.score_fundamental/10) : null;
+  if(p.momentum == null)     p.momentum     = p.score_momentum    != null ? Math.round(p.score_momentum/10)    : null;
+  if(p.risiko == null)       p.risiko       = p.score_risiko       != null ? Math.round(p.score_risiko/10)      : null;
+  if(p.bewertung == null)    p.bewertung    = p.score_bewertung    != null ? Math.round(p.score_bewertung/10)   : null;
+  if(!p.lage && p.lage_text) p.lage = p.lage_text;
+  if(!p.titel && p.title)    p.titel = p.title;
   // Analyst consensus from rec data (p.analysten = "11x Kaufen, 4x Halten")
   if($(t+'-cons-rating')&&p.analysten) $(t+'-cons-rating').textContent=p.analysten;
   // cons-price: only set from rec if not already set by scenarios
@@ -3946,7 +3949,12 @@ function applyRec(t,p) {
   if(banner&&p.empfehlung) banner.className='rec-banner '+(p.empfehlung==='KAUFEN'?'buy':p.empfehlung==='VERKAUFEN'?'sell':'hold');
   // Title and explanation (HTML ids: rklb-rec-title, rklb-rec-sub)
   if($(t+'-rec-title')&&p.titel) $(t+'-rec-title').textContent=stripTags(p.titel);
-  if($(t+'-rec-sub')&&p.begruendung) $(t+'-rec-sub').textContent=stripTags(p.begruendung);
+  // Clear placeholder if we have any content
+  const recSub=$(t+'-rec-sub');
+  if(recSub) {
+    if(p.begruendung) recSub.textContent=stripTags(p.begruendung);
+    else if(p.titel || p.empfehlung) recSub.textContent=''; // clear placeholder if other data loaded
+  }
   // Alert box (HTML ids: rklb-alert-text, rklb-alert-box)
   if($(t+'-alert-text')&&p.lage) $(t+'-alert-text').innerHTML=p.lage;
   if($(t+'-alert-box')&&p.lage_typ) $(t+'-alert-box').className='alert '+(p.lage_typ||'neutral');
