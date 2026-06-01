@@ -3913,6 +3913,12 @@ async function fetchRec(t) {
 function applyRec(t,p) {
   notifyNewData(t);
   if(!p) return;
+  // Normalize field names — cron previously used different names
+  if(p.erklaerung && !p.begruendung) p.begruendung = p.erklaerung;
+  if(p.score_fundamental != null && p.fundamentals == null) p.fundamentals = Math.round(p.score_fundamental/10);
+  if(p.score_momentum != null && p.momentum == null) p.momentum = Math.round(p.score_momentum/10);
+  if(p.score_risiko != null && p.risiko == null) p.risiko = Math.round(p.score_risiko/10);
+  if(p.score_bewertung != null && p.bewertung == null) p.bewertung = Math.round(p.score_bewertung/10);
   // Analyst consensus from rec data (p.analysten = "11x Kaufen, 4x Halten")
   if($(t+'-cons-rating')&&p.analysten) $(t+'-cons-rating').textContent=p.analysten;
   // cons-price: only set from rec if not already set by scenarios
