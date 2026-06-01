@@ -4009,7 +4009,28 @@ async function refreshAllNews() {
   setTimeout(clearStatus,4000);
 }
 
-// ── Init ──────────────────────────────────────────────────
+// ── Service Worker ─────────────────────────────────────────
+if ('serviceWorker' in navigator) {
+  window.addEventListener('load', () => {
+    navigator.serviceWorker.register('/sw.js?v=2026-06-01')
+      .then(reg => {
+        // Check for updates on every page load
+        reg.update();
+        reg.addEventListener('updatefound', () => {
+          const newSW = reg.installing;
+          newSW?.addEventListener('statechange', () => {
+            if (newSW.state === 'installed' && navigator.serviceWorker.controller) {
+              // New version available — reload silently
+              window.location.reload();
+            }
+          });
+        });
+      })
+      .catch(e => console.warn('SW registration failed:', e));
+  });
+}
+
+
 (function init() {
   loadKey();
   loadTx();
