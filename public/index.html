@@ -3489,9 +3489,7 @@ function applyAstsMilestone(p) {
     $('asts-kpi-interp').style.display = 'none'; // shown in Investment-KPIs instead
   }
   if ($('asts-kpi-drivers')) {
-    setDrivers('asts-drivers-list', p.haupttreiber, 'kpi-driver');
-    setDrivers('asts-risks-list',   p.hauptrisiken,  'kpi-risk-tag');
-    $('asts-kpi-drivers').style.display = 'block';
+    $('asts-kpi-drivers').style.display = 'none'; // shown in Investment-KPIs instead
   }
   if ($('asts-milestone-ts')) $('asts-milestone-ts').textContent = 'KI-Analyse · Täglich aktualisiert';
 }
