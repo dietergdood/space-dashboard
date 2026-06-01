@@ -3972,10 +3972,18 @@ function applyRec(t,p) {
     }
     if(explainEl&&p['explain_'+k]) explainEl.innerHTML=p['explain_'+k];
   });
-  // Levels (HTML ids: rklb-pill-einstieg-val, rklb-pill-ziel-val, rklb-pill-stopp-val)
-  if($(t+'-pill-einstieg-val')&&p.einstieg) $(t+'-pill-einstieg-val').textContent=p.einstieg;
-  if($(t+'-pill-ziel-val')&&p.kursziel) $(t+'-pill-ziel-val').textContent=p.kursziel;
-  if($(t+'-pill-stopp-val')&&p.stopp) $(t+'-pill-stopp-val').textContent=p.stopp;
+  // Levels — sanity check: einstieg < kursziel, stopp < einstieg
+  if(p.einstieg && p.kursziel && p.stopp) {
+    const e = parseFloat(p.einstieg.replace(/[^0-9.]/g,''));
+    const z = parseFloat(p.kursziel.replace(/[^0-9.]/g,''));
+    const s = parseFloat(p.stopp.replace(/[^0-9.]/g,''));
+    const valid = !isNaN(e) && !isNaN(z) && !isNaN(s) && e < z && s < e;
+    if(valid) {
+      if($(t+'-pill-einstieg-val')) $(t+'-pill-einstieg-val').textContent=p.einstieg;
+      if($(t+'-pill-ziel-val'))     $(t+'-pill-ziel-val').textContent=p.kursziel;
+      if($(t+'-pill-stopp-val'))    $(t+'-pill-stopp-val').textContent=p.stopp;
+    }
+  }
 }
 async function fetchLiveNews(t) {
   const NEWS_PROMPTS={
