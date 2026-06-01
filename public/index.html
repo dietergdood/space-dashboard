@@ -3792,7 +3792,8 @@ function applyGovSpace(t, p) {
     if(p.ausblick) {
       let ol = $('gov-outlook');
       if (!ol) { ol = document.createElement('div'); ol.id = 'gov-outlook'; ol.className = 'gov-outlook'; $('body-rklb-gov').appendChild(ol); }
-      ol.textContent = stripTags(p.ausblick);
+      const txt = typeof p.ausblick === 'string' ? p.ausblick : p.ausblick.text || p.ausblick.desc || JSON.stringify(p.ausblick);
+      ol.textContent = stripTags(txt);
     }
   } else if(t === 'spcx') {
     if(p.faa) {
@@ -3831,7 +3832,8 @@ function applyGovSpace(t, p) {
     if(p.ausblick) {
       let ol = $('asts-gov-outlook');
       if (!ol) { ol = document.createElement('div'); ol.id = 'asts-gov-outlook'; ol.className = 'gov-outlook'; $('body-asts-gov').appendChild(ol); }
-      ol.textContent = stripTags(p.ausblick);
+      const txt = typeof p.ausblick === 'string' ? p.ausblick : p.ausblick.text || p.ausblick.desc || JSON.stringify(p.ausblick);
+      ol.textContent = stripTags(txt);
     }
   }
 }
