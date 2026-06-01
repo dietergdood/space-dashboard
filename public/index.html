@@ -3486,8 +3486,7 @@ function applyAstsMilestone(p) {
   setRisk('asts-risk-zeitplan',   p.risk_zeitplan);
   // Interpretation + Treiber
   if (p.interpretation && $('asts-kpi-interp')) {
-    $('asts-kpi-interp').textContent = stripTags(p.interpretation);
-    $('asts-kpi-interp').style.display = 'block';
+    $('asts-kpi-interp').style.display = 'none'; // shown in Investment-KPIs instead
   }
   if ($('asts-kpi-drivers')) {
     setDrivers('asts-drivers-list', p.haupttreiber, 'kpi-driver');
