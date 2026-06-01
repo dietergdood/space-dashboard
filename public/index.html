@@ -3150,8 +3150,8 @@ function applySpcxSector(p) {
     });
   }
   if (p.ipo_status && $('spcx-ipo-status')) $('spcx-ipo-status').textContent = stripTags(p.ipo_status);
-  if (p.ipo_date && $('spcx-ipo-date')) $('spcx-ipo-date').textContent = p.ipo_date;
-  if (p.bewertung && $('spcx-val')) $('spcx-val').textContent = p.bewertung;
+  if (p.ipo_date && $('spcx-ipo-date')) $('spcx-ipo-date').textContent = stripTags(String(p.ipo_date||''));
+  if (p.bewertung && $('spcx-val')) $('spcx-val').textContent = stripTags(String(p.bewertung||''));
 }
 
 // ── Push Notifications ──────────────────────────────────────
@@ -3429,7 +3429,7 @@ function applyRklbKpi(p) {
   setDrillRow('rklb-d-margin-qoq', p.gross_margin_qoq);
   setDrillRow('rklb-d-ebitda',     p.ebitda_wert);
   setDrillRow('rklb-d-cash',    p.liquiditaet_wert);
-  if ($('rklb-d-netloss')) { $('rklb-d-netloss').textContent = p.netloss_wert||'—'; }
+  if ($('rklb-d-netloss')) { $('rklb-d-netloss').textContent = stripTags(String(p.netloss_wert||'—')); }
   setDrillRow('rklb-d-neutron',          p.neutron_status);
   setDrillRow('rklb-d-neutron-erstflug', p.neutron_erstflug);
   setDrillRow('rklb-d-neutron-risiko',   p.neutron_risiko);
@@ -3510,7 +3510,7 @@ function applyAstsKpi(p) {
   setDrillRow('asts-kpi-d-cash',    p.cash_wert);
   setDrillRow('asts-kpi-d-debt',    p.debt_wert);
   setDrillRow('asts-kpi-d-runway',  p.cash_runway);
-  if ($('asts-kpi-d-netloss')) $('asts-kpi-d-netloss').textContent = p.netloss_wert||'—';
+  if ($('asts-kpi-d-netloss')) $('asts-kpi-d-netloss').textContent = stripTags(String(p.netloss_wert||'—'));
   if ($('asts-kpi-d-cash-src') && p.cash_quelle) $('asts-kpi-d-cash-src').textContent = p.cash_quelle + ' · ' + (p.cash_datum||'');
   setDrillRow('asts-kpi-d-rev',          p.umsatz_wert);
   setDrillRow('asts-kpi-d-yoy',          p.umsatz_yoy);
@@ -3774,19 +3774,19 @@ function applyGovSpace(t, p) {
   if(!p) return;
   if(t === 'rklb') {
     if(p.golden_dome) {
-      if($('gov-dome-budget')) $('gov-dome-budget').textContent = p.golden_dome.rklb_anteil || p.golden_dome.budget || '—';
+      if($('gov-dome-budget')) $('gov-dome-budget').textContent = stripTags(String(p.golden_dome.rklb_anteil || p.golden_dome.budget || '—'));
       if($('gov-dome-desc')) $('gov-dome-desc').textContent = stripTags(p.golden_dome.desc || '');
     }
     if(p.sda) {
-      if($('gov-sda-budget')) $('gov-sda-budget').textContent = p.sda.rklb_auftraege || p.sda.budget || '—';
+      if($('gov-sda-budget')) $('gov-sda-budget').textContent = stripTags(String(p.sda.rklb_auftraege || p.sda.budget || '—'));
       if($('gov-sda-desc')) $('gov-sda-desc').textContent = stripTags(p.sda.desc || '');
     }
     if(p.nasa) {
-      if($('gov-nasa-val')) $('gov-nasa-val').textContent = p.nasa.wert || '—';
+      if($('gov-nasa-val')) $('gov-nasa-val').textContent = stripTags(String(p.nasa.wert || '—'));
       if($('gov-nasa-desc')) $('gov-nasa-desc').textContent = stripTags(p.nasa.desc || '');
     }
     if(p.space_force) {
-      if($('gov-sf-val')) $('gov-sf-val').textContent = p.space_force.wert || '—';
+      if($('gov-sf-val')) $('gov-sf-val').textContent = stripTags(String(p.space_force.wert || '—'));
       if($('gov-sf-desc')) $('gov-sf-desc').textContent = stripTags(p.space_force.desc || '');
     }
     if(p.ausblick) {
@@ -3797,36 +3797,36 @@ function applyGovSpace(t, p) {
     }
   } else if(t === 'spcx') {
     if(p.faa) {
-      if($('spcx-gov-faa-status')) $('spcx-gov-faa-status').textContent = p.faa.status || '—';
+      if($('spcx-gov-faa-status')) $('spcx-gov-faa-status').textContent = stripTags(String(p.faa.status || '—'));
       if($('spcx-gov-faa-desc')) $('spcx-gov-faa-desc').textContent = stripTags(p.faa.desc || '');
     }
     if(p.nasa) {
-      if($('spcx-gov-nasa-val')) $('spcx-gov-nasa-val').textContent = p.nasa.wert || p.nasa.status || '—';
+      if($('spcx-gov-nasa-val')) $('spcx-gov-nasa-val').textContent = stripTags(String(p.nasa.wert || p.nasa.status || '—'));
       if($('spcx-gov-nasa-desc')) $('spcx-gov-nasa-desc').textContent = stripTags(p.nasa.desc || '');
     }
     if(p.space_force) {
-      if($('spcx-gov-sf-val')) $('spcx-gov-sf-val').textContent = p.space_force.wert || p.space_force.status || '—';
+      if($('spcx-gov-sf-val')) $('spcx-gov-sf-val').textContent = stripTags(String(p.space_force.wert || p.space_force.status || '—'));
       if($('spcx-gov-sf-desc')) $('spcx-gov-sf-desc').textContent = stripTags(p.space_force.desc || '');
     }
     if(p.sec) {
-      if($('spcx-gov-sec-val')) $('spcx-gov-sec-val').textContent = p.sec.status || '—';
+      if($('spcx-gov-sec-val')) $('spcx-gov-sec-val').textContent = stripTags(String(p.sec.status || '—'));
       if($('spcx-gov-sec-desc')) $('spcx-gov-sec-desc').textContent = stripTags(p.sec.desc || '');
     }
   } else if(t === 'asts') {
     if(p.fcc) {
-      if($('asts-gov-fcc-status')) $('asts-gov-fcc-status').textContent = p.fcc.status || '—';
+      if($('asts-gov-fcc-status')) $('asts-gov-fcc-status').textContent = stripTags(String(p.fcc.status || '—'));
       if($('asts-gov-fcc-desc')) $('asts-gov-fcc-desc').textContent = stripTags(p.fcc.desc || '');
     }
     if(p.itu) {
-      if($('asts-gov-itu-status')) $('asts-gov-itu-status').textContent = p.itu.status || '—';
+      if($('asts-gov-itu-status')) $('asts-gov-itu-status').textContent = stripTags(String(p.itu.status || '—'));
       if($('asts-gov-itu-desc')) $('asts-gov-itu-desc').textContent = stripTags(p.itu.desc || '');
     }
     if(p.dod) {
-      if($('asts-gov-dod-val')) $('asts-gov-dod-val').textContent = p.dod.potenzial || '—';
+      if($('asts-gov-dod-val')) $('asts-gov-dod-val').textContent = stripTags(String(p.dod.potenzial || '—'));
       if($('asts-gov-dod-desc')) $('asts-gov-dod-desc').textContent = stripTags(p.dod.desc || '');
     }
     if(p.ntia) {
-      if($('asts-gov-ntia-status')) $('asts-gov-ntia-status').textContent = p.ntia.status || '—';
+      if($('asts-gov-ntia-status')) $('asts-gov-ntia-status').textContent = stripTags(String(p.ntia.status || '—'));
       if($('asts-gov-ntia-desc')) $('asts-gov-ntia-desc').textContent = stripTags(p.ntia.desc || '');
     }
     if(p.ausblick) {
@@ -3934,16 +3934,16 @@ function applyRec(t,p) {
   if(!p.lage && p.lage_text) p.lage = p.lage_text;
   if(!p.titel && p.title)    p.titel = p.title;
   // Analyst consensus from rec data (p.analysten = "11x Kaufen, 4x Halten")
-  if($(t+'-cons-rating')&&p.analysten) $(t+'-cons-rating').textContent=p.analysten;
+  if($(t+'-cons-rating')&&p.analysten) $(t+'-cons-rating').textContent=stripTags(String(p.analysten));
   // cons-price: only set from rec if not already set by scenarios
   const cpEl=$(t+'-cons-price');
   if(cpEl && p.kursziel && (cpEl.textContent==='—'||!cpEl.textContent.trim())) {
-    cpEl.textContent=p.kursziel;
+    cpEl.textContent=stripTags(String(p.kursziel||''));
   }
   // Recommendation pill (HTML id: rklb-rec-pill / asts-rec-pill)
   const pill=$(t+'-rec-pill');
   if(pill&&p.empfehlung){
-    pill.textContent=p.empfehlung;
+    pill.textContent=stripTags(String(p.empfehlung||''));
     pill.className='rec-pill '+(p.empfehlung==='KAUFEN'?'buy':p.empfehlung==='VERKAUFEN'?'sell':'hold');
   }
   // Banner class
