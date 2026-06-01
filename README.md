@@ -13,35 +13,34 @@ Live-Dashboard für Rocket Lab (RKLB), AST SpaceMobile (ASTS) und SpaceX (SPCX, 
 - Handelsvolumen, 52-Wochen-Range, Marktkapitalisierung
 - Pre/Post-Market Preise
 - Range-Chart mit 7 Zeiträumen (1T · 5T · 1M · 6M · YTD · 1J · 5J)
+- CHF/USD Wechselkurs (live, open.er-api.com)
 
-### KI-Analysen (Claude Sonnet/Haiku · täglich 13:00 Uhr Zürich)
+### KI-Analysen (Claude Sonnet 4.5 · täglich 13:00 Uhr Zürich)
 - **Empfehlung** — KAUFEN / HALTEN / VERKAUFEN mit Scores (Fundamentals, Momentum, Risiko, Bewertung)
 - **Historische Empfehlungen** — Verlauf der letzten 7 Empfehlungen
 - **Kursziele & Szenarien** — Bull/Base/Bear + 5-Jahres-Forecast
+- **Experten-Konsens** — Analysten-Kursziel (Ø Bank) mit Kaufen/Halten/Verkaufen-Verteilung
 - **Social Media Sentiment** — Reddit, X/Twitter, StockTwits, Telegram, FB/IG (5 Plattformen)
-- **Nachrichten** — Top News aus 100+ Quellen
+- **Nachrichten** — Top News mit Sentiment (positiv/negativ/neutral)
 - **Sektor-Kontext** — Konkurrenz, SpaceX, Blue Origin, Starlink, neue Space-IPOs
 - **Insider-Trades** — SEC Form 4 Käufe & Verkäufe (RKLB + ASTS)
-- **US Gov Aufträge** — Golden Dome, SDA, NASA, Space Force (RKLB) / FAA, FCC, SEC (SPCX)
-- **US Regulierung** — FCC, ITU, DoD, NTIA (ASTS)
+- **Gov & Aufträge** — Golden Dome, SDA, NASA, Space Force (RKLB) / FCC, ITU, DoD, NTIA (ASTS)
 - **Börsenlexikon** — Fachbegriffe automatisch aktualisiert
-- **Earnings Calendar** — Nächste Quartalszahlen (automatisch via Cron)
+- **Earnings Calendar** — Nächste Quartalszahlen mit Countdown
 
 ### Investment-KPIs (RKLB + ASTS)
 - **KI-KPI-Score 0–100** — Gesamtbewertung mit 6 Kategorien (anklickbar)
 - **Drill-Down** — Klick auf Kategorie öffnet Details mit Quelle und Datum
 - **SEC-Badge** — zeigt welche Daten direkt von SEC EDGAR kommen
 - **KI-Badge** — zeigt welche Daten KI-berechnet sind
-- **Interpretation** — 2-3 Sätze Gesamtbild
+- **Interpretation** — 2 Sätze Gesamtbild
 - **Haupttreiber & Hauptrisiken** — farbige Tags
 
-**RKLB Investment-KPIs:** Wachstum · Backlog · Marge · Liquidität · Risiko · Bewertung
-
+**RKLB:** Wachstum · Backlog · Marge · Liquidität · Risiko · Bewertung  
 **RKLB Meilenstein-Tracker:** Neutron-Status · Launch Cadence · Defense · Risikoampel
 
+**ASTS:** Cash · Umsatz-Ramp · Technologie · Partner · Risiko · Bewertung  
 **ASTS Meilenstein-Tracker:** BlueBird Satelliten-Ampel · FCC/ITU · MNO-Partner · Risikoampel
-
-**ASTS Investment-KPIs:** Cash · Umsatz-Ramp · Technologie · Partner · Risiko · Bewertung
 
 ### Finanzdaten (SEC EDGAR · direkt)
 - Revenue, Bruttomarge, Cash, Debt, Nettoverlust
@@ -49,18 +48,20 @@ Live-Dashboard für Rocket Lab (RKLB), AST SpaceMobile (ASTS) und SpaceX (SPCX, 
 - Quellenangabe mit Datum bei jedem Datenpunkt
 
 ### Portfolio
-- Transaktionen erfassen (Käufe & Verkäufe)
-- Unrealisierter G/V, Portfolio-Wert
+- Transaktionen erfassen (Käufe & Verkäufe mit Datum und Notiz)
+- Unrealisierter G/V, Portfolio-Wert, Ø Kaufpreis
 - CHF/USD Toggle mit Live-Wechselkurs
+- Bull/Bear Szenario-Vorschau
 - CSV-Export
 - Cloud-Sync via Supabase (Magic Link Login)
 
 ### Weitere Features
-- **Dark Mode** — in Einstellungen aktivierbar
-- **Push-Notifications** — bei neuen KI-Daten (PWA)
-- **PWA** — als App auf Homescreen installierbar (iOS + Android)
-- **Error Alerting** — Cron-Fehler werden in Supabase geloggt
-- **Tooltips** — ? Icon erklärt jeden KPI für Laien
+- **Dark Mode** — Toggle in Einstellungen
+- **Push-Notifications** — Toggle in Einstellungen (PWA)
+- **PWA** — als App auf Homescreen installierbar (iOS + Android), `viewport-fit=cover`
+- **Error Alerting** — Cron-Fehler werden in Supabase geloggt und im Dashboard angezeigt
+- **Tooltips** — `?` Icon erklärt jeden KPI verständlich
+- **Responsive** — Desktop, Tablet, Mobile optimiert
 - **SpaceX Tab** — vorbereitet für IPO, wird mit Live-Kursen erweitert
 
 ---
@@ -69,15 +70,15 @@ Live-Dashboard für Rocket Lab (RKLB), AST SpaceMobile (ASTS) und SpaceX (SPCX, 
 
 | Komponente | Technologie |
 |--|--|
-| Frontend | Vanilla HTML/CSS/JS, Chart.js |
-| Backend | Vercel Serverless Functions |
-| KI (komplex) | Claude Sonnet 4.5 + Web-Search |
-| KI (einfach) | Claude Haiku 4.5 (CTX, GOV, Glossar) |
+| Frontend | Vanilla HTML/CSS/JS, Chart.js · Single-Page-App |
+| Fonts | DM Sans + DM Mono (Google Fonts) |
+| Backend | Vercel Serverless Functions (Node.js ESM) |
+| KI | Claude Sonnet 4.5 + Web-Search Tool |
 | Finanzdaten | SEC EDGAR XBRL API (direkt, kostenlos) |
 | Datenbank | Supabase (PostgreSQL) |
 | Auth | Supabase Magic Link |
-| Kursdaten | Yahoo Finance API |
-| Wechselkurs | open.er-api.com |
+| Kursdaten | Yahoo Finance API (query1 + query2 Fallback) |
+| Wechselkurs | open.er-api.com + frankfurter.app Fallback |
 | Hosting | Vercel Pro |
 
 ---
@@ -87,24 +88,20 @@ Live-Dashboard für Rocket Lab (RKLB), AST SpaceMobile (ASTS) und SpaceX (SPCX, 
 ```
 space-dashboard/
 ├── public/
-│   ├── index.html              ← Dashboard (Single-Page-App)
-│   ├── supabase.js             ← Supabase Client (lokal)
-│   ├── chart.min.js            ← Chart.js (lokal)
-│   ├── rklb-logo.png           ← Rocket Lab Logo
-│   ├── asts-logo.png           ← AST SpaceMobile Logo
-│   ├── spacex-logo.svg         ← SpaceX Logo
-│   ├── icon-192.png            ← PWA Icon
-│   ├── icon-512.png            ← PWA Icon
-│   ├── apple-touch-icon.png    ← iOS Homescreen Icon
-│   ├── favicon.ico             ← Browser Favicon
-│   ├── favicon.png             ← Browser Favicon (HD)
-│   └── manifest.json           ← PWA Manifest
+│   ├── index.html              ← Dashboard (Single-Page-App, ~4000 Zeilen)
+│   ├── supabase.js             ← Supabase Client (lokal gebündelt)
+│   ├── chart.min.js            ← Chart.js (lokal gebündelt)
+│   ├── manifest.json           ← PWA Manifest
+│   ├── sw.js                   ← Service Worker (Cache-Clearing)
+│   ├── rklb-logo.png / asts-logo.png / spacex-logo.svg
+│   ├── icon-192.png / icon-512.png / apple-touch-icon.png
+│   └── favicon.ico / favicon.png
 ├── api/
-│   ├── cron.js                 ← KI-Analyse (täglich via Vercel Cron)
+│   ├── cron.js                 ← KI-Analyse (Cron, parallele Batches à 3)
 │   ├── financials.js           ← SEC EDGAR Finanzdaten
-│   ├── quote.js                ← Yahoo Finance Proxy
-│   ├── history.js              ← Kursverlauf API
-│   ├── ki-data.js              ← Supabase Cache API (inkl. History)
+│   ├── quote.js                ← Yahoo Finance Proxy (inkl. 1J History)
+│   ├── history.js              ← Range-Chart API (query1+query2 Fallback)
+│   ├── ki-data.js              ← Supabase Cache-Leser
 │   ├── sync-status.js          ← Sync Status
 │   └── sync-toggle.js          ← Sync Toggle
 ├── vercel.json                 ← Routing + Cron-Konfiguration
@@ -116,21 +113,23 @@ space-dashboard/
 ## Setup & Deploy
 
 ### 1. Voraussetzungen
-- Vercel Account (Pro empfohlen für lange Cron-Laufzeiten)
-- Supabase Account (kostenlos)
-- Anthropic API Key (console.anthropic.com)
+- Vercel Account (Pro empfohlen für 300s Cron-Laufzeit)
+- Supabase Account (kostenlos reicht)
+- Anthropic API Key (console.anthropic.com · Stufe 2+)
 
 ### 2. Supabase Tabellen erstellen
+
 ```sql
--- KI Cache
+-- KI Cache (Upsert via unique constraint)
 CREATE TABLE ki_cache (
   id bigserial PRIMARY KEY,
-  ticker text,
+  ticker text NOT NULL DEFAULT 'global',
   section text NOT NULL,
   data jsonb,
-  updated_at timestamptz DEFAULT now()
+  updated_at timestamptz DEFAULT now(),
+  UNIQUE (ticker, section)
 );
-CREATE INDEX ON ki_cache(section, ticker, updated_at DESC);
+CREATE INDEX ON ki_cache(ticker, section, updated_at DESC);
 
 -- Portfolio Transaktionen
 CREATE TABLE transactions (
@@ -146,123 +145,155 @@ CREATE TABLE transactions (
 );
 ```
 
-### 3. Umgebungsvariablen in Vercel
+> **Wichtig:** Der `UNIQUE (ticker, section)` Constraint ist zwingend — der Cron nutzt Supabase Upsert mit `resolution=merge-duplicates`.
+
+### 3. Supabase RLS aktivieren
+
+```sql
+-- Transactions: nur eigene Daten
+ALTER TABLE transactions ENABLE ROW LEVEL SECURITY;
+CREATE POLICY "own data" ON transactions
+  USING (auth.uid() = user_id);
+
+-- ki_cache: öffentlich lesbar
+ALTER TABLE ki_cache ENABLE ROW LEVEL SECURITY;
+CREATE POLICY "public read" ON ki_cache FOR SELECT USING (true);
+```
+
+### 4. Umgebungsvariablen in Vercel
+
 ```
 ANTHROPIC_API_KEY=sk-ant-...
 SUPABASE_URL=https://xxx.supabase.co
-SUPABASE_ANON_KEY=eyJ...
-SUPABASE_SERVICE_KEY=eyJ...
+SUPABASE_ANON_KEY=eyJ...          ← für ki-data.js (public read)
+SUPABASE_SERVICE_KEY=eyJ...       ← für cron.js (write)
 ```
 
-### 4. Deploy
+### 5. Deploy
+
 ```bash
 git push origin main
-# Vercel deployed automatisch
+# Vercel deployed automatisch via GitHub Integration
 ```
 
-### 5. Erste Befüllung
-Nach erstem Deploy in Vercel:
-1. **Cron Jobs → scope=all_fast → Run Now** (Rec, News, Scenarios ~2 Min)
-2. **Cron Jobs → scope=all_slow → Run Now** (Sector, Gov, KPI, Milestone ~5 Min)
+### 6. Erste Datenbefüllung
+
+Nach erstem Deploy in Vercel Dashboard unter **Deployments → Functions → Cron Jobs**:
+
+1. `scope=all_slow` → Run Now (Sector, Gov, KPI, Milestone, Insider, Glossar · ~2 Min)
+2. `scope=all_fast` → Run Now (Rec, News, Scenarios · ~1 Min)
 
 ---
 
 ## Cron-Jobs
 
-| Job | Zeitplan | Was läuft |
+| Job | Zeitplan (UTC) | Inhalt |
 |--|--|--|
-| `scope=rklb` | Mo–Fr 13:00 | Rec + News (+ Sector/Gov/CTX/Insider/KPI Mo/Mi/Fr) |
-| `scope=asts` | Mo–Fr 13:00 | Rec + News (+ Sector/Gov/CTX/Insider/Milestone Mo/Mi/Fr) |
-| `scope=spcx` | Di+Fr 13:00 | News + Sector + Gov + CTX |
-| `scope=global` | Mo+Do 13:00 | Börsenlexikon |
-| `scope=rklb_news` | Sa+So 13:00 | Nur News |
-| `scope=asts_news` | Sa+So 13:00 | Nur News |
-| `scope=all_fast` | Manuell (1. Jan) | Rec + News + Scenarios (alle Ticker) |
-| `scope=all_slow` | Manuell (1. Jan) | Sector + Gov + CTX + Insider + KPI + Milestone + Glossar |
+| `scope=rklb` | Mo–Fr 11:00 | RKLB: alle Sektionen |
+| `scope=asts` | Mo–Fr 11:00 | ASTS: alle Sektionen |
+| `scope=spcx` | Di+Fr 11:00 | SpaceX: News, Sector, Gov, CTX |
+| `scope=global` | Mo+Do 11:00 | Börsenlexikon |
+| `scope=rklb_news` | Sa+So 11:00 | Nur RKLB News/Rec/Scenarios |
+| `scope=asts_news` | Sa+So 11:00 | Nur ASTS News/Rec/Scenarios |
+| `scope=all_fast` | Manuell | Rec + News + Scenarios (alle Ticker) |
+| `scope=all_slow` | Manuell | Sector + Gov + CTX + Insider + KPI + Milestone + Glossar |
 
-**Smart-Scheduling:** Der Cron entscheidet täglich selbst welche Sektionen laufen:
-- Wochenende → nur News
-- Di/Do → Rec + News
-- Mo/Mi/Fr → Rec + News + Sector + Gov + CTX + Insider + KPI/Milestone
-
-**Kosten:** ~$22/Monat (Anthropic API)
+**Laufzeit:** ~120s (parallele Batches à 3 Calls), Limit: 300s  
+**Kosten:** ~$15–25/Monat (Anthropic API, abhängig von Testfrequenz)  
+**Rate Limit:** Stufe 2 = tägliches Limit; bei viel manuellem Testen → Stufe 3 empfohlen
 
 ---
 
-## KPI-System
+## Cron-Architektur
 
-### Datenquellen pro Datenpunkt
-| Badge | Quelle | Beispiel |
-|--|--|--|
-| `SEC` | SEC EDGAR XBRL direkt | Revenue, Cash, Debt |
-| `KI` | Claude Web-Search | Backlog, Neutron-Status, Scores |
+```
+kiCall(prompt)
+  ├── fetch Anthropic API (max_tokens: 2048, web_search tool)
+  ├── Strip markdown code fences
+  ├── Extract JSON (first { to last })
+  ├── Strategy 1: JSON.parse()
+  ├── Strategy 2: sanitizeJson() → entfernt cite-Tags, fixt Newlines, trailing commas
+  ├── Strategy 3: flatten newlines
+  ├── Strategy 4: salvageJson() → extrahiert bekannte Strukturen (articles/cards/trades)
+  └── Error → retry (max 3×, 15s Pause)
 
-### RKLB Sektionen
+saveToCache(section, ticker, data)
+  └── Supabase POST + Prefer: resolution=merge-duplicates (Upsert)
+```
+
+---
+
+## KPI-Sektionen
+
+### RKLB
 | Section | Inhalt |
 |--|--|
-| `rec` | Empfehlung, Scores, Kursziel, Earnings-Datum |
-| `news` | Top 3-5 News mit Sentiment |
-| `scenarios` | Bull/Base/Bear Kursziele, 5J-Forecast |
-| `sector` | Sektor-Kontext, Konkurrenz |
+| `rec` | Empfehlung, Scores, Kursziel, Analysten |
+| `news` | Top News mit Sentiment |
+| `scenarios` | Bull/Base/Bear, 5J-Forecast, Sentiment |
+| `sector` | Sektor-Kontext, 6 Karten |
 | `gov_space` | Golden Dome, SDA, NASA, Space Force |
-| `ctx` | Firmendaten (Haiku) |
-| `insider` | SEC Form 4 Insider-Trades |
-| `kpi` | KI-KPI-Score, Backlog, Neutron, Defense |
+| `ctx` | Firmenbeschreibung, Tags, Stats |
+| `insider` | SEC Form 4 Trades, Signal |
+| `kpi` | Score, Backlog, Marge, Neutron, Defense |
 
-### ASTS Sektionen
+### ASTS
 | Section | Inhalt |
 |--|--|
-| `rec` | Empfehlung, Scores, Kursziel, Earnings-Datum |
-| `news` | Top 3-5 News mit Sentiment |
-| `scenarios` | Bull/Base/Bear Kursziele, 5J-Forecast |
-| `sector` | Sektor-Kontext, D2D-Konkurrenz |
+| `rec` | Empfehlung, Scores, Kursziel, Analysten |
+| `news` | Top News mit Sentiment |
+| `scenarios` | Bull/Base/Bear, 5J-Forecast, Sentiment |
+| `sector` | Sektor-Kontext, 6 Karten |
 | `gov_space` | FCC, ITU, DoD, NTIA |
-| `ctx` | Firmendaten (Haiku) |
-| `insider` | SEC Form 4 Insider-Trades |
-| `milestone` | KI-KPI-Score, BlueBird-Status, MNOs, Risiken |
+| `ctx` | Firmenbeschreibung, Tags, Stats |
+| `insider` | SEC Form 4 Trades, Signal |
+| `milestone` | Score, BlueBird-Status, MNOs, Risiken |
+
+### SPCX / Global
+| Section | Inhalt |
+|--|--|
+| `spcx/news` | SpaceX News |
+| `spcx/sector` | Marktposition, IPO-Status |
+| `spcx/gov_space` | FAA, NASA, Space Force, SEC |
+| `spcx/ctx` | Firmendaten |
+| `global/glossar` | Börsenlexikon, Golden Dome Update |
 
 ---
 
-## Quellenübersicht (100+ Quellen)
+## Design-System
 
-**Offizielle:** rocketlabusa.com, ast-science.com, spacex.com, SEC EDGAR (Form 4, 10-Q, S-1)
+### Typografie
+| Stufe | Grösse | Verwendung |
+|--|--|--|
+| xs | 11px | Icons, Fine Print |
+| sm | 12px | Timestamps, Tags, Meta |
+| md | 13px | Sekundärer Content, Labels |
+| base | 14px | Primärer UI-Text |
+| lg | 15px | Werte, Inputs |
+| xl | 16px | Prominente Werte |
+| 2xl | 17px | Card-Titel |
 
-**Finanzmedien:** Reuters, Bloomberg, CNBC, WSJ, Financial Times, Forbes, Business Insider
-
-**Börsenportale:** Yahoo Finance, Seeking Alpha, TipRanks, Zacks, Finviz, TradingView, Morningstar, Visible Alpha
-
-**Analysten:** Goldman Sachs, Morgan Stanley, JPMorgan, Bank of America, Needham, Canaccord, Deutsche Bank, Wedbush, Piper Sandler
-
-**Space-Investment Research:** Payload Space, Bryce Tech, Space Capital Quarterly, Beyond Earth Ventures, Exo Swan, Gainify.io, CSIS, Secure World Foundation
-
-**Space-Medien:** SpaceNews, NASASpaceFlight, SpaceflightNow, Via Satellite, Aviation Week, Ars Technica Space
-
-**ETF-Flows:** ARKX, UFO (Procure Space), ITA (iShares Aerospace), ROKT (SPDR Space)
-
-**Telecom (ASTS):** FierceWireless, Light Reading, RCR Wireless, GSMA Intelligence
-
-**Behörden:** FAA, FCC, ITU, NTIA, NASA, Space Force, SDA, ESA, JAXA, defense.gov
-
-**Konkurrenz-Monitoring:**
-- RKLB: Firefly Aerospace, Intuitive Machines (LUNR), Karman Space, Voyager Technologies, Relativity Space
-- ASTS: Starlink D2D, Lynk Global, OmniSpace, Eutelsat/OneWeb, Amazon Kuiper D2D
-
-**Social:** Reddit, X/Twitter, StockTwits, Telegram, Facebook, Instagram, YouTube
-
-**Insider-Trades:** openinsider.com, SEC EDGAR Form 4, finviz.com/insidertrading
+### CSS-Variablen
+```css
+--font-sans: 'DM Sans', system-ui, sans-serif;
+--font-mono: 'DM Mono', 'Fira Mono', monospace;
+--text-xs: 11px; --text-sm: 12px; --text-md: 13px;
+--text-base: 14px; --text-lg: 15px; --text-xl: 16px; --text-2xl: 17px;
+```
 
 ---
 
 ## Pending (nach SpaceX IPO)
-- Insider-Trades für SPCX aktivieren
 - Live-Kurse für SPCX Tab
+- SPCX Insider-Trades aktivieren
 - SPCX Portfolio-Tracking
 
 ---
 
 ## Hinweise
-- **Kein Anlageberatung** — KI-Analysen sind informativ, keine professionelle Beratung
-- Kursdaten alle 15 Sekunden aktualisiert
+- **Keine Anlageberatung** — KI-Analysen sind informativ, keine professionelle Beratung
+- Kursdaten alle 15 Sekunden via Yahoo Finance (query1 + query2 Fallback)
 - KI-Daten täglich um 13:00 Uhr Zürich (11:00 UTC)
 - SEC EDGAR Finanzdaten laden live bei jedem Seitenaufruf
-- Alle Zeitangaben in UTC; Cron läuft auf Vercel Pro mit maxDuration: 300s
+- Supabase Anon Key im Frontend ist öffentlich — RLS schützt die Daten
+- Alle Zeiten in UTC; Cron auf Vercel Pro mit `maxDuration: 300s`
