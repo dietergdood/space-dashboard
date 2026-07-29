@@ -1,6 +1,8 @@
-# Space Stocks Dashboard · RKLB · ASTS · SPCX
+# My Stocks Dashboard · RKLB · ASTS · SPCX · OKLO
 
-Live-Dashboard für Rocket Lab (RKLB), AST SpaceMobile (ASTS) und SpaceX (SPCX, IPO ausstehend) mit KI-Analysen, Finanzdaten und Portfolio-Tracking.
+Live-Dashboard für Rocket Lab (RKLB), AST SpaceMobile (ASTS), SpaceX (SPCX, seit Juni 2026 an der NASDAQ) und Oklo (OKLO) mit KI-Analysen (Claude Opus 5), Finanzdaten und Portfolio-Tracking.
+
+**Harte Datenquellen:** Yahoo Finance (Live-Kurse, Charts, Analysten-Konsens, Earnings-Termine, Short Interest via `/api/analyst`) · SEC EDGAR (XBRL-Finanzdaten via `/api/financials`, Form-4-Insider-Trades via `/api/insider`) · KI-Recherche mit Web-Suche für alles Qualitative.
 
 🌐 **Live:** https://space-stocks.vercel.app
 
@@ -23,12 +25,12 @@ Live-Dashboard für Rocket Lab (RKLB), AST SpaceMobile (ASTS) und SpaceX (SPCX, 
 - **Social Media Sentiment** — Reddit, X/Twitter, StockTwits, Telegram, FB/IG (5 Plattformen)
 - **Nachrichten** — Top News mit Sentiment (positiv/negativ/neutral)
 - **Sektor-Kontext** — Konkurrenz, SpaceX, Blue Origin, Starlink, neue Space-IPOs
-- **Insider-Trades** — SEC Form 4 Käufe & Verkäufe (RKLB + ASTS)
-- **Gov & Aufträge** — Golden Dome, SDA, NASA, Space Force (RKLB) / FCC, ITU, DoD, NTIA (ASTS)
+- **Insider-Trades** — echte SEC EDGAR Form-4-Daten via `/api/insider` (geparst, keine KI-Schätzung), ergänzt um KI-Kontext (alle vier Titel)
+- **Gov & Aufträge** — Golden Dome, SDA, NASA, Space Force (RKLB) / FCC, ITU, DoD, NTIA (ASTS) / FAA, NASA, Space Force, SEC (SPCX) / NRC, DOE, DoD, HALEU (OKLO)
 - **Börsenlexikon** — Fachbegriffe automatisch aktualisiert
 - **Earnings Calendar** — Nächste Quartalszahlen mit Countdown
 
-### Investment-KPIs (RKLB + ASTS)
+### Investment-KPIs (alle vier Titel)
 - **KI-KPI-Score 0–100** — Gesamtbewertung mit 6 Kategorien (anklickbar)
 - **Drill-Down** — Klick auf Kategorie öffnet Details mit Quelle und Datum
 - **SEC-Badge** — zeigt welche Daten direkt von SEC EDGAR kommen
@@ -41,6 +43,12 @@ Live-Dashboard für Rocket Lab (RKLB), AST SpaceMobile (ASTS) und SpaceX (SPCX, 
 
 **ASTS:** Cash · Umsatz-Ramp · Technologie · Partner · Risiko · Bewertung  
 **ASTS Meilenstein-Tracker:** BlueBird Satelliten-Ampel · FCC/ITU · MNO-Partner · Risikoampel
+
+**SPCX:** Wachstum · Starlink · Starship · Liquidität · Risiko · Bewertung  
+**SPCX Meilenstein-Tracker:** Starship-Ampel · Starts & Erfolgsquote · Starlink-Nutzer · Risikoampel
+
+**OKLO:** Cash · Pipeline · Lizenzierung · Technologie · Risiko · Bewertung  
+**OKLO Meilenstein-Tracker:** Aurora-INL-Ampel · NRC/DOE · Kunden-Pipeline (GW) · Risikoampel
 
 ### Finanzdaten (SEC EDGAR · direkt)
 - Revenue, Bruttomarge, Cash, Debt, Nettoverlust

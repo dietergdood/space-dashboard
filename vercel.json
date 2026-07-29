@@ -11,51 +11,120 @@
     {
       "source": "/",
       "headers": [
-        { "key": "Cache-Control", "value": "no-cache, no-store, must-revalidate" },
-        { "key": "Pragma", "value": "no-cache" },
-        { "key": "Expires", "value": "0" }
+        {
+          "key": "Cache-Control",
+          "value": "no-cache, no-store, must-revalidate"
+        },
+        {
+          "key": "Pragma",
+          "value": "no-cache"
+        },
+        {
+          "key": "Expires",
+          "value": "0"
+        }
       ]
     },
     {
       "source": "/index.html",
       "headers": [
-        { "key": "Cache-Control", "value": "no-cache, no-store, must-revalidate" },
-        { "key": "Pragma", "value": "no-cache" },
-        { "key": "Expires", "value": "0" }
+        {
+          "key": "Cache-Control",
+          "value": "no-cache, no-store, must-revalidate"
+        },
+        {
+          "key": "Pragma",
+          "value": "no-cache"
+        },
+        {
+          "key": "Expires",
+          "value": "0"
+        }
       ]
     },
     {
       "source": "/sw.js",
       "headers": [
-        { "key": "Cache-Control", "value": "no-cache, no-store, must-revalidate" }
+        {
+          "key": "Cache-Control",
+          "value": "no-cache, no-store, must-revalidate"
+        }
       ]
     },
     {
       "source": "/manifest.json",
       "headers": [
-        { "key": "Cache-Control", "value": "no-cache, no-store, must-revalidate" }
+        {
+          "key": "Cache-Control",
+          "value": "no-cache, no-store, must-revalidate"
+        }
       ]
     },
     {
       "source": "/:file(chart.min.js|supabase.js)",
       "headers": [
-        { "key": "Cache-Control", "value": "public, max-age=31536000, immutable" }
+        {
+          "key": "Cache-Control",
+          "value": "public, max-age=31536000, immutable"
+        }
       ]
     }
   ],
   "crons": [
-    { "path": "/api/cron?scope=rklb",      "schedule": "0 11 * * 1-5" },
-    { "path": "/api/cron?scope=asts",      "schedule": "5 11 * * 1-5" },
-    { "path": "/api/cron?scope=rklb_news", "schedule": "0 11 * * 0,6" },
-    { "path": "/api/cron?scope=asts_news", "schedule": "5 11 * * 0,6" },
-    { "path": "/api/cron?scope=spcx",      "schedule": "10 11 * * 2,5" },
-    { "path": "/api/cron?scope=global",    "schedule": "15 11 * * 1,4" },
-    { "path": "/api/cron?scope=all_fast",  "schedule": "0 0 1 1 *" },
-    { "path": "/api/cron?scope=all_slow",  "schedule": "0 0 1 1 *" }
+    {
+      "path": "/api/cron?scope=rklb",
+      "schedule": "0 11 * * 1-5"
+    },
+    {
+      "path": "/api/cron?scope=asts",
+      "schedule": "5 11 * * 1-5"
+    },
+    {
+      "path": "/api/cron?scope=spcx",
+      "schedule": "10 11 * * 1-5"
+    },
+    {
+      "path": "/api/cron?scope=oklo",
+      "schedule": "15 11 * * 1-5"
+    },
+    {
+      "path": "/api/cron?scope=rklb_news",
+      "schedule": "0 11 * * 0,6"
+    },
+    {
+      "path": "/api/cron?scope=asts_news",
+      "schedule": "5 11 * * 0,6"
+    },
+    {
+      "path": "/api/cron?scope=spcx_news",
+      "schedule": "10 11 * * 0,6"
+    },
+    {
+      "path": "/api/cron?scope=oklo_news",
+      "schedule": "15 11 * * 0,6"
+    },
+    {
+      "path": "/api/cron?scope=global",
+      "schedule": "20 11 * * 1,4"
+    },
+    {
+      "path": "/api/cron?scope=all_fast",
+      "schedule": "0 0 1 1 *"
+    },
+    {
+      "path": "/api/cron?scope=all_slow",
+      "schedule": "0 0 1 1 *"
+    }
   ],
   "functions": {
-    "api/cron.js":       { "maxDuration": 300 },
-    "api/history.js":    { "maxDuration": 30 },
-    "api/financials.js": { "maxDuration": 30 }
+    "api/cron.js": {
+      "maxDuration": 300
+    },
+    "api/history.js": {
+      "maxDuration": 30
+    },
+    "api/financials.js": {
+      "maxDuration": 30
+    }
   }
 }
