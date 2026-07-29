@@ -1,9 +1,12 @@
 // SEC EDGAR XBRL API — fetches real financial data directly from SEC
 // CIK: RKLB = 0001836935, ASTS = 0001780312
 
+// CIK: RKLB = 0001836935, ASTS = 0001780312, OKLO = 0001849056, SPCX (SpaceX) = 0001181412
 const TICKERS = {
   rklb: { cik: '0001836935', name: 'Rocket Lab USA' },
   asts: { cik: '0001780312', name: 'AST SpaceMobile' },
+  oklo: { cik: '0001849056', name: 'Oklo Inc' },
+  spcx: { cik: '0001181412', name: 'Space Exploration Technologies' },
 };
 
 const EDGAR_BASE = 'https://data.sec.gov/api/xbrl/companyfacts/CIK';
@@ -12,7 +15,7 @@ async function fetchEdgar(cik) {
   const url = `${EDGAR_BASE}${cik}.json`;
   const r = await fetch(url, {
     headers: {
-      'User-Agent': 'SpaceStocksDashboard/1.0 (space-stocks.vercel.app; contact@space-stocks.app)',
+      'User-Agent': 'MyStocksDashboard/1.0 (space-stocks.vercel.app; contact@space-stocks.app)',
       'Accept': 'application/json',
       'Accept-Encoding': 'gzip, deflate',
     }
@@ -65,7 +68,7 @@ export default async function handler(req, res) {
 
   const { ticker } = req.query;
   if (!ticker || !TICKERS[ticker]) {
-    return res.status(400).json({ error: 'ticker required: rklb or asts' });
+    return res.status(400).json({ error: 'ticker required: rklb, asts, spcx or oklo' });
   }
 
   try {
