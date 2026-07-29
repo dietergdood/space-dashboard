@@ -66,13 +66,17 @@ export default async function handler(req, res) {
   res.setHeader('Cache-Control', 's-maxage=3600');
   if (req.method === 'OPTIONS') return res.status(200).end();
 
-  const { ticker } = req.query;
-  if (!ticker || !TICKERS[ticker]) {
-    return res.status(400).json({ error: 'ticker required: rklb, asts, spcx or oklo' });
+  const { ticker, cik: cikOverride } = req.query;
+  // Eigene Titel: CIK wird vom Client mitgeliefert
+  const entry = TICKERS[ticker] || (cikOverride && /^\d{1,10}$/.test(cikOverride)
+    ? { cik: cikOverride.padStart(10, '0'), name: (ticker || '').toUpperCase() }
+    : null);
+  if (!ticker || !entry) {
+    return res.status(400).json({ error: 'ticker required: rklb, asts, spcx, oklo — oder eigener Ticker mit &cik=' });
   }
 
   try {
-    const { cik, name } = TICKERS[ticker];
+    const { cik, name } = entry;
     const facts = await fetchEdgar(cik);
     const us = facts?.facts?.['us-gaap'] || {};
     const dei = facts?.facts?.['dei'] || {};

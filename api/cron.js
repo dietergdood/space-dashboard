@@ -356,6 +356,38 @@ const GOV_ASTS_PROMPT = `AST SpaceMobile (ASTS) regulatory status 2026: FCC, ITU
 
 const SPCX_GOV_PROMPT = `SpaceX (NASDAQ: SPCX) government status 2026: FAA Starship launch licenses, NASA Artemis HLS contracts, Space Force NSSL launch awards, SEC reporting since June 2026 IPO. Fill with real current data. JSON only: {"faa":{"status":"status","desc":"Beschreibung auf Deutsch"},"nasa":{"wert":"$X Mrd","desc":"Beschreibung auf Deutsch"},"space_force":{"wert":"$X Mrd","desc":"Beschreibung auf Deutsch"},"sec":{"status":"status","desc":"Beschreibung auf Deutsch"}}`;
 
+
+// ── Generische Prompts für selbst hinzugefügte Titel ──────────────────────
+function buildCustomPrompts(sym, name) {
+  const co = `${name} (${sym})`;
+  return {
+    rec: `Analysiere die Aktie ${co} aktuell. JSON only: {"empfehlung":"HALTEN","titel":"Kernthese auf Deutsch","begruendung":"3-4 Saetze Analyse auf Deutsch","fundamentals":5,"momentum":5,"risiko":5,"bewertung":5,"explain_fundamentals":"Fundamentals — operative Lage auf Deutsch","explain_momentum":"Momentum — Kurstrend auf Deutsch","explain_risiko":"Risiko — Hoeherer Score = niedrigeres Risiko. Risikobewertung auf Deutsch","explain_bewertung":"Bewertung — Bewertungskommentar auf Deutsch","einstieg":"$X","kursziel":"$X","stopp":"$X","lage":"<b>Aktuelle Lage:</b> 2-3 Saetze operative News auf Deutsch — keine Kurszahlen","lage_typ":"neutral","analysten":"Xx Kaufen Xx Halten","earnings_date":"YYYY-MM-DD naechste Quartalszahlen falls bekannt"}`,
+    news: `${sym} ${name} stock news last 48h. Fill with real recent events. JSON only: {"articles":[{"title":"Max 80 chars","sentiment":"pos|neg|neu","body":"Nachrichtentext auf Deutsch","source":"Source name"}]}`,
+    scenarios: `Analysiere Kursziele von Analysten fuer ${co}. Suche auf Yahoo Finance, TipRanks, Seeking Alpha. WICHTIG: bull_pct=100 immer, alle pct-Werte 0-100. Antworte NUR mit JSON, kein HTML, keine cite-Tags: {"intro":"1 Satz","bull_label":"$XXX","bull_pct":100,"opt_label":"$XXX","opt_pct":60,"base_label":"$XXX","base_pct":45,"bear_label":"$XXX","bear_pct":30,"bull_target":0,"base_target":0,"bear_target":0,"bull5yr":0,"base5yr":0,"bear5yr":0,"bull_desc":"Szenario","base_desc":"Bankexperten","bear_desc":"Szenario","analyst_konsens":"$XXX","sentiment":"2 Saetze ohne HTML","sentiment_warning":true,"sentiment_reddit":"Neutral","sentiment_reddit_sub":"1 Satz","sentiment_x":"Neutral","sentiment_x_sub":"1 Satz","sentiment_st":"Neutral","sentiment_st_sub":"1 Satz","sentiment_tg":"Neutral","sentiment_tg_sub":"1 Satz","sentiment_fb":"Neutral","sentiment_fb_sub":"1 Satz"}`,
+    sector: `Analysiere Branchen- und Wettbewerbsumfeld von ${co}. Alle Texte auf Deutsch. Antworte NUR mit JSON, kein HTML, keine cite-Tags: {"intro":"1 Satz ohne HTML","cards":[{"emoji":"📊","name":"Thema","val":"Kennzahl","val_color":"green","desc":"Kurzbeschreibung"}]}`,
+    ctx: `Aktuelle Firmendaten zu ${co}. Quellen: Investor Relations, SEC Filings, letzter Earnings Call. Antworte NUR mit JSON, kein HTML, keine cite-Tags: {"desc":"Firmenbeschreibung auf Deutsch in 2 Saetzen","tags":[{"text":"Tag","type":"green"}],"stats":[{"label":"Kennzahl","val":"Wert"}]}`,
+    kpi: `Analysiere ${co} fundamental. Suche aktuelle Quartalszahlen, Bilanz, Analystenziele. Antworte NUR mit JSON, kein HTML, keine cite-Tags: {"score_gesamt":50,"score_kommentar":"1 Satz auf Deutsch","score_wachstum":5,"score_profitabilitaet":5,"score_bilanz":5,"score_momentum":5,"score_risiko":5,"score_bewertung":5,"analyst_range":"$X-$X","kurs_vs_konsens":"X% ueber/unter Konsens","interpretation":"3-4 Saetze Analyse auf Deutsch","haupttreiber":["Treiber 1","Treiber 2"],"hauptrisiken":["Risiko 1","Risiko 2"]}`,
+    insider: `${sym} ${name} insider trades last 90 days from SEC Form 4. Fill with real trades. JSON only, no slashes in name fields: {"trades":[{"name":"First Last","title":"CEO","type":"sell","shares":1000,"price":10.00,"value":10000,"date":"2026-07-01","note":"Kontext auf Deutsch"}],"summary":"Zusammenfassung auf Deutsch","signal":"neutral"}`,
+  };
+}
+
+// Liest selbst hinzugefuegte Titel aus Supabase (Tabelle user_tickers, optional)
+async function fetchCustomTickers() {
+  try {
+    const rows = await supa('/user_tickers?select=ticker,symbol,name');
+    if (!Array.isArray(rows)) return [];
+    const seen = new Set();
+    return rows.filter(r => {
+      const k = (r.ticker || '').toLowerCase();
+      if (!k || seen.has(k)) return false;
+      seen.add(k); return true;
+    }).map(r => ({ t: (r.ticker||'').toLowerCase(), sym: (r.symbol||'').toUpperCase(), name: r.name || r.symbol }));
+  } catch (e) {
+    console.log('Keine eigenen Titel (user_tickers nicht vorhanden oder leer):', e.message);
+    return [];
+  }
+}
+
 export default async function handler(req, res) {
   res.setHeader('Access-Control-Allow-Origin', '*');
   res.setHeader('Access-Control-Allow-Methods', 'GET, POST, OPTIONS');
@@ -364,6 +396,9 @@ export default async function handler(req, res) {
 
   const { scope } = req.query;
   console.log('Cron starting, scope:', scope || 'all');
+
+  const customTickers = await fetchCustomTickers();
+  if (customTickers.length) console.log('Eigene Titel gefunden:', customTickers.map(c => c.sym).join(', '));
 
   const allCalls = [
     { ticker:'rklb', section:'rec',        prompt: REC_PROMPTS.rklb },
@@ -401,6 +436,20 @@ export default async function handler(req, res) {
     { ticker:'oklo', section:'gov_space',  prompt: GOV_OKLO_PROMPT },
   ];
 
+  // Selbst hinzugefuegte Titel: generische Prompts anhaengen
+  for (const c of customTickers) {
+    const p = buildCustomPrompts(c.sym, c.name);
+    allCalls.push(
+      { ticker:c.t, section:'rec',       prompt:p.rec,       custom:true },
+      { ticker:c.t, section:'news',      prompt:p.news,      custom:true },
+      { ticker:c.t, section:'scenarios', prompt:p.scenarios, custom:true },
+      { ticker:c.t, section:'sector',    prompt:p.sector,    custom:true },
+      { ticker:c.t, section:'ctx',       prompt:p.ctx,       custom:true },
+      { ticker:c.t, section:'kpi',       prompt:p.kpi,       custom:true },
+      { ticker:c.t, section:'insider',   prompt:p.insider,   custom:true },
+    );
+  }
+
   // Scope filtering
   const fastSections = new Set(['rec','news','scenarios']);
   const slowSections = new Set(['sector','ctx','glossar','kpi','milestone','insider','gov_space']);
@@ -414,6 +463,8 @@ export default async function handler(req, res) {
   else if (scope === 'asts_news') calls = allCalls.filter(c => c.ticker==='asts' && fastSections.has(c.section));
   else if (scope === 'spcx_news') calls = allCalls.filter(c => c.ticker==='spcx' && fastSections.has(c.section));
   else if (scope === 'oklo_news') calls = allCalls.filter(c => c.ticker==='oklo' && fastSections.has(c.section));
+  else if (scope === 'custom') calls = allCalls.filter(c => c.custom);
+  else if (scope === 'custom_news') calls = allCalls.filter(c => c.custom && fastSections.has(c.section));
   else if (scope === 'global') calls = allCalls.filter(c => c.section === 'glossar');
   else if (scope === 'all_fast') calls = allCalls.filter(c => fastSections.has(c.section));
   else if (scope === 'all_slow') calls = allCalls.filter(c => slowSections.has(c.section));

@@ -25,8 +25,9 @@ export default async function handler(req, res) {
   if (req.method === 'OPTIONS') return res.status(200).end();
 
   const t = (req.query.ticker || '').toLowerCase();
-  if (!TICKERS[t]) return res.status(400).json({ error: 'ticker required: rklb, asts, spcx or oklo' });
-  const cik = TICKERS[t].cik;
+  const ov = (req.query.cik || '').replace(/\D/g, '');
+  const cik = TICKERS[t]?.cik || (ov ? ov.padStart(10, '0') : null);
+  if (!cik) return res.status(400).json({ error: 'ticker required: rklb, asts, spcx, oklo — oder eigener Ticker mit &cik=' });
 
   try {
     const sub = await fetch(`https://data.sec.gov/submissions/CIK${cik}.json`, { headers: UA });
