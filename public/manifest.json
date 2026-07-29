@@ -1,7 +1,7 @@
 {
   "name": "My Stocks",
   "short_name": "My Stocks",
-  "description": "Live Dashboard für RKLB, ASTS, SPCX und OKLO",
+  "description": "Live Dashboard für RKLB, ASTS, SPCX, OKLO und eigene Titel",
   "start_url": "/",
   "display": "standalone",
   "background_color": "#ededea",
@@ -9,19 +9,19 @@
   "orientation": "portrait-primary",
   "icons": [
     {
-      "src": "/icon-192.png",
+      "src": "/icon-192.png?v=2",
       "sizes": "192x192",
       "type": "image/png",
       "purpose": "any maskable"
     },
     {
-      "src": "/icon-512.png",
+      "src": "/icon-512.png?v=2",
       "sizes": "512x512",
       "type": "image/png",
       "purpose": "any maskable"
     },
     {
-      "src": "/apple-touch-icon.png",
+      "src": "/apple-touch-icon.png?v=2",
       "sizes": "180x180",
       "type": "image/png"
     }

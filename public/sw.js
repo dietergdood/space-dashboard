@@ -1,5 +1,5 @@
 // Service Worker v2 — Cache-Busting bei jedem Deploy
-const VERSION = 'v2026-07-29';
+const VERSION = 'v2026-07-29b';
 
 self.addEventListener('install', e => {
   self.skipWaiting(); // Neuer SW wird sofort aktiv

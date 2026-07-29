@@ -6,17 +6,17 @@
   <title>My Stocks Dashboard</title>
   <meta name="description" content="RKLB · ASTS · SPCX · OKLO Analyse-Dashboard">
   <link rel="manifest" href="/manifest.json">
-  <link rel="icon" type="image/x-icon" href="/favicon.ico">
-  <link rel="icon" type="image/png" href="/favicon.png">
+  <link rel="icon" type="image/x-icon" href="/favicon.ico?v=2" >
+  <link rel="icon" type="image/png" href="/favicon.png?v=2" >
   <meta name="theme-color" content="#1d4ed8">
   <meta name="mobile-web-app-capable" content="yes">
   <meta name="apple-mobile-web-app-capable" content="yes">
   <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
   <meta name="apple-mobile-web-app-title" content="My Stocks">
-  <link rel="apple-touch-icon" href="/apple-touch-icon.png">
-  <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png">
-  <link rel="icon" type="image/png" sizes="192x192" href="/icon-192.png">
-  <link rel="icon" type="image/png" sizes="512x512" href="/icon-512.png">
+  <link rel="apple-touch-icon" href="/apple-touch-icon.png?v=2" >
+  <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png?v=2" >
+  <link rel="icon" type="image/png" sizes="192x192" href="/icon-192.png?v=2" >
+  <link rel="icon" type="image/png" sizes="512x512" href="/icon-512.png?v=2" >
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;700&family=DM+Mono:wght@400;500;600&display=swap" rel="stylesheet">
@@ -67,7 +67,7 @@ body{font-family:var(--font-sans);background:var(--bg);color:var(--text);min-hei
 .hdr{background:var(--surface);border-bottom:1px solid var(--border);position:sticky;top:0;z-index:100;box-shadow:var(--shadow);width:100%;}
 .hdr-inner{max-width:1200px;margin:0 auto;padding:0 24px;height:60px;display:flex;align-items:center;gap:16px;}
 .logo{display:flex;align-items:center;gap:10px;flex-shrink:0;}
-.logo-icon{font-size:22px;}
+.logo-icon{width:30px;height:30px;border-radius:8px;display:block;flex-shrink:0;}
 .logo-text{font-weight:700;font-size:15px;line-height:1.2;}
 .logo-sub{font-size:12px;color:var(--text3);font-weight:400;}
 .hdr-mid{flex:1;display:flex;justify-content:center;}
@@ -579,7 +579,7 @@ body{font-family:var(--font-sans);background:var(--bg);color:var(--text);min-hei
   .hdr-inner{padding:0 10px;gap:8px;height:52px;max-width:100%;width:100%;box-sizing:border-box;}
   .hdr-mid{flex:1;min-width:0;overflow:hidden;}
   .logo{gap:6px;flex-shrink:0;}
-  .logo-icon{font-size:18px;}
+  .logo-icon{width:26px;height:26px;border-radius:7px;}
   .logo-text{font-size:13px;}
   .logo-sub{display:none;}
   .live-badge span{display:none;}
@@ -723,6 +723,30 @@ body{font-family:var(--font-sans);background:var(--bg);color:var(--text);min-hei
   .met-val{font-size:18px;}
   .card-title{font-size:14px;}
 }
+
+/* ── Titel selbst hinzufügen ── */
+.tab-add{font-size:18px;font-weight:700;padding:0 12px;min-width:38px;color:var(--text2);}
+.tab-add:hover{color:var(--blue);}
+.add-modal-overlay{position:fixed;inset:0;background:rgba(15,23,42,.55);z-index:9999;display:flex;align-items:center;justify-content:center;padding:16px;backdrop-filter:blur(2px);}
+.add-modal{background:var(--card);border:1px solid var(--border);border-radius:14px;padding:22px;width:100%;max-width:420px;box-shadow:0 20px 50px rgba(0,0,0,.25);}
+.add-modal-title{font-size:17px;font-weight:700;margin-bottom:4px;}
+.add-modal-sub{font-size:12px;color:var(--text2);margin-bottom:16px;line-height:1.5;}
+.add-lbl{display:block;font-size:11px;font-weight:600;color:var(--text2);margin:10px 0 4px;}
+.add-inp{width:100%;padding:9px 11px;border:1px solid var(--border);border-radius:8px;background:var(--bg);color:var(--text);font-size:14px;font-family:var(--font-mono);}
+.add-inp:focus{outline:none;border-color:var(--blue);}
+.add-hint{font-size:10.5px;color:var(--text3);margin-top:6px;line-height:1.5;}
+.add-msg{font-size:12px;margin-top:10px;min-height:16px;}
+.add-msg.err{color:var(--red);}
+.add-msg.ok{color:var(--green);}
+.add-msg.load{color:var(--text2);}
+.add-modal-btns{display:flex;gap:8px;justify-content:flex-end;margin-top:16px;}
+.add-btn-cancel,.add-btn-ok{padding:8px 16px;border-radius:8px;font-size:13px;font-weight:600;cursor:pointer;border:1px solid var(--border);}
+.add-btn-cancel{background:transparent;color:var(--text2);}
+.add-btn-ok{background:var(--blue);color:#fff;border-color:var(--blue);}
+.add-btn-ok:disabled{opacity:.6;cursor:default;}
+.btn-remove-ticker{background:transparent;border:1px solid var(--border);color:var(--text3);font-size:12px;padding:7px 14px;border-radius:8px;cursor:pointer;}
+.btn-remove-ticker:hover{color:var(--red);border-color:var(--red);}
+.tab-logo-fallback{width:18px;height:18px;border-radius:4px;display:inline-flex;align-items:center;justify-content:center;font-size:9px;font-weight:700;color:#fff;margin-right:4px;vertical-align:middle;}
 </style>
 </head>
 <body>
@@ -731,7 +755,7 @@ body{font-family:var(--font-sans);background:var(--bg);color:var(--text);min-hei
 <header class="hdr">
   <div class="hdr-inner">
     <div class="logo">
-      <div class="logo-icon">🚀</div>
+      <img src="/logo.svg" class="logo-icon" alt="My Stocks">
       <div>
         <div class="logo-text">My Stocks</div>
         <div class="logo-sub" id="last-upd">lädt...</div>
@@ -743,6 +767,7 @@ body{font-family:var(--font-sans);background:var(--bg);color:var(--text);min-hei
         <button class="tab asts-tab" id="tab-asts-btn"><img src="/asts-logo.png" class="tab-logo" alt="ASTS"><span class="tab-full">AST SpaceMobile (ASTS)</span><span class="tab-short">ASTS</span></button>
         <button class="tab spcx-tab" id="tab-spcx-btn"><img src="/spacex-logo.svg" class="tab-logo spcx-icon" alt="SpaceX" style="width:18px;height:18px;object-fit:contain;filter:invert(0);margin-right:4px;vertical-align:middle;"><span class="tab-full">SpaceX (SPCX)</span><span class="tab-short">SPCX</span></button>
         <button class="tab oklo-tab" id="tab-oklo-btn"><img src="/oklo-logo.svg" class="tab-logo" alt="OKLO"><span class="tab-full">Oklo (OKLO)</span><span class="tab-short">OKLO</span></button>
+        <button class="tab tab-add" id="tab-add-btn" onclick="openAddTicker()" title="Titel hinzufügen">+</button>
       </div>
     </div>
     <div class="hdr-r">
@@ -3105,6 +3130,474 @@ body{font-family:var(--font-sans);background:var(--bg);color:var(--text);min-hei
 </div>
 
 <!-- ═══ GLOSSAR ═══ -->
+<template id="tpl-ticker-panel"><div class="panel custom-panel" id="p-__T__">
+<div class="card open" id="card-__T__-alert">
+  <div class="card-header" onclick="toggleCard('__T__-alert')">
+    <div class="card-icon">📢</div>
+    <div>
+      <div class="card-title">Aktuelle Lage · __NAME__</div>
+      <div class="card-sub">KI-basiert, aktualisierbar</div>
+    </div>
+    <div class="card-arrow">▼</div>
+  </div>
+  <div class="card-body" id="body-__T__-alert">
+    <div class="alert neutral" id="__T__-alert-box">
+      <div class="alert-dot"></div>
+      <div id="__T__-alert-text" style="font-style:italic;color:var(--text3);">⏳ Wird beim nächsten Cron-Lauf aktualisiert (täglich um 13:00)</div>
+    </div>
+  </div>
+</div>
+<div class="card open" id="card-__T__-mets">
+  <div class="card-header" onclick="toggleCard('__T__-mets')">
+    <div class="card-icon">💰</div>
+    <div>
+      <div class="card-title">Live-Kurszahlen</div>
+      <div class="card-sub">Aktueller Kurs · Volumen · Jahresspanne</div>
+    </div>
+    <div class="card-arrow">▼</div>
+  </div>
+  <div class="card-body" id="body-__T__-mets">
+    <div class="mets">
+      <div class="met">
+        <div class="met-icon">💰</div>
+        <div class="met-label">Aktueller Kurs <span class="tip"><span class="tip-icon">?</span><span class="tip-box">Der aktuelle Börsenkurs. Aktualisiert alle 15 Sekunden.</span></span></div>
+        <div class="met-val" id="__T__-price">lädt...</div>
+        <div class="met-chg" id="__T__-chg">—</div>
+        <div class="met-sub">pro Aktie</div>
+        <div class="premarket-badge" id="__T__-premarket" style="display:none;"></div>
+      </div>
+      <div class="met">
+        <div class="met-icon">📊</div>
+        <div class="met-label">Handelsvolumen <span class="tip"><span class="tip-icon">?</span><span class="tip-box">Wie viele Aktien heute gehandelt wurden. Hohes Volumen = viele Anleger kaufen oder verkaufen gerade aktiv.</span></span></div>
+        <div class="met-val mono" id="__T__-vol">—</div>
+        <div class="met-chg nu" id="__T__-vol-ctx" style="font-size:12px;">—</div>
+        <div class="met-chg nu" id="__T__-cap"></div>
+      </div>
+      <div class="met">
+        <div class="met-icon">📏</div>
+        <div class="met-label">Jahresspanne <span class="tip"><span class="tip-icon">?</span><span class="tip-box">Der tiefste und höchste Kurs der letzten 12 Monate. Zeigt die Volatilität.</span></span></div>
+        <div class="met-val mono" id="__T__-52w" style="font-size:15px;padding-top:4px;">—</div>
+        <div class="met-sub">Tief → Hoch (12 Monate)</div>
+      </div>
+      <div class="met">
+        <div class="met-icon">🎯</div>
+        <div class="met-label">Experten-Konsens <span class="tip"><span class="tip-icon">?</span><span class="tip-box"><b>Was bedeutet das?</b> Grosse Banken beschäftigen Analysten die Aktien bewerten. Der Preis ist ihr durchschnittliches Kursziel für die nächsten 12 Monate. Die Anzahl zeigt wie viele Analysten Kaufen, Halten oder Verkaufen empfehlen. Achtung: Bei spekulativen Aktien wie __SYM__ liegen Analysten häufig falsch.</span></span></div>
+        <div class="met-val mono" id="__T__-cons-price">—</div>
+        <div class="met-chg nu" id="__T__-cons-rating">— Analysten</div>
+        <div class="met-sub">Ø Kursziel (12 Monate)</div>
+      </div>
+    </div>
+  </div>
+</div>
+<div class="card open" id="card-__T__-rec">
+  <div class="card-header" onclick="toggleCard('__T__-rec')">
+    <div class="card-icon">🎯</div>
+    <div>
+      <div class="card-title">Kauf/Halt/Verkauf-Empfehlung</div>
+      <div class="card-sub">KI-basiert, aktualisierbar</div>
+    </div>
+    <div class="card-arrow">▼</div>
+  </div>
+  <div class="card-body" id="body-__T__-rec">
+    <div class="rec-banner empty" id="__T__-rec-banner">
+      <div class="rec-head">
+        <span class="rec-pill empty" id="__T__-rec-pill">—</span>
+        <div>
+          <div class="rec-title" id="__T__-rec-title" style="color:var(--text2);font-weight:400;">KI-Analyse ausstehend</div>
+          <div class="rec-ts" id="__T__-rec-ts"></div>
+          <div style="font-size:10px;color:var(--text3);margin-top:4px;">🤖 KI-Analyse auf Basis von 100+ Quellen · Keine Anlageberatung</div>
+        </div>
+      </div>
+      <div class="rec-explain" id="__T__-rec-sub" style="color:var(--text3);font-style:italic;">Noch keine Analyse geladen. Mit KI-Schlüssel im ⚙️-Menü wird die Empfehlung automatisch generiert.</div>
+    </div>
+    <div class="rec-scores" id="__T__-rec-scores">
+      <div class="score-card">
+        <div class="score-top"><div class="score-emoji">📈</div><div class="score-label">Wie gut läuft<br>das Geschäft?</div></div>
+        <div class="score-val wn" id="__T__-s1">—</div>
+        <div class="score-meter"><div class="score-fill" id="__T__-m1"></div></div>
+        <div class="score-explain" id="__T__-explain-fundamentals" style="color:var(--text3);font-style:italic;"></div>
+      </div>
+      <div class="score-card">
+        <div class="score-top"><div class="score-emoji">🚀</div><div class="score-label">Wie stark steigt<br>der Kurs gerade?</div></div>
+        <div class="score-val wn" id="__T__-s2">—</div>
+        <div class="score-meter"><div class="score-fill" id="__T__-m2"></div></div>
+        <div class="score-explain" id="__T__-explain-momentum" style="color:var(--text3);font-style:italic;"></div>
+      </div>
+      <div class="score-card">
+        <div class="score-top"><div class="score-emoji">⚠️</div><div class="score-label">Wie hoch ist<br>das Risiko?</div></div>
+        <div class="score-val wn" id="__T__-s3">—</div>
+        <div class="score-meter"><div class="score-fill" id="__T__-m3"></div></div>
+        <div class="score-explain" id="__T__-explain-risiko" style="color:var(--text3);font-style:italic;"><b>Risiko</b> — <b>Höherer Score = niedrigeres Risiko.</b> Wird mit KI aktualisiert</div>
+      </div>
+      <div class="score-card">
+        <div class="score-top"><div class="score-emoji">💎</div><div class="score-label">Ist der Preis<br>fair?</div></div>
+        <div class="score-val wn" id="__T__-s4">—</div>
+        <div class="score-meter"><div class="score-fill" id="__T__-m4"></div></div>
+        <div class="score-explain" id="__T__-explain-bewertung" style="color:var(--text3);font-style:italic;"></div>
+      </div>
+    </div>
+    <div class="rec-history" id="__T__-rec-history" style="display:none;">
+          <div class="rec-history-title">📊 Verlauf Empfehlungen</div>
+          <div class="rec-history-items" id="__T__-rec-history-items"></div>
+        </div>
+    <div class="rec-levels" id="__T__-rec-levels">
+      <div class="rec-level"><span class="tip"><b>Guter Einstieg:</b> <span id="__T__-pill-einstieg-val">—</span><span class="tip-icon">?</span><span class="tip-box">Unter welchem Kurs ein Einstieg sinnvoller wäre als zum aktuellen Preis.</span></span></div>
+      <div class="rec-level"><span class="tip"><b>Kursziel:</b> <span id="__T__-pill-ziel-val">—</span><span class="tip-icon">?</span><span class="tip-box">Wo der Kurs hinlaufen könnte wenn die Entwicklung wie erwartet verläuft.</span></span></div>
+      <div class="rec-level"><span class="tip"><b>Stopp-Loss:</b> <span id="__T__-pill-stopp-val">—</span><span class="tip-icon">?</span><span class="tip-box">Unter diesem Kurs sollte man die Position überdenken — Sicherheitsnetz.</span></span></div>
+    </div>
+
+  </div>
+</div>
+<div class="card open" id="card-__T__-kpi">
+  <div class="card-header" onclick="toggleCard('__T__-kpi')">
+    <div class="card-icon">📊</div>
+    <div>
+      <div class="card-title">Investment-KPIs</div>
+      <div class="card-sub">Wachstum · Bilanz · Risiko · Bewertung</div>
+    </div>
+    <div class="card-arrow">▼</div>
+  </div>
+  <div class="card-body" id="body-__T__-kpi">
+    <div id="__T__-kpi-content">
+      <div style="display:flex;gap:8px;margin-bottom:10px;flex-wrap:wrap;">
+        <span style="font-size:10px;padding:2px 7px;border-radius:4px;background:rgba(37,99,235,.1);color:var(--blue);font-weight:600;">SEC = Direkt von SEC EDGAR</span>
+        <span style="font-size:10px;padding:2px 7px;border-radius:4px;background:var(--purple-bg);color:var(--purple);font-weight:600;">KI = Claude Web-Search Analyse</span>
+      </div>
+      <div style="display:flex;align-items:center;gap:14px;margin-bottom:12px;">
+        <div class="kpi-score-badge good" id="__T__-kpi-score-badge">—</div>
+        <div style="flex:1;">
+          <div style="font-size:13px;font-weight:600;">KI-KPI-Score <span class="kpi-info" style="vertical-align:middle;">?</span><div class="kpi-tooltip" style="display:none;">Gesamtbewertung 0–100 aus Wachstum, Profitabilität, Bilanz, Momentum, Risiko und Bewertung. Grün ≥80, Blau ≥60, Orange ≥40, Rot &lt;40</div></div>
+          <div style="font-size:11px;color:var(--text3);" id="__T__-kpi-score-sub">Wird berechnet...</div>
+        </div>
+      </div>
+      <div class="kpi-cat-grid">
+        <div class="kpi-cat"><div class="kpi-cat-name">Wachstum <span class="kpi-info">?</span><div class="kpi-tooltip" style="display:none;">Umsatzdynamik und Auftragsentwicklung</div></div><div class="kpi-cat-score" id="__T__-kpi-score-wachstum">—</div></div>
+        <div class="kpi-cat"><div class="kpi-cat-name">Profitabilität <span class="kpi-info">?</span><div class="kpi-tooltip" style="display:none;">Margen und Weg zur Gewinnschwelle</div></div><div class="kpi-cat-score" id="__T__-kpi-score-profit">—</div></div>
+        <div class="kpi-cat"><div class="kpi-cat-name">Bilanz <span class="kpi-info">?</span><div class="kpi-tooltip" style="display:none;">Cash, Schulden und Finanzierungsbedarf</div></div><div class="kpi-cat-score" id="__T__-kpi-score-bilanz">—</div></div>
+        <div class="kpi-cat"><div class="kpi-cat-name">Momentum <span class="kpi-info">?</span><div class="kpi-tooltip" style="display:none;">Kurstrend und operative Dynamik</div></div><div class="kpi-cat-score" id="__T__-kpi-score-momentum">—</div></div>
+        <div class="kpi-cat"><div class="kpi-cat-name">Risiko <span class="kpi-info">?</span><div class="kpi-tooltip" style="display:none;">Höherer Score = niedrigeres Risiko</div></div><div class="kpi-cat-score" id="__T__-kpi-score-risiko">—</div></div>
+        <div class="kpi-cat"><div class="kpi-cat-name">Bewertung <span class="kpi-info">?</span><div class="kpi-tooltip" style="display:none;">Kurs im Verhältnis zu Umsatz und Substanz</div></div><div class="kpi-cat-score" id="__T__-kpi-score-bewertung">—</div></div>
+      </div>
+      <div class="kpi-drill" style="display:block;margin-top:12px;">
+        <div class="kpi-drill-row"><span class="kpi-drill-lbl">Umsatz <span class="kpi-badge-src sec">SEC</span></span><span class="kpi-drill-val" id="__T__-kpi-d-rev">—</span></div>
+        <div class="kpi-drill-row"><span class="kpi-drill-lbl">Wachstum YoY <span class="kpi-badge-src sec">SEC</span></span><span class="kpi-drill-val" id="__T__-kpi-d-yoy">—</span></div>
+        <div class="kpi-drill-row"><span class="kpi-drill-lbl">Cash <span class="kpi-badge-src sec">SEC</span></span><span class="kpi-drill-val" id="__T__-kpi-d-cash">—</span></div>
+        <div class="kpi-drill-row"><span class="kpi-drill-lbl">Schulden <span class="kpi-badge-src sec">SEC</span></span><span class="kpi-drill-val" id="__T__-kpi-d-debt">—</span></div>
+        <div class="kpi-drill-row"><span class="kpi-drill-lbl">Nettoergebnis <span class="kpi-badge-src sec">SEC</span></span><span class="kpi-drill-val" id="__T__-kpi-d-netloss">—</span></div>
+        <div class="kpi-drill-row"><span class="kpi-drill-lbl">Analystenspanne <span class="kpi-badge-src ki">KI</span></span><span class="kpi-drill-val" id="__T__-kpi-d-analyst-range">—</span></div>
+        <div class="kpi-drill-row"><span class="kpi-drill-lbl">Kurs vs. Konsens <span class="kpi-badge-src ki">KI</span></span><span class="kpi-drill-val" id="__T__-kpi-d-vs-konsens">—</span></div>
+      </div>
+      <div class="kpi-interp" id="__T__-kpi-interp2" style="margin-top:12px;">Noch keine KI-Analyse — wird beim nächsten Update geladen.</div>
+      <div id="__T__-kpi-drivers2" style="margin-top:10px;"></div>
+      <div style="font-size:10px;color:var(--text3);margin-top:8px;" id="__T__-kpi-ts2"></div>
+    </div>
+  </div>
+</div>
+
+<div class="card open" id="card-__T__-charts">
+  <div class="card-header" onclick="toggleCard('__T__-charts')">
+    <div class="card-icon">📈</div>
+    <div>
+      <div class="card-title">Kursverlauf & Szenarien</div>
+      <div class="card-sub">12 Monate · 5-Jahres-Forecast · Preisziele</div>
+    </div>
+    <div class="card-arrow">▼</div>
+  </div>
+  <div class="card-body" id="body-__T__-charts">
+    <div class="chart-tabs">
+      <button class="chart-tab active" id="__T__-tab-range" onclick="switchChartTab('__T__','range')">📉 Kursverlauf</button>
+      <button class="chart-tab" id="__T__-tab-1y" onclick="switchChartTab('__T__','1y')">📊 Szenarien</button>
+      <button class="chart-tab" id="__T__-tab-5y" onclick="switchChartTab('__T__','5y')">🔭 5-Jahres-Forecast</button>
+    </div>
+    <div class="chart-view active" id="__T__-view-range">
+      <div class="range-btns">
+        <button class="range-btn" onclick="loadRangeChart('__T__','1d')">1T</button>
+        <button class="range-btn" onclick="loadRangeChart('__T__','5d')">5T</button>
+        <button class="range-btn active" onclick="loadRangeChart('__T__','1mo')">1M</button>
+        <button class="range-btn" onclick="loadRangeChart('__T__','6mo')">6M</button>
+        <button class="range-btn" onclick="loadRangeChart('__T__','ytd')">YTD</button>
+        <button class="range-btn" onclick="loadRangeChart('__T__','1y')">1J</button>
+        <button class="range-btn" onclick="loadRangeChart('__T__','5y')">5J</button>
+      </div>
+      <div class="range-chart-wrap"><canvas id="__T__-range-chart"></canvas></div>
+      <div id="__T__-range-info" style="font-size:12px;margin-top:6px;text-align:right;"></div>
+    </div>
+    <div class="chart-view" id="__T__-view-1y">
+      <div class="chart-grid">
+        <div>
+          <div class="section-head">📈 Kursverlauf der letzten 12 Monate + Zukunftsszenarien</div>
+          <div class="chart-wrap"><canvas id="__T__-chart" role="img" aria-label="__SYM__ Chart"></canvas></div>
+          <div class="lgbox" id="__T__-lgbox">
+            <div class="lgr"><div class="lgl"><div class="lgs" style="background:var(--__T__);"></div></div><div><div class="lgt">Was wirklich passiert ist</div><div class="lgx" id="__T__-lg-actual">Echter Kursverlauf der letzten 12 Monate</div></div></div>
+            <div class="lgr"><div class="lgl"><div class="lgd" style="border-color:var(--green);"></div><div class="lgdot" style="background:var(--green);"></div></div><div><div class="lgt" style="color:var(--green);" id="__T__-lg-bull">Optimistisches Szenario — wird mit KI geladen</div></div></div>
+            <div class="lgr"><div class="lgl"><div class="lgd" style="border-color:var(--border2);"></div><div class="lgdot" style="background:#bbb;"></div></div><div><div class="lgt" style="color:var(--text3);" id="__T__-lg-base">Bankexperten-Konsens — wird mit KI geladen</div></div></div>
+            <div class="lgr"><div class="lgl"><div class="lgd" style="border-color:var(--red);"></div><div class="lgdot" style="background:var(--red);"></div></div><div><div class="lgt" style="color:var(--red);" id="__T__-lg-bear">Pessimistisches Szenario — wird mit KI geladen</div></div></div>
+          </div>
+        </div>
+        <div>
+          <div class="section-head">🎯 Wo könnte der Kurs in 12 Monaten stehen?</div>
+          <div class="section-head" id="__T__-scenarios-intro" style="font-size:13px;font-weight:400;color:var(--text2);text-transform:none;letter-spacing:0;margin-bottom:10px;">Analysten-Ziele und Szenarien</div>
+          <div id="__T__-scenarios-bars">
+            <div class="scr"><div class="scl">Bestmöglicher Fall</div><div class="scb"><div class="scf" style="width:100%;background:var(--green);"></div></div><div class="scv up" id="__T__-sc-bull">—</div></div>
+            <div class="scr"><div class="scl">Optimistischste Bank</div><div class="scb"><div class="scf" style="width:0%;background:var(--__T__);"></div></div><div class="scv mono" id="__T__-sc-opt">—</div></div>
+            <div class="scr"><div class="scl">Alle Banken (Durchschnitt)</div><div class="scb"><div class="scf" style="width:0%;background:#bbb;"></div></div><div class="scv nu" id="__T__-sc-base">—</div></div>
+            <div class="scr"><div class="scl">Vorsichtige Schätzung</div><div class="scb"><div class="scf" style="width:0%;background:var(--amber);"></div></div><div class="scv wn" id="__T__-sc-bear">—</div></div>
+          </div>
+          <div class="sentiment-box" id="__T__-sentiment-box" style="margin-top:14px;">
+            <div class="sentiment-title">💬 Social Media Sentiment</div>
+            <div class="sentiment-platforms">
+              <div class="sentiment-platform">
+                <div class="sentiment-platform-icon">🟠</div>
+                <div class="sentiment-platform-name">Reddit</div>
+                <div class="sentiment-platform-val neutral" id="__T__-sent-reddit">—</div>
+                <div class="sentiment-platform-sub" id="__T__-sent-reddit-sub">lädt...</div>
+              </div>
+              <div class="sentiment-platform">
+                <div class="sentiment-platform-icon">𝕏</div>
+                <div class="sentiment-platform-name">X / Twitter</div>
+                <div class="sentiment-platform-val neutral" id="__T__-sent-x">—</div>
+                <div class="sentiment-platform-sub" id="__T__-sent-x-sub">lädt...</div>
+              </div>
+              <div class="sentiment-platform">
+                <div class="sentiment-platform-icon">📊</div>
+                <div class="sentiment-platform-name">StockTwits</div>
+                <div class="sentiment-platform-val neutral" id="__T__-sent-st">—</div>
+                <div class="sentiment-platform-sub" id="__T__-sent-st-sub">lädt...</div>
+              </div>
+              <div class="sentiment-platform">
+                <div class="sentiment-platform-icon">✈️</div>
+                <div class="sentiment-platform-name">Telegram</div>
+                <div class="sentiment-platform-val neutral" id="__T__-sent-tg">—</div>
+                <div class="sentiment-platform-sub" id="__T__-sent-tg-sub">lädt...</div>
+              </div>
+              <div class="sentiment-platform">
+                <div class="sentiment-platform-icon">👥</div>
+                <div class="sentiment-platform-name">FB / IG</div>
+                <div class="sentiment-platform-val neutral" id="__T__-sent-fb">—</div>
+                <div class="sentiment-platform-sub" id="__T__-sent-fb-sub">lädt...</div>
+              </div>
+            </div>
+            <div class="sentiment-summary" id="__T__-sentiment-text" style="color:var(--text3);font-style:italic;">Wird mit KI geladen...</div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="chart-view" id="__T__-view-5y">
+      <div class="chart-disclaimer">⚠️ Spekulative Schätzung — kein Versprechen! Nutze dies als Denkrahmen, nicht als Prognose.</div>
+      <div class="chart-wrap" style="height:220px;"><canvas id="__T__-chart5" role="img"></canvas></div>
+      <div id="__T__-f5-milestones" class="f5-milestones">
+        <div class="f5-year"><div class="f5-yr-label">🐂 Bull-Szenario</div><div class="f5-assumption" id="__T__-f5-bull-note" style="color:var(--text3);font-style:italic;">Wird mit KI aktualisiert</div></div>
+        <div class="f5-year"><div class="f5-yr-label">📊 Base-Szenario</div><div class="f5-assumption" id="__T__-f5-base-note" style="color:var(--text3);font-style:italic;">Wird mit KI aktualisiert</div></div>
+        <div class="f5-year"><div class="f5-yr-label">🐻 Bear-Szenario</div><div class="f5-assumption" id="__T__-f5-bear-note" style="color:var(--text3);font-style:italic;">Wird mit KI aktualisiert</div></div>
+      </div>
+    </div>
+  </div>
+</div>
+<div class="card open" id="card-__T__-df">
+  <div class="card-header" onclick="toggleCard('__T__-df')">
+    <div class="card-icon">📅</div>
+    <div>
+      <div class="card-title">Was heute passieren könnte</div>
+      <div class="card-sub">ATR-basierte Tagesschätzung</div>
+    </div>
+    <div class="card-arrow">▼</div>
+  </div>
+  <div class="card-body" id="body-__T__-df">
+    <div class="day-fc">
+      <div class="df-range-wrap">
+        <div class="df-top-row">
+          <div class="df-stat-lo">
+            <div class="df-stat-lbl"><span>📉</span> Tagestief <span class="tip tip-left"><span class="tip-icon">?</span><span class="tip-box">Der niedrigste Kurs heute. Tiefes Tief bei hohem Volumen = Verkaufsdruck.</span></span></div>
+            <div class="df-stat-num dn mono" id="__T__-day-lo">—</div>
+          </div>
+          <div class="df-stat-mid">
+            <div class="df-stat-lbl">Eröffnung <span class="tip"><span class="tip-icon">?</span><span class="tip-box">Der erste Handelskurs heute um 09:30 Uhr NY Zeit.</span></span></div>
+            <div class="df-stat-num mono" id="__T__-open">—</div>
+          </div>
+          <div class="df-stat-hi">
+            <div class="df-stat-lbl">Tageshoch <span>📈</span> <span class="tip tip-right"><span class="tip-icon">?</span><span class="tip-box">Der höchste Kurs heute. Hohes Hoch bei positivem Momentum = Kaufinteresse.</span></span></div>
+            <div class="df-stat-num up mono" id="__T__-day-hi">—</div>
+          </div>
+        </div>
+        <div class="range-bar">
+          <div class="range-fill" id="__T__-range-fill" style="width:0%"></div>
+          <div class="range-dot" id="__T__-rdot" style="left:50%;color:var(--__T__);">
+            <div class="range-dot-label" id="__T__-rdot-lbl">—</div>
+          </div>
+        </div>
+        <div class="df-range-footer">
+          <span class="df-range-edge lo" id="__T__-lo-lbl">—</span>
+          <span class="df-range-mid">← Tagesbereich →</span>
+          <span class="df-range-edge hi" id="__T__-hi-lbl">—</span>
+        </div>
+      </div>
+      <div class="df-stats-row" id="__T__-df-stats">
+        <div class="df-stat-pill" id="__T__-df-atr">
+          <div class="df-pill-header">
+            <div class="df-pill-icon">⚡</div>
+            <span class="tip tip-left"><span class="tip-icon">?</span><span class="tip-box" id="__T__-df-atr-tip">ATR (Average True Range): durchschnittliche Tagesschwankung der letzten 5 Tage.</span></span>
+          </div>
+          <div class="df-pill-lbl">Schwankung</div>
+          <div class="df-pill-val" id="__T__-df-atr-val">—</div>
+          <div class="df-pill-sub" id="__T__-df-atr-sub">ATR</div>
+        </div>
+        <div class="df-stat-pill" id="__T__-df-mom">
+          <div class="df-pill-header">
+            <div class="df-pill-icon" id="__T__-df-mom-icon">📈</div>
+            <span class="tip"><span class="tip-icon">?</span><span class="tip-box" id="__T__-df-mom-tip">Kursbewegung der letzten 5 Tage. Positiv = Aufwärtstrend, Negativ = Abwärtstrend.</span></span>
+          </div>
+          <div class="df-pill-lbl">Momentum</div>
+          <div class="df-pill-val" id="__T__-df-mom-val">—</div>
+          <div class="df-pill-sub">5-Tage</div>
+        </div>
+        <div class="df-stat-pill" id="__T__-df-rsi">
+          <div class="df-pill-header">
+            <div class="df-pill-icon">🔬</div>
+            <span class="tip tip-right"><span class="tip-icon">?</span><span class="tip-box" id="__T__-df-rsi-tip">RSI über 70 = überkauft. RSI unter 30 = überverkauft. 30–70 = neutrale Zone.</span></span>
+          </div>
+          <div class="df-pill-lbl" id="__T__-df-rsi-lbl">RSI</div>
+          <div class="df-pill-val" id="__T__-df-rsi-val">—</div>
+          <div class="df-pill-sub" id="__T__-df-rsi-sub">—</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+<div class="card open" id="card-__T__-insider">
+  <div class="card-header" onclick="toggleCard('__T__-insider')">
+    <div class="card-icon">📋</div>
+    <div>
+      <div class="card-title">Insider-Trades</div>
+      <div class="card-sub">SEC Form 4 · Käufe & Verkäufe · <span style="color:var(--blue);font-weight:600;">Verifiziert</span></div>
+    </div>
+    <div class="card-arrow">▼</div>
+  </div>
+  <div class="card-body" id="body-__T__-insider">
+    <div id="__T__-insider-content" style="color:var(--text3);font-style:italic;font-size:13px;">Wird täglich mit KI aktualisiert...</div>
+  </div>
+</div>
+<div class="card open" id="card-__T__-pf">
+  <div class="card-header" onclick="toggleCard('__T__-pf')">
+    <div class="card-icon">🧮</div>
+    <div>
+      <div class="card-title">Dein Portfolio</div>
+      <div class="card-sub">Käufe & Verkäufe eintragen</div>
+    </div>
+    <div class="card-arrow">▼</div>
+  </div>
+  <div class="card-body" id="body-__T__-pf">
+    <div class="pf-new">
+      <div class="pf-form-title">
+        <span>Transaktion</span>
+        <button class="pf-export-btn" onclick="exportPortfolio('__T__')" title="Export CSV">⬇ CSV</button>
+      </div>
+      <div class="pf-form">
+        <div class="pf-row">
+          <select class="pf-select pf-select-type" id="__T__-tx-type">
+            <option value="buy">📈 Kauf</option>
+            <option value="sell">📉 Verkauf</option>
+          </select>
+          <input class="pf-input pf-input-date" id="__T__-tx-date" type="date">
+        </div>
+        <div class="pf-row">
+          <input class="pf-input" id="__T__-tx-qty" type="number" placeholder="Anzahl Aktien" min="0.01" step="0.01">
+          <input class="pf-input" id="__T__-tx-price" type="number" placeholder="Preis $" min="0.01" step="0.01">
+        </div>
+        <input class="pf-input" id="__T__-tx-note" type="text" placeholder="Notiz (optional)">
+        <button class="pf-add" onclick="addTx('__T__')" id="__T__-add-btn">＋ Hinzufügen</button>
+      </div>
+    </div>
+    <div class="pf-tx-list" id="__T__-tx-list">
+      <div class="pf-empty" id="__T__-tx-empty">Noch keine Transaktionen erfasst.</div>
+    </div>
+    <div class="pf-summary" id="__T__-pf-summary" style="display:none;">
+      <div class="pf-sum-header"><div class="section-head">Portfolio-Übersicht</div><div class="pf-currency-toggle"><button id="__T__-cur-usd" class="active" onclick="setCurrency('__T__','USD')">USD</button><button id="__T__-cur-chf" onclick="setCurrency('__T__','CHF')">CHF</button></div></div>
+      <div class="pf-sum-grid">
+        <div class="pf-sum-item"><div class="pf-sum-label">Aktien im Besitz</div><div class="pf-sum-val mono" id="__T__-sum-qty">0</div></div>
+        <div class="pf-sum-item"><div class="pf-sum-label">Ø Kaufpreis</div><div class="pf-sum-val mono" id="__T__-sum-avg">—</div></div>
+        <div class="pf-sum-item"><div class="pf-sum-label">Aktueller Wert</div><div class="pf-sum-val mono" id="__T__-sum-val">—</div></div>
+        <div class="pf-sum-item"><div class="pf-sum-label">Investiert</div><div class="pf-sum-val mono" id="__T__-sum-invested">—</div></div>
+        <div class="pf-sum-item" style="grid-column:1/-1;"><div class="pf-sum-label">Unrealisierter Gewinn/Verlust</div><div class="pf-sum-val" id="__T__-sum-unrealized">—</div></div>
+      </div>
+      <div class="pf-scenarios">
+        <div class="pf-sc bull"><div class="pf-sc-label">🐂 Bull-Szenario</div><div class="pf-sc-val" id="__T__-sum-bull">—</div><div style="font-size:11px;color:var(--green);margin-top:2px;" id="__T__-sum-bull-gain"></div></div>
+        <div class="pf-sc bear"><div class="pf-sc-label">🐻 Bear-Szenario</div><div class="pf-sc-val" id="__T__-sum-bear">—</div><div style="font-size:11px;color:var(--red);margin-top:2px;" id="__T__-sum-bear-loss"></div></div>
+      </div>
+    </div>
+  </div>
+</div>
+<div class="card open" id="card-__T__-news">
+  <div class="card-header" onclick="toggleCard('__T__-news')">
+    <div class="card-icon">📰</div>
+    <div>
+      <div class="card-title">Nachrichten & Marktanalyse</div>
+      <div class="card-sub">Täglich um 13:00 Uhr aktualisiert</div>
+    </div>
+    <div class="card-arrow">▼</div>
+  </div>
+  <div class="card-body" id="body-__T__-news">
+    <div class="news-header">
+      <div id="__T__-earnings-bar" style="display:none;" class="earnings-bar">
+        <span>📅</span>
+        <span class="earnings-label">Nächste Earnings: <b id="__T__-earnings-date">—</b></span>
+        <span class="earnings-countdown" id="__T__-earnings-countdown"></span>
+      </div>
+      <div class="news-meta-row">
+        <div class="news-live"><div class="live-dot"></div>Nachrichten · __SYM__</div>
+        <div class="news-ts" id="__T__-news-ts"></div>
+      </div>
+      <div class="news-source-hint">📰 KI-kuratiert aus SpaceNews, Bloomberg, Reuters, SEC u.v.m.</div>
+    </div>
+    <div class="news-loading" id="__T__-news-loading">
+      <div class="news-spin"></div>
+      <span id="__T__-news-loading-txt">Lade Nachrichten...</span>
+    </div>
+    <div class="news-content" id="__T__-news-content"></div>
+  </div>
+</div>
+<div class="card open" id="card-__T__-sector">
+  <div class="card-header" onclick="toggleCard('__T__-sector')">
+    <div class="card-icon">🌌</div>
+    <div>
+      <div class="card-title">Sektor-Kontext & Einflussfaktoren</div>
+      <div class="card-sub">KI-Rechenzentren, SMR-Konkurrenz, Uran/HALEU</div>
+    </div>
+    <div class="card-arrow">▼</div>
+  </div>
+  <div class="card-body" id="body-__T__-sector">
+    <div class="sector-intro" id="__T__-sector-intro">Externe Faktoren die den Kurs beeinflussen:</div>
+    <div class="sector-grid" id="__T__-sector-grid">
+                            </div>
+  </div>
+</div>
+
+</div>
+
+<!-- ═══ GLOSSAR ═══ -->
+<div style="text-align:center;margin:18px 0 8px;">
+  <button class="btn-remove-ticker" onclick="removeCustomTicker('__T__')">🗑 __SYM__ aus Dashboard entfernen</button>
+</div>
+</template>
+
+<div class="add-modal-overlay" id="add-ticker-modal" style="display:none;" onclick="if(event.target===this)closeAddTicker()">
+  <div class="add-modal">
+    <div class="add-modal-title">Titel hinzufügen</div>
+    <div class="add-modal-sub">Börsenkürzel eingeben — Kurse, Charts, Analystenziele und SEC-Daten werden automatisch geladen.</div>
+    <label class="add-lbl">Börsenkürzel (Ticker) *</label>
+    <input class="add-inp" id="add-tk-sym" placeholder="z.B. LUNR" maxlength="6" autocomplete="off">
+    <label class="add-lbl">Firmenname (optional)</label>
+    <input class="add-inp" id="add-tk-name" placeholder="z.B. Intuitive Machines" autocomplete="off">
+    <label class="add-lbl">SEC CIK-Nummer (optional, für Finanzdaten)</label>
+    <input class="add-inp" id="add-tk-cik" placeholder="z.B. 0001844452" autocomplete="off">
+    <div class="add-hint">CIK findest du auf sec.gov → EDGAR Company Search. Ohne CIK funktioniert alles ausser den SEC-Bilanzdaten.</div>
+    <div class="add-msg" id="add-tk-msg"></div>
+    <div class="add-modal-btns">
+      <button class="add-btn-cancel" onclick="closeAddTicker()">Abbrechen</button>
+      <button class="add-btn-ok" id="add-tk-ok" onclick="submitAddTicker()">Hinzufügen</button>
+    </div>
+  </div>
+</div>
+
 <div class="card open" id="card-glossar">
   <div class="card-header" onclick="this.closest('.card').classList.toggle('open')">
     <div class="card-icon">📚</div>
@@ -3321,9 +3814,9 @@ const fmt = n => n >= 1000 ? n.toLocaleString('en-US', {minimumFractionDigits:2,
 const fmtB = n => n >= 1e12 ? (n/1e12).toFixed(2)+'T' : n >= 1e9 ? (n/1e9).toFixed(1)+'B' : n >= 1e6 ? (n/1e6).toFixed(0)+'M' : n;
 const fmtK = n => n >= 1e6 ? (n/1e6).toFixed(1)+'M' : n >= 1e3 ? (n/1e3).toFixed(0)+'K' : n;
 const stripTags = s => (typeof s === 'string' ? s.replace(/<[^>]*>/g, '') : String(s||''));
-const TICKERS_ALL = ['rklb','asts','spcx','oklo'];
-const SYMBOLS = { rklb:'RKLB', asts:'ASTS', spcx:'SPCX', oklo:'OKLO' };
-const TICKER_COLORS = {
+let TICKERS_ALL = ['rklb','asts','spcx','oklo'];
+let SYMBOLS = { rklb:'RKLB', asts:'ASTS', spcx:'SPCX', oklo:'OKLO' };
+let TICKER_COLORS = {
   rklb:{line:'#1d4ed8',bg:'rgba(29,78,216,.06)'},
   asts:{line:'#15803d',bg:'rgba(21,128,61,.06)'},
   spcx:{line:'#64748b',bg:'rgba(100,116,139,.06)'},
@@ -4250,7 +4743,10 @@ function exportPortfolio(t) {
 // ── Financial KPIs (SEC EDGAR) ──────────────────────────────
 async function loadFinancials(t) {
   try {
-    const r = await fetch(`/api/financials?ticker=${t}`);
+    const custom = (typeof customTickers !== 'undefined') ? customTickers.find(c => c.t === t) : null;
+    if (custom && !custom.cik) return; // ohne CIK keine SEC-Daten
+    const url = custom ? `/api/financials?ticker=${t}&cik=${custom.cik}` : `/api/financials?ticker=${t}`;
+    const r = await fetch(url);
     if (!r.ok) return;
     const d = await r.json();
     if (d.error) {
@@ -4362,7 +4858,7 @@ async function loadFinancials(t) {
       }
     }
 
-    if (t === 'spcx' || t === 'oklo') {
+    if (t === 'spcx' || t === 'oklo' || (typeof customTickers !== 'undefined' && customTickers.some(c => c.t === t))) {
       if (d.revenue?.latest_m != null && $(t+'-kpi-d-rev')) {
         const yoyG = d.revenue.yoy_pct;
         const arrowG = yoyG > 0 ? ' <span class="kpi-trend-up">↑</span>' : yoyG < 0 ? ' <span class="kpi-trend-down">↓</span>' : '';
@@ -4878,6 +5374,281 @@ async function loadRecHistory(t) {
 }
 
 // ── Earnings Calendar ─────────────────────────────────────
+
+// ═══════════════════════════════════════════════════════════════════════
+// Eigene Titel — Nutzer kann Aktien direkt im Dashboard hinzufügen
+// ═══════════════════════════════════════════════════════════════════════
+const CUSTOM_KEY = 'myStocksCustomTickers';
+const BUILTIN_TICKERS = ['rklb','asts','spcx','oklo'];
+const CUSTOM_COLORS = ['#7c3aed','#0891b2','#c2410c','#4d7c0f','#be123c','#0f766e','#a16207','#4338ca'];
+let customTickers = [];
+
+function loadCustomTickers() {
+  try {
+    const raw = localStorage.getItem(CUSTOM_KEY);
+    customTickers = raw ? JSON.parse(raw) : [];
+  } catch(_) { customTickers = []; }
+  return customTickers;
+}
+
+function saveCustomTickers() {
+  try { localStorage.setItem(CUSTOM_KEY, JSON.stringify(customTickers)); } catch(_) {}
+  syncCustomTickersToDB();
+}
+
+// Optionale Cloud-Sync (Tabelle user_tickers, siehe README). Scheitert lautlos wenn nicht vorhanden.
+async function syncCustomTickersToDB() {
+  if (!_supaClient || !currentUser) return;
+  try {
+    await _supaClient.from('user_tickers').delete().eq('user_id', currentUser.id);
+    if (customTickers.length) {
+      await _supaClient.from('user_tickers').insert(
+        customTickers.map(c => ({ user_id: currentUser.id, ticker: c.t, symbol: c.sym, name: c.name, cik: c.cik || null, color: c.color }))
+      );
+    }
+  } catch(_) {}
+}
+
+async function loadCustomTickersFromDB() {
+  if (!_supaClient || !currentUser) return;
+  try {
+    const { data, error } = await _supaClient.from('user_tickers').select('*').eq('user_id', currentUser.id);
+    if (error || !data || !data.length) return;
+    const fromDb = data.map(r => ({ t: r.ticker, sym: r.symbol, name: r.name, cik: r.cik || '', color: r.color || CUSTOM_COLORS[0] }));
+    for (const c of fromDb) {
+      if (!customTickers.some(x => x.t === c.t)) {
+        customTickers.push(c);
+        try { localStorage.setItem(CUSTOM_KEY, JSON.stringify(customTickers)); } catch(_) {}
+        mountCustomTicker(c);
+      }
+    }
+  } catch(_) {}
+}
+
+// Panel + Tab + Kontextleiste aus dem Template erzeugen und im Laufzeit-State registrieren
+function mountCustomTicker(cfg) {
+  const { t, sym, name, color } = cfg;
+  if ($('p-'+t)) return; // schon vorhanden
+  const tplEl = document.getElementById('tpl-ticker-panel');
+  if (!tplEl) { console.error('Panel-Template fehlt'); return; }
+
+  const html = tplEl.innerHTML
+    .split('__SYM__').join(sym)
+    .split('__NAME__').join(name)
+    .split('__T__').join(t);
+
+  // Panel einhängen (vor der Glossar-Karte)
+  const glossar = $('card-glossar');
+  const wrap = document.createElement('div');
+  wrap.innerHTML = html;
+  const panel = wrap.firstElementChild;
+  glossar.parentNode.insertBefore(panel, glossar);
+
+  // Kontextleiste
+  const ctxRef = $('ctx-oklo');
+  const ctx = document.createElement('div');
+  ctx.className = 'ctx-bar';
+  ctx.id = 'ctx-'+t;
+  ctx.style.display = 'none';
+  ctx.innerHTML =
+    '<div class="ctx-top-row">' +
+      '<div class="tab-logo-fallback" style="width:44px;height:44px;border-radius:8px;font-size:15px;background:'+color+';">'+sym.substring(0,2)+'</div>' +
+      '<div class="ctx-name">'+name+' · '+sym+'</div>' +
+    '</div>' +
+    '<div class="ctx-info">' +
+      '<div class="ctx-name">'+name+' · '+sym+'</div>' +
+      '<div class="ctx-desc" id="'+t+'-ctx-desc">Selbst hinzugefügter Titel. Kurse und Charts laufen sofort; KI-Analysen erscheinen nach dem nächsten Update.</div>' +
+      '<div class="ctx-tags" id="'+t+'-ctx-tags"></div>' +
+      '<div class="ctx-stats" id="'+t+'-ctx-stats"><div class="ctx-stat" id="'+t+'-stat-extra"></div></div>' +
+    '</div>';
+  ctxRef.parentNode.insertBefore(ctx, ctxRef.nextSibling);
+
+  // Tab-Button vor dem "+"
+  const addBtn = $('tab-add-btn');
+  const btn = document.createElement('button');
+  btn.className = 'tab '+t+'-tab';
+  btn.id = 'tab-'+t+'-btn';
+  btn.innerHTML = '<span class="tab-logo-fallback" style="background:'+color+';">'+sym.substring(0,1)+'</span>' +
+                  '<span class="tab-full">'+name+' ('+sym+')</span><span class="tab-short">'+sym+'</span>';
+  btn.addEventListener('click', () => switchTab(t));
+  addBtn.parentNode.insertBefore(btn, addBtn);
+
+  // Laufzeit-State registrieren
+  if (!TICKERS_ALL.includes(t)) TICKERS_ALL.push(t);
+  SYMBOLS[t] = sym;
+  TICKER_COLORS[t] = color;
+  quotes[t] = null;
+  txData[t] = txData[t] || [];
+  pfCurrency[t] = pfCurrency[t] || 'USD';
+  forecastTargets[t] = forecastTargets[t] || { bull:null, base:null, bear:null, bull5:null, base5:null, bear5:null };
+  if (typeof _chartsInited === 'object') _chartsInited[t] = false;
+  if (typeof rangeChartLoaded === 'object') rangeChartLoaded[t] = false;
+
+  // Mobile: Karten eingeklappt starten wie bei den anderen Titeln
+  if (window.innerWidth < 768) {
+    panel.querySelectorAll('.card.open').forEach((c, i) => { if (i > 2) c.classList.remove('open'); });
+  }
+}
+
+// Daten für einen Titel laden
+async function loadCustomTickerData(cfg) {
+  const t = cfg.t;
+  try { const q = await fetchQ(t); if (q) { quotes[t] = q; applyQ(t, q); } } catch(_) {}
+  try { await loadFinancials(t); } catch(_) {}
+  try {
+    const r = await fetch('/api/analyst?ticker=' + cfg.sym);
+    if (r.ok) {
+      const a = await r.json();
+      if (a.targetMean && $(t+'-cons-price')) $(t+'-cons-price').textContent = '$'+a.targetMean.toFixed(2)+' (Ø Bank)';
+      if ($(t+'-cons-rating')) {
+        const parts = [];
+        if (a.analystCount) parts.push(a.analystCount+' Analysten');
+        if (a.rating) parts.push(a.rating);
+        if (a.shortPercentOfFloat != null) parts.push('Short '+a.shortPercentOfFloat+'%');
+        if (parts.length) $(t+'-cons-rating').textContent = parts.join(' · ');
+      }
+      if (a.earningsDate && new Date(a.earningsDate) > new Date()) showEarningsBar(t, a.earningsDate);
+    }
+  } catch(_) {}
+  if (cfg.cik) {
+    try {
+      const r = await fetch('/api/insider?ticker='+t+'&cik='+cfg.cik);
+      if (r.ok) { const d = await r.json(); if (d.trades && d.trades.length) applyInsider(t, d); }
+    } catch(_) {}
+  }
+  // KI-Cache (falls der Cron den Titel schon verarbeitet hat)
+  const secs = [
+    ['scenarios', d => applyScenarios(t, d)],
+    ['rec',       d => applyRec(t, d)],
+    ['news',      (d, ts) => applyLiveNewsData(t, d, ts)],
+    ['sector',    d => applySector(t, d)],
+    ['ctx',       d => applyCtx(t, d)],
+    ['kpi',       d => applyGenericKpi(t, d)],
+  ];
+  for (const [section, fn] of secs) {
+    try {
+      const c = await fetchFromCache(section, t);
+      if (c && c.data) fn(c.data, c.updated_at);
+    } catch(_) {}
+  }
+}
+
+// ── Generische KPI-Karte für selbst hinzugefügte Titel ──
+function applyGenericKpi(t, p) {
+  if (!p) return;
+  const setScore = (key, val) => {
+    const el = $(t+'-kpi-score-'+key);
+    if (el && val != null) {
+      el.textContent = val;
+      el.className = 'kpi-cat-score ' + (val >= 8 ? 'good' : val >= 5 ? 'mid' : 'bad');
+    }
+  };
+  const badge = $(t+'-kpi-score-badge');
+  if (badge && p.score_gesamt != null) {
+    badge.textContent = p.score_gesamt;
+    badge.className = 'kpi-score-badge ' + (p.score_gesamt >= 80 ? 'great' : p.score_gesamt >= 60 ? 'good' : p.score_gesamt >= 40 ? 'mid' : 'bad');
+    const sub = $(t+'-kpi-score-sub');
+    if (sub) sub.textContent = p.score_kommentar ? stripTags(p.score_kommentar) : 'KI-Gesamtbewertung 0–100';
+  }
+  setScore('wachstum', p.score_wachstum);
+  setScore('profit',   p.score_profitabilitaet);
+  setScore('bilanz',   p.score_bilanz);
+  setScore('momentum', p.score_momentum);
+  setScore('risiko',   p.score_risiko);
+  setScore('bewertung',p.score_bewertung);
+  const put = (id, v) => { const el = $(t+'-kpi-d-'+id); if (el && v) el.textContent = stripTags(String(v)); };
+  put('analyst-range', p.analyst_range);
+  put('vs-konsens',    p.kurs_vs_konsens);
+  if ($(t+'-kpi-interp2') && p.interpretation) $(t+'-kpi-interp2').textContent = stripTags(p.interpretation);
+  const dr = $(t+'-kpi-drivers2');
+  if (dr && (p.haupttreiber || p.hauptrisiken)) {
+    let h = '';
+    if (p.haupttreiber && p.haupttreiber.length)
+      h += '<div style="font-size:11px;color:var(--green);font-weight:600;margin-bottom:3px;">▲ Treiber</div><div style="font-size:12px;color:var(--text2);margin-bottom:8px;">'+p.haupttreiber.map(x=>stripTags(String(x))).join(' · ')+'</div>';
+    if (p.hauptrisiken && p.hauptrisiken.length)
+      h += '<div style="font-size:11px;color:var(--red);font-weight:600;margin-bottom:3px;">▼ Risiken</div><div style="font-size:12px;color:var(--text2);">'+p.hauptrisiken.map(x=>stripTags(String(x))).join(' · ')+'</div>';
+    dr.innerHTML = h;
+  }
+  const ts = $(t+'-kpi-ts2');
+  if (ts) ts.textContent = 'KI-Analyse · zuletzt aktualisiert: ' + new Date().toLocaleDateString('de-CH');
+}
+
+// ── Modal-Steuerung ──
+function openAddTicker() {
+  $('add-tk-sym').value = ''; $('add-tk-name').value = ''; $('add-tk-cik').value = '';
+  $('add-tk-msg').textContent = ''; $('add-tk-msg').className = 'add-msg';
+  $('add-ticker-modal').style.display = 'flex';
+  setTimeout(() => $('add-tk-sym').focus(), 50);
+}
+function closeAddTicker() { $('add-ticker-modal').style.display = 'none'; }
+
+async function submitAddTicker() {
+  const msg = $('add-tk-msg'), okBtn = $('add-tk-ok');
+  const sym = ($('add-tk-sym').value || '').trim().toUpperCase();
+  let name = ($('add-tk-name').value || '').trim();
+  const cik = ($('add-tk-cik').value || '').trim().replace(/\D/g, '');
+
+  if (!/^[A-Z0-9.\-]{1,6}$/.test(sym)) {
+    msg.textContent = 'Bitte ein gültiges Börsenkürzel eingeben (1–6 Zeichen).'; msg.className = 'add-msg err'; return;
+  }
+  const t = sym.toLowerCase().replace(/[^a-z0-9]/g, '');
+  if (BUILTIN_TICKERS.includes(t) || customTickers.some(c => c.t === t)) {
+    msg.textContent = sym + ' ist bereits im Dashboard.'; msg.className = 'add-msg err'; return;
+  }
+  if (customTickers.length >= 8) {
+    msg.textContent = 'Maximal 8 eigene Titel — bitte zuerst einen entfernen.'; msg.className = 'add-msg err'; return;
+  }
+
+  okBtn.disabled = true;
+  msg.textContent = 'Prüfe ' + sym + ' bei Yahoo Finance...'; msg.className = 'add-msg load';
+  try {
+    const r = await fetch('/api/quote?ticker=' + encodeURIComponent(sym));
+    const q = await r.json();
+    const meta = q && q.chart && q.chart.result && q.chart.result[0] && q.chart.result[0].meta;
+    if (!r.ok || !meta || meta.regularMarketPrice == null) {
+      msg.textContent = 'Kürzel ' + sym + ' nicht gefunden. Bitte Schreibweise prüfen (z.B. LUNR, RDW, FLY).';
+      msg.className = 'add-msg err'; okBtn.disabled = false; return;
+    }
+    if (!name) name = meta.longName || meta.shortName || sym;
+
+    const color = CUSTOM_COLORS[customTickers.length % CUSTOM_COLORS.length];
+    const cfg = { t, sym, name, cik, color };
+    customTickers.push(cfg);
+    saveCustomTickers();
+    mountCustomTicker(cfg);
+    msg.textContent = '✓ ' + name + ' hinzugefügt — lade Daten...'; msg.className = 'add-msg ok';
+    await loadCustomTickerData(cfg);
+    closeAddTicker();
+    switchTab(t);
+  } catch (e) {
+    msg.textContent = 'Fehler: ' + e.message; msg.className = 'add-msg err';
+  } finally {
+    okBtn.disabled = false;
+  }
+}
+
+function removeCustomTicker(t) {
+  const cfg = customTickers.find(c => c.t === t);
+  if (!cfg) return;
+  if (!confirm(cfg.name + ' (' + cfg.sym + ') aus dem Dashboard entfernen?\n\nDeine erfassten Transaktionen für diesen Titel gehen dabei verloren.')) return;
+  customTickers = customTickers.filter(c => c.t !== t);
+  saveCustomTickers();
+  const panel = $('p-'+t); if (panel) panel.remove();
+  const ctx = $('ctx-'+t); if (ctx) ctx.remove();
+  const btn = $('tab-'+t+'-btn'); if (btn) btn.remove();
+  const i = TICKERS_ALL.indexOf(t); if (i >= 0) TICKERS_ALL.splice(i, 1);
+  delete SYMBOLS[t]; delete TICKER_COLORS[t]; delete quotes[t]; delete txData[t];
+  switchTab('rklb');
+}
+
+// Beim Start: gespeicherte Titel wiederherstellen
+async function initCustomTickers() {
+  loadCustomTickers();
+  for (const cfg of customTickers) mountCustomTicker(cfg);
+  for (const cfg of customTickers) loadCustomTickerData(cfg);
+  setTimeout(loadCustomTickersFromDB, 2500); // nach Login-Check
+}
+
 // Repariert abgeschnittene KI-JSON-Antworten (Opus 5: max_tokens inkl. Thinking)
 function repairTruncatedJson(str) {
   let s = str.replace(/\r?\n/g,' ').replace(/\t/g,' ');
@@ -5341,6 +6112,7 @@ if ('serviceWorker' in navigator) {
   loadAll();
   setInterval(loadAll, 15000);
   loadFromCache().then(() => { loadAnalystData(); loadRealInsider(); });
+  initCustomTickers();
   // Tab event listeners (defined here so script is loaded)
   TICKERS_ALL.forEach(t => {
     const btn = document.getElementById('tab-'+t+'-btn');
