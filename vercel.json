@@ -104,6 +104,14 @@
       "schedule": "15 11 * * 0,6"
     },
     {
+      "path": "/api/cron?scope=custom",
+      "schedule": "25 11 * * 1-5"
+    },
+    {
+      "path": "/api/cron?scope=custom_news",
+      "schedule": "25 11 * * 0,6"
+    },
+    {
       "path": "/api/cron?scope=global",
       "schedule": "20 11 * * 1,4"
     },

@@ -305,3 +305,40 @@ saveToCache(section, ticker, data)
 - SEC EDGAR Finanzdaten laden live bei jedem Seitenaufruf
 - Supabase Anon Key im Frontend ist öffentlich — RLS schützt die Daten
 - Alle Zeiten in UTC; Cron auf Vercel Pro mit `maxDuration: 300s`
+
+---
+
+## Eigene Titel hinzufügen
+
+Über den **`+`-Button** in der Tab-Leiste lassen sich beliebige Aktien selbst ins Dashboard aufnehmen:
+
+1. Börsenkürzel eingeben (z.B. `LUNR`, `RDW`, `FLY`) — wird sofort gegen Yahoo Finance validiert
+2. Firmenname optional (wird sonst automatisch übernommen)
+3. SEC CIK-Nummer optional — nur nötig für Bilanzdaten und Insider-Trades aus SEC EDGAR
+   (zu finden über EDGAR Company Search auf sec.gov)
+
+Sofort verfügbar: Live-Kurs, alle Chart-Zeiträume, Tagesprognose (ATR/RSI/Momentum), Portfolio-Tracking,
+Analysten-Konsens, Earnings-Termin und Short Interest. Die KI-Analysen (Empfehlung, News, Szenarien,
+Sektor, KPIs) erscheinen nach dem nächsten Cron-Lauf (`scope=custom`, werktags 11:25 UTC) oder sofort
+über den manuellen Aktualisieren-Button.
+
+Gespeichert wird im Browser (localStorage). Für geräteübergreifende Synchronisation optional diese
+Tabelle in Supabase anlegen:
+
+```sql
+create table user_tickers (
+  id uuid primary key default gen_random_uuid(),
+  user_id uuid references auth.users(id) on delete cascade,
+  ticker text not null,
+  symbol text not null,
+  name text,
+  cik text,
+  color text,
+  created_at timestamptz default now()
+);
+alter table user_tickers enable row level security;
+create policy "own tickers" on user_tickers
+  for all using (auth.uid() = user_id) with check (auth.uid() = user_id);
+```
+
+Ohne diese Tabelle funktioniert alles weiterhin — die Titel bleiben dann nur lokal im jeweiligen Browser.
