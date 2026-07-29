@@ -4878,6 +4878,31 @@ async function loadRecHistory(t) {
 }
 
 // ── Earnings Calendar ─────────────────────────────────────
+// Repariert abgeschnittene KI-JSON-Antworten (Opus 5: max_tokens inkl. Thinking)
+function repairTruncatedJson(str) {
+  let s = str.replace(/\r?\n/g,' ').replace(/\t/g,' ');
+  for (let attempt=0; attempt<40; attempt++) {
+    let depth=[], inStr=false, esc=false;
+    for (const ch of s) {
+      if (esc) { esc=false; continue; }
+      if (ch==='\\') { esc=true; continue; }
+      if (ch==='"') { inStr=!inStr; continue; }
+      if (inStr) continue;
+      if (ch==='{'||ch==='[') depth.push(ch);
+      if (ch==='}'||ch===']') depth.pop();
+    }
+    let c=s;
+    if (inStr) c+='"';
+    c=c.replace(/,\s*$/,'').replace(/"[^"]*"\s*:\s*$/,'""').replace(/,\s*$/,'');
+    for (let i=depth.length-1;i>=0;i--) c+=depth[i]==='{'?'}':']';
+    try { return JSON.parse(c); } catch(_) {}
+    const cut=Math.max(s.lastIndexOf(','),s.lastIndexOf('}'),s.lastIndexOf(']'));
+    if (cut<=0) return null;
+    s=s.substring(0,cut);
+  }
+  return null;
+}
+
 // ── Harte Daten: Analysten-Konsens, Earnings-Termine, Short Interest (Yahoo quoteSummary) ──
 async function loadAnalystData() {
   for (const t of TICKERS_ALL) {
@@ -5129,15 +5154,22 @@ async function kiCall(prompt) {
       const resp=await fetch('https://api.anthropic.com/v1/messages',{
         method:'POST',
         headers:{'Content-Type':'application/json','x-api-key':key,'anthropic-version':'2023-06-01','anthropic-dangerous-direct-browser-access':'true'},
-        body:JSON.stringify({model:'claude-opus-5',max_tokens:1000,tools:[{type:'web_search_20250305',name:'web_search'}],messages:[{role:'user',content:prompt}]})
+        body:JSON.stringify({model:'claude-opus-5',max_tokens:6000,output_config:{effort:'low'},tools:[{type:'web_search_20250305',name:'web_search'}],messages:[{role:'user',content:'WICHTIG: Antworte AUSSCHLIESSLICH mit einem einzigen JSON-Objekt. Keine Markdown-Codefences, keine <cite>-Tags, keine Quellenangaben im Text, Strings kurz halten. '+prompt}]})
       });
       if(resp.status===429){continue;}
       if(!resp.ok) throw new Error('API '+resp.status);
       const data=await resp.json();
-      const raw=data.content.filter(b=>b.type==='text').map(b=>b.text).join('').trim();
-      const match=raw.match(/\{[\s\S]*\}/);
-      if(!match) throw new Error('No JSON');
-      return JSON.parse(match[0]);
+      let raw=data.content.filter(b=>b.type==='text').map(b=>b.text).join('').trim()
+        .replace(/^```json\s*/m,'').replace(/^```\s*/m,'').replace(/\s*```\s*$/,'')
+        .replace(/<\/?(?:antml:)?cite[^>]*>/g,'');
+      const fb=raw.indexOf('{');
+      if(fb===-1) throw new Error('No JSON');
+      const lb=raw.lastIndexOf('}');
+      const extracted=lb>fb?raw.substring(fb,lb+1):raw.substring(fb);
+      try { return JSON.parse(extracted); } catch(_) {}
+      const rep=repairTruncatedJson(extracted);
+      if(rep) return rep;
+      throw new Error('JSON parse failed');
     } catch(e){ if(attempt===maxRetries-1) throw e; }
   }
   return null;
