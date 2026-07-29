@@ -3,8 +3,8 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
-  <title>Space Stocks Dashboard</title>
-  <meta name="description" content="RKLB · ASTS · SpaceX Analyse-Dashboard">
+  <title>My Stocks Dashboard</title>
+  <meta name="description" content="RKLB · ASTS · SPCX · OKLO Analyse-Dashboard">
   <link rel="manifest" href="/manifest.json">
   <link rel="icon" type="image/x-icon" href="/favicon.ico">
   <link rel="icon" type="image/png" href="/favicon.png">
@@ -12,7 +12,7 @@
   <meta name="mobile-web-app-capable" content="yes">
   <meta name="apple-mobile-web-app-capable" content="yes">
   <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
-  <meta name="apple-mobile-web-app-title" content="Space Stocks">
+  <meta name="apple-mobile-web-app-title" content="My Stocks">
   <link rel="apple-touch-icon" href="/apple-touch-icon.png">
   <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png">
   <link rel="icon" type="image/png" sizes="192x192" href="/icon-192.png">
@@ -40,7 +40,7 @@
   --blue:#2563eb;  --blue-bg:rgba(37,99,235,.08);
   --amber:#d97706; --amber-bg:rgba(217,119,6,.08);
   --purple:#7c3aed;--purple-bg:rgba(124,58,237,.08);
-  --rklb:#1d4ed8;  --asts:#15803d;  --spcx:#1a1a1a;
+  --rklb:#1d4ed8;  --asts:#15803d;  --spcx:#334155;  --oklo:#b45309;
   --r:10px; --rl:14px;
   --shadow:0 1px 4px rgba(0,0,0,.12),0 1px 3px rgba(0,0,0,.08);
   --shadow-md:0 4px 12px rgba(0,0,0,.1),0 2px 4px rgba(0,0,0,.06);
@@ -54,6 +54,7 @@
   --blue:#60a5fa;  --blue-bg:rgba(96,165,250,.1);
   --amber:#fbbf24; --amber-bg:rgba(251,191,36,.1);
   --purple:#a78bfa;--purple-bg:rgba(167,139,250,.1);
+  --spcx:#cbd5e1; --oklo:#f59e0b;
   --shadow:0 1px 4px rgba(0,0,0,.4),0 1px 3px rgba(0,0,0,.3);
   --shadow-md:0 4px 12px rgba(0,0,0,.4),0 2px 4px rgba(0,0,0,.3);
 }
@@ -79,6 +80,8 @@ body{font-family:var(--font-sans);background:var(--bg);color:var(--text);min-hei
 .tab.active{background:var(--surface);color:var(--text);box-shadow:var(--shadow);}
 .tab.active.rklb-tab{color:var(--rklb);}
 .tab.active.asts-tab{color:var(--asts);}
+.tab.active.spcx-tab{color:var(--spcx);}
+.tab.active.oklo-tab{color:var(--oklo);}
 .tab-short{display:none;}
 .tab-full{display:inline;}
 
@@ -150,6 +153,7 @@ body{font-family:var(--font-sans);background:var(--bg);color:var(--text);min-hei
 #ctx-rklb::before{background:linear-gradient(180deg,#1d4ed8,#3b82f6);}
 #ctx-asts::before{background:linear-gradient(180deg,#15803d,#22c55e);}
 #ctx-spcx::before{background:linear-gradient(180deg,#1a1a1a,#555);}
+#ctx-oklo::before{background:linear-gradient(180deg,#b45309,#f59e0b);}
 .ctx-bar.show{display:flex;}
 .ctx-top-row{display:flex;align-items:center;gap:12px;}
 .ctx-top-row .ctx-name{font-weight:700;font-size:16px;flex:1;min-width:0;}
@@ -729,7 +733,7 @@ body{font-family:var(--font-sans);background:var(--bg);color:var(--text);min-hei
     <div class="logo">
       <div class="logo-icon">🚀</div>
       <div>
-        <div class="logo-text">Space Stocks</div>
+        <div class="logo-text">My Stocks</div>
         <div class="logo-sub" id="last-upd">lädt...</div>
       </div>
     </div>
@@ -737,7 +741,8 @@ body{font-family:var(--font-sans);background:var(--bg);color:var(--text);min-hei
       <div class="tabs" id="main-tabs">
         <button class="tab rklb-tab active" id="tab-rklb-btn"><img src="/rklb-logo.png" class="tab-logo" alt="RKLB"><span class="tab-full">Rocket Lab (RKLB)</span><span class="tab-short">RKLB</span></button>
         <button class="tab asts-tab" id="tab-asts-btn"><img src="/asts-logo.png" class="tab-logo" alt="ASTS"><span class="tab-full">AST SpaceMobile (ASTS)</span><span class="tab-short">ASTS</span></button>
-        <button class="tab spcx-tab" id="tab-spcx-btn"><img src="/spacex-logo.svg" class="tab-logo spcx-icon" alt="SpaceX" style="width:18px;height:18px;object-fit:contain;filter:invert(0);margin-right:4px;vertical-align:middle;"><span class="tab-full">SpaceX (IPO ausstehend)</span><span class="tab-short">SPCX</span></button>
+        <button class="tab spcx-tab" id="tab-spcx-btn"><img src="/spacex-logo.svg" class="tab-logo spcx-icon" alt="SpaceX" style="width:18px;height:18px;object-fit:contain;filter:invert(0);margin-right:4px;vertical-align:middle;"><span class="tab-full">SpaceX (SPCX)</span><span class="tab-short">SPCX</span></button>
+        <button class="tab oklo-tab" id="tab-oklo-btn"><img src="/oklo-logo.svg" class="tab-logo" alt="OKLO"><span class="tab-full">Oklo (OKLO)</span><span class="tab-short">OKLO</span></button>
       </div>
     </div>
     <div class="hdr-r">
@@ -860,6 +865,39 @@ body{font-family:var(--font-sans);background:var(--bg);color:var(--text);min-hei
     </div>
     <div class="ctx-stats" id="asts-ctx-stats">
       <div class="ctx-stat" id="asts-stat-cash"></div>
+    </div>
+  </div>
+</div>
+
+
+<div class="ctx-bar" id="ctx-spcx" style="display:none;">
+  <div class="ctx-top-row">
+    <img src="/spacex-logo.svg" class="ctx-logo" alt="SpaceX" style="width:44px;height:44px;border-radius:8px;object-fit:contain;background:#fff;padding:6px;border:1px solid var(--border);">
+    <div class="ctx-name">SpaceX · SPCX</div>
+  </div>
+  <div class="ctx-info">
+    <div class="ctx-name">SpaceX · SPCX</div>
+    <div class="ctx-desc" id="spcx-ctx-desc">Grösster Raumfahrtkonzern der Welt: Falcon-Raketen, Starship, Starlink-Satelliteninternet und seit Februar 2026 auch xAI. Seit Juni 2026 an der NASDAQ — grösster IPO der Geschichte (Ausgabepreis $135).</div>
+    <div class="ctx-tags" id="spcx-ctx-tags">
+    </div>
+    <div class="ctx-stats" id="spcx-ctx-stats">
+      <div class="ctx-stat" id="spcx-stat-extra"></div>
+    </div>
+  </div>
+</div>
+
+<div class="ctx-bar" id="ctx-oklo" style="display:none;">
+  <div class="ctx-top-row">
+    <img src="/oklo-logo.svg" class="ctx-logo" alt="Oklo" style="width:44px;height:44px;border-radius:8px;object-fit:contain;background:#fff;padding:6px;border:1px solid var(--border);">
+    <div class="ctx-name">Oklo · OKLO</div>
+  </div>
+  <div class="ctx-info">
+    <div class="ctx-name">Oklo · OKLO</div>
+    <div class="ctx-desc" id="oklo-ctx-desc">Entwickelt kompakte Kernreaktoren (Aurora, 75 MWe) für KI-Rechenzentren und Industrie. Baut, besitzt und betreibt die Anlagen selbst und verkauft Strom über Langzeitverträge. Noch ohne nennenswerten Umsatz — sehr spekulativ, hohe Chance, hohes Risiko.</div>
+    <div class="ctx-tags" id="oklo-ctx-tags">
+    </div>
+    <div class="ctx-stats" id="oklo-ctx-stats">
+      <div class="ctx-stat" id="oklo-stat-extra"></div>
     </div>
   </div>
 </div>
@@ -1970,110 +2008,523 @@ body{font-family:var(--font-sans);background:var(--bg);color:var(--text);min-hei
 
 <!-- ═══ SPCX PANEL ═══ -->
 <div class="panel" id="p-spcx">
-
-<!-- IPO Status Banner -->
-<div class="card open" id="card-spcx-ipo">
-  <div class="card-header" onclick="toggleCard('spcx-ipo')">
-    <div class="card-icon">🚀</div>
+<div class="card open" id="card-spcx-alert">
+  <div class="card-header" onclick="toggleCard('spcx-alert')">
+    <div class="card-icon">📢</div>
     <div>
-      <div class="card-title">SpaceX IPO Status</div>
-      <div class="card-sub">Ticker SPCX · Voraussichtlich 2026</div>
+      <div class="card-title">Aktuelle Lage · SpaceX</div>
+      <div class="card-sub">KI-basiert, aktualisierbar</div>
     </div>
     <div class="card-arrow">▼</div>
   </div>
-  <div class="card-body" id="body-spcx-ipo">
-    <div style="background:var(--surface2);border-radius:10px;padding:16px;border-left:4px solid var(--amber);">
-      <div style="font-size:13px;font-weight:600;color:var(--amber);margin-bottom:6px;">⏳ IPO noch nicht erfolgt</div>
-      <div style="font-size:13px;color:var(--text2);line-height:1.6;" id="spcx-ipo-status">—</div>
+  <div class="card-body" id="body-spcx-alert">
+    <div class="alert neutral" id="spcx-alert-box">
+      <div class="alert-dot"></div>
+      <div id="spcx-alert-text" style="font-style:italic;color:var(--text3);">⏳ Wird beim nächsten Cron-Lauf aktualisiert (täglich um 13:00)</div>
     </div>
-    <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:10px;margin-top:12px;">
-      <div class="met" style="text-align:center;">
-        <div class="met-label">Bewertung</div>
-        <div class="met-val mono" id="spcx-val">—</div>
-        <div class="met-sub">Privat</div>
+  </div>
+</div>
+<div class="card open" id="card-spcx-mets">
+  <div class="card-header" onclick="toggleCard('spcx-mets')">
+    <div class="card-icon">💰</div>
+    <div>
+      <div class="card-title">Live-Kurszahlen</div>
+      <div class="card-sub">Aktueller Kurs · Volumen · Jahresspanne</div>
+    </div>
+    <div class="card-arrow">▼</div>
+  </div>
+  <div class="card-body" id="body-spcx-mets">
+    <div class="mets">
+      <div class="met">
+        <div class="met-icon">💰</div>
+        <div class="met-label">Aktueller Kurs <span class="tip"><span class="tip-icon">?</span><span class="tip-box">Der aktuelle Börsenkurs. Aktualisiert alle 15 Sekunden.</span></span></div>
+        <div class="met-val" id="spcx-price">lädt...</div>
+        <div class="met-chg" id="spcx-chg">—</div>
+        <div class="met-sub">pro Aktie</div>
+        <div class="premarket-badge" id="spcx-premarket" style="display:none;"></div>
       </div>
-      <div class="met" style="text-align:center;">
-        <div class="met-label">IPO Datum</div>
-        <div class="met-val mono" id="spcx-ipo-date">Jun 2026</div>
-        <div class="met-sub">Geplant</div>
+      <div class="met">
+        <div class="met-icon">📊</div>
+        <div class="met-label">Handelsvolumen <span class="tip"><span class="tip-icon">?</span><span class="tip-box">Wie viele Aktien heute gehandelt wurden. Hohes Volumen = viele Anleger kaufen oder verkaufen gerade aktiv.</span></span></div>
+        <div class="met-val mono" id="spcx-vol">—</div>
+        <div class="met-chg nu" id="spcx-vol-ctx" style="font-size:12px;">—</div>
+        <div class="met-chg nu" id="spcx-cap"></div>
       </div>
-      <div class="met" style="text-align:center;">
-        <div class="met-label">Ticker</div>
-        <div class="met-val mono">SPCX</div>
-        <div class="met-sub">Geplant NASDAQ</div>
+      <div class="met">
+        <div class="met-icon">📏</div>
+        <div class="met-label">Jahresspanne <span class="tip"><span class="tip-icon">?</span><span class="tip-box">Der tiefste und höchste Kurs der letzten 12 Monate. Zeigt die Volatilität.</span></span></div>
+        <div class="met-val mono" id="spcx-52w" style="font-size:15px;padding-top:4px;">—</div>
+        <div class="met-sub">Tief → Hoch (12 Monate)</div>
+      </div>
+      <div class="met">
+        <div class="met-icon">🎯</div>
+        <div class="met-label">Experten-Konsens <span class="tip"><span class="tip-icon">?</span><span class="tip-box"><b>Was bedeutet das?</b> Grosse Banken beschäftigen Analysten die Aktien bewerten. Der Preis ist ihr durchschnittliches Kursziel für die nächsten 12 Monate. Die Anzahl zeigt wie viele Analysten Kaufen, Halten oder Verkaufen empfehlen. Achtung: Bei spekulativen Aktien wie SPCX liegen Analysten häufig falsch.</span></span></div>
+        <div class="met-val mono" id="spcx-cons-price">—</div>
+        <div class="met-chg nu" id="spcx-cons-rating">— Analysten</div>
+        <div class="met-sub">Ø Kursziel (12 Monate)</div>
       </div>
     </div>
   </div>
 </div>
+<div class="card open" id="card-spcx-rec">
+  <div class="card-header" onclick="toggleCard('spcx-rec')">
+    <div class="card-icon">🎯</div>
+    <div>
+      <div class="card-title">Kauf/Halt/Verkauf-Empfehlung</div>
+      <div class="card-sub">KI-basiert, aktualisierbar</div>
+    </div>
+    <div class="card-arrow">▼</div>
+  </div>
+  <div class="card-body" id="body-spcx-rec">
+    <div class="rec-banner empty" id="spcx-rec-banner">
+      <div class="rec-head">
+        <span class="rec-pill empty" id="spcx-rec-pill">—</span>
+        <div>
+          <div class="rec-title" id="spcx-rec-title" style="color:var(--text2);font-weight:400;">KI-Analyse ausstehend</div>
+          <div class="rec-ts" id="spcx-rec-ts"></div>
+          <div style="font-size:10px;color:var(--text3);margin-top:4px;">🤖 KI-Analyse auf Basis von 100+ Quellen · Keine Anlageberatung</div>
+        </div>
+      </div>
+      <div class="rec-explain" id="spcx-rec-sub" style="color:var(--text3);font-style:italic;">Noch keine Analyse geladen. Mit KI-Schlüssel im ⚙️-Menü wird die Empfehlung automatisch generiert.</div>
+    </div>
+    <div class="rec-scores" id="spcx-rec-scores">
+      <div class="score-card">
+        <div class="score-top"><div class="score-emoji">📈</div><div class="score-label">Wie gut läuft<br>das Geschäft?</div></div>
+        <div class="score-val wn" id="spcx-s1">—</div>
+        <div class="score-meter"><div class="score-fill" id="spcx-m1"></div></div>
+        <div class="score-explain" id="spcx-explain-fundamentals" style="color:var(--text3);font-style:italic;"></div>
+      </div>
+      <div class="score-card">
+        <div class="score-top"><div class="score-emoji">🚀</div><div class="score-label">Wie stark steigt<br>der Kurs gerade?</div></div>
+        <div class="score-val wn" id="spcx-s2">—</div>
+        <div class="score-meter"><div class="score-fill" id="spcx-m2"></div></div>
+        <div class="score-explain" id="spcx-explain-momentum" style="color:var(--text3);font-style:italic;"></div>
+      </div>
+      <div class="score-card">
+        <div class="score-top"><div class="score-emoji">⚠️</div><div class="score-label">Wie hoch ist<br>das Risiko?</div></div>
+        <div class="score-val wn" id="spcx-s3">—</div>
+        <div class="score-meter"><div class="score-fill" id="spcx-m3"></div></div>
+        <div class="score-explain" id="spcx-explain-risiko" style="color:var(--text3);font-style:italic;"><b>Risiko</b> — <b>Höherer Score = niedrigeres Risiko.</b> Wird mit KI aktualisiert</div>
+      </div>
+      <div class="score-card">
+        <div class="score-top"><div class="score-emoji">💎</div><div class="score-label">Ist der Preis<br>fair?</div></div>
+        <div class="score-val wn" id="spcx-s4">—</div>
+        <div class="score-meter"><div class="score-fill" id="spcx-m4"></div></div>
+        <div class="score-explain" id="spcx-explain-bewertung" style="color:var(--text3);font-style:italic;"></div>
+      </div>
+    </div>
+    <div class="rec-history" id="spcx-rec-history" style="display:none;">
+          <div class="rec-history-title">📊 Verlauf Empfehlungen</div>
+          <div class="rec-history-items" id="spcx-rec-history-items"></div>
+        </div>
+    <div class="rec-levels" id="spcx-rec-levels">
+      <div class="rec-level"><span class="tip"><b>Guter Einstieg:</b> <span id="spcx-pill-einstieg-val">—</span><span class="tip-icon">?</span><span class="tip-box">Unter welchem Kurs ein Einstieg sinnvoller wäre als zum aktuellen Preis.</span></span></div>
+      <div class="rec-level"><span class="tip"><b>Kursziel:</b> <span id="spcx-pill-ziel-val">—</span><span class="tip-icon">?</span><span class="tip-box">Wo der Kurs hinlaufen könnte wenn die Entwicklung wie erwartet verläuft.</span></span></div>
+      <div class="rec-level"><span class="tip"><b>Stopp-Loss:</b> <span id="spcx-pill-stopp-val">—</span><span class="tip-icon">?</span><span class="tip-box">Unter diesem Kurs sollte man die Position überdenken — Sicherheitsnetz.</span></span></div>
+    </div>
 
-<!-- SpaceX News -->
+  </div>
+</div>
+<div class="card open" id="card-spcx-kpi">
+  <div class="card-header" onclick="toggleCard('spcx-kpi')">
+    <div class="card-icon">📊</div>
+    <div>
+      <div class="card-title">Investment-KPIs</div>
+      <div class="card-sub">Wachstum · Starlink · Starship · Bewertung</div>
+    </div>
+    <div class="card-arrow">▼</div>
+  </div>
+  <div class="card-body" id="body-spcx-kpi">
+    <div id="spcx-kpi-content">
+      <div style="display:flex;gap:8px;margin-bottom:10px;flex-wrap:wrap;">
+        <span style="font-size:10px;padding:2px 7px;border-radius:4px;background:rgba(37,99,235,.1);color:var(--blue);font-weight:600;">SEC = Direkt von SEC EDGAR</span>
+        <span style="font-size:10px;padding:2px 7px;border-radius:4px;background:var(--purple-bg);color:var(--purple);font-weight:600;">KI = Claude Web-Search Analyse</span>
+      </div>
+      <div style="display:flex;align-items:center;gap:14px;margin-bottom:12px;">
+        <div class="kpi-score-badge good" id="spcx-kpi-score-badge">—</div>
+        <div style="flex:1;">
+          <div style="font-size:13px;font-weight:600;">KI-KPI-Score <span class="kpi-info" style="vertical-align:middle;">?</span><div class="kpi-tooltip" style="display:none;">Gesamtbewertung 0–100 basierend auf Wachstum, Starlink, Starship, Liquidität, Risiko und Bewertung. Grün ≥80, Blau ≥60, Orange ≥40, Rot &lt;40</div></div>
+          <div style="font-size:11px;color:var(--text3);" id="spcx-kpi-score-sub">Wird berechnet...</div>
+        </div>
+      </div>
+      <div class="kpi-cat-grid">
+        <div class="kpi-cat" onclick="toggleDrill('spcx-kpi','wachstum')"><div class="kpi-cat-name">Wachstum <span class="kpi-info">?</span><div class="kpi-tooltip" style="display:none;">Wie schnell wächst der Umsatz? SpaceX peilt laut Musk bis 2030 massives Wachstum an</div></div><div class="kpi-cat-score" id="spcx-kpi-score-wachstum">—</div></div>
+        <div class="kpi-cat" onclick="toggleDrill('spcx-kpi','starlink')"><div class="kpi-cat-name">Starlink <span class="kpi-info">?</span><div class="kpi-tooltip" style="display:none;">Starlink ist das profitable Kerngeschäft — über 60% des Umsatzes und einziges profitables Segment</div></div><div class="kpi-cat-score" id="spcx-kpi-score-starlink">—</div></div>
+        <div class="kpi-cat" onclick="toggleDrill('spcx-kpi','starship')"><div class="kpi-cat-name">Starship <span class="kpi-info">?</span><div class="kpi-tooltip" style="display:none;">Die grösste Rakete aller Zeiten — Schlüssel für Mars, Artemis und günstige Massentransporte ins All</div></div><div class="kpi-cat-score" id="spcx-kpi-score-starship">—</div></div>
+        <div class="kpi-cat" onclick="toggleDrill('spcx-kpi','liquiditaet')"><div class="kpi-cat-name">Liquidität <span class="kpi-info">?</span><div class="kpi-tooltip" style="display:none;">Cash nach dem $85-Mrd-IPO vs. enormer Capex für Starship, Starlink und xAI-Rechenzentren</div></div><div class="kpi-cat-score" id="spcx-kpi-score-liquiditaet">—</div></div>
+        <div class="kpi-cat" onclick="toggleDrill('spcx-kpi','risiko')"><div class="kpi-cat-name">Risiko <span class="kpi-info">?</span><div class="kpi-tooltip" style="display:none;">Hoher Score = geringeres Risiko. Bewertung, Capex, xAI-Integration, Regulierung</div></div><div class="kpi-cat-score" id="spcx-kpi-score-risiko">—</div></div>
+        <div class="kpi-cat" onclick="toggleDrill('spcx-kpi','bewertung')"><div class="kpi-cat-name">Bewertung <span class="kpi-info">?</span><div class="kpi-tooltip" style="display:none;">~$2 Billionen Marktwert bei ~$19 Mrd Umsatz — extrem hohe Bewertung, viel Zukunft eingepreist</div></div><div class="kpi-cat-score" id="spcx-kpi-score-bewertung">—</div></div>
+      </div>
+      <div class="kpi-drill" id="spcx-kpi-drill-wachstum">
+        <div class="kpi-drill-row"><span class="kpi-drill-label">Revenue</span><span class="kpi-drill-val"><span id="spcx-kpi-d-rev">—</span><span class="kpi-tag-sec">SEC</span></span></div>
+        <div class="kpi-drill-source" id="spcx-kpi-d-rev-src"></div>
+        <div class="kpi-drill-row"><span class="kpi-drill-label">YoY Wachstum</span><span class="kpi-drill-val" id="spcx-kpi-d-yoy">—</span></div>
+        <div class="kpi-drill-row"><span class="kpi-drill-label">Guidance / Ziel</span><span class="kpi-drill-val"><span id="spcx-kpi-d-guidance">—</span><span class="kpi-tag-ki">KI</span></span></div>
+      </div>
+      <div class="kpi-drill" id="spcx-kpi-drill-starlink">
+        <div class="kpi-drill-row"><span class="kpi-drill-label">Starlink Nutzer</span><span class="kpi-drill-val"><span id="spcx-kpi-d-subs">—</span><span class="kpi-tag-ki">KI</span></span></div>
+        <div class="kpi-drill-row"><span class="kpi-drill-label">Starlink Umsatz</span><span class="kpi-drill-val"><span id="spcx-kpi-d-starlink-rev">—</span><span class="kpi-tag-ki">KI</span></span></div>
+        <div class="kpi-drill-row"><span class="kpi-drill-label">Anteil am Umsatz</span><span class="kpi-drill-val" id="spcx-kpi-d-starlink-anteil">—</span></div>
+      </div>
+      <div class="kpi-drill" id="spcx-kpi-drill-starship">
+        <div class="kpi-drill-row"><span class="kpi-drill-label">Starship Status</span><span class="kpi-drill-val"><span id="spcx-kpi-d-starship">—</span><span class="kpi-tag-ki">KI</span></span></div>
+        <div class="kpi-drill-row"><span class="kpi-drill-label">Testflüge</span><span class="kpi-drill-val" id="spcx-kpi-d-fluege">—</span></div>
+      </div>
+      <div class="kpi-drill" id="spcx-kpi-drill-liquiditaet">
+        <div class="kpi-drill-row"><span class="kpi-drill-label">Cash Total</span><span class="kpi-drill-val"><span id="spcx-kpi-d-cash">—</span><span class="kpi-tag-sec">SEC</span></span></div>
+        <div class="kpi-drill-source" id="spcx-kpi-d-cash-src"></div>
+        <div class="kpi-drill-row"><span class="kpi-drill-label kpi-tooltip-wrap">Capex <span class="kpi-info">?</span><div class="kpi-tooltip" style="display:none;">Investitionen in Starship, Starlink und KI-Rechenzentren — zuletzt über $10 Mrd pro Quartal</div></span><span class="kpi-drill-val"><span id="spcx-kpi-d-capex">—</span><span class="kpi-tag-ki">KI</span></span></div>
+        <div class="kpi-drill-row"><span class="kpi-drill-label">Nettoergebnis</span><span class="kpi-drill-val"><span id="spcx-kpi-d-netloss">—</span><span class="kpi-tag-sec">SEC</span></span></div>
+      </div>
+      <div class="kpi-drill" id="spcx-kpi-drill-risiko">
+        <div class="kpi-drill-row"><span class="kpi-drill-label">Bewertungs-Risiko</span><span class="kpi-drill-val risk-val" id="spcx-kpi-d-risk-bewertung">—</span></div>
+        <div class="kpi-drill-row"><span class="kpi-drill-label">Capex / xAI</span><span class="kpi-drill-val risk-val" id="spcx-kpi-d-risk-capex">—</span></div>
+        <div class="kpi-drill-row"><span class="kpi-drill-label">Konkurrenz</span><span class="kpi-drill-val risk-val" id="spcx-kpi-d-risk-konkurrenz">—</span></div>
+      </div>
+      <div class="kpi-drill" id="spcx-kpi-drill-bewertung">
+        <div class="kpi-drill-row"><span class="kpi-drill-label kpi-tooltip-wrap">EV/Sales <span class="kpi-info">?</span><div class="kpi-tooltip" style="display:none;">Wie teuer ist die Aktie relativ zum Umsatz? ~$2 Bio Marktwert / ~$19 Mrd Umsatz = ~100x</div></span><span class="kpi-drill-val"><span id="spcx-kpi-d-evsales">—</span><span class="kpi-tag-ki">KI</span></span></div>
+        <div class="kpi-drill-row"><span class="kpi-drill-label kpi-tooltip-wrap">Kurs vs. Konsens <span class="kpi-info">?</span><div class="kpi-tooltip" style="display:none;">Wie weit ist der Kurs vom Analysten-Konsens entfernt?</div></span><span class="kpi-drill-val" id="spcx-kpi-d-vs-konsens">—</span></div>
+        <div class="kpi-drill-row"><span class="kpi-drill-label">Analysten-Range</span><span class="kpi-drill-val" id="spcx-kpi-d-analyst-range">—</span></div>
+      </div>
+      <div class="kpi-interp" id="spcx-kpi-interp2" style="display:none;"></div>
+      <div id="spcx-kpi-drivers2" style="display:none;">
+        <div style="font-size:11px;color:var(--text3);margin-top:8px;margin-bottom:4px;">Haupttreiber</div>
+        <div class="kpi-drivers" id="spcx-kpi-drivers2-list"></div>
+        <div style="font-size:11px;color:var(--text3);margin-top:6px;margin-bottom:4px;">Hauptrisiken</div>
+        <div class="kpi-drivers" id="spcx-kpi-risks2-list"></div>
+      </div>
+      <div class="kpi-source" id="spcx-kpi-ts2"></div>
+    </div>
+  </div>
+</div>
+<div class="card open" id="card-spcx-milestone">
+  <div class="card-header" onclick="toggleCard('spcx-milestone')">
+    <div class="card-icon">🚀</div>
+    <div>
+      <div class="card-title">Meilenstein-Tracker</div>
+      <div class="card-sub">Starship · Starts · Starlink · Risiken</div>
+    </div>
+    <div class="card-arrow">▼</div>
+  </div>
+  <div class="card-body" id="body-spcx-milestone">
+    <div id="spcx-milestone-content">
+      <div class="kpi-section-title">Starship Programm <span class="kpi-info">?</span><div class="kpi-tooltip" style="display:none;">Starship entscheidet über die langfristige Story: Mars, Artemis-Mondlandung und drastisch günstigere Starts</div> <span style="font-weight:400;text-transform:none;font-size:10px;color:var(--text3);">KI-Analyse</span></div>
+      <div id="spcx-starship-status"><div style="color:var(--text3);font-size:13px;font-style:italic;">Wird aktualisiert...</div></div>
+      <div class="kpi-section-title" style="margin-top:12px;">Starts & Starlink</div>
+      <div class="kpi-grid">
+        <div class="kpi-box">
+          <div class="kpi-label">Starts 2026 <span class="kpi-info">?</span><div class="kpi-tooltip" style="display:none;">Anzahl Raketenstarts 2026 (Falcon + Starship). SpaceX dominiert mit Abstand den globalen Startmarkt.</div></div>
+          <div class="kpi-val" id="spcx-ms-launches">—</div>
+          <div class="kpi-sub" id="spcx-ms-launches-sub">—</div>
+        </div>
+        <div class="kpi-box">
+          <div class="kpi-label">Erfolgsquote <span class="kpi-info">?</span><div class="kpi-tooltip" style="display:none;">Anteil erfolgreicher Starts. Die Falcon 9 ist die zuverlässigste Rakete der Geschichte.</div></div>
+          <div class="kpi-val" id="spcx-ms-success">—</div>
+          <div class="kpi-sub">Falcon 9</div>
+        </div>
+        <div class="kpi-box">
+          <div class="kpi-label">Starlink Nutzer <span class="kpi-info">?</span><div class="kpi-tooltip" style="display:none;">Aktive Starlink-Abonnenten weltweit. Über 10 Mio (Q1 2026) — wichtigster Umsatztreiber.</div></div>
+          <div class="kpi-val" id="spcx-ms-subs">—</div>
+          <div class="kpi-sub" id="spcx-ms-subs-sub">—</div>
+        </div>
+        <div class="kpi-box">
+          <div class="kpi-label">Nächster Meilenstein <span class="kpi-info">?</span><div class="kpi-tooltip" style="display:none;">Der wichtigste bevorstehende operative Schritt</div></div>
+          <div class="kpi-val" id="spcx-next-milestone" style="font-size:11px;">—</div>
+        </div>
+      </div>
+      <div class="kpi-section-title" style="margin-top:12px;">Risikoampel</div>
+      <div class="risk-grid">
+        <div class="risk-item"><div class="risk-label">Bewertung <span class="kpi-info">?</span><div class="kpi-tooltip" style="display:none;">~$2 Billionen Marktwert bei ~$19 Mrd Umsatz und Verlusten — jeder Rückschlag kann starke Korrekturen auslösen (CFRA: Sell, Morningstar: deutlich überbewertet).</div></div><div class="risk-val" id="spcx-ms-risk-bewertung">—</div></div>
+        <div class="risk-item"><div class="risk-label">Capex / xAI <span class="kpi-info">?</span><div class="kpi-tooltip" style="display:none;">Über $10 Mrd Investitionen pro Quartal, Grossteil in KI. Die xAI-Fusion (Feb 2026) macht die Firma kapitalintensiver und schwerer bewertbar.</div></div><div class="risk-val" id="spcx-ms-risk-capex">—</div></div>
+        <div class="risk-item"><div class="risk-label">Regulierung <span class="kpi-info">?</span><div class="kpi-tooltip" style="display:none;">FAA-Startlizenzen für Starship, FCC-Frequenzen für Starlink, Abhängigkeit von NASA/DoD-Aufträgen.</div></div><div class="risk-val" id="spcx-ms-risk-regulierung">—</div></div>
+        <div class="risk-item"><div class="risk-label">Konkurrenz <span class="kpi-info">?</span><div class="kpi-tooltip" style="display:none;">Amazon Kuiper (Satelliten-Internet), Blue Origin New Glenn, Rocket Lab Neutron, chinesische Anbieter.</div></div><div class="risk-val" id="spcx-ms-risk-konkurrenz">—</div></div>
+      </div>
+      <div class="kpi-source" id="spcx-milestone-ts"></div>
+    </div>
+  </div>
+</div>
+<div class="card open" id="card-spcx-charts">
+  <div class="card-header" onclick="toggleCard('spcx-charts')">
+    <div class="card-icon">📈</div>
+    <div>
+      <div class="card-title">Kursverlauf & Szenarien</div>
+      <div class="card-sub">12 Monate · 5-Jahres-Forecast · Preisziele</div>
+    </div>
+    <div class="card-arrow">▼</div>
+  </div>
+  <div class="card-body" id="body-spcx-charts">
+    <div class="chart-tabs">
+      <button class="chart-tab active" id="spcx-tab-range" onclick="switchChartTab('spcx','range')">📉 Kursverlauf</button>
+      <button class="chart-tab" id="spcx-tab-1y" onclick="switchChartTab('spcx','1y')">📊 Szenarien</button>
+      <button class="chart-tab" id="spcx-tab-5y" onclick="switchChartTab('spcx','5y')">🔭 5-Jahres-Forecast</button>
+    </div>
+    <div class="chart-view active" id="spcx-view-range">
+      <div class="range-btns">
+        <button class="range-btn" onclick="loadRangeChart('spcx','1d')">1T</button>
+        <button class="range-btn" onclick="loadRangeChart('spcx','5d')">5T</button>
+        <button class="range-btn active" onclick="loadRangeChart('spcx','1mo')">1M</button>
+        <button class="range-btn" onclick="loadRangeChart('spcx','6mo')">6M</button>
+        <button class="range-btn" onclick="loadRangeChart('spcx','ytd')">YTD</button>
+        <button class="range-btn" onclick="loadRangeChart('spcx','1y')">1J</button>
+        <button class="range-btn" onclick="loadRangeChart('spcx','5y')">5J</button>
+      </div>
+      <div class="range-chart-wrap"><canvas id="spcx-range-chart"></canvas></div>
+      <div id="spcx-range-info" style="font-size:12px;margin-top:6px;text-align:right;"></div>
+    </div>
+    <div class="chart-view" id="spcx-view-1y">
+      <div class="chart-grid">
+        <div>
+          <div class="section-head">📈 Kursverlauf der letzten 12 Monate + Zukunftsszenarien</div>
+          <div class="chart-wrap"><canvas id="spcx-chart" role="img" aria-label="SPCX Chart"></canvas></div>
+          <div class="lgbox" id="spcx-lgbox">
+            <div class="lgr"><div class="lgl"><div class="lgs" style="background:var(--spcx);"></div></div><div><div class="lgt">Was wirklich passiert ist</div><div class="lgx" id="spcx-lg-actual">Echter Kursverlauf der letzten 12 Monate</div></div></div>
+            <div class="lgr"><div class="lgl"><div class="lgd" style="border-color:var(--green);"></div><div class="lgdot" style="background:var(--green);"></div></div><div><div class="lgt" style="color:var(--green);" id="spcx-lg-bull">Optimistisches Szenario — wird mit KI geladen</div></div></div>
+            <div class="lgr"><div class="lgl"><div class="lgd" style="border-color:var(--border2);"></div><div class="lgdot" style="background:#bbb;"></div></div><div><div class="lgt" style="color:var(--text3);" id="spcx-lg-base">Bankexperten-Konsens — wird mit KI geladen</div></div></div>
+            <div class="lgr"><div class="lgl"><div class="lgd" style="border-color:var(--red);"></div><div class="lgdot" style="background:var(--red);"></div></div><div><div class="lgt" style="color:var(--red);" id="spcx-lg-bear">Pessimistisches Szenario — wird mit KI geladen</div></div></div>
+          </div>
+        </div>
+        <div>
+          <div class="section-head">🎯 Wo könnte der Kurs in 12 Monaten stehen?</div>
+          <div class="section-head" id="spcx-scenarios-intro" style="font-size:13px;font-weight:400;color:var(--text2);text-transform:none;letter-spacing:0;margin-bottom:10px;">Analysten-Ziele und Szenarien</div>
+          <div id="spcx-scenarios-bars">
+            <div class="scr"><div class="scl">Bestmöglicher Fall</div><div class="scb"><div class="scf" style="width:100%;background:var(--green);"></div></div><div class="scv up" id="spcx-sc-bull">—</div></div>
+            <div class="scr"><div class="scl">Optimistischste Bank</div><div class="scb"><div class="scf" style="width:0%;background:var(--spcx);"></div></div><div class="scv mono" id="spcx-sc-opt">—</div></div>
+            <div class="scr"><div class="scl">Alle Banken (Durchschnitt)</div><div class="scb"><div class="scf" style="width:0%;background:#bbb;"></div></div><div class="scv nu" id="spcx-sc-base">—</div></div>
+            <div class="scr"><div class="scl">Vorsichtige Schätzung</div><div class="scb"><div class="scf" style="width:0%;background:var(--amber);"></div></div><div class="scv wn" id="spcx-sc-bear">—</div></div>
+          </div>
+          <div class="sentiment-box" id="spcx-sentiment-box" style="margin-top:14px;">
+            <div class="sentiment-title">💬 Social Media Sentiment</div>
+            <div class="sentiment-platforms">
+              <div class="sentiment-platform">
+                <div class="sentiment-platform-icon">🟠</div>
+                <div class="sentiment-platform-name">Reddit</div>
+                <div class="sentiment-platform-val neutral" id="spcx-sent-reddit">—</div>
+                <div class="sentiment-platform-sub" id="spcx-sent-reddit-sub">lädt...</div>
+              </div>
+              <div class="sentiment-platform">
+                <div class="sentiment-platform-icon">𝕏</div>
+                <div class="sentiment-platform-name">X / Twitter</div>
+                <div class="sentiment-platform-val neutral" id="spcx-sent-x">—</div>
+                <div class="sentiment-platform-sub" id="spcx-sent-x-sub">lädt...</div>
+              </div>
+              <div class="sentiment-platform">
+                <div class="sentiment-platform-icon">📊</div>
+                <div class="sentiment-platform-name">StockTwits</div>
+                <div class="sentiment-platform-val neutral" id="spcx-sent-st">—</div>
+                <div class="sentiment-platform-sub" id="spcx-sent-st-sub">lädt...</div>
+              </div>
+              <div class="sentiment-platform">
+                <div class="sentiment-platform-icon">✈️</div>
+                <div class="sentiment-platform-name">Telegram</div>
+                <div class="sentiment-platform-val neutral" id="spcx-sent-tg">—</div>
+                <div class="sentiment-platform-sub" id="spcx-sent-tg-sub">lädt...</div>
+              </div>
+              <div class="sentiment-platform">
+                <div class="sentiment-platform-icon">👥</div>
+                <div class="sentiment-platform-name">FB / IG</div>
+                <div class="sentiment-platform-val neutral" id="spcx-sent-fb">—</div>
+                <div class="sentiment-platform-sub" id="spcx-sent-fb-sub">lädt...</div>
+              </div>
+            </div>
+            <div class="sentiment-summary" id="spcx-sentiment-text" style="color:var(--text3);font-style:italic;">Wird mit KI geladen...</div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="chart-view" id="spcx-view-5y">
+      <div class="chart-disclaimer">⚠️ Spekulative Schätzung — kein Versprechen! Nutze dies als Denkrahmen, nicht als Prognose.</div>
+      <div class="chart-wrap" style="height:220px;"><canvas id="spcx-chart5" role="img"></canvas></div>
+      <div id="spcx-f5-milestones" class="f5-milestones">
+        <div class="f5-year"><div class="f5-yr-label">🐂 Bull-Szenario</div><div class="f5-assumption" id="spcx-f5-bull-note" style="color:var(--text3);font-style:italic;">Wird mit KI aktualisiert</div></div>
+        <div class="f5-year"><div class="f5-yr-label">📊 Base-Szenario</div><div class="f5-assumption" id="spcx-f5-base-note" style="color:var(--text3);font-style:italic;">Wird mit KI aktualisiert</div></div>
+        <div class="f5-year"><div class="f5-yr-label">🐻 Bear-Szenario</div><div class="f5-assumption" id="spcx-f5-bear-note" style="color:var(--text3);font-style:italic;">Wird mit KI aktualisiert</div></div>
+      </div>
+    </div>
+  </div>
+</div>
+<div class="card open" id="card-spcx-df">
+  <div class="card-header" onclick="toggleCard('spcx-df')">
+    <div class="card-icon">📅</div>
+    <div>
+      <div class="card-title">Was heute passieren könnte</div>
+      <div class="card-sub">ATR-basierte Tagesschätzung</div>
+    </div>
+    <div class="card-arrow">▼</div>
+  </div>
+  <div class="card-body" id="body-spcx-df">
+    <div class="day-fc">
+      <div class="df-range-wrap">
+        <div class="df-top-row">
+          <div class="df-stat-lo">
+            <div class="df-stat-lbl"><span>📉</span> Tagestief <span class="tip tip-left"><span class="tip-icon">?</span><span class="tip-box">Der niedrigste Kurs heute. Tiefes Tief bei hohem Volumen = Verkaufsdruck.</span></span></div>
+            <div class="df-stat-num dn mono" id="spcx-day-lo">—</div>
+          </div>
+          <div class="df-stat-mid">
+            <div class="df-stat-lbl">Eröffnung <span class="tip"><span class="tip-icon">?</span><span class="tip-box">Der erste Handelskurs heute um 09:30 Uhr NY Zeit.</span></span></div>
+            <div class="df-stat-num mono" id="spcx-open">—</div>
+          </div>
+          <div class="df-stat-hi">
+            <div class="df-stat-lbl">Tageshoch <span>📈</span> <span class="tip tip-right"><span class="tip-icon">?</span><span class="tip-box">Der höchste Kurs heute. Hohes Hoch bei positivem Momentum = Kaufinteresse.</span></span></div>
+            <div class="df-stat-num up mono" id="spcx-day-hi">—</div>
+          </div>
+        </div>
+        <div class="range-bar">
+          <div class="range-fill" id="spcx-range-fill" style="width:0%"></div>
+          <div class="range-dot" id="spcx-rdot" style="left:50%;color:var(--spcx);">
+            <div class="range-dot-label" id="spcx-rdot-lbl">—</div>
+          </div>
+        </div>
+        <div class="df-range-footer">
+          <span class="df-range-edge lo" id="spcx-lo-lbl">—</span>
+          <span class="df-range-mid">← Tagesbereich →</span>
+          <span class="df-range-edge hi" id="spcx-hi-lbl">—</span>
+        </div>
+      </div>
+      <div class="df-stats-row" id="spcx-df-stats">
+        <div class="df-stat-pill" id="spcx-df-atr">
+          <div class="df-pill-header">
+            <div class="df-pill-icon">⚡</div>
+            <span class="tip tip-left"><span class="tip-icon">?</span><span class="tip-box" id="spcx-df-atr-tip">ATR (Average True Range): durchschnittliche Tagesschwankung der letzten 5 Tage.</span></span>
+          </div>
+          <div class="df-pill-lbl">Schwankung</div>
+          <div class="df-pill-val" id="spcx-df-atr-val">—</div>
+          <div class="df-pill-sub" id="spcx-df-atr-sub">ATR</div>
+        </div>
+        <div class="df-stat-pill" id="spcx-df-mom">
+          <div class="df-pill-header">
+            <div class="df-pill-icon" id="spcx-df-mom-icon">📈</div>
+            <span class="tip"><span class="tip-icon">?</span><span class="tip-box" id="spcx-df-mom-tip">Kursbewegung der letzten 5 Tage. Positiv = Aufwärtstrend, Negativ = Abwärtstrend.</span></span>
+          </div>
+          <div class="df-pill-lbl">Momentum</div>
+          <div class="df-pill-val" id="spcx-df-mom-val">—</div>
+          <div class="df-pill-sub">5-Tage</div>
+        </div>
+        <div class="df-stat-pill" id="spcx-df-rsi">
+          <div class="df-pill-header">
+            <div class="df-pill-icon">🔬</div>
+            <span class="tip tip-right"><span class="tip-icon">?</span><span class="tip-box" id="spcx-df-rsi-tip">RSI über 70 = überkauft. RSI unter 30 = überverkauft. 30–70 = neutrale Zone.</span></span>
+          </div>
+          <div class="df-pill-lbl" id="spcx-df-rsi-lbl">RSI</div>
+          <div class="df-pill-val" id="spcx-df-rsi-val">—</div>
+          <div class="df-pill-sub" id="spcx-df-rsi-sub">—</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+<div class="card open" id="card-spcx-insider">
+  <div class="card-header" onclick="toggleCard('spcx-insider')">
+    <div class="card-icon">📋</div>
+    <div>
+      <div class="card-title">Insider-Trades</div>
+      <div class="card-sub">SEC Form 4 · Käufe & Verkäufe · <span style="color:var(--blue);font-weight:600;">Verifiziert</span></div>
+    </div>
+    <div class="card-arrow">▼</div>
+  </div>
+  <div class="card-body" id="body-spcx-insider">
+    <div id="spcx-insider-content" style="color:var(--text3);font-style:italic;font-size:13px;">Wird täglich mit KI aktualisiert...</div>
+  </div>
+</div>
+<div class="card open" id="card-spcx-pf">
+  <div class="card-header" onclick="toggleCard('spcx-pf')">
+    <div class="card-icon">🧮</div>
+    <div>
+      <div class="card-title">Dein Portfolio</div>
+      <div class="card-sub">Käufe & Verkäufe eintragen</div>
+    </div>
+    <div class="card-arrow">▼</div>
+  </div>
+  <div class="card-body" id="body-spcx-pf">
+    <div class="pf-new">
+      <div class="pf-form-title">
+        <span>Transaktion</span>
+        <button class="pf-export-btn" onclick="exportPortfolio('spcx')" title="Export CSV">⬇ CSV</button>
+      </div>
+      <div class="pf-form">
+        <div class="pf-row">
+          <select class="pf-select pf-select-type" id="spcx-tx-type">
+            <option value="buy">📈 Kauf</option>
+            <option value="sell">📉 Verkauf</option>
+          </select>
+          <input class="pf-input pf-input-date" id="spcx-tx-date" type="date">
+        </div>
+        <div class="pf-row">
+          <input class="pf-input" id="spcx-tx-qty" type="number" placeholder="Anzahl Aktien" min="0.01" step="0.01">
+          <input class="pf-input" id="spcx-tx-price" type="number" placeholder="Preis $" min="0.01" step="0.01">
+        </div>
+        <input class="pf-input" id="spcx-tx-note" type="text" placeholder="Notiz (optional)">
+        <button class="pf-add" onclick="addTx('spcx')" id="spcx-add-btn">＋ Hinzufügen</button>
+      </div>
+    </div>
+    <div class="pf-tx-list" id="spcx-tx-list">
+      <div class="pf-empty" id="spcx-tx-empty">Noch keine Transaktionen erfasst.</div>
+    </div>
+    <div class="pf-summary" id="spcx-pf-summary" style="display:none;">
+      <div class="pf-sum-header"><div class="section-head">Portfolio-Übersicht</div><div class="pf-currency-toggle"><button id="spcx-cur-usd" class="active" onclick="setCurrency('spcx','USD')">USD</button><button id="spcx-cur-chf" onclick="setCurrency('spcx','CHF')">CHF</button></div></div>
+      <div class="pf-sum-grid">
+        <div class="pf-sum-item"><div class="pf-sum-label">Aktien im Besitz</div><div class="pf-sum-val mono" id="spcx-sum-qty">0</div></div>
+        <div class="pf-sum-item"><div class="pf-sum-label">Ø Kaufpreis</div><div class="pf-sum-val mono" id="spcx-sum-avg">—</div></div>
+        <div class="pf-sum-item"><div class="pf-sum-label">Aktueller Wert</div><div class="pf-sum-val mono" id="spcx-sum-val">—</div></div>
+        <div class="pf-sum-item"><div class="pf-sum-label">Investiert</div><div class="pf-sum-val mono" id="spcx-sum-invested">—</div></div>
+        <div class="pf-sum-item" style="grid-column:1/-1;"><div class="pf-sum-label">Unrealisierter Gewinn/Verlust</div><div class="pf-sum-val" id="spcx-sum-unrealized">—</div></div>
+      </div>
+      <div class="pf-scenarios">
+        <div class="pf-sc bull"><div class="pf-sc-label">🐂 Bull-Szenario</div><div class="pf-sc-val" id="spcx-sum-bull">—</div><div style="font-size:11px;color:var(--green);margin-top:2px;" id="spcx-sum-bull-gain"></div></div>
+        <div class="pf-sc bear"><div class="pf-sc-label">🐻 Bear-Szenario</div><div class="pf-sc-val" id="spcx-sum-bear">—</div><div style="font-size:11px;color:var(--red);margin-top:2px;" id="spcx-sum-bear-loss"></div></div>
+      </div>
+    </div>
+  </div>
+</div>
 <div class="card open" id="card-spcx-news">
   <div class="card-header" onclick="toggleCard('spcx-news')">
     <div class="card-icon">📰</div>
     <div>
-      <div class="card-title">SpaceX Nachrichten</div>
+      <div class="card-title">Nachrichten & Marktanalyse</div>
       <div class="card-sub">Täglich um 13:00 Uhr aktualisiert</div>
     </div>
     <div class="card-arrow">▼</div>
   </div>
   <div class="card-body" id="body-spcx-news">
-    <div id="spcx-earnings-bar" style="display:none;" class="earnings-bar">
-        <span>🚀</span>
-        <span class="earnings-label">SpaceX IPO / Nächstes Event: <b id="spcx-earnings-date">—</b></span>
+    <div class="news-header">
+      <div id="spcx-earnings-bar" style="display:none;" class="earnings-bar">
+        <span>📅</span>
+        <span class="earnings-label">Nächste Earnings: <b id="spcx-earnings-date">—</b></span>
         <span class="earnings-countdown" id="spcx-earnings-countdown"></span>
       </div>
-    <div class="news-live"><div class="live-dot"></div>Nachrichten · SPCX</div>
-    <div id="spcx-news-content"><div style="color:var(--text3);font-style:italic;font-size:13px;">Wird täglich mit KI aktualisiert...</div></div>
+      <div class="news-meta-row">
+        <div class="news-live"><div class="live-dot"></div>Nachrichten · SPCX</div>
+        <div class="news-ts" id="spcx-news-ts"></div>
+      </div>
+      <div class="news-source-hint">📰 KI-kuratiert aus SpaceNews, Bloomberg, Reuters, SEC u.v.m.</div>
+    </div>
+    <div class="news-loading" id="spcx-news-loading">
+      <div class="news-spin"></div>
+      <span id="spcx-news-loading-txt">Lade Nachrichten...</span>
+    </div>
+    <div class="news-content" id="spcx-news-content"></div>
   </div>
 </div>
-
-<!-- SpaceX Sektor-Kontext -->
 <div class="card open" id="card-spcx-sector">
   <div class="card-header" onclick="toggleCard('spcx-sector')">
     <div class="card-icon">🌌</div>
     <div>
-      <div class="card-title">SpaceX Marktposition</div>
-      <div class="card-sub">Starlink · Falcon · Starship · Konkurrenz</div>
+      <div class="card-title">Sektor-Kontext & Einflussfaktoren</div>
+      <div class="card-sub">Starlink, Starship, xAI, Konkurrenz</div>
     </div>
     <div class="card-arrow">▼</div>
   </div>
   <div class="card-body" id="body-spcx-sector">
-    <div class="sector-intro" id="spcx-sector-intro">SpaceX dominiert den kommerziellen Raumfahrtmarkt.</div>
+    <div class="sector-intro" id="spcx-sector-intro">Externe Faktoren die den Kurs beeinflussen:</div>
     <div class="sector-grid" id="spcx-sector-grid">
-      <div class="sector-card">
-        <div class="sector-emoji">🛸</div>
-        <div class="sector-name">Starlink</div>
-        <div class="sector-val" style="color:var(--green)" id="spcx-starlink-val">~6000 Satelliten</div>
-        <div class="sector-desc" id="spcx-starlink-desc">Weltgrösstes Satelliten-Internet Netzwerk</div>
-      </div>
-      <div class="sector-card">
-        <div class="sector-emoji">🚀</div>
-        <div class="sector-name">Falcon 9</div>
-        <div class="sector-val" style="color:var(--blue)" id="spcx-falcon-val">~250 Starts/Jahr</div>
-        <div class="sector-desc" id="spcx-falcon-desc">Meistgeflogene Rakete der Geschichte</div>
-      </div>
-      <div class="sector-card">
-        <div class="sector-emoji">⭐</div>
-        <div class="sector-name">Starship</div>
-        <div class="sector-val" style="color:var(--amber)" id="spcx-starship-val">In Entwicklung</div>
-        <div class="sector-desc" id="spcx-starship-desc">Grösste Rakete aller Zeiten — Mars-Mission</div>
-      </div>
-      <div class="sector-card">
-        <div class="sector-emoji">🏆</div>
-        <div class="sector-name">Marktanteil</div>
-        <div class="sector-val" style="color:var(--green)" id="spcx-market-val">~60%</div>
-        <div class="sector-desc" id="spcx-market-desc">Kommerzieller Raketenmarkt global</div>
-      </div>
-    </div>
+                            </div>
   </div>
 </div>
-
 <div class="card open" id="card-spcx-gov">
   <div class="card-header" onclick="toggleCard('spcx-gov')">
     <div class="card-icon">🏛</div>
     <div>
       <div class="card-title">US Behörden & Aufträge</div>
-      <div class="card-sub">FAA · NASA · Space Force · FCC · SEC</div>
+      <div class="card-sub">FAA · NASA · Space Force · SEC</div>
     </div>
     <div class="card-arrow">▼</div>
   </div>
@@ -2095,14 +2546,562 @@ body{font-family:var(--font-sans);background:var(--bg);color:var(--text);min-hei
         <div class="gov-item-desc" id="spcx-gov-sf-desc">NSSL Launch-Aufträge</div>
       </div>
       <div class="gov-item">
-        <div class="gov-item-header"><div class="gov-item-emoji">📋</div><div class="gov-item-name">SEC / IPO</div></div>
+        <div class="gov-item-header"><div class="gov-item-emoji">📋</div><div class="gov-item-name">SEC / Reporting</div></div>
         <div class="gov-item-val" id="spcx-gov-sec-val">Lädt...</div>
-        <div class="gov-item-desc" id="spcx-gov-sec-desc">S-1 Filing Status</div>
+        <div class="gov-item-desc" id="spcx-gov-sec-desc">10-Q/10-K Filings seit IPO Juni 2026</div>
       </div>
     </div>
   </div>
 </div>
+</div>
 
+<!-- ═══ OKLO PANEL ═══ -->
+<div class="panel" id="p-oklo">
+<div class="card open" id="card-oklo-alert">
+  <div class="card-header" onclick="toggleCard('oklo-alert')">
+    <div class="card-icon">📢</div>
+    <div>
+      <div class="card-title">Aktuelle Lage · Oklo</div>
+      <div class="card-sub">KI-basiert, aktualisierbar</div>
+    </div>
+    <div class="card-arrow">▼</div>
+  </div>
+  <div class="card-body" id="body-oklo-alert">
+    <div class="alert neutral" id="oklo-alert-box">
+      <div class="alert-dot"></div>
+      <div id="oklo-alert-text" style="font-style:italic;color:var(--text3);">⏳ Wird beim nächsten Cron-Lauf aktualisiert (täglich um 13:00)</div>
+    </div>
+  </div>
+</div>
+<div class="card open" id="card-oklo-mets">
+  <div class="card-header" onclick="toggleCard('oklo-mets')">
+    <div class="card-icon">💰</div>
+    <div>
+      <div class="card-title">Live-Kurszahlen</div>
+      <div class="card-sub">Aktueller Kurs · Volumen · Jahresspanne</div>
+    </div>
+    <div class="card-arrow">▼</div>
+  </div>
+  <div class="card-body" id="body-oklo-mets">
+    <div class="mets">
+      <div class="met">
+        <div class="met-icon">💰</div>
+        <div class="met-label">Aktueller Kurs <span class="tip"><span class="tip-icon">?</span><span class="tip-box">Der aktuelle Börsenkurs. Aktualisiert alle 15 Sekunden.</span></span></div>
+        <div class="met-val" id="oklo-price">lädt...</div>
+        <div class="met-chg" id="oklo-chg">—</div>
+        <div class="met-sub">pro Aktie</div>
+        <div class="premarket-badge" id="oklo-premarket" style="display:none;"></div>
+      </div>
+      <div class="met">
+        <div class="met-icon">📊</div>
+        <div class="met-label">Handelsvolumen <span class="tip"><span class="tip-icon">?</span><span class="tip-box">Wie viele Aktien heute gehandelt wurden. Hohes Volumen = viele Anleger kaufen oder verkaufen gerade aktiv.</span></span></div>
+        <div class="met-val mono" id="oklo-vol">—</div>
+        <div class="met-chg nu" id="oklo-vol-ctx" style="font-size:12px;">—</div>
+        <div class="met-chg nu" id="oklo-cap"></div>
+      </div>
+      <div class="met">
+        <div class="met-icon">📏</div>
+        <div class="met-label">Jahresspanne <span class="tip"><span class="tip-icon">?</span><span class="tip-box">Der tiefste und höchste Kurs der letzten 12 Monate. Zeigt die Volatilität.</span></span></div>
+        <div class="met-val mono" id="oklo-52w" style="font-size:15px;padding-top:4px;">—</div>
+        <div class="met-sub">Tief → Hoch (12 Monate)</div>
+      </div>
+      <div class="met">
+        <div class="met-icon">🎯</div>
+        <div class="met-label">Experten-Konsens <span class="tip"><span class="tip-icon">?</span><span class="tip-box"><b>Was bedeutet das?</b> Grosse Banken beschäftigen Analysten die Aktien bewerten. Der Preis ist ihr durchschnittliches Kursziel für die nächsten 12 Monate. Die Anzahl zeigt wie viele Analysten Kaufen, Halten oder Verkaufen empfehlen. Achtung: Bei spekulativen Aktien wie OKLO liegen Analysten häufig falsch.</span></span></div>
+        <div class="met-val mono" id="oklo-cons-price">—</div>
+        <div class="met-chg nu" id="oklo-cons-rating">— Analysten</div>
+        <div class="met-sub">Ø Kursziel (12 Monate)</div>
+      </div>
+    </div>
+  </div>
+</div>
+<div class="card open" id="card-oklo-rec">
+  <div class="card-header" onclick="toggleCard('oklo-rec')">
+    <div class="card-icon">🎯</div>
+    <div>
+      <div class="card-title">Kauf/Halt/Verkauf-Empfehlung</div>
+      <div class="card-sub">KI-basiert, aktualisierbar</div>
+    </div>
+    <div class="card-arrow">▼</div>
+  </div>
+  <div class="card-body" id="body-oklo-rec">
+    <div class="rec-banner empty" id="oklo-rec-banner">
+      <div class="rec-head">
+        <span class="rec-pill empty" id="oklo-rec-pill">—</span>
+        <div>
+          <div class="rec-title" id="oklo-rec-title" style="color:var(--text2);font-weight:400;">KI-Analyse ausstehend</div>
+          <div class="rec-ts" id="oklo-rec-ts"></div>
+          <div style="font-size:10px;color:var(--text3);margin-top:4px;">🤖 KI-Analyse auf Basis von 100+ Quellen · Keine Anlageberatung</div>
+        </div>
+      </div>
+      <div class="rec-explain" id="oklo-rec-sub" style="color:var(--text3);font-style:italic;">Noch keine Analyse geladen. Mit KI-Schlüssel im ⚙️-Menü wird die Empfehlung automatisch generiert.</div>
+    </div>
+    <div class="rec-scores" id="oklo-rec-scores">
+      <div class="score-card">
+        <div class="score-top"><div class="score-emoji">📈</div><div class="score-label">Wie gut läuft<br>das Geschäft?</div></div>
+        <div class="score-val wn" id="oklo-s1">—</div>
+        <div class="score-meter"><div class="score-fill" id="oklo-m1"></div></div>
+        <div class="score-explain" id="oklo-explain-fundamentals" style="color:var(--text3);font-style:italic;"></div>
+      </div>
+      <div class="score-card">
+        <div class="score-top"><div class="score-emoji">🚀</div><div class="score-label">Wie stark steigt<br>der Kurs gerade?</div></div>
+        <div class="score-val wn" id="oklo-s2">—</div>
+        <div class="score-meter"><div class="score-fill" id="oklo-m2"></div></div>
+        <div class="score-explain" id="oklo-explain-momentum" style="color:var(--text3);font-style:italic;"></div>
+      </div>
+      <div class="score-card">
+        <div class="score-top"><div class="score-emoji">⚠️</div><div class="score-label">Wie hoch ist<br>das Risiko?</div></div>
+        <div class="score-val wn" id="oklo-s3">—</div>
+        <div class="score-meter"><div class="score-fill" id="oklo-m3"></div></div>
+        <div class="score-explain" id="oklo-explain-risiko" style="color:var(--text3);font-style:italic;"><b>Risiko</b> — <b>Höherer Score = niedrigeres Risiko.</b> Wird mit KI aktualisiert</div>
+      </div>
+      <div class="score-card">
+        <div class="score-top"><div class="score-emoji">💎</div><div class="score-label">Ist der Preis<br>fair?</div></div>
+        <div class="score-val wn" id="oklo-s4">—</div>
+        <div class="score-meter"><div class="score-fill" id="oklo-m4"></div></div>
+        <div class="score-explain" id="oklo-explain-bewertung" style="color:var(--text3);font-style:italic;"></div>
+      </div>
+    </div>
+    <div class="rec-history" id="oklo-rec-history" style="display:none;">
+          <div class="rec-history-title">📊 Verlauf Empfehlungen</div>
+          <div class="rec-history-items" id="oklo-rec-history-items"></div>
+        </div>
+    <div class="rec-levels" id="oklo-rec-levels">
+      <div class="rec-level"><span class="tip"><b>Guter Einstieg:</b> <span id="oklo-pill-einstieg-val">—</span><span class="tip-icon">?</span><span class="tip-box">Unter welchem Kurs ein Einstieg sinnvoller wäre als zum aktuellen Preis.</span></span></div>
+      <div class="rec-level"><span class="tip"><b>Kursziel:</b> <span id="oklo-pill-ziel-val">—</span><span class="tip-icon">?</span><span class="tip-box">Wo der Kurs hinlaufen könnte wenn die Entwicklung wie erwartet verläuft.</span></span></div>
+      <div class="rec-level"><span class="tip"><b>Stopp-Loss:</b> <span id="oklo-pill-stopp-val">—</span><span class="tip-icon">?</span><span class="tip-box">Unter diesem Kurs sollte man die Position überdenken — Sicherheitsnetz.</span></span></div>
+    </div>
+
+  </div>
+</div>
+<div class="card open" id="card-oklo-kpi">
+  <div class="card-header" onclick="toggleCard('oklo-kpi')">
+    <div class="card-icon">📊</div>
+    <div>
+      <div class="card-title">Investment-KPIs</div>
+      <div class="card-sub">Cash · Pipeline · Lizenzierung · Bewertung</div>
+    </div>
+    <div class="card-arrow">▼</div>
+  </div>
+  <div class="card-body" id="body-oklo-kpi">
+    <div id="oklo-kpi-content">
+      <div style="display:flex;gap:8px;margin-bottom:10px;flex-wrap:wrap;">
+        <span style="font-size:10px;padding:2px 7px;border-radius:4px;background:rgba(37,99,235,.1);color:var(--blue);font-weight:600;">SEC = Direkt von SEC EDGAR</span>
+        <span style="font-size:10px;padding:2px 7px;border-radius:4px;background:var(--purple-bg);color:var(--purple);font-weight:600;">KI = Claude Web-Search Analyse</span>
+      </div>
+      <div style="display:flex;align-items:center;gap:14px;margin-bottom:12px;">
+        <div class="kpi-score-badge good" id="oklo-kpi-score-badge">—</div>
+        <div style="flex:1;">
+          <div style="font-size:13px;font-weight:600;">KI-KPI-Score <span class="kpi-info" style="vertical-align:middle;">?</span><div class="kpi-tooltip" style="display:none;">Gesamtbewertung 0–100 basierend auf Cash, Pipeline, Lizenzierung, Technologie, Risiko und Bewertung. Grün ≥80, Blau ≥60, Orange ≥40, Rot &lt;40</div></div>
+          <div style="font-size:11px;color:var(--text3);" id="oklo-kpi-score-sub">Wird berechnet...</div>
+        </div>
+      </div>
+      <div class="kpi-cat-grid">
+        <div class="kpi-cat" onclick="toggleDrill('oklo-kpi','cash')"><div class="kpi-cat-name">Cash <span class="kpi-info">?</span><div class="kpi-tooltip" style="display:none;">Verfügbares Kapital. Bei Oklo kritisch — noch ohne Umsatz, Reaktorbau kostet viel Geld</div></div><div class="kpi-cat-score" id="oklo-kpi-score-cash">—</div></div>
+        <div class="kpi-cat" onclick="toggleDrill('oklo-kpi','pipeline')"><div class="kpi-cat-name">Pipeline <span class="kpi-info">?</span><div class="kpi-tooltip" style="display:none;">Kundeninteresse in Gigawatt: ~14 GW inkl. Switch (12 GW), Meta (1.2 GW Ohio) und Equinix (500 MW)</div></div><div class="kpi-cat-score" id="oklo-kpi-score-pipeline">—</div></div>
+        <div class="kpi-cat" onclick="toggleDrill('oklo-kpi','lizenz')"><div class="kpi-cat-name">Lizenzierung <span class="kpi-info">?</span><div class="kpi-tooltip" style="display:none;">Ohne NRC-Lizenz kein Reaktorbetrieb — der wichtigste Meilenstein-Pfad für Oklo</div></div><div class="kpi-cat-score" id="oklo-kpi-score-lizenz">—</div></div>
+        <div class="kpi-cat" onclick="toggleDrill('oklo-kpi','tech')"><div class="kpi-cat-name">Technologie <span class="kpi-info">?</span><div class="kpi-tooltip" style="display:none;">Aurora: kompakter Schneller Reaktor (75 MWe), Bau am Idaho National Laboratory läuft</div></div><div class="kpi-cat-score" id="oklo-kpi-score-tech">—</div></div>
+        <div class="kpi-cat" onclick="toggleDrill('oklo-kpi','risiko')"><div class="kpi-cat-name">Risiko <span class="kpi-info">?</span><div class="kpi-tooltip" style="display:none;">Hoher Score = geringeres Risiko. Genehmigungen, Finanzierung, Zeitplan, Konkurrenz</div></div><div class="kpi-cat-score" id="oklo-kpi-score-risiko">—</div></div>
+        <div class="kpi-cat" onclick="toggleDrill('oklo-kpi','bewertung')"><div class="kpi-cat-name">Bewertung <span class="kpi-info">?</span><div class="kpi-tooltip" style="display:none;">Milliarden-Bewertung ohne Umsatz — der Kurs preist die Pipeline und den KI-Strombedarf ein</div></div><div class="kpi-cat-score" id="oklo-kpi-score-bewertung">—</div></div>
+      </div>
+      <div class="kpi-drill" id="oklo-kpi-drill-cash">
+        <div class="kpi-drill-row"><span class="kpi-drill-label">Cash Total</span><span class="kpi-drill-val"><span id="oklo-kpi-d-cash">—</span><span class="kpi-tag-sec">SEC</span></span></div>
+        <div class="kpi-drill-source" id="oklo-kpi-d-cash-src"></div>
+        <div class="kpi-drill-row"><span class="kpi-drill-label">Schulden</span><span class="kpi-drill-val"><span id="oklo-kpi-d-debt">—</span><span class="kpi-tag-sec">SEC</span></span></div>
+        <div class="kpi-drill-row"><span class="kpi-drill-label kpi-tooltip-wrap">Cash Runway <span class="kpi-info">?</span><div class="kpi-tooltip" style="display:none;">Wie lange reicht das Geld ohne neue Finanzierung?</div></span><span class="kpi-drill-val"><span id="oklo-kpi-d-runway">—</span><span class="kpi-tag-ki">KI</span></span></div>
+        <div class="kpi-drill-row"><span class="kpi-drill-label">Nettoverlust</span><span class="kpi-drill-val"><span id="oklo-kpi-d-netloss">—</span><span class="kpi-tag-sec">SEC</span></span></div>
+      </div>
+      <div class="kpi-drill" id="oklo-kpi-drill-pipeline">
+        <div class="kpi-drill-row"><span class="kpi-drill-label">Kunden-Pipeline</span><span class="kpi-drill-val"><span id="oklo-kpi-d-pipeline">—</span><span class="kpi-tag-ki">KI</span></span></div>
+        <div class="kpi-drill-row"><span class="kpi-drill-label">Grosskunden</span><span class="kpi-drill-val" id="oklo-kpi-d-kunden">—</span></div>
+        <div class="kpi-drill-row"><span class="kpi-drill-label">Neue Verträge</span><span class="kpi-drill-val"><span id="oklo-kpi-d-pipeline-neu">—</span><span class="kpi-tag-ki">KI</span></span></div>
+      </div>
+      <div class="kpi-drill" id="oklo-kpi-drill-lizenz">
+        <div class="kpi-drill-row"><span class="kpi-drill-label">NRC Status</span><span class="kpi-drill-val"><span id="oklo-kpi-d-nrc">—</span><span class="kpi-tag-ki">KI</span></span></div>
+        <div class="kpi-drill-row"><span class="kpi-drill-label kpi-tooltip-wrap">PDC Report <span class="kpi-info">?</span><div class="kpi-tooltip" style="display:none;">Principal Design Criteria — von der NRC im Mai 2026 im Schnellverfahren genehmigt. Grundlage für alle weiteren Lizenzanträge.</div></span><span class="kpi-drill-val" id="oklo-kpi-d-pdc">—</span></div>
+        <div class="kpi-drill-row"><span class="kpi-drill-label kpi-tooltip-wrap">COLA <span class="kpi-info">?</span><div class="kpi-tooltip" style="display:none;">Combined License Application — kombinierter Bau- und Betriebsantrag für Aurora-INL</div></span><span class="kpi-drill-val" id="oklo-kpi-d-cola">—</span></div>
+        <div class="kpi-drill-row"><span class="kpi-drill-label">DOE / INL</span><span class="kpi-drill-val" id="oklo-kpi-d-doe">—</span></div>
+      </div>
+      <div class="kpi-drill" id="oklo-kpi-drill-tech">
+        <div class="kpi-drill-row"><span class="kpi-drill-label">Aurora Leistung</span><span class="kpi-drill-val"><span id="oklo-kpi-d-leistung">—</span><span class="kpi-tag-ki">KI</span></span></div>
+        <div class="kpi-drill-row"><span class="kpi-drill-label">Baufortschritt INL</span><span class="kpi-drill-val" id="oklo-kpi-d-aurora">—</span></div>
+        <div class="kpi-drill-row"><span class="kpi-drill-label kpi-tooltip-wrap">Brennstoff (HALEU) <span class="kpi-info">?</span><div class="kpi-tooltip" style="display:none;">High-Assay Low-Enriched Uranium — spezieller Brennstoff für schnelle Reaktoren, knappes Gut</div></span><span class="kpi-drill-val" id="oklo-kpi-d-fuel">—</span></div>
+      </div>
+      <div class="kpi-drill" id="oklo-kpi-drill-risiko">
+        <div class="kpi-drill-row"><span class="kpi-drill-label">Genehmigung</span><span class="kpi-drill-val risk-val" id="oklo-kpi-d-risk-genehmigung">—</span></div>
+        <div class="kpi-drill-row"><span class="kpi-drill-label">Finanzierung / Dilution</span><span class="kpi-drill-val risk-val" id="oklo-kpi-d-risk-finanzierung">—</span></div>
+        <div class="kpi-drill-row"><span class="kpi-drill-label">Zeitplan</span><span class="kpi-drill-val risk-val" id="oklo-kpi-d-risk-zeitplan">—</span></div>
+      </div>
+      <div class="kpi-drill" id="oklo-kpi-drill-bewertung">
+        <div class="kpi-drill-row"><span class="kpi-drill-label kpi-tooltip-wrap">EV/Sales <span class="kpi-info">?</span><div class="kpi-tooltip" style="display:none;">Oklo hat noch keinen nennenswerten Umsatz — die Bewertung basiert komplett auf der Zukunft</div></span><span class="kpi-drill-val"><span id="oklo-kpi-d-evsales">—</span><span class="kpi-tag-ki">KI</span></span></div>
+        <div class="kpi-drill-row"><span class="kpi-drill-label kpi-tooltip-wrap">Kurs vs. Konsens <span class="kpi-info">?</span><div class="kpi-tooltip" style="display:none;">Wie weit ist der Kurs vom Analysten-Konsens entfernt?</div></span><span class="kpi-drill-val" id="oklo-kpi-d-vs-konsens">—</span></div>
+        <div class="kpi-drill-row"><span class="kpi-drill-label">Analysten-Range</span><span class="kpi-drill-val" id="oklo-kpi-d-analyst-range">—</span></div>
+      </div>
+      <div class="kpi-interp" id="oklo-kpi-interp2" style="display:none;"></div>
+      <div id="oklo-kpi-drivers2" style="display:none;">
+        <div style="font-size:11px;color:var(--text3);margin-top:8px;margin-bottom:4px;">Haupttreiber</div>
+        <div class="kpi-drivers" id="oklo-kpi-drivers2-list"></div>
+        <div style="font-size:11px;color:var(--text3);margin-top:6px;margin-bottom:4px;">Hauptrisiken</div>
+        <div class="kpi-drivers" id="oklo-kpi-risks2-list"></div>
+      </div>
+      <div class="kpi-source" id="oklo-kpi-ts2"></div>
+    </div>
+  </div>
+</div>
+<div class="card open" id="card-oklo-milestone">
+  <div class="card-header" onclick="toggleCard('oklo-milestone')">
+    <div class="card-icon">⚛️</div>
+    <div>
+      <div class="card-title">Meilenstein-Tracker</div>
+      <div class="card-sub">Aurora-INL · NRC · Kunden · Risiken</div>
+    </div>
+    <div class="card-arrow">▼</div>
+  </div>
+  <div class="card-body" id="body-oklo-milestone">
+    <div id="oklo-milestone-content">
+      <div class="kpi-section-title">Aurora Programm <span class="kpi-info">?</span><div class="kpi-tooltip" style="display:none;">Ohne fertigen Reaktor kein Umsatz — der Bau am Idaho National Laboratory ist der wichtigste operative KPI für Oklo</div> <span style="font-weight:400;text-transform:none;font-size:10px;color:var(--text3);">KI-Analyse</span></div>
+      <div id="oklo-aurora-status"><div style="color:var(--text3);font-size:13px;font-style:italic;">Wird aktualisiert...</div></div>
+      <div class="kpi-section-title" style="margin-top:12px;">Regulierung & Kunden</div>
+      <div class="kpi-grid">
+        <div class="kpi-box">
+          <div class="kpi-label">NRC Status <span class="kpi-info">?</span><div class="kpi-tooltip" style="display:none;">Die NRC (US-Atomaufsicht) hat im Mai 2026 Oklos Principal Design Criteria für Aurora genehmigt — im beschleunigten Verfahren</div></div>
+          <div class="kpi-val" id="oklo-nrc-status" style="font-size:12px;">—</div>
+        </div>
+        <div class="kpi-box">
+          <div class="kpi-label">DOE / INL <span class="kpi-info">?</span><div class="kpi-tooltip" style="display:none;">Partnerschaft mit dem Department of Energy: Standort und Brennstoff am Idaho National Laboratory</div></div>
+          <div class="kpi-val" id="oklo-doe-status" style="font-size:12px;">—</div>
+        </div>
+        <div class="kpi-box">
+          <div class="kpi-label">Kunden-Pipeline <span class="kpi-info">?</span><div class="kpi-tooltip" style="display:none;">~14 GW Kundeninteresse: Switch 12 GW Master Power Agreement, Meta 1.2 GW (Ohio, verbindlich), Equinix 500 MW LOI</div></div>
+          <div class="kpi-val" id="oklo-pipeline-gw">—</div>
+          <div class="kpi-sub" id="oklo-pipeline-list" style="font-size:10px;">—</div>
+        </div>
+        <div class="kpi-box">
+          <div class="kpi-label">Nächster Meilenstein <span class="kpi-info">?</span><div class="kpi-tooltip" style="display:none;">Der wichtigste bevorstehende operative Schritt</div></div>
+          <div class="kpi-val" id="oklo-next-milestone" style="font-size:11px;">—</div>
+        </div>
+      </div>
+      <div class="kpi-section-title" style="margin-top:12px;">Risikoampel</div>
+      <div class="risk-grid">
+        <div class="risk-item"><div class="risk-label">Genehmigung <span class="kpi-info">?</span><div class="kpi-tooltip" style="display:none;">Risiko dass NRC-Lizenzierung (COLA) länger dauert oder scheitert. 2022 wurde ein erster Antrag abgelehnt.</div></div><div class="risk-val" id="oklo-risk-genehmigung">—</div></div>
+        <div class="risk-item"><div class="risk-label">Finanzierung <span class="kpi-info">?</span><div class="kpi-tooltip" style="display:none;">Oklo verbrennt Cash ohne Umsatz (~$129 Mio Verlust/Jahr) — neue Aktienausgaben verwässern bestehende Aktionäre</div></div><div class="risk-val" id="oklo-risk-finanzierung">—</div></div>
+        <div class="risk-item"><div class="risk-label">Zeitplan <span class="kpi-info">?</span><div class="kpi-tooltip" style="display:none;">Risiko von Verzögerungen beim Aurora-Bau, HALEU-Brennstoff und der Umwandlung der Pipeline in echte Verträge</div></div><div class="risk-val" id="oklo-risk-zeitplan">—</div></div>
+        <div class="risk-item"><div class="risk-label">Konkurrenz <span class="kpi-info">?</span><div class="kpi-tooltip" style="display:none;">Andere SMR-Anbieter: NuScale, TerraPower, X-energy, Kairos — plus Gas, Solar+Speicher als Alternativen für Rechenzentren</div></div><div class="risk-val" id="oklo-risk-konkurrenz">—</div></div>
+      </div>
+      <div class="kpi-source" id="oklo-milestone-ts"></div>
+    </div>
+  </div>
+</div>
+<div class="card open" id="card-oklo-charts">
+  <div class="card-header" onclick="toggleCard('oklo-charts')">
+    <div class="card-icon">📈</div>
+    <div>
+      <div class="card-title">Kursverlauf & Szenarien</div>
+      <div class="card-sub">12 Monate · 5-Jahres-Forecast · Preisziele</div>
+    </div>
+    <div class="card-arrow">▼</div>
+  </div>
+  <div class="card-body" id="body-oklo-charts">
+    <div class="chart-tabs">
+      <button class="chart-tab active" id="oklo-tab-range" onclick="switchChartTab('oklo','range')">📉 Kursverlauf</button>
+      <button class="chart-tab" id="oklo-tab-1y" onclick="switchChartTab('oklo','1y')">📊 Szenarien</button>
+      <button class="chart-tab" id="oklo-tab-5y" onclick="switchChartTab('oklo','5y')">🔭 5-Jahres-Forecast</button>
+    </div>
+    <div class="chart-view active" id="oklo-view-range">
+      <div class="range-btns">
+        <button class="range-btn" onclick="loadRangeChart('oklo','1d')">1T</button>
+        <button class="range-btn" onclick="loadRangeChart('oklo','5d')">5T</button>
+        <button class="range-btn active" onclick="loadRangeChart('oklo','1mo')">1M</button>
+        <button class="range-btn" onclick="loadRangeChart('oklo','6mo')">6M</button>
+        <button class="range-btn" onclick="loadRangeChart('oklo','ytd')">YTD</button>
+        <button class="range-btn" onclick="loadRangeChart('oklo','1y')">1J</button>
+        <button class="range-btn" onclick="loadRangeChart('oklo','5y')">5J</button>
+      </div>
+      <div class="range-chart-wrap"><canvas id="oklo-range-chart"></canvas></div>
+      <div id="oklo-range-info" style="font-size:12px;margin-top:6px;text-align:right;"></div>
+    </div>
+    <div class="chart-view" id="oklo-view-1y">
+      <div class="chart-grid">
+        <div>
+          <div class="section-head">📈 Kursverlauf der letzten 12 Monate + Zukunftsszenarien</div>
+          <div class="chart-wrap"><canvas id="oklo-chart" role="img" aria-label="OKLO Chart"></canvas></div>
+          <div class="lgbox" id="oklo-lgbox">
+            <div class="lgr"><div class="lgl"><div class="lgs" style="background:var(--oklo);"></div></div><div><div class="lgt">Was wirklich passiert ist</div><div class="lgx" id="oklo-lg-actual">Echter Kursverlauf der letzten 12 Monate</div></div></div>
+            <div class="lgr"><div class="lgl"><div class="lgd" style="border-color:var(--green);"></div><div class="lgdot" style="background:var(--green);"></div></div><div><div class="lgt" style="color:var(--green);" id="oklo-lg-bull">Optimistisches Szenario — wird mit KI geladen</div></div></div>
+            <div class="lgr"><div class="lgl"><div class="lgd" style="border-color:var(--border2);"></div><div class="lgdot" style="background:#bbb;"></div></div><div><div class="lgt" style="color:var(--text3);" id="oklo-lg-base">Bankexperten-Konsens — wird mit KI geladen</div></div></div>
+            <div class="lgr"><div class="lgl"><div class="lgd" style="border-color:var(--red);"></div><div class="lgdot" style="background:var(--red);"></div></div><div><div class="lgt" style="color:var(--red);" id="oklo-lg-bear">Pessimistisches Szenario — wird mit KI geladen</div></div></div>
+          </div>
+        </div>
+        <div>
+          <div class="section-head">🎯 Wo könnte der Kurs in 12 Monaten stehen?</div>
+          <div class="section-head" id="oklo-scenarios-intro" style="font-size:13px;font-weight:400;color:var(--text2);text-transform:none;letter-spacing:0;margin-bottom:10px;">Analysten-Ziele und Szenarien</div>
+          <div id="oklo-scenarios-bars">
+            <div class="scr"><div class="scl">Bestmöglicher Fall</div><div class="scb"><div class="scf" style="width:100%;background:var(--green);"></div></div><div class="scv up" id="oklo-sc-bull">—</div></div>
+            <div class="scr"><div class="scl">Optimistischste Bank</div><div class="scb"><div class="scf" style="width:0%;background:var(--oklo);"></div></div><div class="scv mono" id="oklo-sc-opt">—</div></div>
+            <div class="scr"><div class="scl">Alle Banken (Durchschnitt)</div><div class="scb"><div class="scf" style="width:0%;background:#bbb;"></div></div><div class="scv nu" id="oklo-sc-base">—</div></div>
+            <div class="scr"><div class="scl">Vorsichtige Schätzung</div><div class="scb"><div class="scf" style="width:0%;background:var(--amber);"></div></div><div class="scv wn" id="oklo-sc-bear">—</div></div>
+          </div>
+          <div class="sentiment-box" id="oklo-sentiment-box" style="margin-top:14px;">
+            <div class="sentiment-title">💬 Social Media Sentiment</div>
+            <div class="sentiment-platforms">
+              <div class="sentiment-platform">
+                <div class="sentiment-platform-icon">🟠</div>
+                <div class="sentiment-platform-name">Reddit</div>
+                <div class="sentiment-platform-val neutral" id="oklo-sent-reddit">—</div>
+                <div class="sentiment-platform-sub" id="oklo-sent-reddit-sub">lädt...</div>
+              </div>
+              <div class="sentiment-platform">
+                <div class="sentiment-platform-icon">𝕏</div>
+                <div class="sentiment-platform-name">X / Twitter</div>
+                <div class="sentiment-platform-val neutral" id="oklo-sent-x">—</div>
+                <div class="sentiment-platform-sub" id="oklo-sent-x-sub">lädt...</div>
+              </div>
+              <div class="sentiment-platform">
+                <div class="sentiment-platform-icon">📊</div>
+                <div class="sentiment-platform-name">StockTwits</div>
+                <div class="sentiment-platform-val neutral" id="oklo-sent-st">—</div>
+                <div class="sentiment-platform-sub" id="oklo-sent-st-sub">lädt...</div>
+              </div>
+              <div class="sentiment-platform">
+                <div class="sentiment-platform-icon">✈️</div>
+                <div class="sentiment-platform-name">Telegram</div>
+                <div class="sentiment-platform-val neutral" id="oklo-sent-tg">—</div>
+                <div class="sentiment-platform-sub" id="oklo-sent-tg-sub">lädt...</div>
+              </div>
+              <div class="sentiment-platform">
+                <div class="sentiment-platform-icon">👥</div>
+                <div class="sentiment-platform-name">FB / IG</div>
+                <div class="sentiment-platform-val neutral" id="oklo-sent-fb">—</div>
+                <div class="sentiment-platform-sub" id="oklo-sent-fb-sub">lädt...</div>
+              </div>
+            </div>
+            <div class="sentiment-summary" id="oklo-sentiment-text" style="color:var(--text3);font-style:italic;">Wird mit KI geladen...</div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="chart-view" id="oklo-view-5y">
+      <div class="chart-disclaimer">⚠️ Spekulative Schätzung — kein Versprechen! Nutze dies als Denkrahmen, nicht als Prognose.</div>
+      <div class="chart-wrap" style="height:220px;"><canvas id="oklo-chart5" role="img"></canvas></div>
+      <div id="oklo-f5-milestones" class="f5-milestones">
+        <div class="f5-year"><div class="f5-yr-label">🐂 Bull-Szenario</div><div class="f5-assumption" id="oklo-f5-bull-note" style="color:var(--text3);font-style:italic;">Wird mit KI aktualisiert</div></div>
+        <div class="f5-year"><div class="f5-yr-label">📊 Base-Szenario</div><div class="f5-assumption" id="oklo-f5-base-note" style="color:var(--text3);font-style:italic;">Wird mit KI aktualisiert</div></div>
+        <div class="f5-year"><div class="f5-yr-label">🐻 Bear-Szenario</div><div class="f5-assumption" id="oklo-f5-bear-note" style="color:var(--text3);font-style:italic;">Wird mit KI aktualisiert</div></div>
+      </div>
+    </div>
+  </div>
+</div>
+<div class="card open" id="card-oklo-df">
+  <div class="card-header" onclick="toggleCard('oklo-df')">
+    <div class="card-icon">📅</div>
+    <div>
+      <div class="card-title">Was heute passieren könnte</div>
+      <div class="card-sub">ATR-basierte Tagesschätzung</div>
+    </div>
+    <div class="card-arrow">▼</div>
+  </div>
+  <div class="card-body" id="body-oklo-df">
+    <div class="day-fc">
+      <div class="df-range-wrap">
+        <div class="df-top-row">
+          <div class="df-stat-lo">
+            <div class="df-stat-lbl"><span>📉</span> Tagestief <span class="tip tip-left"><span class="tip-icon">?</span><span class="tip-box">Der niedrigste Kurs heute. Tiefes Tief bei hohem Volumen = Verkaufsdruck.</span></span></div>
+            <div class="df-stat-num dn mono" id="oklo-day-lo">—</div>
+          </div>
+          <div class="df-stat-mid">
+            <div class="df-stat-lbl">Eröffnung <span class="tip"><span class="tip-icon">?</span><span class="tip-box">Der erste Handelskurs heute um 09:30 Uhr NY Zeit.</span></span></div>
+            <div class="df-stat-num mono" id="oklo-open">—</div>
+          </div>
+          <div class="df-stat-hi">
+            <div class="df-stat-lbl">Tageshoch <span>📈</span> <span class="tip tip-right"><span class="tip-icon">?</span><span class="tip-box">Der höchste Kurs heute. Hohes Hoch bei positivem Momentum = Kaufinteresse.</span></span></div>
+            <div class="df-stat-num up mono" id="oklo-day-hi">—</div>
+          </div>
+        </div>
+        <div class="range-bar">
+          <div class="range-fill" id="oklo-range-fill" style="width:0%"></div>
+          <div class="range-dot" id="oklo-rdot" style="left:50%;color:var(--oklo);">
+            <div class="range-dot-label" id="oklo-rdot-lbl">—</div>
+          </div>
+        </div>
+        <div class="df-range-footer">
+          <span class="df-range-edge lo" id="oklo-lo-lbl">—</span>
+          <span class="df-range-mid">← Tagesbereich →</span>
+          <span class="df-range-edge hi" id="oklo-hi-lbl">—</span>
+        </div>
+      </div>
+      <div class="df-stats-row" id="oklo-df-stats">
+        <div class="df-stat-pill" id="oklo-df-atr">
+          <div class="df-pill-header">
+            <div class="df-pill-icon">⚡</div>
+            <span class="tip tip-left"><span class="tip-icon">?</span><span class="tip-box" id="oklo-df-atr-tip">ATR (Average True Range): durchschnittliche Tagesschwankung der letzten 5 Tage.</span></span>
+          </div>
+          <div class="df-pill-lbl">Schwankung</div>
+          <div class="df-pill-val" id="oklo-df-atr-val">—</div>
+          <div class="df-pill-sub" id="oklo-df-atr-sub">ATR</div>
+        </div>
+        <div class="df-stat-pill" id="oklo-df-mom">
+          <div class="df-pill-header">
+            <div class="df-pill-icon" id="oklo-df-mom-icon">📈</div>
+            <span class="tip"><span class="tip-icon">?</span><span class="tip-box" id="oklo-df-mom-tip">Kursbewegung der letzten 5 Tage. Positiv = Aufwärtstrend, Negativ = Abwärtstrend.</span></span>
+          </div>
+          <div class="df-pill-lbl">Momentum</div>
+          <div class="df-pill-val" id="oklo-df-mom-val">—</div>
+          <div class="df-pill-sub">5-Tage</div>
+        </div>
+        <div class="df-stat-pill" id="oklo-df-rsi">
+          <div class="df-pill-header">
+            <div class="df-pill-icon">🔬</div>
+            <span class="tip tip-right"><span class="tip-icon">?</span><span class="tip-box" id="oklo-df-rsi-tip">RSI über 70 = überkauft. RSI unter 30 = überverkauft. 30–70 = neutrale Zone.</span></span>
+          </div>
+          <div class="df-pill-lbl" id="oklo-df-rsi-lbl">RSI</div>
+          <div class="df-pill-val" id="oklo-df-rsi-val">—</div>
+          <div class="df-pill-sub" id="oklo-df-rsi-sub">—</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+<div class="card open" id="card-oklo-insider">
+  <div class="card-header" onclick="toggleCard('oklo-insider')">
+    <div class="card-icon">📋</div>
+    <div>
+      <div class="card-title">Insider-Trades</div>
+      <div class="card-sub">SEC Form 4 · Käufe & Verkäufe · <span style="color:var(--blue);font-weight:600;">Verifiziert</span></div>
+    </div>
+    <div class="card-arrow">▼</div>
+  </div>
+  <div class="card-body" id="body-oklo-insider">
+    <div id="oklo-insider-content" style="color:var(--text3);font-style:italic;font-size:13px;">Wird täglich mit KI aktualisiert...</div>
+  </div>
+</div>
+<div class="card open" id="card-oklo-pf">
+  <div class="card-header" onclick="toggleCard('oklo-pf')">
+    <div class="card-icon">🧮</div>
+    <div>
+      <div class="card-title">Dein Portfolio</div>
+      <div class="card-sub">Käufe & Verkäufe eintragen</div>
+    </div>
+    <div class="card-arrow">▼</div>
+  </div>
+  <div class="card-body" id="body-oklo-pf">
+    <div class="pf-new">
+      <div class="pf-form-title">
+        <span>Transaktion</span>
+        <button class="pf-export-btn" onclick="exportPortfolio('oklo')" title="Export CSV">⬇ CSV</button>
+      </div>
+      <div class="pf-form">
+        <div class="pf-row">
+          <select class="pf-select pf-select-type" id="oklo-tx-type">
+            <option value="buy">📈 Kauf</option>
+            <option value="sell">📉 Verkauf</option>
+          </select>
+          <input class="pf-input pf-input-date" id="oklo-tx-date" type="date">
+        </div>
+        <div class="pf-row">
+          <input class="pf-input" id="oklo-tx-qty" type="number" placeholder="Anzahl Aktien" min="0.01" step="0.01">
+          <input class="pf-input" id="oklo-tx-price" type="number" placeholder="Preis $" min="0.01" step="0.01">
+        </div>
+        <input class="pf-input" id="oklo-tx-note" type="text" placeholder="Notiz (optional)">
+        <button class="pf-add" onclick="addTx('oklo')" id="oklo-add-btn">＋ Hinzufügen</button>
+      </div>
+    </div>
+    <div class="pf-tx-list" id="oklo-tx-list">
+      <div class="pf-empty" id="oklo-tx-empty">Noch keine Transaktionen erfasst.</div>
+    </div>
+    <div class="pf-summary" id="oklo-pf-summary" style="display:none;">
+      <div class="pf-sum-header"><div class="section-head">Portfolio-Übersicht</div><div class="pf-currency-toggle"><button id="oklo-cur-usd" class="active" onclick="setCurrency('oklo','USD')">USD</button><button id="oklo-cur-chf" onclick="setCurrency('oklo','CHF')">CHF</button></div></div>
+      <div class="pf-sum-grid">
+        <div class="pf-sum-item"><div class="pf-sum-label">Aktien im Besitz</div><div class="pf-sum-val mono" id="oklo-sum-qty">0</div></div>
+        <div class="pf-sum-item"><div class="pf-sum-label">Ø Kaufpreis</div><div class="pf-sum-val mono" id="oklo-sum-avg">—</div></div>
+        <div class="pf-sum-item"><div class="pf-sum-label">Aktueller Wert</div><div class="pf-sum-val mono" id="oklo-sum-val">—</div></div>
+        <div class="pf-sum-item"><div class="pf-sum-label">Investiert</div><div class="pf-sum-val mono" id="oklo-sum-invested">—</div></div>
+        <div class="pf-sum-item" style="grid-column:1/-1;"><div class="pf-sum-label">Unrealisierter Gewinn/Verlust</div><div class="pf-sum-val" id="oklo-sum-unrealized">—</div></div>
+      </div>
+      <div class="pf-scenarios">
+        <div class="pf-sc bull"><div class="pf-sc-label">🐂 Bull-Szenario</div><div class="pf-sc-val" id="oklo-sum-bull">—</div><div style="font-size:11px;color:var(--green);margin-top:2px;" id="oklo-sum-bull-gain"></div></div>
+        <div class="pf-sc bear"><div class="pf-sc-label">🐻 Bear-Szenario</div><div class="pf-sc-val" id="oklo-sum-bear">—</div><div style="font-size:11px;color:var(--red);margin-top:2px;" id="oklo-sum-bear-loss"></div></div>
+      </div>
+    </div>
+  </div>
+</div>
+<div class="card open" id="card-oklo-news">
+  <div class="card-header" onclick="toggleCard('oklo-news')">
+    <div class="card-icon">📰</div>
+    <div>
+      <div class="card-title">Nachrichten & Marktanalyse</div>
+      <div class="card-sub">Täglich um 13:00 Uhr aktualisiert</div>
+    </div>
+    <div class="card-arrow">▼</div>
+  </div>
+  <div class="card-body" id="body-oklo-news">
+    <div class="news-header">
+      <div id="oklo-earnings-bar" style="display:none;" class="earnings-bar">
+        <span>📅</span>
+        <span class="earnings-label">Nächste Earnings: <b id="oklo-earnings-date">—</b></span>
+        <span class="earnings-countdown" id="oklo-earnings-countdown"></span>
+      </div>
+      <div class="news-meta-row">
+        <div class="news-live"><div class="live-dot"></div>Nachrichten · OKLO</div>
+        <div class="news-ts" id="oklo-news-ts"></div>
+      </div>
+      <div class="news-source-hint">📰 KI-kuratiert aus SpaceNews, Bloomberg, Reuters, SEC u.v.m.</div>
+    </div>
+    <div class="news-loading" id="oklo-news-loading">
+      <div class="news-spin"></div>
+      <span id="oklo-news-loading-txt">Lade Nachrichten...</span>
+    </div>
+    <div class="news-content" id="oklo-news-content"></div>
+  </div>
+</div>
+<div class="card open" id="card-oklo-sector">
+  <div class="card-header" onclick="toggleCard('oklo-sector')">
+    <div class="card-icon">🌌</div>
+    <div>
+      <div class="card-title">Sektor-Kontext & Einflussfaktoren</div>
+      <div class="card-sub">KI-Rechenzentren, SMR-Konkurrenz, Uran/HALEU</div>
+    </div>
+    <div class="card-arrow">▼</div>
+  </div>
+  <div class="card-body" id="body-oklo-sector">
+    <div class="sector-intro" id="oklo-sector-intro">Externe Faktoren die den Kurs beeinflussen:</div>
+    <div class="sector-grid" id="oklo-sector-grid">
+                            </div>
+  </div>
+</div>
+<div class="card open" id="card-oklo-gov">
+  <div class="card-header" onclick="toggleCard('oklo-gov')">
+    <div class="card-icon">🏛</div>
+    <div>
+      <div class="card-title">US Regulierung & Aufträge</div>
+      <div class="card-sub">NRC · DOE · DoD · HALEU</div>
+    </div>
+    <div class="card-arrow">▼</div>
+  </div>
+  <div class="card-body" id="body-oklo-gov">
+    <div class="gov-grid">
+      <div class="gov-item">
+        <div class="gov-item-header"><div class="gov-item-emoji">☢️</div><div class="gov-item-name">NRC Lizenzierung</div></div>
+        <div class="gov-item-val" id="oklo-gov-nrc-status">Lädt...</div>
+        <div class="gov-item-desc" id="oklo-gov-nrc-desc">PDC genehmigt Mai 2026 · COLA folgt</div>
+      </div>
+      <div class="gov-item">
+        <div class="gov-item-header"><div class="gov-item-emoji">🏗</div><div class="gov-item-name">DOE / INL</div></div>
+        <div class="gov-item-val" id="oklo-gov-doe-val">Lädt...</div>
+        <div class="gov-item-desc" id="oklo-gov-doe-desc">Standort & Reaktor-Pilotprogramm</div>
+      </div>
+      <div class="gov-item">
+        <div class="gov-item-header"><div class="gov-item-emoji">⚔️</div><div class="gov-item-name">DoD / Air Force</div></div>
+        <div class="gov-item-val" id="oklo-gov-dod-val">Lädt...</div>
+        <div class="gov-item-desc" id="oklo-gov-dod-desc">Mikroreaktor Eielson AFB (Alaska)</div>
+      </div>
+      <div class="gov-item">
+        <div class="gov-item-header"><div class="gov-item-emoji">🧪</div><div class="gov-item-name">HALEU Brennstoff</div></div>
+        <div class="gov-item-val" id="oklo-gov-fuel-status">Lädt...</div>
+        <div class="gov-item-desc" id="oklo-gov-fuel-desc">DOE-Zuteilung & Recycling-Projekte</div>
+      </div>
+    </div>
+  </div>
+</div>
 </div>
 
 <!-- ═══ GLOSSAR ═══ -->
@@ -2136,6 +3135,13 @@ body{font-family:var(--font-sans);background:var(--bg);color:var(--text);min-hei
       <div class="gitem"><div class="gitem-term">🟢 Kaufdruck</div><div class="gitem-def">Viele Leute kaufen gerade gleichzeitig. Das treibt den Kurs nach oben — wie wenn alle gleichzeitig ein Produkt wollen, steigt der Preis.</div></div>
       <div class="gitem"><div class="gitem-term">🔴 Verkaufsdruck</div><div class="gitem-def">Viele Leute verkaufen gerade gleichzeitig. Der Kurs fällt dabei stark. Kann bedeuten: schlechte News, Panik, oder grosse Investoren steigen aus.</div></div>
       <div class="gitem"><div class="gitem-term">⚖️ Unentschieden</div><div class="gitem-def">Viel Handel, aber der Kurs bewegt sich kaum. Käufer und Verkäufer sind gleich stark. Das passiert oft kurz bevor der Kurs eine klare Richtung einschlägt.</div></div>
+      <div class="gitem"><div class="gitem-term">Aurora-Reaktor</div><div class="gitem-def">Oklos kompakter Schneller Reaktor (75 MWe). Erste Anlage entsteht am Idaho National Laboratory — Strom für KI-Rechenzentren.</div></div>
+      <div class="gitem"><div class="gitem-term">SMR (Small Modular Reactor)</div><div class="gitem-def">Kleine, modulare Kernreaktoren die in Serie gebaut werden können. Oklos Marktsegment — Konkurrenten: NuScale, TerraPower, X-energy.</div></div>
+      <div class="gitem"><div class="gitem-term">NRC</div><div class="gitem-def">Nuclear Regulatory Commission — die US-Atomaufsicht. Ohne ihre Lizenz darf Oklo keinen Reaktor betreiben. PDC-Report im Mai 2026 genehmigt.</div></div>
+      <div class="gitem"><div class="gitem-term">HALEU</div><div class="gitem-def">High-Assay Low-Enriched Uranium — höher angereicherter Brennstoff für schnelle Reaktoren wie Aurora. Knappes Gut, wichtiger Engpass.</div></div>
+      <div class="gitem"><div class="gitem-term">Starship</div><div class="gitem-def">Die riesige, voll wiederverwendbare SpaceX-Rakete — Schlüssel für Mars-Missionen, Artemis-Mondlandung und drastisch günstigere Starts.</div></div>
+      <div class="gitem"><div class="gitem-term">Starlink</div><div class="gitem-def">Das SpaceX Satelliten-Internet mit über 10 Mio Kunden — grösster Umsatzbringer und einziges profitables Segment des Konzerns.</div></div>
+      <div class="gitem"><div class="gitem-term">IPO</div><div class="gitem-def">Initial Public Offering = Börsengang. SpaceX ging im Juni 2026 zu $135/Aktie an die NASDAQ — der grösste IPO der Geschichte ($85.7 Mrd).</div></div>
       <div class="gitem"><div class="gitem-term">Schwaches Kaufinteresse</div><div class="gitem-def">Der Kurs steigt, aber nur wenige handeln. Vergleich: ein Produkt wird teurer, aber kaum jemand kauft es — der Preis könnte bald wieder fallen.</div></div>
     </div>
   </div>
@@ -2146,7 +3152,7 @@ body{font-family:var(--font-sans);background:var(--bg);color:var(--text);min-hei
 <div class="auth-overlay hidden" id="auth-overlay">
   <div class="auth-box">
     <div class="auth-logo">🚀</div>
-    <div class="auth-title">Space Stocks Dashboard</div>
+    <div class="auth-title">My Stocks Dashboard</div>
     <div class="auth-sub">Gib deine Email ein — du bekommst einen Magic Link zum Einloggen. Kein Passwort nötig.</div>
     <div id="auth-email-view">
       <input class="auth-input" id="auth-email" type="email" placeholder="deine@email.com" onkeydown="if(event.key==='Enter')sendMagicLink()">
@@ -2260,7 +3266,7 @@ function showUserMenu(email) {
 // ── Portfolio DB Sync ──────────────────────
 async function savePortfolioToDB() {
   if (!_supaClient || !currentUser) { return; }
-  ['rklb','asts'].forEach(async t => {
+  TICKERS_ALL.forEach(async t => {
     // Delete existing and reinsert (simple approach)
     await _supaClient.from('transactions').delete().eq('user_id', currentUser.id).eq('ticker', t);
     if (txData[t].length > 0) {
@@ -2288,8 +3294,9 @@ async function loadPortfolioFromDB() {
       .order('created_at', { ascending: true });
     if (error) throw error;
     if (data && data.length > 0) {
-      txData.rklb = []; txData.asts = [];
+      TICKERS_ALL.forEach(t => { txData[t] = []; });
       data.forEach(row => {
+        if (!txData[row.ticker]) return;
         txData[row.ticker].push({
           id: row.id,
           type: row.type,
@@ -2299,8 +3306,7 @@ async function loadPortfolioFromDB() {
           note: row.note || ''
         });
       });
-      renderTxList('rklb'); renderTxList('asts');
-      recalcPF('rklb'); recalcPF('asts');
+      TICKERS_ALL.forEach(t => { renderTxList(t); recalcPF(t); });
     }
   } catch(e) { console.warn('loadPortfolioFromDB:', e.message); }
 }
@@ -2315,14 +3321,22 @@ const fmt = n => n >= 1000 ? n.toLocaleString('en-US', {minimumFractionDigits:2,
 const fmtB = n => n >= 1e12 ? (n/1e12).toFixed(2)+'T' : n >= 1e9 ? (n/1e9).toFixed(1)+'B' : n >= 1e6 ? (n/1e6).toFixed(0)+'M' : n;
 const fmtK = n => n >= 1e6 ? (n/1e6).toFixed(1)+'M' : n >= 1e3 ? (n/1e3).toFixed(0)+'K' : n;
 const stripTags = s => (typeof s === 'string' ? s.replace(/<[^>]*>/g, '') : String(s||''));
+const TICKERS_ALL = ['rklb','asts','spcx','oklo'];
+const SYMBOLS = { rklb:'RKLB', asts:'ASTS', spcx:'SPCX', oklo:'OKLO' };
+const TICKER_COLORS = {
+  rklb:{line:'#1d4ed8',bg:'rgba(29,78,216,.06)'},
+  asts:{line:'#15803d',bg:'rgba(21,128,61,.06)'},
+  spcx:{line:'#64748b',bg:'rgba(100,116,139,.06)'},
+  oklo:{line:'#b45309',bg:'rgba(180,83,9,.06)'}
+};
 
 // ── State ──────────────────────────────────────────────────
 const chartInstances = {};
-const forecastTargets = { rklb:{bull:null,base:null,bear:null}, asts:{bull:null,base:null,bear:null} };
+const forecastTargets = { rklb:{bull:null,base:null,bear:null}, asts:{bull:null,base:null,bear:null}, spcx:{bull:null,base:null,bear:null}, oklo:{bull:null,base:null,bear:null} };
 const mo = ['Jun','Jul','Aug','Sep','Okt','Nov','Dez','Jan','Feb','Mär','Apr','Mai','Jun→','Jul→','Aug→','Sep→'];
-const quotes = { rklb: null, asts: null };
-const txData = { rklb: [], asts: [] };
-const pfCurrency = { rklb: 'USD', asts: 'USD' };
+const quotes = { rklb: null, asts: null, spcx: null, oklo: null };
+const txData = { rklb: [], asts: [], spcx: [], oklo: [] };
+const pfCurrency = { rklb: 'USD', asts: 'USD', spcx: 'USD', oklo: 'USD' };
 let usdChfRate = 0.9; // fallback, fetched live
 
 async function fetchUsdChfRate() {
@@ -2356,7 +3370,8 @@ function fmtCur(t, usdVal) {
   }
   return '$' + fmt(usdVal);
 }
-let autoTimer = null, autoCountdown = null, _astsChartsInited = false;
+let autoTimer = null, autoCountdown = null;
+const _chartsInited = { asts:false, spcx:false, oklo:false };
 
 // ── localStorage helpers ───────────────────────────────────
 function saveKey(val) { try { localStorage.setItem('space_api_key', val); } catch(e){} }
@@ -2376,7 +3391,7 @@ function saveTx(t) {
   savePortfolioToDB(); // sync to Supabase
 }
 function loadTx() {
-  ['rklb','asts'].forEach(t => {
+  TICKERS_ALL.forEach(t => {
     try {
       const d = localStorage.getItem('space_tx_'+t);
       if (d) { txData[t] = JSON.parse(d); renderTxList(t); }
@@ -2388,7 +3403,7 @@ function loadTx() {
 let activeTab = 'rklb';
 function switchTab(id) {
   activeTab = id;
-  ['rklb','asts','spcx'].forEach(t => {
+  TICKERS_ALL.forEach(t => {
     const panel = $('p-'+t);
     if (panel) panel.classList.toggle('active', t===id);
     const ctxEl = $('ctx-'+t);
@@ -2400,11 +3415,8 @@ function switchTab(id) {
     if (btn) btn.classList.toggle('active', t===id);
     const govEl = $('card-'+t+'-gov');
     if (govEl) govEl.style.display = t===id ? 'block' : 'none';
-    const spcxGovEl = $('card-spcx-gov');
-    if (spcxGovEl) spcxGovEl.style.display = id==='spcx' ? 'block' : 'none';
   });
-  if (id === 'asts') setTimeout(initAstsCharts, 50);
-  if (id === 'spcx') loadSpcxData();
+  if (id !== 'rklb') setTimeout(() => initTickerCharts(id), 50);
 }
 
 // ── Card Toggle ────────────────────────────────────────────
@@ -2422,7 +3434,7 @@ document.addEventListener('click', e => {
 });
 
 // ── Chart Tab Switch ───────────────────────────────────────
-const rangeChartLoaded = { rklb: false, asts: false };
+const rangeChartLoaded = { rklb: false, asts: false, spcx: false, oklo: false };
 const rangeChartInstances = {};
 
 async function loadRangeChart(t, range) {
@@ -2437,7 +3449,7 @@ async function loadRangeChart(t, range) {
   });
   if (infoEl) infoEl.textContent = 'Lade...';
   try {
-    const sym = t === 'rklb' ? 'RKLB' : 'ASTS';
+    const sym = SYMBOLS[t] || t.toUpperCase();
     const r = await fetch('/api/history?ticker='+sym+'&range='+range);
     if (r.status === 404) throw new Error('Chart-API nicht gefunden — bitte Seite neu laden');
     if (r.status === 502) throw new Error('Yahoo Finance nicht erreichbar');
@@ -2457,9 +3469,9 @@ async function loadRangeChart(t, range) {
     const first = prices[0], last = prices[prices.length-1];
     const chg = last - first, chgPct = chg/first*100;
     const up = chg >= 0;
-    const baseColor = t === 'rklb' ? '#1d4ed8' : '#15803d';
+    const baseColor = TICKER_COLORS[t].line;
     const lineColor = up ? baseColor : '#ef4444';
-    const bgColor = up ? (t==='rklb' ? 'rgba(29,78,216,0.06)' : 'rgba(21,128,61,0.06)') : 'rgba(239,68,68,0.06)';
+    const bgColor = up ? TICKER_COLORS[t].bg : 'rgba(239,68,68,0.06)';
     if (rangeChartInstances[t+'-range']) { rangeChartInstances[t+'-range'].destroy(); }
     rangeChartInstances[t+'-range'] = new Chart(canvas, {
       type: 'line',
@@ -2606,18 +3618,20 @@ function build5yrChart(ticker, canvasId) {
   });
 }
 
-// ── ASTS Lazy Init ─────────────────────────────────────────
-function initAstsCharts() {
-  if (_astsChartsInited) return;
-  _astsChartsInited = true;
-  buildHistoryChart('asts','asts-chart','#15803d','rgba(21,128,61,.06)',forecastTargets.asts.bull,forecastTargets.asts.base,forecastTargets.asts.bear);
-  build5yrChart('asts','asts-chart5');
+// ── Lazy Chart Init (all non-default tabs) ─────────────────
+function initTickerCharts(t) {
+  if (t === 'rklb' || _chartsInited[t]) return;
+  if (!$(t+'-chart')) return;
+  _chartsInited[t] = true;
+  const c = TICKER_COLORS[t];
+  buildHistoryChart(t, t+'-chart', c.line, c.bg, forecastTargets[t].bull, forecastTargets[t].base, forecastTargets[t].bear);
+  build5yrChart(t, t+'-chart5');
 }
 
 // ── Fetch Quote ────────────────────────────────────────────
 async function fetchQ(ticker) {
   try {
-    const r = await fetch('/api/quote?ticker='+ticker);
+    const r = await fetch('/api/quote?ticker='+(SYMBOLS[ticker]||ticker));
     if (!r.ok) throw new Error(r.status);
     const d = await r.json();
     if (d.error) throw new Error(d.error);
@@ -2728,8 +3742,10 @@ function applyQ(t, q) {
   if ($(t+'-52w') && q.lo52 && q.hi52) $(t+'-52w').textContent = '$'+fmt(q.lo52)+' → $'+fmt(q.hi52);
   calcDF(t, q);
   recalcPF(t);
-  if (t==='rklb') buildHistoryChart('rklb','rklb-chart','#1d4ed8','rgba(29,78,216,.06)',forecastTargets.rklb.bull,forecastTargets.rklb.base,forecastTargets.rklb.bear);
-  else if (_astsChartsInited) buildHistoryChart('asts','asts-chart','#15803d','rgba(21,128,61,.06)',forecastTargets.asts.bull,forecastTargets.asts.base,forecastTargets.asts.bear);
+  if (t==='rklb' || _chartsInited[t]) {
+    const cc = TICKER_COLORS[t];
+    buildHistoryChart(t, t+'-chart', cc.line, cc.bg, forecastTargets[t].bull, forecastTargets[t].base, forecastTargets[t].bear);
+  }
   pEl.style.textShadow = up?'0 0 10px rgba(22,163,74,.3)':'0 0 10px rgba(220,38,38,.3)';
   setTimeout(()=>pEl.style.textShadow='', 900);
 }
@@ -2949,33 +3965,45 @@ async function loadFromCache() {
     // Scenarios zuerst — setzt analyst_konsens bevor applyRec überschreiben kann
     {fn:(d,ts)=>applyScenarios('rklb',d),  section:'scenarios', ticker:'rklb'},
     {fn:(d,ts)=>applyScenarios('asts',d),  section:'scenarios', ticker:'asts'},
+    {fn:(d,ts)=>applyScenarios('spcx',d),  section:'scenarios', ticker:'spcx'},
+    {fn:(d,ts)=>applyScenarios('oklo',d),  section:'scenarios', ticker:'oklo'},
     // Rec
     {fn:(d,ts)=>applyRec('rklb',d),        section:'rec',       ticker:'rklb'},
     {fn:(d,ts)=>applyRec('asts',d),        section:'rec',       ticker:'asts'},
+    {fn:(d,ts)=>applyRec('spcx',d),        section:'rec',       ticker:'spcx'},
+    {fn:(d,ts)=>applyRec('oklo',d),        section:'rec',       ticker:'oklo'},
     // News
     {fn:(d,ts)=>applyLiveNewsData('rklb',d,ts), section:'news', ticker:'rklb'},
     {fn:(d,ts)=>applyLiveNewsData('asts',d,ts), section:'news', ticker:'asts'},
     {fn:(d,ts)=>applyLiveNewsData('spcx',d,ts), section:'news', ticker:'spcx'},
+    {fn:(d,ts)=>applyLiveNewsData('oklo',d,ts), section:'news', ticker:'oklo'},
     // Sector
     {fn:(d,ts)=>applySector('rklb',d),     section:'sector',    ticker:'rklb'},
     {fn:(d,ts)=>applySector('asts',d),     section:'sector',    ticker:'asts'},
     {fn:(d,ts)=>applySector('spcx',d),     section:'sector',    ticker:'spcx'},
+    {fn:(d,ts)=>applySector('oklo',d),     section:'sector',    ticker:'oklo'},
     // CTX
     {fn:(d,ts)=>applyCtx('rklb',d),        section:'ctx',       ticker:'rklb'},
     {fn:(d,ts)=>applyCtx('asts',d),        section:'ctx',       ticker:'asts'},
     {fn:(d,ts)=>applyCtx('spcx',d),        section:'ctx',       ticker:'spcx'},
+    {fn:(d,ts)=>applyCtx('oklo',d),        section:'ctx',       ticker:'oklo'},
     // Glossar
     {fn:(d,ts)=>applyGlossar(d),           section:'glossar',   ticker:null},
-    // KPI — beide Funktionen lesen von derselben Section
+    // KPI / Milestone — beide Funktionen lesen von derselben Section
     {fn:(d,ts)=>{applyRklbKpi(d);applyRklbMilestone(d);}, section:'kpi', ticker:'rklb'},
     {fn:(d,ts)=>{applyAstsMilestone(d);applyAstsKpi(d);}, section:'milestone', ticker:'asts'},
+    {fn:(d,ts)=>{applySpcxMilestone(d);applySpcxKpi(d);}, section:'milestone', ticker:'spcx'},
+    {fn:(d,ts)=>{applyOkloMilestone(d);applyOkloKpi(d);}, section:'milestone', ticker:'oklo'},
     // Insider
     {fn:(d,ts)=>applyInsider('rklb',d),    section:'insider',   ticker:'rklb'},
     {fn:(d,ts)=>applyInsider('asts',d),    section:'insider',   ticker:'asts'},
+    {fn:(d,ts)=>applyInsider('spcx',d),    section:'insider',   ticker:'spcx'},
+    {fn:(d,ts)=>applyInsider('oklo',d),    section:'insider',   ticker:'oklo'},
     // Gov
     {fn:(d,ts)=>applyGovSpace('rklb',d),   section:'gov_space', ticker:'rklb'},
     {fn:(d,ts)=>applyGovSpace('asts',d),   section:'gov_space', ticker:'asts'},
     {fn:(d,ts)=>applyGovSpace('spcx',d),   section:'gov_space', ticker:'spcx'},
+    {fn:(d,ts)=>applyGovSpace('oklo',d),   section:'gov_space', ticker:'oklo'},
   ];
   let loaded=0;
   for(const s of sections){
@@ -3045,14 +4073,17 @@ function applyScenarios(t,p) {
   if(p.intro&&$(t+'-scenarios-intro')) $(t+'-scenarios-intro').textContent=stripTags(p.intro);
   const barsEl=document.getElementById(t+'-scenarios-bars');
   if(barsEl&&p.bull_label){
-    const tc=t==='rklb'?'--rklb':'--asts';
+    const tc='--'+t;
     const clamp = v => Math.min(100, Math.max(0, v||0));
     barsEl.innerHTML='<div class="scr"><div class="scl">Bestmöglicher Fall</div><div class="scb"><div class="scf" style="width:100%;background:var(--green)"></div></div><div class="scv up">'+p.bull_label+'</div></div>'+'<div class="scr"><div class="scl">Optimistischste Bank</div><div class="scb"><div class="scf" style="width:'+clamp(p.opt_pct||50)+'%;background:var('+tc+')"></div></div><div class="scv mono">'+p.opt_label+'</div></div>'+'<div class="scr"><div class="scl">Alle Banken (Ø)</div><div class="scb"><div class="scf" style="width:'+clamp(p.base_pct||40)+'%;background:#bbb"></div></div><div class="scv nu">'+p.base_label+'</div></div>'+'<div class="scr"><div class="scl">Vorsichtige Schätzung</div><div class="scb"><div class="scf" style="width:'+clamp(p.bear_pct||30)+'%;background:var(--amber)"></div></div><div class="scv wn">'+p.bear_label+'</div></div>';
   }
   if(p.bull_target&&p.base_target&&p.bear_target){
     forecastTargets[t]={bull:p.bull_target,base:p.base_target,bear:p.bear_target,bull5:p.bull5yr||null,base5:p.base5yr||null,bear5:p.bear5yr||null};
-    if(t==='rklb'){buildHistoryChart('rklb','rklb-chart','#1d4ed8','rgba(29,78,216,.06)',p.bull_target,p.base_target,p.bear_target);build5yrChart('rklb','rklb-chart5');}
-    else if(_astsChartsInited){buildHistoryChart('asts','asts-chart','#15803d','rgba(21,128,61,.06)',p.bull_target,p.base_target,p.bear_target);build5yrChart('asts','asts-chart5');}
+    if(t==='rklb' || _chartsInited[t]){
+      const cc = TICKER_COLORS[t];
+      buildHistoryChart(t, t+'-chart', cc.line, cc.bg, p.bull_target, p.base_target, p.bear_target);
+      build5yrChart(t, t+'-chart5');
+    }
   }
   if($(t+'-lg-bull')&&p.bull_desc) $(t+'-lg-bull').textContent=stripTags(p.bull_desc);
   if($(t+'-lg-base')&&p.base_desc) $(t+'-lg-base').textContent=stripTags(p.base_desc);
@@ -3125,37 +4156,7 @@ async function fetchCtxBar(t) {
   catch(e){ console.warn('fetchCtxBar:',e.message); }
 }
 
-const GLOSSAR_PROMPT=`Du bist Finanz-Erklärer. Suche das aktuelle Budget des US "Golden Dome" Programms. Welche 2-4 neue Fachbegriffe tauchen in RKLB/ASTS News auf? Antworte NUR mit JSON: {"golden_dome_def":"US-Raketenabwehr (BETRAG). Rocket Lab Lieferant.","terms":[{"term":"Begriff","def":"Erklärung"}]}`;
-async function loadSpcxData() {
-  // Load SpaceX news and sector from cache
-  const news = await fetchFromCache('news', 'spcx');
-  if (news && news.data) applyLiveNewsData('spcx', news.data, news.updated_at);
-  const sector = await fetchFromCache('sector', 'spcx');
-  if (sector && sector.data) applySpcxSector(sector.data);
-  const ctx = await fetchFromCache('ctx', 'spcx');
-  if (ctx && ctx.data) {
-    if ($('spcx-ctx-desc') && ctx.data.desc) $('spcx-ctx-desc').textContent = stripTags(ctx.data.desc);
-    if ($('spcx-stat-val') && ctx.data.stats && ctx.data.stats[0]) $('spcx-stat-val').textContent = ctx.data.stats[0].label + ' ' + ctx.data.stats[0].val;
-  }
-}
-
-function applySpcxSector(p) {
-  if (!p) return;
-  if ($('spcx-sector-intro') && p.intro) $('spcx-sector-intro').textContent = stripTags(p.intro);
-  if (p.cards && p.cards.length) {
-    const ids = ['starlink', 'falcon', 'starship', 'market'];
-    p.cards.forEach((c, i) => {
-      if (ids[i]) {
-        if ($('spcx-'+ids[i]+'-val')) $('spcx-'+ids[i]+'-val').textContent = c.val || '—';
-        if ($('spcx-'+ids[i]+'-desc')) $('spcx-'+ids[i]+'-desc').textContent = stripTags(c.desc || '');
-      }
-    });
-  }
-  if (p.ipo_status && $('spcx-ipo-status')) $('spcx-ipo-status').textContent = stripTags(p.ipo_status);
-  if (p.ipo_date && $('spcx-ipo-date')) $('spcx-ipo-date').textContent = stripTags(String(p.ipo_date||''));
-  if (p.bewertung && $('spcx-val')) $('spcx-val').textContent = stripTags(String(p.bewertung||''));
-}
-
+const GLOSSAR_PROMPT=`Du bist Finanz-Erklärer. Suche das aktuelle Budget des US "Golden Dome" Programms. Welche 2-4 neue Fachbegriffe tauchen in RKLB/ASTS/SPCX/OKLO News auf? Antworte NUR mit JSON: {"golden_dome_def":"US-Raketenabwehr (BETRAG). Rocket Lab Lieferant.","terms":[{"term":"Begriff","def":"Erklärung"}]}`;
 // ── Push Notifications ──────────────────────────────────────
 async function togglePushPermission() {
   const btn = document.getElementById('push-toggle-btn');
@@ -3212,7 +4213,7 @@ function showToast(msg, duration=3000) {
 
 // Notify when fresh KI data loaded
 function notifyNewData(ticker) {
-  sendPushIfEnabled(`Space Stocks — Neue Daten`, `${ticker.toUpperCase()} Analyse wurde aktualisiert`);
+  sendPushIfEnabled(`My Stocks — Neue Daten`, `${ticker.toUpperCase()} Analyse wurde aktualisiert`);
 }
 
 // ── Portfolio Export ────────────────────────────────────────
@@ -3358,6 +4359,25 @@ async function loadFinancials(t) {
       if (d.net_income_m != null && $('asts-kpi-d-netloss')) {
         $('asts-kpi-d-netloss').textContent = fmt(d.net_income_m);
         $('asts-kpi-d-netloss').style.color = d.net_income_m < 0 ? 'var(--red)' : 'var(--green)';
+      }
+    }
+
+    if (t === 'spcx' || t === 'oklo') {
+      if (d.revenue?.latest_m != null && $(t+'-kpi-d-rev')) {
+        const yoyG = d.revenue.yoy_pct;
+        const arrowG = yoyG > 0 ? ' <span class="kpi-trend-up">↑</span>' : yoyG < 0 ? ' <span class="kpi-trend-down">↓</span>' : '';
+        $(t+'-kpi-d-rev').innerHTML = fmt(d.revenue.latest_m) + arrowG;
+        if ($(t+'-kpi-d-yoy') && yoyG != null) $(t+'-kpi-d-yoy').innerHTML = `<span class="${yoyG>=0?'kpi-trend-up':'kpi-trend-down'}">${fmtPct(yoyG)} YoY</span>`;
+        if ($(t+'-kpi-d-rev-src')) $(t+'-kpi-d-rev-src').textContent = 'SEC EDGAR · ' + (d.revenue.date?.substring(0,7)||'');
+      }
+      if (d.cash_m != null && $(t+'-kpi-d-cash')) {
+        $(t+'-kpi-d-cash').textContent = fmt(d.cash_m);
+        if ($(t+'-kpi-d-cash-src')) $(t+'-kpi-d-cash-src').textContent = 'SEC EDGAR · ' + (d.cash_date?.substring(0,7)||'');
+      }
+      if (d.debt_m != null && $(t+'-kpi-d-debt')) $(t+'-kpi-d-debt').textContent = fmt(d.debt_m);
+      if (d.net_income_m != null && $(t+'-kpi-d-netloss')) {
+        $(t+'-kpi-d-netloss').textContent = fmt(d.net_income_m);
+        $(t+'-kpi-d-netloss').style.color = d.net_income_m < 0 ? 'var(--red)' : 'var(--green)';
       }
     }
   } catch(e) { console.warn('loadFinancials:', e.message); }
@@ -3572,6 +4592,153 @@ function applyRklbMilestone(p) {
   if ($('rklb-milestone-ts')) $('rklb-milestone-ts').textContent = 'KI-Analyse · Täglich aktualisiert';
 }
 
+// ── SPCX KPI + Milestone (aus Section 'milestone') ──────────
+function applySpcxKpi(p) {
+  if (!p) return;
+  setScore('spcx-kpi-score-badge', 'spcx-kpi-score-sub', p.score_gesamt, 'Wachstum · Starlink · Starship · Liquidität');
+  setCatScore('spcx-kpi-score-wachstum',    p.score_wachstum);
+  setCatScore('spcx-kpi-score-starlink',    p.score_starlink);
+  setCatScore('spcx-kpi-score-starship',    p.score_starship);
+  setCatScore('spcx-kpi-score-liquiditaet', p.score_liquiditaet);
+  setCatScore('spcx-kpi-score-risiko',      p.score_risiko);
+  setCatScore('spcx-kpi-score-bewertung',   p.score_bewertung);
+  setDrillRow('spcx-kpi-d-rev',      p.umsatz_wert, p.umsatz_trend);
+  setDrillRow('spcx-kpi-d-yoy',      p.umsatz_yoy);
+  setDrillRow('spcx-kpi-d-guidance', p.guidance_2026);
+  if ($('spcx-kpi-d-rev-src') && p.umsatz_quelle) $('spcx-kpi-d-rev-src').textContent = p.umsatz_quelle + ' · ' + (p.umsatz_datum||'');
+  setDrillRow('spcx-kpi-d-subs',            p.starlink_subs);
+  setDrillRow('spcx-kpi-d-starlink-rev',    p.starlink_umsatz);
+  setDrillRow('spcx-kpi-d-starlink-anteil', p.starlink_anteil);
+  setDrillRow('spcx-kpi-d-starship', p.starship_status);
+  setDrillRow('spcx-kpi-d-fluege',   p.starship_fluege);
+  setDrillRow('spcx-kpi-d-cash',  p.cash_wert);
+  if ($('spcx-kpi-d-cash-src') && p.cash_quelle) $('spcx-kpi-d-cash-src').textContent = p.cash_quelle + ' · ' + (p.cash_datum||'');
+  setDrillRow('spcx-kpi-d-capex', p.capex_wert);
+  if ($('spcx-kpi-d-netloss')) $('spcx-kpi-d-netloss').textContent = stripTags(String(p.netloss_wert||'—'));
+  const riskMapS = {hoch:'risk-hoch',mittel:'risk-mittel',niedrig:'risk-niedrig'};
+  const setRS = (id,val) => { const el=$(id); if(!el||!val) return; el.textContent=stripTags(val); const v=val.toLowerCase(); for(const [k,cls] of Object.entries(riskMapS)){if(v.includes(k)){el.className='risk-val '+cls;break;}} };
+  setRS('spcx-kpi-d-risk-bewertung',  p.risk_bewertung);
+  setRS('spcx-kpi-d-risk-capex',      p.risk_capex);
+  setRS('spcx-kpi-d-risk-konkurrenz', p.risk_konkurrenz);
+  setDrillRow('spcx-kpi-d-evsales',       p.ev_sales||'—');
+  setDrillRow('spcx-kpi-d-vs-konsens',    p.kurs_vs_konsens||'—');
+  setDrillRow('spcx-kpi-d-analyst-range', p.analyst_range||'—');
+  if (p.interpretation && $('spcx-kpi-interp2')) {
+    $('spcx-kpi-interp2').textContent = stripTags(p.interpretation);
+    $('spcx-kpi-interp2').style.display = 'block';
+  }
+  if ($('spcx-kpi-drivers2')) {
+    setDrivers('spcx-kpi-drivers2-list', p.haupttreiber, 'kpi-driver');
+    setDrivers('spcx-kpi-risks2-list',   p.hauptrisiken,  'kpi-risk-tag');
+    $('spcx-kpi-drivers2').style.display = 'block';
+  }
+  if ($('spcx-kpi-ts2')) $('spcx-kpi-ts2').textContent = 'KI-Analyse · Täglich aktualisiert';
+}
+
+function applySpcxMilestone(p) {
+  if (!p) return;
+  const stEl = $('spcx-starship-status');
+  if (stEl) {
+    const rows = [
+      {name:'Starship',        status:p.starship_status, ampel:p.starship_ampel},
+      {name:'Starship V3',     status:p.v3_status,       ampel:p.v3_ampel},
+      {name:'Artemis / HLS',   status:p.artemis_status,  ampel:p.artemis_ampel},
+      {name:'Mars-Programm',   status:p.mars_status,     ampel:p.mars_ampel},
+    ].filter(s => s.status);
+    if (rows.length) stEl.innerHTML = rows.map(s => {
+      const cls = s.ampel==='gruen'?'dot-green':s.ampel==='rot'?'dot-red':s.ampel==='gelb'?'dot-yellow':'dot-gray';
+      return `<div class="milestone-row"><div class="milestone-dot ${cls}"></div><div class="milestone-name">${stripTags(s.name)}</div><div class="milestone-status">${stripTags(s.status)}</div></div>`;
+    }).join('');
+  }
+  if ($('spcx-ms-launches'))     $('spcx-ms-launches').textContent     = stripTags(p.launches_2026||'—');
+  if ($('spcx-ms-launches-sub')) $('spcx-ms-launches-sub').textContent = stripTags(p.launches_2026_note||'Falcon + Starship');
+  if ($('spcx-ms-success'))      $('spcx-ms-success').textContent      = stripTags(p.launch_success||'—');
+  if ($('spcx-ms-subs'))         $('spcx-ms-subs').textContent         = stripTags(p.starlink_subs||'—');
+  if ($('spcx-ms-subs-sub'))     $('spcx-ms-subs-sub').textContent     = stripTags(p.starlink_umsatz||'');
+  if ($('spcx-next-milestone'))  $('spcx-next-milestone').textContent  = stripTags(p.naechster_meilenstein||'—');
+  const riskMapM = {hoch:'risk-hoch',mittel:'risk-mittel',niedrig:'risk-niedrig'};
+  const setRM = (id,val) => { const el=$(id); if(!el||!val) return; el.textContent=stripTags(val); const v=val.toLowerCase(); for(const [k,cls] of Object.entries(riskMapM)){if(v.includes(k)){el.className='risk-val '+cls;break;}} };
+  setRM('spcx-ms-risk-bewertung',   p.risk_bewertung);
+  setRM('spcx-ms-risk-capex',       p.risk_capex);
+  setRM('spcx-ms-risk-regulierung', p.risk_regulierung);
+  setRM('spcx-ms-risk-konkurrenz',  p.risk_konkurrenz);
+  if ($('spcx-milestone-ts')) $('spcx-milestone-ts').textContent = 'KI-Analyse · Täglich aktualisiert';
+}
+
+// ── OKLO KPI + Milestone (aus Section 'milestone') ──────────
+function applyOkloKpi(p) {
+  if (!p) return;
+  setScore('oklo-kpi-score-badge', 'oklo-kpi-score-sub', p.score_gesamt, 'Cash · Pipeline · Lizenzierung · Technologie');
+  setCatScore('oklo-kpi-score-cash',      p.score_cash);
+  setCatScore('oklo-kpi-score-pipeline',  p.score_pipeline);
+  setCatScore('oklo-kpi-score-lizenz',    p.score_lizenz);
+  setCatScore('oklo-kpi-score-tech',      p.score_technologie);
+  setCatScore('oklo-kpi-score-risiko',    p.score_risiko);
+  setCatScore('oklo-kpi-score-bewertung', p.score_bewertung);
+  setDrillRow('oklo-kpi-d-cash',   p.cash_wert);
+  if ($('oklo-kpi-d-cash-src') && p.cash_quelle) $('oklo-kpi-d-cash-src').textContent = p.cash_quelle + ' · ' + (p.cash_datum||'');
+  setDrillRow('oklo-kpi-d-debt',   p.debt_wert);
+  setDrillRow('oklo-kpi-d-runway', p.cash_runway);
+  if ($('oklo-kpi-d-netloss')) $('oklo-kpi-d-netloss').textContent = stripTags(String(p.netloss_wert||'—'));
+  setDrillRow('oklo-kpi-d-pipeline',     p.pipeline_gw);
+  setDrillRow('oklo-kpi-d-kunden',       p.pipeline_kunden);
+  setDrillRow('oklo-kpi-d-pipeline-neu', p.pipeline_neu);
+  setDrillRow('oklo-kpi-d-nrc',  p.nrc_status);
+  setDrillRow('oklo-kpi-d-pdc',  p.pdc_status);
+  setDrillRow('oklo-kpi-d-cola', p.cola_status);
+  setDrillRow('oklo-kpi-d-doe',  p.doe_status);
+  setDrillRow('oklo-kpi-d-leistung', p.aurora_leistung);
+  setDrillRow('oklo-kpi-d-aurora',   p.aurora_status);
+  setDrillRow('oklo-kpi-d-fuel',     p.fuel_status);
+  const riskMapO = {hoch:'risk-hoch',mittel:'risk-mittel',niedrig:'risk-niedrig'};
+  const setRO = (id,val) => { const el=$(id); if(!el||!val) return; el.textContent=stripTags(val); const v=val.toLowerCase(); for(const [k,cls] of Object.entries(riskMapO)){if(v.includes(k)){el.className='risk-val '+cls;break;}} };
+  setRO('oklo-kpi-d-risk-genehmigung',  p.risk_genehmigung);
+  setRO('oklo-kpi-d-risk-finanzierung', p.risk_finanzierung);
+  setRO('oklo-kpi-d-risk-zeitplan',     p.risk_zeitplan);
+  setDrillRow('oklo-kpi-d-evsales',       p.ev_sales||'Pre-Revenue');
+  setDrillRow('oklo-kpi-d-vs-konsens',    p.kurs_vs_konsens||'—');
+  setDrillRow('oklo-kpi-d-analyst-range', p.analyst_range||'—');
+  if (p.interpretation && $('oklo-kpi-interp2')) {
+    $('oklo-kpi-interp2').textContent = stripTags(p.interpretation);
+    $('oklo-kpi-interp2').style.display = 'block';
+  }
+  if ($('oklo-kpi-drivers2')) {
+    setDrivers('oklo-kpi-drivers2-list', p.haupttreiber, 'kpi-driver');
+    setDrivers('oklo-kpi-risks2-list',   p.hauptrisiken,  'kpi-risk-tag');
+    $('oklo-kpi-drivers2').style.display = 'block';
+  }
+  if ($('oklo-kpi-ts2')) $('oklo-kpi-ts2').textContent = 'KI-Analyse · Täglich aktualisiert';
+}
+
+function applyOkloMilestone(p) {
+  if (!p) return;
+  const auEl = $('oklo-aurora-status');
+  if (auEl) {
+    const rows = [
+      {name:'Aurora-INL Bau',    status:p.aurora_status,       ampel:p.aurora_ampel},
+      {name:'NRC Lizenzierung',  status:p.cola_status,         ampel:p.cola_ampel},
+      {name:'Brennstoff (HALEU)',status:p.fuel_status,         ampel:p.fuel_ampel},
+      {name:'Meta 1.2 GW Ohio',  status:p.meta_projekt_status, ampel:p.meta_ampel},
+    ].filter(s => s.status);
+    if (rows.length) auEl.innerHTML = rows.map(s => {
+      const cls = s.ampel==='gruen'?'dot-green':s.ampel==='rot'?'dot-red':s.ampel==='gelb'?'dot-yellow':'dot-gray';
+      return `<div class="milestone-row"><div class="milestone-dot ${cls}"></div><div class="milestone-name">${stripTags(s.name)}</div><div class="milestone-status">${stripTags(s.status)}</div></div>`;
+    }).join('');
+  }
+  if ($('oklo-nrc-status'))     $('oklo-nrc-status').textContent     = stripTags(p.nrc_status||'—');
+  if ($('oklo-doe-status'))     $('oklo-doe-status').textContent     = stripTags(p.doe_status||'—');
+  if ($('oklo-pipeline-gw'))    $('oklo-pipeline-gw').textContent    = stripTags(p.pipeline_gw||'—');
+  if ($('oklo-pipeline-list'))  $('oklo-pipeline-list').textContent  = stripTags(p.pipeline_kunden||'—');
+  if ($('oklo-next-milestone')) $('oklo-next-milestone').textContent = stripTags(p.naechster_meilenstein||'—');
+  const riskMapO2 = {hoch:'risk-hoch',mittel:'risk-mittel',niedrig:'risk-niedrig'};
+  const setRO2 = (id,val) => { const el=$(id); if(!el||!val) return; el.textContent=stripTags(val); const v=val.toLowerCase(); for(const [k,cls] of Object.entries(riskMapO2)){if(v.includes(k)){el.className='risk-val '+cls;break;}} };
+  setRO2('oklo-risk-genehmigung',  p.risk_genehmigung);
+  setRO2('oklo-risk-finanzierung', p.risk_finanzierung);
+  setRO2('oklo-risk-zeitplan',     p.risk_zeitplan);
+  setRO2('oklo-risk-konkurrenz',   p.risk_konkurrenz);
+  if ($('oklo-milestone-ts')) $('oklo-milestone-ts').textContent = 'KI-Analyse · Täglich aktualisiert';
+}
+
 // ── Insider Trades ──────────────────────────────────────────
 function applyInsider(t, p) {
   const el = $(t+'-insider-content');
@@ -3711,10 +4878,51 @@ async function loadRecHistory(t) {
 }
 
 // ── Earnings Calendar ─────────────────────────────────────
+// ── Harte Daten: Analysten-Konsens, Earnings-Termine, Short Interest (Yahoo quoteSummary) ──
+async function loadAnalystData() {
+  for (const t of TICKERS_ALL) {
+    try {
+      const r = await fetch('/api/analyst?ticker=' + SYMBOLS[t]);
+      if (!r.ok) continue;
+      const a = await r.json();
+      // Analysten-Kursziel (echt, überschreibt KI-Schätzung)
+      if (a.targetMean && $(t+'-cons-price')) {
+        $(t+'-cons-price').textContent = '$' + a.targetMean.toFixed(2) + ' (Ø Bank)';
+      }
+      // Rating + Anzahl Analysten + Short Interest
+      if ($(t+'-cons-rating')) {
+        const parts = [];
+        if (a.analystCount) parts.push(a.analystCount + ' Analysten');
+        if (a.rating) parts.push(a.rating);
+        if (a.shortPercentOfFloat != null) parts.push('Short ' + a.shortPercentOfFloat + '%');
+        if (parts.length) $(t+'-cons-rating').textContent = parts.join(' · ');
+      }
+      // Echter Earnings-Termin (überschreibt Schätzung/Cache)
+      if (a.earningsDate && new Date(a.earningsDate) > new Date()) {
+        showEarningsBar(t, a.earningsDate);
+      }
+    } catch (_) {}
+  }
+}
+
+// ── Harte Daten: Insider-Trades direkt aus SEC EDGAR Form 4 ──
+async function loadRealInsider() {
+  for (const t of TICKERS_ALL) {
+    try {
+      const r = await fetch('/api/insider?ticker=' + t);
+      if (!r.ok) continue;
+      const d = await r.json();
+      if (d.trades && d.trades.length) applyInsider(t, d); // echte Daten schlagen KI-Cache
+    } catch (_) {}
+  }
+}
+
 async function loadEarningsCalendar() {
   const tickers = [
     {t:'rklb', sym:'RKLB'},
     {t:'asts', sym:'ASTS'},
+    {t:'spcx', sym:'SPCX'},
+    {t:'oklo', sym:'OKLO'},
   ];
   for (const {t, sym} of tickers) {
     const cached = await fetchFromCache('rec', t);
@@ -3728,6 +4936,8 @@ function getEstimatedEarnings(sym) {
   const known = {
     RKLB: '2026-08-06', // Q2 2026 confirmed Aug 6, 2026 (TipRanks)
     ASTS: '2026-08-11', // Q2 2026 est. mid-Aug 2026 (last Q1: May 11)
+    OKLO: '2026-08-10', // Q2 2026 est. (Schätzung — wird vom Cron überschrieben)
+    SPCX: '2026-08-13', // erste Earnings als börsennotierte Firma (Schätzung)
   };
   if (known[sym]) {
     const d = new Date(known[sym]);
@@ -3739,6 +4949,8 @@ function getEstimatedEarnings(sym) {
   const schedules = {
     RKLB: [[1,26],[4,7],[7,6],[10,5]],  // [month, approx_day]
     ASTS: [[2,10],[4,11],[7,11],[10,10]],
+    OKLO: [[2,20],[4,11],[7,10],[10,10]],
+    SPCX: [[1,28],[4,28],[7,13],[10,28]],
   };
   const quarters = schedules[sym] || [];
   for (let [m, day] of quarters) {
@@ -3811,6 +5023,29 @@ function applyGovSpace(t, p) {
       if($('spcx-gov-sec-val')) $('spcx-gov-sec-val').textContent = stripTags(String(p.sec.status || '—'));
       if($('spcx-gov-sec-desc')) $('spcx-gov-sec-desc').textContent = stripTags(p.sec.desc || '');
     }
+  } else if(t === 'oklo') {
+    if(p.nrc) {
+      if($('oklo-gov-nrc-status')) $('oklo-gov-nrc-status').textContent = stripTags(String(p.nrc.status || '—'));
+      if($('oklo-gov-nrc-desc')) $('oklo-gov-nrc-desc').textContent = stripTags(p.nrc.desc || '');
+    }
+    if(p.doe) {
+      if($('oklo-gov-doe-val')) $('oklo-gov-doe-val').textContent = stripTags(String(p.doe.status || p.doe.wert || '—'));
+      if($('oklo-gov-doe-desc')) $('oklo-gov-doe-desc').textContent = stripTags(p.doe.desc || '');
+    }
+    if(p.dod) {
+      if($('oklo-gov-dod-val')) $('oklo-gov-dod-val').textContent = stripTags(String(p.dod.status || p.dod.wert || '—'));
+      if($('oklo-gov-dod-desc')) $('oklo-gov-dod-desc').textContent = stripTags(p.dod.desc || '');
+    }
+    if(p.fuel) {
+      if($('oklo-gov-fuel-status')) $('oklo-gov-fuel-status').textContent = stripTags(String(p.fuel.status || '—'));
+      if($('oklo-gov-fuel-desc')) $('oklo-gov-fuel-desc').textContent = stripTags(p.fuel.desc || '');
+    }
+    if(p.ausblick) {
+      let ol = $('oklo-gov-outlook');
+      if (!ol) { ol = document.createElement('div'); ol.id = 'oklo-gov-outlook'; ol.className = 'gov-outlook'; $('body-oklo-gov').appendChild(ol); }
+      const txt = typeof p.ausblick === 'string' ? p.ausblick : p.ausblick.text || p.ausblick.desc || JSON.stringify(p.ausblick);
+      ol.textContent = stripTags(txt);
+    }
   } else if(t === 'asts') {
     if(p.fcc) {
       if($('asts-gov-fcc-status')) $('asts-gov-fcc-status').textContent = stripTags(String(p.fcc.status || '—'));
@@ -3869,9 +5104,9 @@ async function fetchGlossar() {
 
 // ── Load All (15s refresh) ─────────────────────────────────
 async function loadAll() {
-  const results = await Promise.all(['rklb','asts'].map(t => fetchQ(t)));
+  const results = await Promise.all(TICKERS_ALL.map(t => fetchQ(t)));
   // Apply quotes to UI
-  ['rklb','asts'].forEach((t, i) => { if (results[i]) applyQ(t, results[i]); });
+  TICKERS_ALL.forEach((t, i) => { if (results[i]) applyQ(t, results[i]); });
   // Update header timestamp
   const now = new Date();
   const upd = document.getElementById('last-upd');
@@ -3894,7 +5129,7 @@ async function kiCall(prompt) {
       const resp=await fetch('https://api.anthropic.com/v1/messages',{
         method:'POST',
         headers:{'Content-Type':'application/json','x-api-key':key,'anthropic-version':'2023-06-01','anthropic-dangerous-direct-browser-access':'true'},
-        body:JSON.stringify({model:'claude-sonnet-4-5',max_tokens:1000,tools:[{type:'web_search_20250305',name:'web_search'}],messages:[{role:'user',content:prompt}]})
+        body:JSON.stringify({model:'claude-opus-5',max_tokens:1000,tools:[{type:'web_search_20250305',name:'web_search'}],messages:[{role:'user',content:prompt}]})
       });
       if(resp.status===429){continue;}
       if(!resp.ok) throw new Error('API '+resp.status);
@@ -3910,13 +5145,17 @@ async function kiCall(prompt) {
 
 const CTX_PROMPTS={
   rklb:`Suche aktuelle Firmendaten für Rocket Lab (RKLB). Antworte NUR mit JSON: {"desc":"1-2 Sätze","tags":[{"text":"Tag","type":"green"}],"stats":[{"label":"Backlog","val":"$X Mrd"}]}`,
-  asts:`Suche aktuelle Firmendaten für AST SpaceMobile (ASTS). Antworte NUR mit JSON: {"desc":"1-2 Sätze","tags":[{"text":"Tag","type":"green"}],"stats":[{"label":"Cash","val":"$X Mrd"}]}`
+  asts:`Suche aktuelle Firmendaten für AST SpaceMobile (ASTS). Antworte NUR mit JSON: {"desc":"1-2 Sätze","tags":[{"text":"Tag","type":"green"}],"stats":[{"label":"Cash","val":"$X Mrd"}]}`,
+  spcx:`Suche aktuelle Firmendaten für SpaceX (NASDAQ: SPCX, börsennotiert seit Juni 2026). Antworte NUR mit JSON: {"desc":"1-2 Sätze","tags":[{"text":"Tag","type":"green"}],"stats":[{"label":"Starlink Nutzer","val":"X Mio"}]}`,
+  oklo:`Suche aktuelle Firmendaten für Oklo Inc (NYSE: OKLO, Kernreaktoren). Antworte NUR mit JSON: {"desc":"1-2 Sätze","tags":[{"text":"Tag","type":"green"}],"stats":[{"label":"Pipeline","val":"X GW"}]}`
 };
 
 async function fetchRec(t) {
   const REC_PROMPTS={
     rklb:`Analysiere Rocket Lab (RKLB). Antworte NUR mit JSON: {"empfehlung":"KAUFEN","titel":"Titel","begruendung":"2-3 Sätze","fundamentals":7,"momentum":7,"risiko":6,"bewertung":5,"explain_fundamentals":"<b>Fundamentals</b> — 1 Satz","explain_momentum":"<b>Momentum</b> — 1 Satz","explain_risiko":"<b>Risiko</b> — <b>Höherer Score = niedrigeres Risiko.</b> 1 Satz","explain_bewertung":"<b>Bewertung</b> — 1 Satz","einstieg":"$120","kursziel":"$180","stopp":"$100","lage":"<b>Aktuelle Lage:</b> 1 Satz","lage_typ":"positive","analysten":"10x Kaufen"}`,
-    asts:`Analysiere AST SpaceMobile (ASTS). Antworte NUR mit JSON: {"empfehlung":"HALTEN","titel":"Titel","begruendung":"2-3 Sätze","fundamentals":5,"momentum":7,"risiko":4,"bewertung":3,"explain_fundamentals":"<b>Fundamentals</b> — 1 Satz","explain_momentum":"<b>Momentum</b> — 1 Satz","explain_risiko":"<b>Risiko</b> — <b>Höherer Score = niedrigeres Risiko.</b> 1 Satz","explain_bewertung":"<b>Bewertung</b> — 1 Satz","einstieg":"$80","kursziel":"$140","stopp":"$65","lage":"<b>Aktuelle Lage:</b> 1 Satz","lage_typ":"warning","analysten":"8x Kaufen"}`
+    asts:`Analysiere AST SpaceMobile (ASTS). Antworte NUR mit JSON: {"empfehlung":"HALTEN","titel":"Titel","begruendung":"2-3 Sätze","fundamentals":5,"momentum":7,"risiko":4,"bewertung":3,"explain_fundamentals":"<b>Fundamentals</b> — 1 Satz","explain_momentum":"<b>Momentum</b> — 1 Satz","explain_risiko":"<b>Risiko</b> — <b>Höherer Score = niedrigeres Risiko.</b> 1 Satz","explain_bewertung":"<b>Bewertung</b> — 1 Satz","einstieg":"$80","kursziel":"$140","stopp":"$65","lage":"<b>Aktuelle Lage:</b> 1 Satz","lage_typ":"warning","analysten":"8x Kaufen"}`,
+    spcx:`Analysiere SpaceX (NASDAQ: SPCX, seit Juni 2026 börsennotiert). Antworte NUR mit JSON: {"empfehlung":"HALTEN","titel":"Titel","begruendung":"2-3 Sätze","fundamentals":7,"momentum":6,"risiko":4,"bewertung":2,"explain_fundamentals":"<b>Fundamentals</b> — 1 Satz","explain_momentum":"<b>Momentum</b> — 1 Satz","explain_risiko":"<b>Risiko</b> — <b>Höherer Score = niedrigeres Risiko.</b> 1 Satz","explain_bewertung":"<b>Bewertung</b> — 1 Satz","einstieg":"$130","kursziel":"$180","stopp":"$110","lage":"<b>Aktuelle Lage:</b> 1 Satz","lage_typ":"neutral","analysten":"Xx Kaufen"}`,
+    oklo:`Analysiere Oklo Inc (NYSE: OKLO). Antworte NUR mit JSON: {"empfehlung":"HALTEN","titel":"Titel","begruendung":"2-3 Sätze","fundamentals":4,"momentum":6,"risiko":3,"bewertung":3,"explain_fundamentals":"<b>Fundamentals</b> — 1 Satz","explain_momentum":"<b>Momentum</b> — 1 Satz","explain_risiko":"<b>Risiko</b> — <b>Höherer Score = niedrigeres Risiko.</b> 1 Satz","explain_bewertung":"<b>Bewertung</b> — 1 Satz","einstieg":"$55","kursziel":"$95","stopp":"$40","lage":"<b>Aktuelle Lage:</b> 1 Satz","lage_typ":"neutral","analysten":"Xx Kaufen"}`
   };
   try { const p=await kiCall(REC_PROMPTS[t]); if(p) applyRec(t,p); }
   catch(e){ console.warn('fetchRec:',e.message); }
@@ -3988,7 +5227,9 @@ function applyRec(t,p) {
 async function fetchLiveNews(t) {
   const NEWS_PROMPTS={
     rklb:`Suche aktuelle RKLB Nachrichten der letzten 24h. NUR JSON: {"articles":[{"title":"Titel","sentiment":"pos|neg|neu","body":"2-3 Sätze","source":"Quelle"}]}`,
-    asts:`Suche aktuelle ASTS Nachrichten der letzten 24h. NUR JSON: {"articles":[{"title":"Titel","sentiment":"pos|neg|neu","body":"2-3 Sätze","source":"Quelle"}]}`
+    asts:`Suche aktuelle ASTS Nachrichten der letzten 24h. NUR JSON: {"articles":[{"title":"Titel","sentiment":"pos|neg|neu","body":"2-3 Sätze","source":"Quelle"}]}`,
+    spcx:`Suche aktuelle SpaceX (SPCX Aktie) Nachrichten der letzten 24h. NUR JSON: {"articles":[{"title":"Titel","sentiment":"pos|neg|neu","body":"2-3 Sätze","source":"Quelle"}]}`,
+    oklo:`Suche aktuelle Oklo (OKLO Aktie) Nachrichten der letzten 24h. NUR JSON: {"articles":[{"title":"Titel","sentiment":"pos|neg|neu","body":"2-3 Sätze","source":"Quelle"}]}`
   };
   try { const p=await kiCall(NEWS_PROMPTS[t]); if(p) applyLiveNewsData(t,p,new Date().toISOString()); }
   catch(e){ console.warn('fetchLiveNews:',e.message); }
@@ -3996,7 +5237,9 @@ async function fetchLiveNews(t) {
 async function fetchScenarios(t) {
   const SCENARIOS_PROMPTS={
     rklb:`Analysiere RKLB Kursziele. NUR JSON: {"intro":"1 Satz","bull_label":"$XXX","bull_pct":100,"opt_label":"$XXX","opt_pct":60,"base_label":"$XXX","base_pct":45,"bear_label":"$XX","bear_pct":35,"bull_target":220,"base_target":130,"bear_target":80,"bull5yr":500,"base5yr":230,"bear5yr":65,"bull_desc":"Bull","base_desc":"Base","bear_desc":"Bear","sentiment":"Reddit/WSB","sentiment_warning":false}`,
-    asts:`Analysiere ASTS Kursziele. NUR JSON: {"intro":"1 Satz","bull_label":"$XXX","bull_pct":100,"opt_label":"$XXX","opt_pct":55,"base_label":"$XX","base_pct":40,"bear_label":"$XX","bear_pct":30,"bull_target":200,"base_target":85,"bear_target":45,"bull5yr":400,"base5yr":120,"bear5yr":20,"bull_desc":"Bull","base_desc":"Base","bear_desc":"Bear","sentiment":"Reddit/WSB","sentiment_warning":true}`
+    asts:`Analysiere ASTS Kursziele. NUR JSON: {"intro":"1 Satz","bull_label":"$XXX","bull_pct":100,"opt_label":"$XXX","opt_pct":55,"base_label":"$XX","base_pct":40,"bear_label":"$XX","bear_pct":30,"bull_target":200,"base_target":85,"bear_target":45,"bull5yr":400,"base5yr":120,"bear5yr":20,"bull_desc":"Bull","base_desc":"Base","bear_desc":"Bear","sentiment":"Reddit/WSB","sentiment_warning":true}`,
+    spcx:`Analysiere SpaceX (SPCX) Kursziele. NUR JSON: {"intro":"1 Satz","bull_label":"$XXX","bull_pct":100,"opt_label":"$XXX","opt_pct":60,"base_label":"$XXX","base_pct":45,"bear_label":"$XXX","bear_pct":30,"bull_target":250,"base_target":165,"bear_target":110,"bull5yr":500,"base5yr":260,"bear5yr":90,"bull_desc":"Bull","base_desc":"Base","bear_desc":"Bear","sentiment":"Reddit/WSB","sentiment_warning":true}`,
+    oklo:`Analysiere Oklo (OKLO) Kursziele. NUR JSON: {"intro":"1 Satz","bull_label":"$XXX","bull_pct":100,"opt_label":"$XXX","opt_pct":55,"base_label":"$XX","base_pct":40,"bear_label":"$XX","bear_pct":25,"bull_target":140,"base_target":85,"bear_target":40,"bull5yr":300,"base5yr":120,"bear5yr":25,"bull_desc":"Bull","base_desc":"Base","bear_desc":"Bear","sentiment":"Reddit/WSB","sentiment_warning":true}`
   };
   try { const p=await kiCall(SCENARIOS_PROMPTS[t]); if(p) applyScenarios(t,p); }
   catch(e){ console.warn('fetchScenarios:',e.message); }
@@ -4004,7 +5247,9 @@ async function fetchScenarios(t) {
 async function fetchSectorContext(t) {
   const SECTOR_PROMPTS={
     rklb:`Analysiere Sektor-Kontext für RKLB. NUR JSON: {"intro":"1 Satz","cards":[{"emoji":"🌌","name":"SpaceX IPO","val":"Status","val_color":"purple","desc":"2 Sätze"},{"emoji":"🛡","name":"Golden Dome","val":"Status","val_color":"green","desc":"2 Sätze"},{"emoji":"🌍","name":"Sektor-Peers","val":"Neutral","val_color":"blue","desc":"kurz"},{"emoji":"📈","name":"Defense","val":"wächst","val_color":"green","desc":"kurz"}]}`,
-    asts:`Analysiere Sektor-Kontext für ASTS. NUR JSON: {"intro":"1 Satz","cards":[{"emoji":"🌌","name":"SpaceX IPO","val":"Status","val_color":"purple","desc":"2 Sätze"},{"emoji":"💥","name":"Blue Origin","val":"Status","val_color":"red","desc":"kurz"},{"emoji":"📶","name":"Starlink D2D","val":"Konkurrenz","val_color":"red","desc":"kurz"},{"emoji":"📱","name":"AT&T/Verizon","val":"Partner","val_color":"green","desc":"kurz"}]}`
+    asts:`Analysiere Sektor-Kontext für ASTS. NUR JSON: {"intro":"1 Satz","cards":[{"emoji":"🌌","name":"SpaceX","val":"Status","val_color":"purple","desc":"2 Sätze"},{"emoji":"💥","name":"Blue Origin","val":"Status","val_color":"red","desc":"kurz"},{"emoji":"📶","name":"Starlink D2D","val":"Konkurrenz","val_color":"red","desc":"kurz"},{"emoji":"📱","name":"AT&T/Verizon","val":"Partner","val_color":"green","desc":"kurz"}]}`,
+    spcx:`Analysiere Sektor-Kontext für die SpaceX Aktie (SPCX). NUR JSON: {"intro":"1 Satz","cards":[{"emoji":"🛸","name":"Starlink","val":"Status","val_color":"green","desc":"kurz"},{"emoji":"⭐","name":"Starship","val":"Status","val_color":"amber","desc":"kurz"},{"emoji":"🤖","name":"xAI","val":"Status","val_color":"purple","desc":"kurz"},{"emoji":"📦","name":"Amazon Kuiper","val":"Konkurrenz","val_color":"red","desc":"kurz"}]}`,
+    oklo:`Analysiere Sektor-Kontext für Oklo (OKLO). NUR JSON: {"intro":"1 Satz","cards":[{"emoji":"🤖","name":"KI-Strombedarf","val":"Status","val_color":"green","desc":"kurz"},{"emoji":"⚛️","name":"SMR-Konkurrenz","val":"NuScale/TerraPower","val_color":"red","desc":"kurz"},{"emoji":"🧪","name":"HALEU/Uran","val":"Status","val_color":"amber","desc":"kurz"},{"emoji":"🏛","name":"NRC-Reform","val":"Status","val_color":"blue","desc":"kurz"}]}`
   };
   try { const p=await kiCall(SECTOR_PROMPTS[t]); if(p) applySector(t,p); }
   catch(e){ console.warn('fetchSectorContext:',e.message); }
@@ -4014,22 +5259,19 @@ async function refreshAllNews() {
   const delay=ms=>new Promise(r=>setTimeout(r,ms));
   const setStatus=(txt,type='')=>{if(statusEl){statusEl.style.display='inline-flex';statusEl.textContent=txt;statusEl.className='ki-status-pill'+(type?' '+type:'');}};
   const clearStatus=()=>{if(statusEl) statusEl.style.display='none';};
-  const calls=[
-    [()=>fetchRec('rklb'),'🎯 RKLB Empfehlung...',(1)],
-    [()=>fetchRec('asts'),'🎯 ASTS Empfehlung...',(2)],
-    [()=>fetchLiveNews('rklb'),'📰 RKLB News...',(3)],
-    [()=>fetchLiveNews('asts'),'📰 ASTS News...',(4)],
-    [()=>fetchScenarios('rklb'),'📊 RKLB Szenarien...',(5)],
-    [()=>fetchScenarios('asts'),'📊 ASTS Szenarien...',(6)],
-    [()=>fetchSectorContext('rklb'),'🌌 RKLB Sektor...',(7)],
-    [()=>fetchSectorContext('asts'),'🌌 ASTS Sektor...',(8)],
-    [()=>fetchCtxBar('rklb'),'🏢 RKLB Firma...',(9)],
-    [()=>fetchCtxBar('asts'),'🏢 ASTS Firma...',(10)],
-    [()=>fetchGlossar(),'📚 Lexikon...',(11)],
-  ];
+  const calls=[];
+  TICKERS_ALL.forEach(t=>{
+    const S=t.toUpperCase();
+    calls.push([()=>fetchRec(t),'🎯 '+S+' Empfehlung...']);
+    calls.push([()=>fetchLiveNews(t),'📰 '+S+' News...']);
+    calls.push([()=>fetchScenarios(t),'📊 '+S+' Szenarien...']);
+    calls.push([()=>fetchSectorContext(t),'🌌 '+S+' Sektor...']);
+    calls.push([()=>fetchCtxBar(t),'🏢 '+S+' Firma...']);
+  });
+  calls.push([()=>fetchGlossar(),'📚 Lexikon...']);
   for(let i=0;i<calls.length;i++){
-    const [fn,label,num]=calls[i];
-    setStatus(label+' ('+num+'/11)');
+    const [fn,label]=calls[i];
+    setStatus(label+' ('+(i+1)+'/'+calls.length+')');
     try{await fn();}catch(e){console.warn('refresh:',e.message);}
     if(i<calls.length-1) await delay(8000);
   }
@@ -4040,7 +5282,7 @@ async function refreshAllNews() {
 // ── Service Worker ─────────────────────────────────────────
 if ('serviceWorker' in navigator) {
   window.addEventListener('load', () => {
-    navigator.serviceWorker.register('/sw.js?v=2026-06-01')
+    navigator.serviceWorker.register('/sw.js?v=2026-07-29')
       .then(reg => {
         // Check for updates on every page load
         reg.update();
@@ -4066,19 +5308,17 @@ if ('serviceWorker' in navigator) {
   // Start data loading immediately - no Chart.js needed
   loadAll();
   setInterval(loadAll, 15000);
-  loadFromCache();
+  loadFromCache().then(() => { loadAnalystData(); loadRealInsider(); });
   // Tab event listeners (defined here so script is loaded)
-  const rklbBtn = document.getElementById('tab-rklb-btn');
-  const astsBtn = document.getElementById('tab-asts-btn');
-  const spcxBtn = document.getElementById('tab-spcx-btn');
-  if (rklbBtn) rklbBtn.addEventListener('click', () => switchTab('rklb'));
-  if (astsBtn) astsBtn.addEventListener('click', () => switchTab('asts'));
-  if (spcxBtn) spcxBtn.addEventListener('click', () => switchTab('spcx'));
+  TICKERS_ALL.forEach(t => {
+    const btn = document.getElementById('tab-'+t+'-btn');
+    if (btn) btn.addEventListener('click', () => switchTab(t));
+  });
   switchTab('rklb');
   document.querySelectorAll('.card').forEach(c=>c.classList.add('open'));
   if(window.innerWidth<=800){
     ['charts','df','pf','news','sector'].forEach(s=>{
-      ['rklb','asts'].forEach(t=>{
+      TICKERS_ALL.forEach(t=>{
         const c=$('card-'+t+'-'+s);
         if(c) c.classList.remove('open');
       });
@@ -4104,10 +5344,7 @@ if ('serviceWorker' in navigator) {
       if (age < 2) showToast(`⚠️ Cron Fehler: ${d.data.failed.join(', ')}`, 6000);
     }
   }).catch(()=>{});
-  loadRecHistory('rklb');
-  loadRecHistory('asts');
-  loadFinancials('rklb');
-  loadFinancials('asts');
+  TICKERS_ALL.forEach(t => { loadRecHistory(t); loadFinancials(t); });
   // Load range charts after DOM + Chart.js are ready
   function initRangeCharts() {
     if (typeof Chart === 'undefined') {

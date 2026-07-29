@@ -1,7 +1,7 @@
 {
-  "name": "Space Stocks",
-  "short_name": "Space Stocks",
-  "description": "Live Dashboard für RKLB, ASTS und SpaceX",
+  "name": "My Stocks",
+  "short_name": "My Stocks",
+  "description": "Live Dashboard für RKLB, ASTS, SPCX und OKLO",
   "start_url": "/",
   "display": "standalone",
   "background_color": "#ededea",
