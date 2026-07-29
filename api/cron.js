@@ -31,8 +31,8 @@ async function supa(path, method='GET', body=null) {
 // Removes common causes of JSON parse failures from KI responses
 function sanitizeJson(str) {
   return str
-    // Remove cite tags like text
-    .replace(/]*>([^<]*)<\/antml:cite>/g, '$1')
+    // Remove cite tags, keep inner text
+    .replace(/<(?:antml:)?cite[^>]*>([\s\S]*?)<\/(?:antml:)?cite>/g, '$1')
     // Remove all remaining HTML tags
     .replace(/<[^>]+>/g, '')
     // Fix unescaped newlines inside strings (common cause of parse failures)
@@ -41,6 +41,9 @@ function sanitizeJson(str) {
     .replace(/,(\s*[}\]])/g, '$1')
     .trim();
 }
+
+// Global für alle KI-Prompts: erzwingt kompaktes, parsbares JSON (Opus 5 zitiert/formatiert sonst gern)
+const JSON_STYLE = 'WICHTIG: Antworte AUSSCHLIESSLICH mit einem einzigen JSON-Objekt. Keine Markdown-Codefences, keine <cite>-Tags, keine Quellenangaben oder Fussnoten im Text, keine Zeilenumbrueche in Strings, Strings kurz halten. ';
 
 async function kiCall(prompt, retries=3, maxSearches=8, model='claude-opus-5') {
   for (let attempt = 0; attempt < retries; attempt++) {
@@ -64,9 +67,10 @@ async function kiCall(prompt, retries=3, maxSearches=8, model='claude-opus-5') {
         },
         body: JSON.stringify({
           model: model,
-          max_tokens: 2048,  // increased from 1024 — prevents truncated JSON
+          max_tokens: 12000, // Opus 5: max_tokens = Thinking + sichtbarer Text — grosszügig ansetzen
+          output_config: { effort: 'medium' }, // weniger Thinking-Tokens, reicht für JSON-Research
           tools: [{type: 'web_search_20250305', name: 'web_search', max_uses: maxSearches}],
-          messages: [{role: 'user', content: prompt}]
+          messages: [{role: 'user', content: JSON_STYLE + prompt}]
         })
       });
       clearTimeout(timeout);
@@ -96,12 +100,15 @@ async function kiCall(prompt, retries=3, maxSearches=8, model='claude-opus-5') {
       .replace(/\s*```\s*$/,'')
       .trim();
 
+    // Strip citation tags the model may embed despite instructions
+    jsonStr = jsonStr.replace(/<\/?(?:antml:)?cite[^>]*>/g, '');
+
     // Extract JSON object (from first { to last })
     const firstBrace = jsonStr.indexOf('{');
     const lastBrace = jsonStr.lastIndexOf('}');
 
-    // If no JSON braces found, check for refusal
-    if (firstBrace === -1 || lastBrace === -1) {
+    // If no opening brace found, check for refusal
+    if (firstBrace === -1) {
       const refusalPhrases = [
         'I cannot provide', 'cannot provide the response',
         'I must inform you that I cannot', 'citation guidelines',
@@ -115,7 +122,9 @@ async function kiCall(prompt, retries=3, maxSearches=8, model='claude-opus-5') {
       }
       throw new Error('No JSON in response');
     }
-    let extracted = jsonStr.substring(firstBrace, lastBrace + 1);
+    let extracted = lastBrace > firstBrace
+      ? jsonStr.substring(firstBrace, lastBrace + 1)
+      : jsonStr.substring(firstBrace); // abgeschnittene Antwort — Reparatur versuchen
 
     // Strategy 1: direct parse
     try { return JSON.parse(extracted); } catch(_) {}
@@ -129,7 +138,16 @@ async function kiCall(prompt, retries=3, maxSearches=8, model='claude-opus-5') {
       return JSON.parse(fixed);
     } catch(_) {}
 
-    // Strategy 4: salvage known structures
+    // Strategy 4: repair truncated JSON (cut at last complete value, close open braces/brackets)
+    try {
+      const repaired = repairTruncatedJson(extracted);
+      if (repaired) {
+        console.log('JSON repaired from truncated response');
+        return repaired;
+      }
+    } catch(_) {}
+
+    // Strategy 5: salvage known structures
     try {
       const salvaged = salvageJson(extracted);
       if (salvaged) {
@@ -142,6 +160,35 @@ async function kiCall(prompt, retries=3, maxSearches=8, model='claude-opus-5') {
     throw new Error(`JSON parse failed after all strategies`);
   }
   throw new Error('All retries exhausted');
+}
+
+// ── Repariert abgeschnittenes JSON: schneidet beim letzten vollständigen Wert ab und schliesst Klammern ──
+function repairTruncatedJson(str) {
+  let s = str.replace(/\r?\n/g, ' ').replace(/\t/g, ' ');
+  for (let attempt = 0; attempt < 40; attempt++) {
+    // Offene Klammern zählen (Strings dabei überspringen)
+    let depth = [], inStr = false, esc = false;
+    for (const ch of s) {
+      if (esc) { esc = false; continue; }
+      if (ch === '\\') { esc = true; continue; }
+      if (ch === '"') { inStr = !inStr; continue; }
+      if (inStr) continue;
+      if (ch === '{' || ch === '[') depth.push(ch);
+      if (ch === '}' || ch === ']') depth.pop();
+    }
+    let candidate = s;
+    if (inStr) candidate += '"';                       // offenen String schliessen
+    candidate = candidate.replace(/,\s*$/, '');        // hängendes Komma weg
+    candidate = candidate.replace(/"[^"]*"\s*:\s*$/, '""'); // hängender Key ohne Wert
+    candidate = candidate.replace(/,\s*$/, '');
+    for (let i = depth.length - 1; i >= 0; i--) candidate += depth[i] === '{' ? '}' : ']';
+    try { return JSON.parse(candidate); } catch(_) {}
+    // Weiter zurückschneiden: bis zum letzten Komma oder Klammer-Ende
+    const cut = Math.max(s.lastIndexOf(','), s.lastIndexOf('}'), s.lastIndexOf(']'));
+    if (cut <= 0) return null;
+    s = s.substring(0, cut);
+  }
+  return null;
 }
 
 // ── Structured salvage for known response types ────────────────────────────
